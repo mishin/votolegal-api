@@ -147,6 +147,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 user_sessions
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::UserSession>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_sessions",
+  "VotoLegal::Schema::Result::UserSession",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 roles
 
 Type: many_to_many
@@ -157,8 +172,9 @@ Composing rels: L</user_roles> -> role
 
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 11:33:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KKnTZxiF+N2okofGQfL7bw
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 16:29:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Dpb+SzSrd8eIPbTnNfoaxg
 
 __PACKAGE__->remove_column('password');
 __PACKAGE__->add_column(
