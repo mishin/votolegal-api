@@ -25,7 +25,7 @@ sub login_POST {
 
     $c->req->params->{email} = lc $c->req->params->{email};
 
-    # TODO Validar no ResultSet.
+    $c->model('DB::User')->execute($c, for => 'login', with => $c->req->params);
 
     my $authenticate = $c->authenticate({
         email    => $c->req->params->{email},
