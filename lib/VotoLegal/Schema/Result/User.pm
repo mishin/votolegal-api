@@ -157,10 +157,29 @@ Composing rels: L</user_roles> -> role
 
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
-
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 11:33:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KKnTZxiF+N2okofGQfL7bw
 
+__PACKAGE__->remove_column('password');
+__PACKAGE__->add_column(
+    password => {
+        data_type        => "text",
+        passphrase       => 'crypt',
+        passphrase_class => 'BlowfishCrypt',
+        passphrase_args  => {
+            cost        => 8,
+            salt_random => 1,
+        },
+        passphrase_check_method => 'check_password',
+        is_nullable             => 0
+    },
+);
+
+sub new_session {
+    my ($self, %args) = @_;
+
+    use DDP; p \%args;
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

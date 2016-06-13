@@ -20,6 +20,8 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+    Authentication
+    Authorization::Roles
 /;
 
 extends 'Catalyst';
@@ -39,7 +41,7 @@ __PACKAGE__->config(
     name => 'VotoLegal',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
-    enable_catalyst_header => 1, # Send X-Catalyst header
+    enable_catalyst_header => 0, # Send X-Catalyst header
 );
 
 # Start the application
