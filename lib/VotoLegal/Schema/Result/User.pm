@@ -204,8 +204,7 @@ sub new_session {
     })->first;
 
     if (!defined($session)) {
-        $session = $schema->resultset('UserSession')->create({
-            user_id      => $self->id,
+        $session = $self->user_sessions->create({
             valid_for_ip => $args{ip},
             api_key      => random_string(128),
         });
@@ -218,6 +217,5 @@ sub new_session {
     };
 }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;
