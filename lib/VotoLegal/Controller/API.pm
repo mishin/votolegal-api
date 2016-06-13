@@ -21,6 +21,35 @@ sub root : Chained('/') : PathPart('api') : CaptureArgs(0) {
     $c->response->headers->header(charset => "utf-8");
 }
 
+sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    my $api_key = $c->req->param('api_key') || $c->req->header('X-API-Key');
+
+    if (!defined($api_key)) {
+        $self->status_forbidden($c, message => "access denied");
+        $c->detach();
+        return ;
+    }
+
+    my $user_session = $c->model('DB::UserSession')->search({
+        api_key      => $api_key,
+        valid_for_ip => $c->req->address,
+    })->first;
+
+    if (!$user_session) {
+        $self->status_forbidden($c, message => "access denied");
+        $c->detach();
+        return ;
+    }
+
+    my $user = $c->find_user({
+        id => $user_session->user_id,    
+    });
+
+    $c->set_authenticated($user);
+}
+
 =encoding utf8
 
 =head1 AUTHOR
