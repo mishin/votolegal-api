@@ -173,8 +173,10 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 16:29:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Dpb+SzSrd8eIPbTnNfoaxg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 17:03:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zId74V8JD1+xAcyGy4nIMQ
+
+use Crypt::PRNG qw(random_string);
 
 __PACKAGE__->remove_column('password');
 __PACKAGE__->add_column(
@@ -194,7 +196,26 @@ __PACKAGE__->add_column(
 sub new_session {
     my ($self, %args) = @_;
 
-    use DDP; p \%args;
+    my $schema = $self->result_source->schema;
+
+    my $session = $schema->resultset('UserSession')->search({
+        user_id      => $self->id,
+        valid_for_ip => $args{ip},
+    })->first;
+
+    if (!defined($session)) {
+        $session = $schema->resultset('UserSession')->create({
+            user_id      => $self->id,
+            valid_for_ip => $args{ip},
+            api_key      => random_string(128),
+        });
+    }
+
+    return {
+        user_id => $self->id,
+        roles   => [ map { $_->role} $self->roles ],
+        api_key => $session->api_key,
+    };
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

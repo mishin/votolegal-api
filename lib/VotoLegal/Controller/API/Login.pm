@@ -37,17 +37,11 @@ sub login_POST {
             ip => $c->req->address,
             %{$c->req->params},
         );
+
+        return $self->status_ok($c, entity => $session);
     }
-            #ip => $c->req->address,
-        #    #%{$c->req->params},
-        #});
 
-        #use DDP; p $session;
-
-        #return $self->status_ok($c, entity => $session);
-    #}
-
-    return $self->status_bad_request( $c, message => 'Bad email or password.' );
+    return $self->status_bad_request($c, message => 'Bad email or password.');
 }
 
 =encoding utf8
