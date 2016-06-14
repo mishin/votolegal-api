@@ -17,9 +17,9 @@ sub verifiers_specs {
         login => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
-                email => {
+                username => {
                     required   => 1,
-                    type       => EmailAddress,
+                    type       => 'Str',
                     post_check => sub { 1 }
                 },
                 password => {
@@ -53,7 +53,8 @@ sub action_specs {
     my ($self) = @_;
 
     return {
-        login => sub { 1 },
+        login  => sub { 1 },
+        create => sub { 1 },
     };
 }
 

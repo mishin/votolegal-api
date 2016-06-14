@@ -49,7 +49,7 @@ __PACKAGE__->table("user");
   is_nullable: 0
   sequence: 'user_id_seq'
 
-=head2 login
+=head2 username
 
   data_type: 'text'
   is_nullable: 1
@@ -81,7 +81,7 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "user_id_seq",
   },
-  "login",
+  "username",
   { data_type => "text", is_nullable => 1 },
   "password",
   { data_type => "text", is_nullable => 1 },
@@ -107,6 +107,32 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<user_email_key>
+
+=over 4
+
+=item * L</email>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("user_email_key", ["email"]);
+
+=head2 C<user_username_key>
+
+=over 4
+
+=item * L</username>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("user_username_key", ["username"]);
 
 =head1 RELATIONS
 
@@ -166,8 +192,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 11:20:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IinrswtzNtYdfnhAZaykuw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 13:55:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rH9bovODMXr8NMG6jUTyAQ
 
 use Crypt::PRNG qw(random_string);
 
