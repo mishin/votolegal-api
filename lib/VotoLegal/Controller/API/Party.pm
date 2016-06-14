@@ -2,7 +2,7 @@ package VotoLegal::Controller::API::Party;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends 'Catalyst::Controller'; }
+BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 =head1 NAME
 
@@ -15,6 +15,23 @@ Catalyst Controller.
 =head1 METHODS
 
 =cut
+
+sub root : Chained('/api/root') : PathPart('party') : CaptureArgs(0) { }
+
+sub party : Chained('root') : PathPart('') ActionClass('REST') { }
+
+sub party_GET {
+    my ($self, $c) = @_;
+
+    my @parties = map {
+        {
+            id   => $_->id,
+            name => $_->name 
+        }
+    } $c->model('DB::Party')->all;
+
+    return $self->status_ok($c, entity => { parties => \@parties });
+}
 
 =encoding utf8
 
