@@ -34,7 +34,7 @@ sub register_POST {
     eval {
         $c->model('DB')->schema->txn_do(sub {
             $user = $user_rs->create({
-                login    => $c->req->params->{login},
+                username => $c->req->params->{login},
                 password => $c->req->params->{password},
                 email    => $c->req->params->{email},
             });
@@ -49,6 +49,7 @@ sub register_POST {
                 ficha_limpa  => $c->req->params->{ficha_limpa},
                 reelection   => $c->req->params->{reelection},
                 raising_goal => $c->req->params->{raising_goal},
+                active       => 0,
             });
         });
     };
