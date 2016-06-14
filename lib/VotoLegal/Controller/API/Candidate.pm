@@ -2,7 +2,7 @@ package VotoLegal::Controller::API::Candidate;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends 'Catalyst::Controller'; }
+BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 =head1 NAME
 
@@ -16,18 +16,7 @@ Catalyst Controller.
 
 =cut
 
-
-=head2 index
-
-=cut
-
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
-
-    $c->response->body('Matched VotoLegal::Controller::API::Candidate in API::Candidate.');
-}
-
-
+sub root : Chained('/api/root') : PathPart('candidate') : CaptureArgs(0) { }
 
 =encoding utf8
 
