@@ -23,11 +23,17 @@ sub register : Chained('/api/candidate/root') : PathPart('register') : ActionCla
 sub register_POST {
     my ($self, $c) = @_;
 
+    my $user_rs      = $c->model('DB::User');
+    my $candidate_rs = $c->model('DB::Candidate');
+
+    $user_rs->execute($c, for => 'create', with => $c->req->params);
+    $candidate_rs->execute($c, for => 'create', with => $c->req->params);
+
     my $user ;
     my $candidate;
     eval {
         $c->model('DB')->schema->txn_do(sub {
-            $user = $c->model('DB::User')->create({
+            $user = $user_rs->create({
                 login    => $c->req->params->{login},
                 password => $c->req->params->{password},
                 email    => $c->req->params->{email},

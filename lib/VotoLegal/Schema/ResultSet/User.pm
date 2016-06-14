@@ -28,7 +28,24 @@ sub verifiers_specs {
                 },
             },
         ),
-
+        create => Data::Verifier->new(
+            filters => [qw(trim)],
+            profile => {
+                login => {
+                    required => 1,
+                    type     => 'Str',
+                },
+                email => {
+                    required   => 1,
+                    type       => EmailAddress,
+                    post_check => sub { 1 }
+                },
+                password => {
+                    required => 1,
+                    type     => 'Str',
+                },
+            },
+        ),
     };
 }
 
