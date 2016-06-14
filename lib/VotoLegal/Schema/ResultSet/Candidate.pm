@@ -7,6 +7,8 @@ extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
 
+use VotoLegal::Types qw(CPF);
+
 use Data::Verifier;
 
 sub verifiers_specs {
@@ -27,6 +29,22 @@ sub verifiers_specs {
                 raising_goal => {
                     required => 1,
                     type     => 'Int',
+                },
+                party_id => {
+                    required => 1,
+                    type     => 'Int',
+                },
+                cpf => {
+                    required => 1,
+                    type     => CPF,
+                },
+                ficha_limpa => {
+                    required => 1,
+                    type     => 'Bool',
+                },
+                reelection => {
+                    required => 1,
+                    type     => 'Bool',
                 },
             },
         ),
