@@ -49,7 +49,7 @@ __PACKAGE__->table("user");
   is_nullable: 0
   sequence: 'user_id_seq'
 
-=head2 nickname
+=head2 login
 
   data_type: 'text'
   is_nullable: 1
@@ -59,26 +59,10 @@ __PACKAGE__->table("user");
   data_type: 'text'
   is_nullable: 1
 
-=head2 name
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 email
 
   data_type: 'text'
   is_nullable: 0
-
-=head2 cpf
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 active
-
-  data_type: 'boolean'
-  default_value: false
-  is_nullable: 1
 
 =head2 created_at
 
@@ -97,18 +81,12 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "user_id_seq",
   },
-  "nickname",
+  "login",
   { data_type => "text", is_nullable => 1 },
   "password",
   { data_type => "text", is_nullable => 1 },
-  "name",
-  { data_type => "text", is_nullable => 1 },
   "email",
   { data_type => "text", is_nullable => 0 },
-  "cpf",
-  { data_type => "text", is_nullable => 0 },
-  "active",
-  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
   "created_at",
   {
     data_type     => "timestamp with time zone",
@@ -131,6 +109,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
+
+=head2 candidates
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Candidate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "candidates",
+  "VotoLegal::Schema::Result::Candidate",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 user_roles
 
@@ -173,8 +166,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 17:03:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zId74V8JD1+xAcyGy4nIMQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 11:20:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IinrswtzNtYdfnhAZaykuw
 
 use Crypt::PRNG qw(random_string);
 

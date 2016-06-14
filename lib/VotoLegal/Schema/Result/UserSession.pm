@@ -58,7 +58,7 @@ __PACKAGE__->table("user_session");
 =head2 api_key
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 valid_for_ip
 
@@ -85,7 +85,7 @@ __PACKAGE__->add_columns(
   "user_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "api_key",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "valid_for_ip",
   { data_type => "text", is_nullable => 1 },
   "created_at",
@@ -111,7 +111,7 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 UNIQUE CONSTRAINTS
 
-=head2 C<user_session_unique_api_key>
+=head2 C<user_session_api_key_key>
 
 =over 4
 
@@ -121,7 +121,7 @@ __PACKAGE__->set_primary_key("id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("user_session_unique_api_key", ["api_key"]);
+__PACKAGE__->add_unique_constraint("user_session_api_key_key", ["api_key"]);
 
 =head1 RELATIONS
 
@@ -137,12 +137,12 @@ __PACKAGE__->belongs_to(
   "user",
   "VotoLegal::Schema::Result::User",
   { id => "user_id" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 16:29:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gmmdpzr+0H0M1YqMdX4qmA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 10:55:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nzbmeJlOJNbSsFuozKFvUg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
