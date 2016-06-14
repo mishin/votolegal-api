@@ -18,6 +18,31 @@ Catalyst Controller.
 
 sub root : Chained('/api/root') : PathPart('candidate') : CaptureArgs(0) { }
 
+sub base : Chained('/api/logged') : PathPart('candidate') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{collection} = $c->user->candidates;
+}
+
+sub candidate : Chained('base') : PathPart('') : ActionClass('REST') { }
+
+sub candidate_GET {
+    my ($self, $c) = @_;
+
+    my $candidate = $c->stash->{collection}->search({
+    },
+    {
+        join         => 'party',
+        '+select'    => ['party.name'],
+        '+as'        => ['party_name'],
+        result_class => 'DBIx::Class::ResultClass::HashRefInflator'
+    })->single;
+
+    return $self->status_ok($c, entity => {
+        candidate => $candidate,
+    });
+}
+
 =encoding utf8
 
 =head1 AUTHOR
