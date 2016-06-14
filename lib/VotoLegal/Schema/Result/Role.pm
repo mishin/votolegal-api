@@ -47,7 +47,7 @@ __PACKAGE__->table("role");
   data_type: 'integer'
   is_nullable: 0
 
-=head2 role
+=head2 name
 
   data_type: 'text'
   is_nullable: 1
@@ -57,7 +57,7 @@ __PACKAGE__->table("role");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_nullable => 0 },
-  "role",
+  "name",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -101,8 +101,8 @@ Composing rels: L</user_roles> -> user
 __PACKAGE__->many_to_many("users", "user_roles", "user");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-13 11:33:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3Y6ggq+se1lcFs+PTQLwEQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 17:15:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nGX5cZzb918XOWHj/S0qcg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
