@@ -29,14 +29,15 @@ sub candidate : Chained('base') : PathPart('') : ActionClass('REST') { }
 sub candidate_GET {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{collection}->search({
-    },
-    {
-        join         => 'party',
-        '+select'    => ['party.name'],
-        '+as'        => ['party_name'],
-        result_class => 'DBIx::Class::ResultClass::HashRefInflator'
-    })->single;
+    my $candidate = $c->stash->{collection}->search(
+        {},
+        {
+            join         => 'party',
+            '+select'    => ['party.name'],
+            '+as'        => ['party_name'],
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator'
+        }
+    )->single;
 
     return $self->status_ok($c, entity => {
         candidate => $candidate,
