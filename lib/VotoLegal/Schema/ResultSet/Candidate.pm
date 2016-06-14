@@ -31,8 +31,13 @@ sub verifiers_specs {
                     type     => 'Int',
                 },
                 party_id => {
-                    required => 1,
-                    type     => 'Int',
+                    required   => 1,
+                    type       => 'Int',
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->result_source->schema->resultset('Party')->search({ id => $r->get_value('party_id') })->count;
+                    },
                 },
                 cpf => {
                     required => 1,
