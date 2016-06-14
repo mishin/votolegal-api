@@ -34,7 +34,7 @@ sub register_POST {
     eval {
         $c->model('DB')->schema->txn_do(sub {
             $user = $user_rs->create({
-                username => $c->req->params->{login},
+                username => $c->req->params->{username},
                 password => $c->req->params->{password},
                 email    => $c->req->params->{email},
             });
