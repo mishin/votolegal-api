@@ -53,14 +53,6 @@ sub verifiers_specs {
                         return 1;
                     },
                 },
-                ficha_limpa => {
-                    required => 1,
-                    type     => 'Bool',
-                },
-                reelection => {
-                    required => 1,
-                    type     => 'Bool',
-                },
                 office_id => {
                     required   => 1,
                     type       => 'Int',
