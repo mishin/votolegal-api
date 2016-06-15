@@ -47,8 +47,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         $self->search({
-                            cpf     => $r->get_value('cpf'),
-                            user_id => { '!=' => $self->user_id },
+                            cpf => $r->get_value('cpf'),
                         })->count and die \["cpf", "already exists"];
 
                         return 1;
