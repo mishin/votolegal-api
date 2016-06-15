@@ -189,6 +189,87 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 13:55:26
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LPZP6NCrNGTGmQxrQABJww
 
+use Data::Verifier;
+use VotoLegal::Types qw(CPF);
+
+with 'VotoLegal::Role::Verification';
+with 'VotoLegal::Role::Verification';
+
+sub resultset {
+    my $self = shift;
+
+    return $self->result_source->schema->resultset(@_);
+}
+
+sub verifiers_specs {
+    my $self = shift;
+
+    return {
+        update => Data::Verifier->new(
+            filters => [qw(trim)],
+            profile => {
+                name => {
+                    required => 0,
+                    type     => 'Str',
+                },
+                popular_name => {
+                    required => 0,
+                    type     => 'Str',
+                },
+                party_id    => {
+                    required   => 0,
+                    type       => 'Int',
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->result_source->schema->resultset('Party')
+                            ->search({ id => $r->get_value('party_id') })
+                            ->count;
+                    },
+                },
+                cpf => {
+                    required   => 0,
+                    type       => CPF,
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $candidate_rs = $self->resultset($self->result_source->source_name);
+
+                        $candidate_rs->search({
+                            cpf     => $r->get_value('cpf'),
+                            user_id => { '!=' => $self->user_id },
+                        })->count and die \["cpf", "already exists"];
+
+                        return 1;
+                    },
+                },
+            },
+        ),
+    };
+}
+
+sub action_specs {
+    my $self = shift;
+
+    return {
+        update => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+            not defined $values{$_} and delete $values{$_} for keys %values;
+
+            if (%values) {
+                my $user = $self->update(\%values);
+
+                return $user;
+            }
+            return ;
+        },
+    };
+}
+
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
+
 1;

@@ -53,10 +53,9 @@ sub candidate_GET {
 sub candidate_PUT {
     my ($self, $c) = @_;
 
-    $c->stash->{collection}->execute($c, for => 'update', with => $c->req->params);
-    #$c->model('DB::User')->execute($c, for => 'update', with => $c->req->params);
+    my $candidate = $c->stash->{collection}->single->execute($c, for => 'update', with => $c->req->params);
 
-    return $self->status_accepted($c, entity => {});
+    return $self->status_accepted($c, entity => { id => $candidate->id });
 }
 
 =encoding utf8
