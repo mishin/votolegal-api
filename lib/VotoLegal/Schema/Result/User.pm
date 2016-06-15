@@ -231,7 +231,7 @@ sub new_session {
 
     return {
         user_id => $self->id,
-        roles   => [ map { $_->role} $self->roles ],
+        roles   => [ map { $_->name } $self->roles ],
         api_key => $session->api_key,
     };
 }
