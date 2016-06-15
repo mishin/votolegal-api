@@ -18,45 +18,7 @@ Catalyst Controller.
 
 sub root : Chained('/api/root') : PathPart('candidate') : CaptureArgs(0) { }
 
-sub base : Chained('/api/logged') : PathPart('candidate') : CaptureArgs(0) {
-    my ($self, $c) = @_;
-
-    if (!$c->check_user_roles(qw(user))) {
-        $self->status_forbidden($c, message => "access denied");
-        $c->detach();
-    }
-
-    $c->stash->{collection} = $c->user->candidates;
-
-}
-
-sub candidate : Chained('base') : PathPart('') : ActionClass('REST') { }
-
-sub candidate_GET {
-    my ($self, $c) = @_;
-
-    my $candidate = $c->stash->{collection}->search(
-        {},
-        {
-            join         => 'party',
-            '+select'    => ['party.name'],
-            '+as'        => ['party_name'],
-            result_class => 'DBIx::Class::ResultClass::HashRefInflator'
-        }
-    )->single;
-
-    return $self->status_ok($c, entity => {
-        candidate => $candidate,
-    });
-}
-
-sub candidate_PUT {
-    my ($self, $c) = @_;
-
-    my $candidate = $c->stash->{collection}->single->execute($c, for => 'update', with => $c->req->params);
-
-    return $self->status_accepted($c, entity => { id => $candidate->id });
-}
+sub base : Chained('/api/logged') : PathPart('candidate') : CaptureArgs(0) { }
 
 =encoding utf8
 
