@@ -97,6 +97,12 @@ __PACKAGE__->table("candidate");
   data_type: 'integer'
   is_nullable: 0
 
+=head2 office_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -125,6 +131,8 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", default_value => \"false", is_nullable => 1 },
   "raising_goal",
   { data_type => "integer", is_nullable => 0 },
+  "office_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -154,6 +162,21 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
 
 =head1 RELATIONS
+
+=head2 office
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::Office>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "office",
+  "VotoLegal::Schema::Result::Office",
+  { id => "office_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
 
 =head2 party
 
@@ -186,8 +209,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 13:55:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LPZP6NCrNGTGmQxrQABJww
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-15 13:11:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zkiIroXMBTRpuctOYYi6qw
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
