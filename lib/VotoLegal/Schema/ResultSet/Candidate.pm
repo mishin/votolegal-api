@@ -40,8 +40,18 @@ sub verifiers_specs {
                     },
                 },
                 cpf => {
-                    required => 1,
-                    type     => CPF,
+                    required   => 1,
+                    type       => CPF,
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->search({
+                            cpf     => $r->get_value('cpf'),
+                            user_id => { '!=' => $self->user_id },
+                        })->count and die \["cpf", "already exists"];
+
+                        return 1;
+                    },
                 },
                 ficha_limpa => {
                     required => 1,
