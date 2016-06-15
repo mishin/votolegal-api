@@ -34,9 +34,10 @@ sub verifiers_specs {
                     required   => 1,
                     type       => 'Int',
                     post_check => sub {
-                        my $r = shift;
+                        my $r        = shift;
+                        my $party_id = $r->get_value('party_id');
 
-                        $self->result_source->schema->resultset('Party')->search({ id => $r->get_value('party_id') })->count;
+                        $self->result_source->schema->resultset('Party')->search({ id => $party_id })->count;
                     },
                 },
                 cpf => {
@@ -60,6 +61,16 @@ sub verifiers_specs {
                 reelection => {
                     required => 1,
                     type     => 'Bool',
+                },
+                office_id => {
+                    required   => 1,
+                    type       => 'Int',
+                    post_check => sub {
+                        my $r         = shift;
+                        my $office_id = $r->get_value('office_id');
+
+                        $self->result_source->schema->resultset('Office')->search({ id => $office_id })->count;
+                    },
                 },
             },
         ),
