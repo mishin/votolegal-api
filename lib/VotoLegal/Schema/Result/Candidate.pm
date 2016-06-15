@@ -216,7 +216,6 @@ use Data::Verifier;
 use VotoLegal::Types qw(CPF);
 
 with 'VotoLegal::Role::Verification';
-with 'VotoLegal::Role::Verification';
 
 sub resultset {
     my $self = shift;
@@ -256,14 +255,22 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
-                        my $candidate_rs = $self->resultset($self->result_source->source_name);
-
-                        $candidate_rs->search({
+                        $self->resultset($self->result_source->source_name)->search({
                             cpf     => $r->get_value('cpf'),
                             user_id => { '!=' => $self->user_id },
                         })->count and die \["cpf", "already exists"];
 
                         return 1;
+                    },
+                },
+                office_id => {
+                    required   => 1,
+                    type       => 'Int',
+                    post_check => sub {
+                        my $r         = shift;
+                        my $office_id = $r->get_value('office_id');
+
+                        $self->resultset('Office')->search({ id => $office_id })->count;
                     },
                 },
             },
