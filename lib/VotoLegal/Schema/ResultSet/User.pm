@@ -32,13 +32,30 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 username => {
-                    required => 1,
-                    type     => 'Str',
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->search({
+                            username => $r->get_value('username'),
+                        })->count and die \["username", "already exists"];
+
+                        return 1;
+                    },
                 },
                 email => {
                     required   => 1,
                     type       => EmailAddress,
-                    post_check => sub { 1 }
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->search({
+                            email => $r->get_value('email'),
+                        })->count and die \["email", "already exists"];
+
+                        return 1;
+                    }
                 },
                 password => {
                     required => 1,
