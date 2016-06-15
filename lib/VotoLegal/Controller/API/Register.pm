@@ -46,8 +46,6 @@ sub register_POST {
                 popular_name => $c->req->params->{popular_name},
                 party_id     => $c->req->params->{party_id},
                 cpf          => $c->req->params->{cpf},
-                ficha_limpa  => $c->req->params->{ficha_limpa},
-                reelection   => $c->req->params->{reelection},
                 raising_goal => $c->req->params->{raising_goal},
                 office_id    => $c->req->params->{office_id},
                 active       => 0,
