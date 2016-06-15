@@ -29,7 +29,6 @@ sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {
     if (!defined($api_key)) {
         $self->status_forbidden($c, message => "access denied");
         $c->detach();
-        return ;
     }
 
     my $user_session = $c->model('DB::UserSession')->search({
@@ -40,12 +39,9 @@ sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {
     if (!$user_session) {
         $self->status_forbidden($c, message => "access denied");
         $c->detach();
-        return ;
     }
 
-    my $user = $c->find_user({
-        id => $user_session->user_id,    
-    });
+    my $user = $c->find_user({ id => $user_session->user_id });
 
     $c->set_authenticated($user);
 }
