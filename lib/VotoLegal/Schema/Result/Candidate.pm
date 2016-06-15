@@ -76,16 +76,6 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
-=head2 ficha_limpa
-
-  data_type: 'boolean'
-  is_nullable: 0
-
-=head2 reelection
-
-  data_type: 'boolean'
-  is_nullable: 0
-
 =head2 active
 
   data_type: 'boolean'
@@ -102,6 +92,11 @@ __PACKAGE__->table("candidate");
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
+
+=head2 video_url
+
+  data_type: 'text'
+  is_nullable: 1
 
 =cut
 
@@ -123,16 +118,14 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cpf",
   { data_type => "text", is_nullable => 0 },
-  "ficha_limpa",
-  { data_type => "boolean", is_nullable => 0 },
-  "reelection",
-  { data_type => "boolean", is_nullable => 0 },
   "active",
   { data_type => "boolean", default_value => \"false", is_nullable => 1 },
   "raising_goal",
   { data_type => "integer", is_nullable => 0 },
   "office_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "video_url",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -209,8 +202,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-15 13:11:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zkiIroXMBTRpuctOYYi6qw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-15 17:52:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ONeUmn8SGqhWZjM8spII1w
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
