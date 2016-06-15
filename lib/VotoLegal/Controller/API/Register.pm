@@ -1,4 +1,4 @@
-package VotoLegal::Controller::API::Candidate::Register;
+package VotoLegal::Controller::API::Register;
 use Moose;
 use namespace::autoclean;
 
@@ -8,7 +8,7 @@ use DDP;
 
 =head1 NAME
 
-VotoLegal::Controller::API::Candidate::Register - Catalyst Controller
+VotoLegal::Controller::API::Register - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -18,7 +18,7 @@ Catalyst Controller.
 
 =cut
 
-sub register : Chained('/api/candidate/root') : PathPart('register') : ActionClass('REST') { }
+sub register : Chained('/api/root') : PathPart('register') : ActionClass('REST') { }
 
 sub register_POST {
     my ($self, $c) = @_;
@@ -49,6 +49,7 @@ sub register_POST {
                 ficha_limpa  => $c->req->params->{ficha_limpa},
                 reelection   => $c->req->params->{reelection},
                 raising_goal => $c->req->params->{raising_goal},
+                office_id    => $c->req->params->{office_id},
                 active       => 0,
             });
         });
