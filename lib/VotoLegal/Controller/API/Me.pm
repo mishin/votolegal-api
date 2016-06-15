@@ -1,4 +1,4 @@
-package VotoLegal::Controller::API::Candidate::Me;
+package VotoLegal::Controller::API::Me;
 use Moose;
 use namespace::autoclean;
 
@@ -16,7 +16,7 @@ Catalyst Controller.
 
 =cut
 
-sub base : Chained('/api/candidate/base') : PathPart('me') : CaptureArgs(0) {
+sub base : Chained('/api/logged') : PathPart('me') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     if (!$c->check_user_roles(qw(user))) {
