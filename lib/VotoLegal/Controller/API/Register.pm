@@ -26,8 +26,9 @@ sub register_POST {
     my $user_rs      = $c->model('DB::User');
     my $candidate_rs = $c->model('DB::Candidate');
 
+    # TODO Passar todos os parâmetros e criar o user dentro do ResultSet do Candidate.
     $user_rs->execute($c, for => 'create', with => $c->req->params);
-    $candidate_rs->execute($c, for => 'create', with => $c->req->params);
+    $candidate_rs->execute($c, for => 'create', with => { %{$c->req->params}, status => "pendent" });
 
     my $user ;
     my $candidate;
@@ -48,7 +49,7 @@ sub register_POST {
                 cpf          => $c->req->params->{cpf},
                 raising_goal => $c->req->params->{raising_goal},
                 office_id    => $c->req->params->{office_id},
-                active       => 0,
+                status       => "pendent",
             });
         });
     };

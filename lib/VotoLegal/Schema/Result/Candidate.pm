@@ -76,12 +76,6 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
-=head2 active
-
-  data_type: 'boolean'
-  default_value: false
-  is_nullable: 1
-
 =head2 raising_goal
 
   data_type: 'integer'
@@ -99,6 +93,11 @@ __PACKAGE__->table("candidate");
   is_nullable: 1
 
 =head2 link_tse
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 status
 
   data_type: 'text'
   is_nullable: 1
@@ -123,8 +122,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cpf",
   { data_type => "text", is_nullable => 0 },
-  "active",
-  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
   "raising_goal",
   { data_type => "integer", is_nullable => 0 },
   "office_id",
@@ -132,6 +129,8 @@ __PACKAGE__->add_columns(
   "video_url",
   { data_type => "text", is_nullable => 1 },
   "link_tse",
+  { data_type => "text", is_nullable => 1 },
+  "status",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -209,8 +208,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 09:55:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9DYmCvCWsTZQ7wmIUjfSIw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 11:33:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hA/UI61E5SopxL73stpVOQ
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);

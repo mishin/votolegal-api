@@ -63,6 +63,16 @@ sub verifiers_specs {
                         $self->result_source->schema->resultset('Office')->search({ id => $office_id })->count;
                     },
                 },
+                status => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $status = $r->get_value('status');
+                        $status =~ m{^(pendent|activated|deactivated)$};
+                    }
+                },
                 link_tse => {
                     required   => 0,
                     type       => 'Str',
