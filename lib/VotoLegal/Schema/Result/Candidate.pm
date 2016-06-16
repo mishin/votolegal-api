@@ -100,7 +100,7 @@ __PACKAGE__->table("candidate");
 =head2 status
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -131,7 +131,7 @@ __PACKAGE__->add_columns(
   "link_tse",
   { data_type => "text", is_nullable => 1 },
   "status",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -208,8 +208,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 11:33:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hA/UI61E5SopxL73stpVOQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 12:12:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KC5XElGryns89zmKyv21Ng
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
