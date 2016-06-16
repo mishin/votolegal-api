@@ -49,6 +49,7 @@ sub register_POST {
                 cpf          => $c->req->params->{cpf},
                 raising_goal => $c->req->params->{raising_goal},
                 office_id    => $c->req->params->{office_id},
+                reelection   => $c->req->params->{reelection},
                 status       => "pendent",
             });
         });

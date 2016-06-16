@@ -73,13 +73,9 @@ sub verifiers_specs {
                         $status =~ m{^(pendent|activated|deactivated)$};
                     }
                 },
-                link_tse => {
-                    required   => 0,
-                    type       => 'Str',
-                    post_check => sub {
-                        # TODO Validar a url. 
-                        1;
-                    },
+                reelection => {
+                    required   => 1,
+                    type       => 'Bool',
                 },
             },
         ),

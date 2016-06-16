@@ -92,14 +92,14 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 link_tse
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 status
 
   data_type: 'text'
+  is_nullable: 0
+
+=head2 reelection
+
+  data_type: 'boolean'
   is_nullable: 0
 
 =cut
@@ -128,10 +128,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "video_url",
   { data_type => "text", is_nullable => 1 },
-  "link_tse",
-  { data_type => "text", is_nullable => 1 },
   "status",
   { data_type => "text", is_nullable => 0 },
+  "reelection",
+  { data_type => "boolean", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -208,8 +208,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 12:12:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KC5XElGryns89zmKyv21Ng
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 14:10:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wplb3uh98lBfsQ4rfo7T3Q
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
@@ -272,13 +272,10 @@ sub verifiers_specs {
                         $self->resultset('Office')->search({ id => $office_id })->count;
                     },
                 },
-                link_tse => {
+                reelection => {
                     required   => 0,
-                    type       => 'Str',
-                    post_check => sub {
-                        # TODO Validar a url. 
-                        1;
-                    },
+                    type       => 'Bool',
+                    post_check => sub { 1 },
                 },
             },
         ),
