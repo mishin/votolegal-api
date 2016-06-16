@@ -63,9 +63,16 @@ sub verifiers_specs {
                         $self->result_source->schema->resultset('Office')->search({ id => $office_id })->count;
                     },
                 },
+                link_tse => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        # TODO Validar a url. 
+                        1;
+                    },
+                },
             },
         ),
-
     };
 }
 

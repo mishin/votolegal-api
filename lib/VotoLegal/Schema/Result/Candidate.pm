@@ -58,12 +58,12 @@ __PACKAGE__->table("candidate");
 =head2 name
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 popular_name
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 party_id
 
@@ -98,6 +98,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 link_tse
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -111,9 +116,9 @@ __PACKAGE__->add_columns(
   "user_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "popular_name",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "party_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cpf",
@@ -125,6 +130,8 @@ __PACKAGE__->add_columns(
   "office_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "video_url",
+  { data_type => "text", is_nullable => 1 },
+  "link_tse",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -202,8 +209,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-15 17:52:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ONeUmn8SGqhWZjM8spII1w
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 09:55:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9DYmCvCWsTZQ7wmIUjfSIw
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
@@ -264,6 +271,14 @@ sub verifiers_specs {
                         my $office_id = $r->get_value('office_id');
 
                         $self->resultset('Office')->search({ id => $office_id })->count;
+                    },
+                },
+                link_tse => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        # TODO Validar a url. 
+                        1;
                     },
                 },
             },
