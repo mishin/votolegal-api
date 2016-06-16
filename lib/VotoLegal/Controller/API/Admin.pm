@@ -2,7 +2,7 @@ package VotoLegal::Controller::API::Admin;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends 'Catalyst::Controller'; }
+BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 =head1 NAME
 
