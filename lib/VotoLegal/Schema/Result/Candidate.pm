@@ -92,6 +92,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
+=head2 username
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -117,6 +122,8 @@ __PACKAGE__->add_columns(
   "reelection",
   { data_type => "boolean", is_nullable => 0 },
   "status",
+  { data_type => "text", is_nullable => 0 },
+  "username",
   { data_type => "text", is_nullable => 0 },
 );
 
@@ -145,6 +152,18 @@ __PACKAGE__->set_primary_key("id");
 =cut
 
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
+
+=head2 C<candidate_username_key>
+
+=over 4
+
+=item * L</username>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("candidate_username_key", ["username"]);
 
 =head1 RELATIONS
 
@@ -194,8 +213,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 17:05:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/VQasgF53C0JCygJfUObfQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 17:55:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/J2+FEJDuiJSQXgRtSAszA
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);

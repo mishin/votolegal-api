@@ -4,8 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
-
 =head1 NAME
 
 VotoLegal::Controller::API::Candidate - Catalyst Controller

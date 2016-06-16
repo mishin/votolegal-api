@@ -6,8 +6,10 @@ use utf8;
 extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
+with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
 use VotoLegal::Types qw(CPF);
+use MooseX::Types::Email qw(EmailAddress);
 
 use Data::Verifier;
 
@@ -18,6 +20,36 @@ sub verifiers_specs {
         create => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
+                email => {
+                    required => 1,
+                    type     => EmailAddress,
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->result_source->schema->resultset('User')->search({
+                            email => $r->get_value('email'),
+                        })->count and die \["email", "already exists"];
+
+                        return 1;
+                    }
+                },
+                password => {
+                    required => 1,
+                    type     => 'Str',
+                },
+                username => {
+                    required => 1,
+                    type     => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        $self->search({
+                            username => $r->get_value('username'),
+                        })->count and die \["username", "already exists"];
+
+                        return 1;
+                    },
+                },
                 name => {
                     required => 1,
                     type     => 'Str',
@@ -82,7 +114,24 @@ sub action_specs {
     my ($self) = @_;
 
     return {
-        create => sub { 1 },
+        create => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+            not defined $values{$_} and delete $values{$_} for keys %values;
+
+            # Creating user.
+            my %user;
+            $user{$_} = delete $values{$_} for qw(email password);
+
+            my $user = $self->result_source->schema->resultset('User')->create(\%user);
+            $user->add_to_roles({ id => 2 });
+
+            # Creating candidate.
+            my $candidate = $user->candidates->create(\%values);
+
+            return $candidate;
+        },
     };
 }
 
