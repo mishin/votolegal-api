@@ -41,7 +41,7 @@ sub candidate_GET {
             status => "activated",
         },
         {
-            columns      => [ qw(id name popular_name ficha_limpa raising_goal reelection office_id) ],
+            columns      => [ qw(id name popular_name reelection office_id) ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator'
         }
     )->single;

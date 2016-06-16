@@ -47,7 +47,6 @@ sub register_POST {
                 popular_name => $c->req->params->{popular_name},
                 party_id     => $c->req->params->{party_id},
                 cpf          => $c->req->params->{cpf},
-                raising_goal => $c->req->params->{raising_goal},
                 office_id    => $c->req->params->{office_id},
                 reelection   => $c->req->params->{reelection},
                 status       => "pending",

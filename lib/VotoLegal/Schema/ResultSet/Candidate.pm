@@ -26,10 +26,6 @@ sub verifiers_specs {
                     required => 1,
                     type     => 'Str',
                 },
-                raising_goal => {
-                    required => 1,
-                    type     => 'Int',
-                },
                 party_id => {
                     required   => 1,
                     type       => 'Int',

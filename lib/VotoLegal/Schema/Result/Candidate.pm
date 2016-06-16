@@ -76,21 +76,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
-=head2 raising_goal
-
-  data_type: 'integer'
-  is_nullable: 0
-
 =head2 office_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
-
-=head2 video_url
-
-  data_type: 'text'
-  is_nullable: 1
 
 =head2 reelection
 
@@ -122,12 +112,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cpf",
   { data_type => "text", is_nullable => 0 },
-  "raising_goal",
-  { data_type => "integer", is_nullable => 0 },
   "office_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "video_url",
-  { data_type => "text", is_nullable => 1 },
   "reelection",
   { data_type => "boolean", is_nullable => 0 },
   "status",
@@ -208,8 +194,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 16:31:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LAE9Bm5r8jEp9iMi5bgysA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 17:05:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/VQasgF53C0JCygJfUObfQ
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
