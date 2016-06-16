@@ -37,7 +37,9 @@ sub candidate_GET {
     my ($self, $c) = @_;
 
     my $candidate = $c->stash->{collection}->search(
-        {},
+        {
+            status => "activated",
+        },
         {
             columns      => [ qw(id name popular_name ficha_limpa raising_goal reelection office_id) ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator'
