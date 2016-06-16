@@ -92,14 +92,14 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 status
-
-  data_type: 'text'
-  is_nullable: 0
-
 =head2 reelection
 
   data_type: 'boolean'
+  is_nullable: 0
+
+=head2 status
+
+  data_type: 'text'
   is_nullable: 0
 
 =cut
@@ -128,10 +128,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "video_url",
   { data_type => "text", is_nullable => 1 },
-  "status",
-  { data_type => "text", is_nullable => 0 },
   "reelection",
   { data_type => "boolean", is_nullable => 0 },
+  "status",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -208,8 +208,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 14:10:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wplb3uh98lBfsQ4rfo7T3Q
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 16:31:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LAE9Bm5r8jEp9iMi5bgysA
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
@@ -263,7 +263,7 @@ sub verifiers_specs {
                     },
                 },
                 office_id => {
-                    required   => 1,
+                    required   => 0,
                     type       => 'Int',
                     post_check => sub {
                         my $r         = shift;
@@ -276,6 +276,16 @@ sub verifiers_specs {
                     required   => 0,
                     type       => 'Bool',
                     post_check => sub { 1 },
+                },
+                status => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $status = $r->get_value('status');
+                        $status =~ m{^(pending|activated|deactivated)$};
+                    }
                 },
             },
         ),

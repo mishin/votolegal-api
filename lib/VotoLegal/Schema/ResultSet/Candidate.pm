@@ -70,7 +70,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $status = $r->get_value('status');
-                        $status =~ m{^(pendent|activated|deactivated)$};
+                        $status =~ m{^(pending|activated|deactivated)$};
                     }
                 },
                 reelection => {

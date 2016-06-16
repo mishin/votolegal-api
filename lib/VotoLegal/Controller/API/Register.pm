@@ -28,7 +28,7 @@ sub register_POST {
 
     # TODO Passar todos os parâmetros e criar o user dentro do ResultSet do Candidate.
     $user_rs->execute($c, for => 'create', with => $c->req->params);
-    $candidate_rs->execute($c, for => 'create', with => { %{$c->req->params}, status => "pendent" });
+    $candidate_rs->execute($c, for => 'create', with => { %{$c->req->params}, status => "pending" });
 
     my $user ;
     my $candidate;
@@ -50,7 +50,7 @@ sub register_POST {
                 raising_goal => $c->req->params->{raising_goal},
                 office_id    => $c->req->params->{office_id},
                 reelection   => $c->req->params->{reelection},
-                status       => "pendent",
+                status       => "pending",
             });
         });
     };
