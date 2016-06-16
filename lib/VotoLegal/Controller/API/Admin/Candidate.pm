@@ -16,20 +16,51 @@ Catalyst Controller.
 
 =cut
 
-sub root : Chained('/api/admin/root') : PathPart('candidate') : CaptureArgs(0) { }
+with 'CatalystX::Eta::Controller::Search';
+with 'CatalystX::Eta::Controller::Order';
 
-sub pending : Chained('root') : PathPart('pending') : ActionClass('REST') { }
+__PACKAGE__->config(
+    # Search
+    search_ok => {
+        status => 'Str',
+    },
+    # Order
+    order_ok => {
+        name => 1,
+    },
+);
 
-sub pending_GET {
+sub root : Chained('/api/admin/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    my $candidate_rs = $c->model('DB::Candidate')->search(
-        { status => "pendent" },
+    $c->stash->{collection} = $c->model('DB::Candidate')->search({}, { order_by => 'me.name' });
+}
+
+sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }
+
+sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
+    my ($self, $c, $candidate_id) = @_;
+
+    $c->stash->{object}    = $c->stash->{collection}->search({ id => $candidate_id });
+    $c->stash->{candidate} = $c->stash->{object}->single;
+
+    if (!$c->stash->{candidate}) {
+        $self->status_bad_request($c, message => "Candidate not found");
+        $c->detach();
+    }
+}
+
+sub list : Chained('base') : PathPart('') : ActionClass('REST') { }
+
+sub list_GET {
+    my ($self, $c) = @_;
+
+    my $candidate_rs = $c->stash->{collection}->search(
+        {},
         {
             #prefetch     => { 'office' },
             #'+select'    => ['office.name'],
             #'+as'        => ['office_name'],
-            order_by     => { -asc => 'me.name' },
             result_class => 'DBIx::Class::ResultClass::HashRefInflator',
         },
     );
@@ -40,7 +71,7 @@ sub pending_GET {
     }
 
     return $self->status_ok($c, entity => {
-        candidate => \@rows,   
+        candidate => \@rows,
     });
 }
 
