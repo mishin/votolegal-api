@@ -54,6 +54,11 @@ __PACKAGE__->table("party");
   data_type: 'text'
   is_nullable: 1
 
+=head2 acronym
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -66,6 +71,8 @@ __PACKAGE__->add_columns(
   },
   "name",
   { data_type => "text", is_nullable => 1 },
+  "acronym",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -112,8 +119,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-14 10:55:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DWRuFeap2RnSJuj5p2diJg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 10:57:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TNTKSXU3Ei5x8d5nmdZxNw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

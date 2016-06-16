@@ -36,8 +36,8 @@ sub me_GET {
         {},
         {
             join         => 'party',
-            '+select'    => ['party.name'],
-            '+as'        => ['party_name'],
+            '+select'    => ['party.acronym'],
+            '+as'        => ['party_acronym'],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator'
         }
     )->single;
