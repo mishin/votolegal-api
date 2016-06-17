@@ -81,22 +81,29 @@ my $auth_user = {};
 sub api_auth_as {
     my (%conf) = @_;
 
-    my $user_id = $conf{user_id};
+    if (!defined($conf{user_id}) && !defined($conf{candidate_id})) {
+        croak "api_auth_as: missing 'user_id' or 'candidate_id'.";
+    }
 
-    defined $user_id or croak "api_auth_as: missing 'user_id'";
+    my $user_id      = $conf{user_id};
+    my $candidate_id = $conf{candidate_id};
 
     my $schema = VotoLegal->model(defined($conf{model}) ? $conf{model} : 'DB');
+
+    if (defined($candidate_id)) {
+        $user_id = $schema->resultset('Candidate')->find($candidate_id)->user_id;
+    }
 
     if ($auth_user->{id} != $user_id) {
         my $user = $schema->resultset('User')->find($user_id);
 
         croak 'api_auth_as: user not found' unless $user;
 
-        my $session = $user->user_sessions->create( { api_key => random_string(128) } );
+        my $session = $user->new_session(ip => "127.0.0.1");
 
         $auth_user = {
             id      => $user_id,
-            api_key => $session->api_key
+            api_key => $session->{api_key},
         };
     }
 
