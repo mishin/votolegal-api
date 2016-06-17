@@ -8,6 +8,7 @@ use CatalystX::Eta::Test::REST;
 
 use Data::Faker;
 use Data::Printer;
+use JSON::MaybeXS;
 use Crypt::PRNG qw(random_string);
 use Business::BR::CPF qw(random_cpf);
 
@@ -114,17 +115,20 @@ sub create_candidate {
         name  => 'add candidate',
         stash => 'candidate',
         [
-            username     => $username,
-            name         => $fake->first_name,
-            popular_name => $fake->last_name,
-            email        => $fake->email,
-            state        => 'São Paulo',
-            city         => 'Iguape',
-            office_id    => 2,
-            party_id     => 5,
-            reelection   => 1,
-            password     => "foobarquux1",
-            cpf          => random_cpf(),
+            username             => $username,
+            password             => "foobarquux1",
+            name                 => $fake->first_name,
+            popular_name         => $fake->last_name,
+            email                => $fake->email,
+            cpf                  => random_cpf(),
+            address_state        => 'São Paulo',
+            address_city         => 'Iguape',
+            address_zipcode      => '11920-000',
+            address_street       => $fake->street_address,
+            address_house_number => 1 + int(rand(2000)),
+            office_id            => 2,
+            party_id             => 5,
+            reelection           => 1,
             %opts,
         ],
     );
