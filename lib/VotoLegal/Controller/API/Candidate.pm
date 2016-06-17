@@ -45,7 +45,8 @@ sub candidate_GET {
 
     return $self->status_ok($c, entity => {
         candidate => {
-            map { $_ => $candidate->$_ } qw(id name popular_name status reelection party_id office_id address_city address_state address_street address_house_number address_complement address_zipcode)
+            map { $_ => $candidate->$_ } qw(
+              id name popular_name status reelection party_id office_id address_city address_state address_street address_house_number address_complement address_zipcode username)
         },
     });
 }
