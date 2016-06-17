@@ -331,9 +331,18 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
+                        my $roles = $r->get_value('roles');
+                        if (!grep $_ eq 'admin', @$roles) {
+                            return 0;
+                        }
+
                         my $status = $r->get_value('status');
                         $status =~ m{^(pending|activated|deactivated)$};
                     }
+                },
+                roles => {
+                    required => 1,
+                    type     => 'ArrayRef[Str]',
                 },
             },
         ),
@@ -350,12 +359,13 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            if (%values) {
-                my $user = $self->update(\%values);
+            delete $values{roles};
 
-                return $user;
+            if (%values) {
+                $self = $self->update(\%values);
             }
-            return ;
+
+            return $self;
         },
     };
 }
