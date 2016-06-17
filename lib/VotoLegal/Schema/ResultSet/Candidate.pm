@@ -8,6 +8,7 @@ extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
+use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(CPF);
 use MooseX::Types::Email qw(EmailAddress);
 
@@ -104,6 +105,49 @@ sub verifiers_specs {
                 reelection => {
                     required   => 1,
                     type       => 'Bool',
+                },
+                address_state => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $state = $r->get_value('address_state');
+                        $self->result_source->schema->resultset('State')->search({ name => $state })->count;
+                    },
+                },
+                address_city => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $city = $r->get_value('address_city');
+                        $self->result_source->schema->resultset('City')->search({ name => $city })->count;
+                    },
+                },
+                address_zipcode => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $cep = $r->get_value('address_zipcode');
+                        return test_cep($cep);
+
+                    },
+                },
+                address_street => {
+                    required   => 1,
+                    type       => 'Str',
+                },
+                address_house_number => {
+                    required   => 1,
+                    type       => 'Int',
+                },
+                address_complement => {
+                    required   => 0,
+                    type       => 'Str',
                 },
             },
         ),

@@ -97,6 +97,37 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
+=head2 address_state
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_city
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_zipcode
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_street
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_complement
+
+  data_type: 'text'
+  default_value: (empty string)
+  is_nullable: 0
+
+=head2 address_house_number
+
+  data_type: 'integer'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -125,6 +156,18 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "username",
   { data_type => "text", is_nullable => 0 },
+  "address_state",
+  { data_type => "text", is_nullable => 0 },
+  "address_city",
+  { data_type => "text", is_nullable => 0 },
+  "address_zipcode",
+  { data_type => "text", is_nullable => 0 },
+  "address_street",
+  { data_type => "text", is_nullable => 0 },
+  "address_complement",
+  { data_type => "text", default_value => "", is_nullable => 0 },
+  "address_house_number",
+  { data_type => "integer", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -213,8 +256,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 17:55:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/J2+FEJDuiJSQXgRtSAszA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-17 11:11:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O9DQSgtnHAEhryY2Ws+Y4A
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
