@@ -34,9 +34,12 @@ sub register_POST {
         },
     );
 
-    $self->status_ok($c, entity => { candidate_id => $candidate->id });
+    $self->status_created(
+        $c,
+        location => $c->uri_for( $c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ]),
+        entity   => { candidate_id => $candidate->id }
+    );
 }
-
 
 =encoding utf8
 
