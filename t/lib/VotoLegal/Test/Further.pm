@@ -9,6 +9,7 @@ use CatalystX::Eta::Test::REST;
 use Data::Faker;
 use Data::Printer;
 use Crypt::PRNG qw(random_string);
+use Business::BR::CPF qw(random_cpf);
 
 # ugly hack
 sub import {
@@ -99,6 +100,34 @@ sub api_auth_as {
     }
 
     $obj->fixed_headers([ 'x-api-key' => $auth_user->{api_key} ]);
+}
+
+sub create_candidate {
+    my (%opts) = @_;
+
+    my $fake = Data::Faker->new();
+    my $username = lc $fake->name;
+    $username =~ s/\s+/_/g;
+
+    return $obj->rest_post(
+        '/api/register',
+        name  => 'add candidate',
+        stash => 'candidate',
+        [
+            username     => $username,
+            name         => $fake->first_name,
+            popular_name => $fake->last_name,
+            email        => $fake->email,
+            state        => 'São Paulo',
+            city         => 'Iguape',
+            office_id    => 2,
+            party_id     => 5,
+            reelection   => 1,
+            password     => "foobarquux1",
+            cpf          => random_cpf(),
+            %opts,
+        ],
+    );
 }
 
 1;
