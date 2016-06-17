@@ -70,9 +70,7 @@ sub list_GET {
         push @rows, $candidate;
     }
 
-    return $self->status_ok($c, entity => {
-        candidate => \@rows,
-    });
+    return $self->status_ok($c, entity => \@rows);
 }
 
 =encoding utf8
