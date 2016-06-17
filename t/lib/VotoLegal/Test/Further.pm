@@ -9,7 +9,6 @@ use CatalystX::Eta::Test::REST;
 use Data::Faker;
 use Data::Printer;
 use JSON::MaybeXS;
-use Crypt::PRNG qw(random_string);
 use Business::BR::CPF qw(random_cpf);
 
 # ugly hack

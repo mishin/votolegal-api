@@ -40,7 +40,7 @@ sub me_GET {
             '+as'        => ['party_acronym'],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator'
         }
-    )->single;
+    )->next;
 
     return $self->status_ok($c, entity => {
         candidate => $candidate,
