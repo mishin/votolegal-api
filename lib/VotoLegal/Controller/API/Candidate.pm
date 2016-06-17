@@ -16,41 +16,37 @@ Catalyst Controller.
 
 =cut
 
-sub root : Chained('/api/root') : PathPart('candidate') : CaptureArgs(1) {
-    my ($self, $c, $username) = @_;
-
-    my $user = $c->model('DB::User')->search({ username => $username })->single;
-
-    if (!$user) {
-        $self->status_bad_request($c, message => "Candidate not found");
-        $c->detach();
-    }
-
-    $c->stash->{collection} = $user->candidates;
-}
-
-sub candidate : Chained('root') : PathPart('') : ActionClass('REST') { }
-
-sub candidate_GET {
+sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{collection}->search(
-        {
-            status => "activated",
-        },
-        {
-            columns      => [ qw(id name popular_name reelection office_id) ],
-            result_class => 'DBIx::Class::ResultClass::HashRefInflator'
-        }
-    )->single;
+    $c->stash->{collection} = $c->model('DB::Candidate');
+}
 
-    if (!%{$candidate}) {
+sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }
+
+sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
+    my ($self, $c, $candidate_id) = @_;
+
+    $c->stash->{candidate} = $c->stash->{collection}->search({ id => $candidate_id })->next;
+
+    if (!$c->stash->{candidate}) {
         $self->status_bad_request($c, message => 'Candidate not found');
         $c->detach();
     }
 
+}
+
+sub candidate : Chained('object') : PathPart('') : ActionClass('REST') { }
+
+sub candidate_GET {
+    my ($self, $c) = @_;
+
+    my $candidate = $c->stash->{candidate};
+
     return $self->status_ok($c, entity => {
-        candidate => $candidate,
+        candidate => {
+            map { $_ => $candidate->$_ } qw(id name popular_name status reelection party_id office_id address_city address_state address_street address_house_number address_complement address_zipcode)
+        },
     });
 }
 
