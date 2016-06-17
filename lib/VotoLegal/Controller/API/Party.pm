@@ -16,17 +16,20 @@ Catalyst Controller.
 
 =cut
 
-sub root : Chained('/api/root') : PathPart('party') : CaptureArgs(0) { }
+sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 
-sub party : Chained('root') : PathPart('') ActionClass('REST') { }
+sub base : Chained('root') : PathPart('party') : CaptureArgs(0) { }
+
+sub party : Chained('base') : PathPart('') ActionClass('REST') { }
 
 sub party_GET {
     my ($self, $c) = @_;
 
     my @parties = map {
         {
-            id   => $_->id,
-            name => $_->name 
+            id      => $_->id,
+            name    => $_->name,
+            acronym => $_->acronym,
         }
     } $c->model('DB::Party')->all;
 
