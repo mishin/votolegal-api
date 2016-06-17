@@ -20,48 +20,38 @@ db_transaction {
 
         is ($me->{candidate}->{id}, stash 'candidate.id');
     };
-};
 
-done_testing();
-
-__END__
-
-db_transaction {
-    create_candidate;
-
-    stash_test 'candidate.get', sub {
-        my ($me) = @_;
-
-        ok($me->{candidate}->{id} > 0, 'candidate id');
-        is($me->{candidate}->{status}, "pending", 'candidate status pending');
-    };
-
-    my $candidate_id = stash 'candidate.id';
-    my $candidate    = $schema->resultset('Candidate')->find($candidate_id);
-
-    rest_post '/api/login',
-        name    => 'candidate login --fail',
+    rest_put '/api/me',
+        name    => "edit myself -- can't change status",
         is_fail => 1,
-        [
-            email => $candidate->user->email,
-            password => 'wrongpassword',
-        ],
+        params  => {
+            status => "activated",
+        },
     ;
 
-    rest_post '/api/login',
-        name  => 'candidate login',
-        code  => 200,
-        stash => 'login',
-        [
-            email    => $candidate->user->email,
-            password => 'foobarquux1',
-        ],
+    rest_put '/api/me',
+        name   => 'edit candidate',
+        params => {
+            name                 => "Junior Moraes",
+            popular_name         => "Junior do VotoLegal",
+            address_street       => "Rua Tiradentes",
+            address_house_number => 666,
+        },
     ;
 
-    stash_test 'login', sub {
+    rest_get '/api/me',
+        name  => 'get myself after edit',
+        stash => 'me2',
+        code  => 200
+    ;
+
+    stash_test 'me2', sub {
         my ($me) = @_;
 
-        is(length $me->{api_key}, 128, 'api key ok');
+        is ($me->{candidate}->{name}, "Junior Moraes", 'name');
+        is ($me->{candidate}->{popular_name}, "Junior do VotoLegal", 'popular name');
+        is ($me->{candidate}->{address_street}, "Rua Tiradentes", 'address street');
+        is ($me->{candidate}->{address_house_number}, 666, 'address house number');
     };
 };
 

@@ -50,10 +50,9 @@ sub me_GET {
 sub me_PUT {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{collection}->single->execute($c, for => 'update', with => { %{$c->req->params}, roles => [$c->user->roles] });
+    my $candidate = $c->stash->{collection}->single->execute($c, for => 'update', with => { %{ $c->req->params }, roles => [ $c->user->roles ] });
 
     return $self->status_accepted($c, entity => { id => $candidate->id });
-    #return $self->status_accepted($c, entity => { id => 0 });
 }
 
 =encoding utf8

@@ -344,6 +344,48 @@ sub verifiers_specs {
                     required => 1,
                     type     => 'ArrayRef[Str]',
                 },
+                address_state => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $state = $r->get_value('address_state');
+                        $self->resultset('State')->search({ name => $state })->count;
+                    },
+                },
+                address_city => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $city = $r->get_value('address_city');
+                        $self->resultset('City')->search({ name => $city })->count;
+                    },
+                },
+                address_zipcode => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $cep = $r->get_value('address_zipcode');
+                        return test_cep($cep);
+                    },
+                },
+                address_street => {
+                    required   => 0,
+                    type       => 'Str',
+                },
+                address_house_number => {
+                    required   => 0,
+                    type       => 'Int',
+                },
+                address_complement => {
+                    required   => 0,
+                    type       => 'Str',
+                },
             },
         ),
     };
