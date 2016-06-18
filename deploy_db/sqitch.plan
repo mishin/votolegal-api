@@ -1,0 +1,13 @@
+%syntax-version=1.0.0
+%project=votolegal
+%uri=https://github.com/AppCivico/votolegal-api
+
+appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
+0000-party [appschema] 2016-06-18T23:29:22Z junior,,, <junior@fvox> # adicionando partidos
+0001-candidate [0000-party] 2016-06-18T23:37:51Z junior,,, <junior@fvox> # candidates
+0002-reelection [0001-candidate] 2016-06-18T23:40:52Z junior,,, <junior@fvox> # election ficha limpa deixou de existir
+0003-names [0002-reelection] 2016-06-18T23:42:15Z junior,,, <junior@fvox> # mes adicionando name e popular name no candidate
+0004-party-acronym [0003-names] 2016-06-18T23:43:44Z junior,,, <junior@fvox> # rty-acronym adicionando sigla nos partidos
+0005-candidate-status [0004-party-acronym] 2016-06-18T23:47:47Z junior,,, <junior@fvox> # ndidate-status
+0006-delete-raising-goal [0005-candidate-status] 2016-06-18T23:48:36Z junior,,, <junior@fvox> # lete-raising-goal no raising goal
+0007-candidate-username [0006-delete-raising-goal] 2016-06-18T23:49:40Z junior,,, <junior@fvox> # ndidate-username
