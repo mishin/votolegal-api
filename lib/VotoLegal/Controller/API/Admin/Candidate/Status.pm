@@ -25,7 +25,7 @@ sub activate_PUT {
 
     my $candidate = $c->stash->{candidate};
 
-    $candidate->execute($c, for => 'update', with => { status => "activated" });
+    $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "activated" } );
 
     return $self->status_ok($c, entity => { id => $candidate->id });
 }
@@ -37,7 +37,7 @@ sub deactivate_PUT {
 
     my $candidate = $c->stash->{candidate};
 
-    $candidate->execute($c, for => 'update', with => { status => "deactivated" });
+    $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "deactivated" } );
 
     return $self->status_ok($c, entity => { id => $candidate->id });
 }
