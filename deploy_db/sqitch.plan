@@ -11,3 +11,6 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0005-candidate-status [0004-party-acronym] 2016-06-18T23:47:47Z junior,,, <junior@fvox> # ndidate-status
 0006-delete-raising-goal [0005-candidate-status] 2016-06-18T23:48:36Z junior,,, <junior@fvox> # lete-raising-goal no raising goal
 0007-candidate-username [0006-delete-raising-goal] 2016-06-18T23:49:40Z junior,,, <junior@fvox> # ndidate-username
+0008-states [0007-candidate-username] 2016-06-18T23:54:18Z junior,,, <junior@fvox> # ates adicionando os estados
+0009-cities [0008-states] 2016-06-18T23:55:50Z junior,,, <junior@fvox> # ties adicionando cidades
+0010-candidate-address [0009-cities] 2016-06-19T00:01:19Z junior,,, <junior@fvox> # ndidate-address adicionando endereço do candidato
