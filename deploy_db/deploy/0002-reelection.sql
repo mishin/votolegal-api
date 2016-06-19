@@ -4,6 +4,5 @@
 BEGIN;
 
 ALTER TABLE candidate DROP COLUMN ficha_limpa ;
-ALTER TABLE candidate DROP COLUMN reelection ;
 
 COMMIT;
