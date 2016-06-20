@@ -35,6 +35,6 @@ CREATE TABLE public.user_session
 );
 
 INSERT INTO "user" (username, password, email) VALUES ('admin', 'reBXSBHPrtEoRrH2GtJVye6w780FGABokqbBEQb0N0xvgAclgstba', 'juniorfvox@gmail.com') ;
-INSERT INTO user_roles (role_id, user_id) VALUES (1, 1) ;
+INSERT INTO user_role (role_id, user_id) VALUES (1, 1) ;
 
 COMMIT;
