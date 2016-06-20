@@ -18,25 +18,33 @@ Catalyst Controller.
 
 =cut
 
-sub register : Chained('/api/root') : PathPart('register') : ActionClass('REST') { }
+sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{collection} = $c->model('DB::Candidate');
+}
+
+sub base : Chained('root') : PathPart('register') : CaptureArgs(0) { }
+
+sub register : Chained('base') : PathPart('') : ActionClass('REST') { }
 
 sub register_POST {
     my ($self, $c) = @_;
 
-    my $candidate_rs = $c->model('DB::Candidate');
-
-    my $candidate = $c->model('DB::Candidate')->execute(
+    my $candidate = $c->stash->{collection}->execute(
         $c,
-        for => 'create',
+        for  => 'create',
         with => {
             %{ $c->req->params },
             status => "pending",
         },
     );
 
+    $candidate->send_email_registration();
+
     $self->status_created(
         $c,
-        location => $c->uri_for( $c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ]),
+        location => $c->uri_for($c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ]),
         entity   => { id => $candidate->id }
     );
 }

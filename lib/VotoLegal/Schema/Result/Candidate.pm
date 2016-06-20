@@ -76,15 +76,15 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
+=head2 reelection
+
+  data_type: 'boolean'
+  is_nullable: 0
+
 =head2 office_id
 
   data_type: 'integer'
   is_foreign_key: 1
-  is_nullable: 0
-
-=head2 reelection
-
-  data_type: 'boolean'
   is_nullable: 0
 
 =head2 status
@@ -148,10 +148,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "cpf",
   { data_type => "text", is_nullable => 0 },
-  "office_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "reelection",
   { data_type => "boolean", is_nullable => 0 },
+  "office_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "status",
   { data_type => "text", is_nullable => 0 },
   "username",
@@ -256,11 +256,14 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-17 11:11:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O9DQSgtnHAEhryY2Ws+Y4A
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-20 15:41:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8MyK3neE18Zk3rZsMRxgLw
 
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
+use VotoLegal::Mailer::Template;
+
+use DDP;
 
 with 'VotoLegal::Role::Verification';
 
@@ -412,6 +415,24 @@ sub action_specs {
     };
 }
 
+sub send_email_registration {
+    my ($self) = @_;
+
+    my $subject = "VotoLegal - Cadastro realizado";
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to      => $self->user,
+        from    => "",
+        subject => $subject,
+        content => "",
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        user  => $self->user,
+        body  => $email->as_string,
+        title => $subject,
+    });
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
