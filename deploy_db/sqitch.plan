@@ -14,3 +14,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0008-states [0007-candidate-username] 2016-06-18T23:54:18Z junior,,, <junior@fvox> # ates adicionando os estados
 0009-cities [0008-states] 2016-06-18T23:55:50Z junior,,, <junior@fvox> # ties adicionando cidades
 0010-candidate-address [0009-cities] 2016-06-19T00:01:19Z junior,,, <junior@fvox> # ndidate-address adicionando endereço do candidato
+0011-populate_party [0010-candidate-address] 2016-06-20T14:34:29Z Junior Moraes,,, <junior@junior-eokoe> # Populando a tabela de partidos
