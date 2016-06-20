@@ -25,7 +25,7 @@ db_transaction {
     my $email = $email_rs->next;
     ok ($worker->run_once($email->id), 'run once');
 
-    is ($email_rs->count, 0, 'email is queued');
+    is ($email_rs->count, 0, 'email out of queue');
 };
 
 done_testing();

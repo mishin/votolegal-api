@@ -5,10 +5,10 @@ use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP::TLS;
 
 BEGIN {
-    if (!$ENV{HARNESS_ACTIVE} && !$0 =~ /forkprove/) {
-        defined $ENV{VOTOLEGAL_SMTP_SERVER} or die "ENV 'VOTOLEGAL_SMTP_SERVER' MISSING";
-        defined $ENV{VOTOLEGAL_SMTP_USER}   or die "ENV 'VOTOLEGAL_SMTP_USER' MISSING";
-        defined $ENV{VOTOLEGAL_SMTP_PASSWD} or die "ENV 'VOTOLEGAL_SMTP_PASSWD' MISSING";
+    if (!$ENV{HARNESS_ACTIVE} && $0 !~ /forkprove/) {
+        defined $ENV{VOTOLEGAL_SMTP_SERVER} || die "ENV 'VOTOLEGAL_SMTP_SERVER' MISSING";
+        defined $ENV{VOTOLEGAL_SMTP_USER}   || die "ENV 'VOTOLEGAL_SMTP_USER' MISSING";
+        defined $ENV{VOTOLEGAL_SMTP_PASSWD} || die "ENV 'VOTOLEGAL_SMTP_PASSWD' MISSING";
     }
 }
 

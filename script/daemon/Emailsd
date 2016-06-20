@@ -1,0 +1,48 @@
+#!/usr/bin/env perl
+package VotoLegal::Daemon::Emailsd;
+use common::sense;
+use FindBin qw($RealBin $Script);
+use lib "$RealBin/../../lib";
+use Data::Printer;
+
+use AnyEvent;
+use Daemon::Generic;
+
+use VotoLegal::SchemaConnected;
+use VotoLegal::Worker::Email;
+
+newdaemon(
+    pidfile => "/tmp/$Script.pid",
+    options => {},
+);
+
+sub gd_preconfig {
+    my $self = shift;
+
+    $0 = "VotoLegal::Daemon::Emailsd";
+    $|++;
+
+    return ();
+}
+
+sub gd_run {
+    my $self = shift;
+
+    my $schema = get_schema();
+
+    my $cv = AnyEvent->condvar;
+
+    my $worker = VotoLegal::Worker::Email->new(
+        schema => $schema,
+    );
+
+    my $w = AnyEvent->timer(
+        after    => 0.0,
+        interval => $worker->timer,
+        cb       => sub { $worker->listen_queue() },
+    );
+
+    $cv->recv;
+}
+
+1;

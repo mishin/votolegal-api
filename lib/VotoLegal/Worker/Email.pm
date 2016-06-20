@@ -7,6 +7,11 @@ with 'VotoLegal::Worker';
 use VotoLegal::Mailer;
 use Data::Printer;
 
+has timer => (
+    is      => "rw",
+    default => 5,
+);
+
 has mailer => (
     is       => "ro",
     isa      => "VotoLegal::Mailer",
@@ -32,14 +37,10 @@ sub listen_queue {
         },
     )->all;
 
-    my $count = 0;
-
     for my $item (@items) {
         $self->exec_item($item);
-        $count++;
     }
-
-    return $count;
+    return ;
 }
 
 sub run_once {
