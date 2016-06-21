@@ -16,12 +16,12 @@ stash_test 'party', sub {
     is (ref $res->{parties}, 'ARRAY');
     ok (scalar @{ $res->{parties} } > 0, 'has parties');
 
+    my $all_parties_has_name_and_acronym = 1;
     for (@{ $res->{parties} }) {
-        ok (
-            defined($_->{id}) && defined($_->{name}) && defined($_->{acronym}),
-            'party has id, name and acronym',
-        );
+        $all_parties_has_name_and_acronym &= defined($_->{name}) && defined($_->{acronym});
     }
+
+    ok ($all_parties_has_name_and_acronym, 'all parties has name and acronym');
 };
 
 done_testing();
