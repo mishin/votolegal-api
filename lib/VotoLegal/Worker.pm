@@ -11,5 +11,11 @@ has timer => (
     required => 1,
 );
 
+has logger => (
+    is       => "rw",
+    isa      => "Log::Log4perl::Logger",
+    required => 0,
+);
+
 1;
 

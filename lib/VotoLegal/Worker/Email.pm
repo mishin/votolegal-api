@@ -5,7 +5,6 @@ use Moose;
 with 'VotoLegal::Worker';
 
 use VotoLegal::Mailer;
-use Data::Printer;
 
 has timer => (
     is      => "rw",
@@ -26,10 +25,10 @@ has schema => (
 sub listen_queue {
     my $self = shift;
 
+    $self->logger->debug("Buscando itens na fila...") if $self->logger;
+
     my @items = $self->schema->resultset('EmailQueue')->search(
-        {
-            sent => 0,
-        },
+        { sent => 0 },
         {
             rows   => 20,
             for    => "update",
@@ -37,10 +36,18 @@ sub listen_queue {
         },
     )->all;
 
-    for my $item (@items) {
-        $self->exec_item($item);
+    if (@items) {
+        $self->logger->info(sprintf("'%d' itens serão processados.", scalar @items)) if $self->logger;
+
+        for my $item (@items) {
+            $self->exec_item($item);
+        }
+
+        $self->logger->info("Todos os items foram processados com sucesso") if $self->logger;
     }
-    return ;
+    else {
+        $self->logger->info("Não há itens pendentes na fila.") if $self->logger;
+    }
 }
 
 sub run_once {
