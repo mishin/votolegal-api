@@ -128,6 +128,11 @@ __PACKAGE__->table("candidate");
   data_type: 'integer'
   is_nullable: 0
 
+=head2 cnpj
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -168,6 +173,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", default_value => "", is_nullable => 0 },
   "address_house_number",
   { data_type => "integer", is_nullable => 0 },
+  "cnpj",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -256,14 +263,14 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-20 15:41:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8MyK3neE18Zk3rZsMRxgLw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-21 14:02:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zC40qMQY2UEgPD8Jjoe7rg
 
 use Data::Verifier;
+
 use VotoLegal::Types qw(CPF);
 use VotoLegal::Mailer::Template;
-
-use DDP;
+use MooseX::Types::CNPJ qw(CNPJ);
 
 with 'VotoLegal::Role::Verification';
 
@@ -388,6 +395,10 @@ sub verifiers_specs {
                 address_complement => {
                     required   => 0,
                     type       => 'Str',
+                },
+                cnpj => {
+                    required => 0,
+                    type     => CNPJ,
                 },
             },
         ),

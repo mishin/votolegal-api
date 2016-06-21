@@ -10,6 +10,7 @@ use Data::Faker;
 use Data::Printer;
 use JSON::MaybeXS;
 use Business::BR::CPF qw(random_cpf);
+use Business::BR::CNPJ qw(random_cnpj);
 
 # ugly hack
 sub import {
@@ -127,6 +128,7 @@ sub create_candidate {
             popular_name         => $fake->last_name,
             email                => $fake->email,
             cpf                  => random_cpf(),
+            cnpj                 => random_cnpj(1),
             address_state        => 'São Paulo',
             address_city         => 'Iguape',
             address_zipcode      => '11920-000',

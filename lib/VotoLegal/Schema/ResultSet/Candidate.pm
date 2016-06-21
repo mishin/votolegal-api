@@ -10,6 +10,7 @@ with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(CPF);
+use MooseX::Types::CNPJ qw(CNPJ);
 use MooseX::Types::Email qw(EmailAddress);
 
 use Data::Verifier;
@@ -148,6 +149,10 @@ sub verifiers_specs {
                 address_complement => {
                     required   => 0,
                     type       => 'Str',
+                },
+                cnpj => {
+                    required => 1,
+                    type     => CNPJ,
                 },
             },
         ),
