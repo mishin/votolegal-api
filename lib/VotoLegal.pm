@@ -44,6 +44,17 @@ __PACKAGE__->config(
     enable_catalyst_header => 0, # Send X-Catalyst header
 );
 
+before 'setup_components' => sub {
+    my $app = shift;
+
+    $app->config->{'Model::DB'}->{connect_info} = {
+        dsn         => "dbi:Pg:dbname=" . $ENV{VOTOLEGAL_DB_NAME} . ";host=" . $ENV{VOTOLEGAL_DB_HOST},
+        user        => $ENV{VOTOLEGAL_DB_USER},
+        password    => $ENV{VOTOLEGAL_DB_PASSWD},
+        quote_names => q(1),
+    };
+};
+
 # Start the application
 __PACKAGE__->setup();
 
