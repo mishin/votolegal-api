@@ -26,6 +26,7 @@ sub activate_PUT {
     my $candidate = $c->stash->{candidate};
 
     $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "activated" } );
+    $candidate->send_email_activation();
 
     return $self->status_ok($c, entity => { id => $candidate->id });
 }

@@ -27,6 +27,12 @@ db_transaction {
         code  => 200,
     ;
 
+    is(
+        $schema->resultset('EmailQueue')->search({ user_id => $candidate->user->id })->count,
+        2,
+        'two emails on queue',
+    );
+
     ok ($candidate->discard_changes, 'reload candidate');
     is ($candidate->status, "activated", 'candidate is activated');
 

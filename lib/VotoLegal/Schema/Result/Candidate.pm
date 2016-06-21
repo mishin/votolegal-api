@@ -434,6 +434,25 @@ sub send_email_registration {
     });
 }
 
+sub send_email_activation {
+    my ($self) = @_;
+
+    my $subject = "VotoLegal - Cadastro aprovado";
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to      => $self->user,
+        from    => "",
+        subject => $subject,
+        content => "",
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        user  => $self->user,
+        body  => $email->as_string,
+        title => $subject,
+    });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
