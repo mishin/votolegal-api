@@ -34,7 +34,8 @@ CREATE TABLE public.user_session
   created_at timestamp without time zone NOT NULL DEFAULT now()
 );
 
-INSERT INTO "user" (username, password, email) VALUES ('admin', 'reBXSBHPrtEoRrH2GtJVye6w780FGABokqbBEQb0N0xvgAclgstba', 'juniorfvox@gmail.com') ;
+
+INSERT INTO "user" (username, password, email) VALUES ('admin', '$2a$08$J.6n3gDaI557928Pa746deLFIknPMoyCo692RwAjVf0ToIFTI73vq', 'juniorfvox@gmail.com') ;
 INSERT INTO user_role (role_id, user_id) VALUES (1, 1) ;
 
 COMMIT;
