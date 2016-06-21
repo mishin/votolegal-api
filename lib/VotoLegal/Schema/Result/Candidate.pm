@@ -267,10 +267,11 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zC40qMQY2UEgPD8Jjoe7rg
 
 use Data::Verifier;
-
+use Template;
 use VotoLegal::Types qw(CPF);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
+use Data::Section::Simple qw(get_data_section);
 
 with 'VotoLegal::Role::Verification';
 
@@ -429,13 +430,23 @@ sub action_specs {
 sub send_email_registration {
     my ($self) = @_;
 
+    my $tt   = Template->new(EVAL_PERL => 0);
+    my $data = get_data_section('candidate_registration.tt');
+
+    my $content ;
+    $tt->process(
+        \$data,
+        { map { $_ => $self->$_} qw(name) },
+        \$content,
+    );
+
     my $subject = "VotoLegal - Cadastro realizado";
 
     my $email = VotoLegal::Mailer::Template->new(
         to      => $self->user,
-        from    => "",
+        from    => 'no-reply@votolegal.org',
         subject => $subject,
-        content => "",
+        content => $content,
     )->build_email();
 
     return $self->resultset('EmailQueue')->create({
@@ -448,13 +459,23 @@ sub send_email_registration {
 sub send_email_activation {
     my ($self) = @_;
 
+    my $tt   = Template->new(EVAL_PERL => 0);
+    my $data = get_data_section('candidate_activation.tt');
+
+    my $content ;
+    $tt->process(
+        \$data,
+        { map { $_ => $self->$_} qw(name) },
+        \$content,
+    );
+
     my $subject = "VotoLegal - Cadastro aprovado";
 
     my $email = VotoLegal::Mailer::Template->new(
         to      => $self->user,
-        from    => "",
+        from    => 'no-reply@votolegal.org',
         subject => $subject,
-        content => "",
+        content => $content,
     )->build_email();
 
     return $self->resultset('EmailQueue')->create({
@@ -468,3 +489,16 @@ sub send_email_activation {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+__DATA__
+
+@@ candidate_registration.tt
+
+Olá [% name %]!<br>
+Seu cadastro está pendente para aprovação.<br>
+
+@@ candidate_activation.tt
+
+Olá [% name %]!<br>
+Seu cadastro foi aprovado com sucesso!<br>
+
