@@ -7,7 +7,7 @@ requires 'run_once';
 
 has timer => (
     is       => "ro",
-	isa 	 => "Int",
+    isa      => "Int",
     required => 1,
 );
 

@@ -1,8 +1,8 @@
 package Data::Verifier;
+use Moose;
 {
     $Data::Verifier::VERSION = '0.56';
 }
-use Moose;
 
 # ABSTRACT: Profile based data verification with Moose type constraints.
 
