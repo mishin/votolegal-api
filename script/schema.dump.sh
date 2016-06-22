@@ -9,4 +9,5 @@ perl votolegal_create.pl model DB DBIC::Schema VotoLegal::Schema create=static c
 cd ..;
 
 rm -f lib/VotoLegal/Model/DB.pm.new;
+rm -f t/model_DB.t;
 rm -f t/model_DB.t.new;
