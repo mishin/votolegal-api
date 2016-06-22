@@ -217,6 +217,21 @@ __PACKAGE__->add_unique_constraint("candidate_username_key", ["username"]);
 
 =head1 RELATIONS
 
+=head2 candidate_issue_priorities
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::CandidateIssuePriority>
+
+=cut
+
+__PACKAGE__->has_many(
+  "candidate_issue_priorities",
+  "VotoLegal::Schema::Result::CandidateIssuePriority",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 office
 
 Type: belongs_to
@@ -262,9 +277,23 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 issue_priorities
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-21 14:02:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zC40qMQY2UEgPD8Jjoe7rg
+Type: many_to_many
+
+Composing rels: L</candidate_issue_priorities> -> issue_priority
+
+=cut
+
+__PACKAGE__->many_to_many(
+  "issue_priorities",
+  "candidate_issue_priorities",
+  "issue_priority",
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-22 11:40:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OtUjM980mDvs7tR3EYhsIw
 
 use Data::Verifier;
 use Template;
@@ -274,6 +303,7 @@ use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
 
 with 'VotoLegal::Role::Verification';
+with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
 sub resultset {
     my $self = shift;
@@ -401,6 +431,28 @@ sub verifiers_specs {
                     required => 0,
                     type     => CNPJ,
                 },
+                issue_priorities => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $issue_priorities   = $r->get_value("issue_priorities");
+                        my @issue_priority_ids = grep { int($_) == $_ } split(m{\s*,\s*}, $issue_priorities);
+
+                        if (@issue_priority_ids > 4) {
+                            return 0;
+                        }
+
+                        my @issue_priority = map {
+                            $self->resultset('IssuePriority')->find($_) or die \["issue_priorities", "invalid issue_priority_id '$_'"]
+                        } @issue_priority_ids;
+
+                        $self->set_issue_priorities(@issue_priority);
+
+                        return 1;
+                    },
+                },
             },
         ),
     };
@@ -416,7 +468,9 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
+            # Deletando os values que não pertencem a entidade Candidate.
             delete $values{roles};
+            delete $values{issue_priorities};
 
             if (%values) {
                 $self = $self->update(\%values);

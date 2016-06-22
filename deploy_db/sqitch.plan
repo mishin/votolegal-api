@@ -16,3 +16,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0010-candidate-address [0009-cities] 2016-06-19T00:01:19Z junior,,, <junior@fvox> # ndidate-address adicionando endereço do candidato
 0011-populate_party [0010-candidate-address] 2016-06-20T14:34:29Z Junior Moraes,,, <junior@junior-eokoe> # Populando a tabela de partidos
 0012-candidate-cnpj [0011-populate_party] 2016-06-21T17:01:53Z Junior Moraes,,, <junior@junior-eokoe> # ndidate-cnpj adicionando cnpj na tabela de candidatos
+0013-issue-priority [0012-candidate-cnpj] 2016-06-22T16:36:06Z Junior Moraes,,, <junior@junior-eokoe> # sue-priority adicionando tabelas de assuntos prioritarios
