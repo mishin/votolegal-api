@@ -35,18 +35,19 @@ sub me : Chained('base') : PathPart('') : ActionClass('REST') { }
 sub me_GET {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{collection}->search(
-        {},
+    my $me = $c->stash->{collection}->search(
+        undef,
         {
-            join         => 'party',
-            '+select'    => ['party.acronym'],
-            '+as'        => ['party_acronym'],
+            prefetch => [
+                'party',
+                { 'candidate_issue_priorities' => 'issue_priority' },
+            ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator'
         }
     )->next;
 
     return $self->status_ok($c, entity => {
-        candidate => $candidate,
+        me => $me,
     });
 }
 

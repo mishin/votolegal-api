@@ -38,6 +38,29 @@ db_transaction {
         [1, 2, 3, 5],
         'issue priority edited',
     );
+
+    rest_get '/api/me',
+        name  => "get myself",
+        stash => "me",
+        code  => 200,
+    ;
+
+    stash_test 'me', sub {
+        my ($res) = @_;
+
+        my $candidate_issue_priorities = $res->{me}->{candidate_issue_priorities};
+
+        my @issue_priority_id = ();
+        for (@{$candidate_issue_priorities}) {
+            push @issue_priority_id, $_->{issue_priority_id};
+        }
+
+        is_deeply(
+            [ sort { $a <=> $b } @issue_priority_id ],
+            [1, 2, 3, 5],
+            'get issue priority',
+        );
+    };
 };
 
 done_testing();
