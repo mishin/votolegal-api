@@ -16,9 +16,9 @@ db_transaction {
         code  => 200;
 
     stash_test 'me', sub {
-        my ($me) = @_;
+        my ($res) = @_;
 
-        is ($me->{candidate}->{id}, stash 'candidate.id');
+        is ($res->{me}->{id}, stash 'candidate.id');
     };
 
     rest_put '/api/me',
@@ -46,12 +46,12 @@ db_transaction {
     ;
 
     stash_test 'me2', sub {
-        my ($me) = @_;
+        my ($res) = @_;
 
-        is ($me->{candidate}->{name}, "Junior Moraes", 'name');
-        is ($me->{candidate}->{popular_name}, "Junior do VotoLegal", 'popular name');
-        is ($me->{candidate}->{address_street}, "Rua Tiradentes", 'address street');
-        is ($me->{candidate}->{address_house_number}, 666, 'address house number');
+        is ($res->{me}->{name}, "Junior Moraes", 'name');
+        is ($res->{me}->{popular_name}, "Junior do VotoLegal", 'popular name');
+        is ($res->{me}->{address_street}, "Rua Tiradentes", 'address street');
+        is ($res->{me}->{address_house_number}, 666, 'address house number');
     };
 };
 
