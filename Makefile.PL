@@ -77,18 +77,14 @@ my %WriteMakefileArgs = (
     "CatalystX::Eta::Test::REST" => 0,
     "Data::Faker" => 0,
     "Data::Printer" => 0,
-    "File::Spec" => 0,
     "FindBin" => 0,
-    "IO::Handle" => 0,
-    "IPC::Open3" => 0,
     "JSON::MaybeXS" => 0,
     "Test::More" => 0,
-    "blib" => "1.01",
     "lib" => 0
   },
   "VERSION" => 20160622,
   "test" => {
-    "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/party/*.t t/workers/*.t"
+    "TESTS" => "t/admin/*.t t/candidate/*.t t/party/*.t t/workers/*.t"
   }
 );
 
@@ -130,10 +126,7 @@ my %FallbackPrereqs = (
   "Email::Sender::Transport::SMTP::TLS" => 0,
   "Encode" => 0,
   "Exporter" => 0,
-  "File::Spec" => 0,
   "FindBin" => 0,
-  "IO::Handle" => 0,
-  "IPC::Open3" => 0,
   "JSON::MaybeXS" => 0,
   "MIME::Lite" => 0,
   "Moose" => 0,
@@ -153,7 +146,6 @@ my %FallbackPrereqs = (
   "Template::Tiny" => 0,
   "Test::More" => 0,
   "base" => 0,
-  "blib" => "1.01",
   "common::sense" => 0,
   "lib" => 0,
   "namespace::autoclean" => 0,
