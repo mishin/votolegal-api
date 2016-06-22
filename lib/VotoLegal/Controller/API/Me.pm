@@ -16,7 +16,7 @@ Catalyst Controller.
 
 =cut
 
-sub base : Chained('/api/logged') : PathPart('me') : CaptureArgs(0) {
+sub root : Chained('/api/logged') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     if (!$c->check_user_roles(qw(user))) {
@@ -25,7 +25,10 @@ sub base : Chained('/api/logged') : PathPart('me') : CaptureArgs(0) {
     }
 
     $c->stash->{collection} = $c->user->candidates;
+    $c->stash->{candidate}  = $c->stash->{collection}->next;
 }
+
+sub base : Chained('root') : PathPart('me') : CaptureArgs(0) { }
 
 sub me : Chained('base') : PathPart('') : ActionClass('REST') { }
 
@@ -50,7 +53,7 @@ sub me_GET {
 sub me_PUT {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{collection}->single->execute($c, for => 'update', with => { %{ $c->req->params }, roles => [ $c->user->roles ] });
+    my $candidate = $c->stash->{candidate}->execute($c, for => 'update', with => { %{ $c->req->params }, roles => [ $c->user->roles ] });
 
     return $self->status_accepted($c, entity => { id => $candidate->id });
 }
