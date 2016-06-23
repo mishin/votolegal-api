@@ -2,3 +2,4 @@ blib/*
 inc/*
 log/*
 deploy/envs.sh
+.build/*
