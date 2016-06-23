@@ -371,7 +371,7 @@ __PACKAGE__->meta->make_immutable;
 
 __END__
 
-=pod
+=encoding UTF-8
 
 =head1 NAME
 
