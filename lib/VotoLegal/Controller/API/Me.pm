@@ -54,9 +54,31 @@ sub me_GET {
 sub me_PUT {
     my ($self, $c) = @_;
 
-    my $candidate = $c->stash->{candidate}->execute($c, for => 'update', with => { %{ $c->req->params }, roles => [ $c->user->roles ] });
+    my $picture = $self->_upload_picture($c->req->upload('file'));
+
+    my $candidate = $c->stash->{candidate}->execute(
+        $c,
+        for => 'update',
+        with => {
+            %{ $c->req->params },
+            picture => $picture,
+            roles   => [ $c->user->roles ],
+        }
+    );
 
     return $self->status_accepted($c, entity => { id => $candidate->id });
+}
+
+sub _upload_picture {
+    my ($self, $upload) = @_;
+
+    return unless $upload;
+
+    die \['file', 'empty file']    unless $upload->size > 0;
+    die \['file', 'invalid image'] unless $upload->type =~ m{^image\/};
+
+    # TODO Implementar o upload na Amazon S3.
+    return "https://avatars0.githubusercontent.com/u/711681?v=3&s=460";
 }
 
 =encoding utf8

@@ -133,6 +133,46 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
+=head2 picture
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 video_url
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 facebook_url
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 twitter_url
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 website_url
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 summary
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 biography
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 cielo_token
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -175,6 +215,22 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "cnpj",
   { data_type => "text", is_nullable => 0 },
+  "picture",
+  { data_type => "text", is_nullable => 1 },
+  "video_url",
+  { data_type => "text", is_nullable => 1 },
+  "facebook_url",
+  { data_type => "text", is_nullable => 1 },
+  "twitter_url",
+  { data_type => "text", is_nullable => 1 },
+  "website_url",
+  { data_type => "text", is_nullable => 1 },
+  "summary",
+  { data_type => "text", is_nullable => 1 },
+  "biography",
+  { data_type => "text", is_nullable => 1 },
+  "cielo_token",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -292,10 +348,11 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-22 11:40:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OtUjM980mDvs7tR3EYhsIw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-23 13:24:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+nrLxPGZ6JHshPGUSfIYzg
 
 use Data::Verifier;
+use Data::Validate::URI qw(is_web_uri);
 use Template;
 use VotoLegal::Types qw(CPF);
 use VotoLegal::Mailer::Template;
@@ -452,6 +509,53 @@ sub verifiers_specs {
 
                         return 1;
                     },
+                },
+                picture => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('picture') },
+                },
+                video_url => {
+                    required => 0,
+                    type     => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('video_url') },
+                },
+                facebook_url => {
+                    required => 0,
+                    type     => "Str",
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $uri = URI->new($r->get_value('facebook_url'));
+                        $uri->host =~ m{(www\.)?facebook\.com$};
+                    },
+                },
+                twitter_url => {
+                    required => 0,
+                    type     => "Str",
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $uri = URI->new($r->get_value('twitter_url'));
+                        $uri->host =~ m{(www\.)?twitter\.com$};
+                    }
+                },
+                website_url => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('website_url') },
+                },
+                summary => {
+                    required => 0,
+                    type     => "Str",
+                },
+                biography => {
+                    required => 0,
+                    type     => "Str",
+                },
+                cielo_token => {
+                    required => 0,
+                    type     => "Str",
                 },
             },
         ),
