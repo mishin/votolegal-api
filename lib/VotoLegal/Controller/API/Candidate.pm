@@ -27,13 +27,13 @@ sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }
 sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     my ($self, $c, $candidate_id) = @_;
 
-    $c->stash->{candidate} = $c->stash->{collection}->search({ id => $candidate_id })->next;
-
-    if (!$c->stash->{candidate}) {
+    if (my $candidate = $c->stash->{collection}->search({ id => $candidate_id })->next) {
+        $c->stash->{candidate} = $candidate;
+    }
+    else {
         $self->status_bad_request($c, message => 'Candidate not found');
         $c->detach();
     }
-
 }
 
 sub candidate : Chained('object') : PathPart('') : ActionClass('REST') { }
