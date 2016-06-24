@@ -28,7 +28,7 @@ sub listen_queue {
     $self->logger->debug("Buscando itens na fila...") if $self->logger;
 
     my @items = $self->schema->resultset('EmailQueue')->search(
-        { sent => 0 },
+        undef,
         {
             rows   => 20,
             for    => "update",
@@ -59,9 +59,7 @@ sub run_once {
     }
     else {
         $item = $self->schema->resultset('EmailQueue')->search(
-            {
-                sent => 0,
-            },
+            undef,
             {
                 rows   => 1,
                 for    => "update",
@@ -79,12 +77,11 @@ sub run_once {
 sub exec_item {
     my ($self, $item) = @_;
 
-    my $body = $item->body;
-
-    if ($self->mailer->send($body)) {
+    if ($self->mailer->send($item->body)) {
         $item->delete();
         return 1;
     }
+
     return 0;
 }
 

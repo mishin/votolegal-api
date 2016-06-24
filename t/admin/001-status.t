@@ -28,7 +28,7 @@ db_transaction {
     ;
 
     is(
-        $schema->resultset('EmailQueue')->search({ user_id => $candidate->user->id })->count,
+        $schema->resultset('EmailQueue')->count,
         2,
         'two emails on queue',
     );

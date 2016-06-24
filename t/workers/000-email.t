@@ -16,9 +16,7 @@ db_transaction {
     ok ($worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Email does VotoLegal::Worker');
 
     create_candidate;
-    my $user = $schema->resultset('Candidate')->find(stash 'candidate.id')->user;
-
-    my $email_rs = $schema->resultset('EmailQueue')->search({ user_id => $user->id });
+    my $email_rs = $schema->resultset('EmailQueue');
 
     is ($email_rs->count, 1, 'email is queued');
 

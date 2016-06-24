@@ -588,40 +588,32 @@ sub action_specs {
 sub send_email_registration {
     my ($self) = @_;
 
-    my $subject = "VotoLegal - Cadastro realizado";
-
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
         from     => 'no-reply@votolegal.org',
-        subject  => $subject,
+        subject  => "VotoLegal - Cadastro realizado",
         template => get_data_section('candidate_registration.tt'),
         vars     => { map { $_ => $self->$_} qw(name) },
     )->build_email();
 
     return $self->resultset('EmailQueue')->create({
-        user  => $self->user,
-        body  => $email->as_string,
-        title => $subject,
+        body => $email->as_string,
     });
 }
 
 sub send_email_activation {
     my ($self) = @_;
 
-    my $subject = "VotoLegal - Cadastro aprovado";
-
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
         from     => 'no-reply@votolegal.org',
-        subject  => $subject,
+        subject  => "VotoLegal - Cadastro aprovado",,
         template => get_data_section('candidate_activation.tt'),
         vars     => { map { $_ => $self->$_} qw(name) },
     )->build_email();
 
     return $self->resultset('EmailQueue')->create({
-        user  => $self->user,
-        body  => $email->as_string,
-        title => $subject,
+        body => $email->as_string,
     });
 }
 

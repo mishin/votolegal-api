@@ -132,21 +132,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 email_queues
-
-Type: has_many
-
-Related object: L<VotoLegal::Schema::Result::EmailQueue>
-
-=cut
-
-__PACKAGE__->has_many(
-  "email_queues",
-  "VotoLegal::Schema::Result::EmailQueue",
-  { "foreign.user_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 user_roles
 
 Type: has_many
@@ -188,8 +173,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-20 15:41:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B2qXGEVg5RQcjMFJM6tvBQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-24 09:53:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uPQWyp91Cw823R+Qdo2MLw
 
 use Crypt::PRNG qw(random_string);
 

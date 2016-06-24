@@ -49,32 +49,10 @@ __PACKAGE__->table("email_queue");
   is_nullable: 0
   sequence: 'email_queue_id_seq'
 
-=head2 user_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 body
 
   data_type: 'text'
   is_nullable: 0
-
-=head2 sent
-
-  data_type: 'boolean'
-  default_value: false
-  is_nullable: 1
-
-=head2 title
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 sent_at
-
-  data_type: 'timestamp'
-  is_nullable: 1
 
 =head2 created_at
 
@@ -93,16 +71,8 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "email_queue_id_seq",
   },
-  "user_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "body",
   { data_type => "text", is_nullable => 0 },
-  "sent",
-  { data_type => "boolean", default_value => \"false", is_nullable => 1 },
-  "title",
-  { data_type => "text", is_nullable => 0 },
-  "sent_at",
-  { data_type => "timestamp", is_nullable => 1 },
   "created_at",
   {
     data_type     => "timestamp",
@@ -124,31 +94,9 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 RELATIONS
 
-=head2 user
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::User>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "user",
-  "VotoLegal::Schema::Result::User",
-  { id => "user_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-20 15:41:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fQvZPeqTxrohDGr5nGPAxg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-24 09:53:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3E2QPSksUk4StOjVZtoEAQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
