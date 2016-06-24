@@ -64,7 +64,6 @@ my %WriteMakefileArgs = (
     "MooseX::Types::Structured" => 0,
     "Scalar::Util" => 0,
     "Template" => 0,
-    "Template::Tiny" => 0,
     "base" => 0,
     "common::sense" => 0,
     "namespace::autoclean" => 0,
@@ -83,9 +82,9 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160623,
+  "VERSION" => 20160624,
   "test" => {
-    "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/party/*.t t/workers/*.t"
+    "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/misc/*.t t/party/*.t t/workers/*.t"
   }
 );
 
@@ -145,7 +144,6 @@ my %FallbackPrereqs = (
   "MooseX::Types::Structured" => 0,
   "Scalar::Util" => 0,
   "Template" => 0,
-  "Template::Tiny" => 0,
   "Test::More" => 0,
   "base" => 0,
   "common::sense" => 0,
