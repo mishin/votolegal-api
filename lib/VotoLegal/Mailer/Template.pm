@@ -1,41 +1,60 @@
 package VotoLegal::Mailer::Template;
 use Moose;
-use Template::Tiny;
-
 use namespace::autoclean;
+
+use Template;
 use MIME::Lite;
-use DateTime;
 use Encode;
 
-has content => (is => 'ro');
-has to      => (is => 'ro');
-has title   => (is => 'ro');
-
-has cc      => (
-    is      => 'ro',
-    isa     => 'ArrayRef',
-    default => sub { [] }
+has to => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
 );
 
-has subject => (is => 'ro');
-has from    => (is => 'ro');
+has subject => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
+);
+
+has from => (
+    is       => 'ro',
+    isa      => 'Str',
+    required => 1,
+);
+
+has template => (
+    is       => "ro",
+    isa      => "Str",
+    required => 1,
+);
+
+has vars => (
+    is       => "ro",
+    isa      => "HashRef",
+    default  => sub { {} },
+);
 
 sub build_email {
-    my ($self, $fixed_to) = @_;
+    my ($self) = @_;
 
-    ref $self->to or die "'to' param must be a Result::User";
+    my $tt = Template->new(EVAL_PERL => 0);
 
-    my $to = $self->to->email;
-    $to    = $fixed_to if defined $fixed_to;
-
-    my $email = MIME::Lite->new(
-        To      => Encode::encode('MIME-Header', $to),
-        Subject => Encode::encode('MIME-Header', $self->subject),
-        Type    => q{multipart/related},
-        From    => $self->from,
+    my $content ;
+    $tt->process(
+        \$self->template,
+        $self->vars,
+        \$content,
     );
 
-    return $email;
+    return MIME::Lite->new(
+        To      => Encode::encode("MIME-Header", $self->to),
+        Subject => Encode::encode("MIME-Header", $self->subject),
+        Type    => "multipart/related",
+        From    => $self->from,
+        Data    => $content,
+    );
 }
 
 __PACKAGE__->meta->make_immutable;
