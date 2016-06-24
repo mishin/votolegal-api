@@ -48,13 +48,19 @@ sub build_email {
         \$content,
     );
 
-    return MIME::Lite->new(
+    my $email = MIME::Lite->new(
         To      => Encode::encode("MIME-Header", $self->to),
         Subject => Encode::encode("MIME-Header", $self->subject),
         Type    => "multipart/related",
         From    => $self->from,
-        Data    => $content,
     );
+
+    $email->attach(
+        Type => "text/html",
+        Data => $content,
+    );
+
+    return $email;
 }
 
 __PACKAGE__->meta->make_immutable;
