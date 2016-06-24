@@ -18,32 +18,31 @@ Catalyst Controller.
 
 sub root : Chained('/') : PathPart('api') : CaptureArgs(0) {
     my ($self, $c) = @_;
+
     $c->response->headers->header(charset => "utf-8");
+
+    my $api_key = $c->req->param('api_key') || $c->req->header('X-API-Key');
+
+    if (defined($api_key)) {
+        my $user_session = $c->model('DB::UserSession')->search({
+            api_key      => $api_key,
+            valid_for_ip => $c->req->address,
+        })->next;
+
+        if ($user_session) {
+            my $user = $c->find_user({ id => $user_session->user_id });
+            $c->set_authenticated($user);
+        }
+    }
 }
 
 sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    my $api_key = $c->req->param('api_key') || $c->req->header('X-API-Key');
-
-    if (!defined($api_key)) {
+    if (!$c->user) {
         $self->status_forbidden($c, message => "access denied");
         $c->detach();
     }
-
-    my $user_session = $c->model('DB::UserSession')->search({
-        api_key      => $api_key,
-        valid_for_ip => $c->req->address,
-    })->first;
-
-    if (!$user_session) {
-        $self->status_forbidden($c, message => "access denied");
-        $c->detach();
-    }
-
-    my $user = $c->find_user({ id => $user_session->user_id });
-
-    $c->set_authenticated($user);
 }
 
 =encoding utf8
