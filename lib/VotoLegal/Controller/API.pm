@@ -40,9 +40,15 @@ sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     if (!$c->user) {
-        $self->status_forbidden($c, message => "access denied");
-        $c->detach();
+        $c->forward('forbidden');
     }
+}
+
+sub forbidden : Private {
+    my ($self, $c) = @_;
+
+    $self->status_forbidden($c, message => "access denied");
+    $c->detach();
 }
 
 =encoding utf8
