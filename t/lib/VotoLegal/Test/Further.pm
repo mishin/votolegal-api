@@ -6,6 +6,7 @@ use Test::More;
 use Catalyst::Test q(VotoLegal);
 use CatalystX::Eta::Test::REST;
 
+use Text::Lorem;
 use Data::Faker;
 use Data::Printer;
 use JSON::MaybeXS;
@@ -140,6 +141,16 @@ sub create_candidate {
             %opts,
         ],
     );
+}
+
+sub lorem_words {
+    my ($words) = @_;
+
+    $words ||= 5;
+
+    my $lorem = Text::Lorem->new();
+
+    return $lorem->words($words);
 }
 
 1;
