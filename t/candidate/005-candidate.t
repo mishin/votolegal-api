@@ -17,6 +17,7 @@ db_transaction {
     ;
 
     my $candidate = $schema->resultset('Candidate')->find($candidate_id);
+
     stash_test 'get' => sub {
         my ($res) = @_;
 
