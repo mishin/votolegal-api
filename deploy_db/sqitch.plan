@@ -19,3 +19,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0013-issue-priority [0012-candidate-cnpj] 2016-06-22T16:36:06Z Junior Moraes,,, <junior@junior-eokoe> # sue-priority adicionando tabelas de assuntos prioritarios
 0014-full-register [0013-issue-priority] 2016-06-23T17:02:21Z Junior Moraes,,, <junior@junior-eokoe> # ll-register cadastro completo
 0015-unused-email-queue-columns [0014-full-register] 2016-06-24T13:09:31Z Junior Moraes,,, <junior@junior-eokoe> # used-email-queue-columns removendo colunas nao utilizadas
+0016-projects [0015-unused-email-queue-columns] 2016-06-24T22:24:50Z Junior Moraes,,, <junior@junior-eokoe> # ojects tabela de projetos

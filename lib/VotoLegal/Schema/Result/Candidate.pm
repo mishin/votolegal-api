@@ -318,6 +318,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 projects
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Project>
+
+=cut
+
+__PACKAGE__->has_many(
+  "projects",
+  "VotoLegal::Schema::Result::Project",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user
 
 Type: belongs_to
@@ -348,8 +363,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-23 13:24:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+nrLxPGZ6JHshPGUSfIYzg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-24 14:29:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XK84JTket9gs14cjR/q6Ew
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
