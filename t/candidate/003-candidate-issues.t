@@ -10,7 +10,9 @@ db_transaction {
     create_candidate;
     api_auth_as candidate_id => stash 'candidate.id';
 
-    rest_put '/api/me',
+    my $candidate_id = stash 'candidate.id';
+
+    rest_put "/api/candidate/${candidate_id}",
         name    => "more issues than i can have",
         is_fail => 1,
         params  => {
@@ -18,7 +20,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "invalid issue id",
         is_fail => 1,
         params  => {
@@ -26,7 +28,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "edit issue priority",
         params  => {
             issue_priorities => "5,2,3,1",
@@ -34,25 +36,25 @@ db_transaction {
     ;
 
     is_deeply(
-        [ sort { $a <=> $b } map { $_->id } $schema->resultset('Candidate')->find(stash 'candidate.id')->issue_priorities->all ],
+        [ sort { $a <=> $b } map { $_->id } $schema->resultset('Candidate')->find($candidate_id)->issue_priorities->all ],
         [1, 2, 3, 5],
         'issue priority edited',
     );
 
-    rest_get '/api/me',
+    rest_get "/api/candidate/${candidate_id}",
         name  => "get myself",
-        stash => "me",
+        stash => "get",
         code  => 200,
     ;
 
-    stash_test 'me', sub {
+    stash_test 'get', sub {
         my ($res) = @_;
 
-        my $candidate_issue_priorities = $res->{me}->{candidate_issue_priorities};
+        my $candidate_issue_priorities = $res->{candidate}->{candidate_issue_priorities};
 
         my @issue_priority_id = ();
         for (@{$candidate_issue_priorities}) {
-            push @issue_priority_id, $_->{issue_priority_id};
+            push @issue_priority_id, $_->{id};
         }
 
         is_deeply(

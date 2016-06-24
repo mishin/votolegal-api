@@ -7,22 +7,40 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
-    # Testando os dados do pré cadastro.
     create_candidate;
-    api_auth_as candidate_id => stash 'candidate.id';
+    my $candidate_id = stash 'candidate.id';
 
-    rest_get '/api/me',
-        name  => 'get myself',
-        stash => 'me',
-        code  => 200;
+    # Testando o GET.
+    diag "Testing GET...";
+    rest_get "/api/candidate/${candidate_id}",
+        name  => 'get candidate',
+        stash => 'get_logged_out',
+    ;
 
-    stash_test 'me', sub {
+    stash_test 'get_logged_out' => sub {
         my ($res) = @_;
 
-        is ($res->{me}->{id}, stash 'candidate.id');
+        ok (!defined($res->{candidate}->{cpf}),  'no cpf');
+        ok (!defined($res->{candidate}->{cnpj}), 'no cnpj');
     };
 
-    rest_put '/api/me',
+    api_auth_as candidate_id => $candidate_id;
+
+    rest_get "/api/candidate/${candidate_id}",
+        name  => 'get candidate',
+        stash => 'get_logged_in',
+    ;
+
+    stash_test 'get_logged_in' => sub {
+        my ($res) = @_;
+
+        ok (defined($res->{candidate}->{cpf}),  'cpf');
+        ok (defined($res->{candidate}->{cnpj}), 'cnpj');
+    };
+
+    # Testando o PUT.
+    diag "Testing PUT...";
+    rest_put "/api/candidate/${candidate_id}",
         name    => "edit myself -- can't change status",
         is_fail => 1,
         params  => {
@@ -30,7 +48,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
         params => {
             name                 => "Junior Moraes",
@@ -39,21 +57,6 @@ db_transaction {
             address_house_number => 666,
         },
     ;
-
-    rest_get '/api/me',
-        name  => 'get myself after edit',
-        stash => 'me2',
-        code  => 200
-    ;
-
-    stash_test 'me2', sub {
-        my ($res) = @_;
-
-        is ($res->{me}->{name}, "Junior Moraes", 'name');
-        is ($res->{me}->{popular_name}, "Junior do VotoLegal", 'popular name');
-        is ($res->{me}->{address_street}, "Rua Tiradentes", 'address street');
-        is ($res->{me}->{address_house_number}, 666, 'address house number');
-    };
 
     # Cadastro completo.
     my $video_url    = "https://www.youtube.com/watch?v=Pff7fkgBzfQ";
@@ -64,7 +67,7 @@ db_transaction {
     my $biography    = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
     my $cielo_token  = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid video url",
         is_fail => 1,
         params  => {
@@ -72,7 +75,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid facebook url",
         is_fail => 1,
         params  => {
@@ -80,7 +83,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid twitter url",
         is_fail => 1,
         params  => {
@@ -88,7 +91,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid website url",
         is_fail => 1,
         params  => {
@@ -96,7 +99,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't upload empty image",
         is_fail => 1,
         files   => {
@@ -104,7 +107,7 @@ db_transaction {
         },
     ;
 
-    rest_put '/api/me',
+    rest_put "/api/candidate/${candidate_id}",
         name  => 'edit myself',
         files => {
             file => "$Bin/picture.jpg",
@@ -120,16 +123,16 @@ db_transaction {
         },
     ;
 
-    my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id');
-
-    ok ($candidate->picture =~ m{https?:\/\/}, 'picture url');
-    is ($candidate->video_url, $video_url, 'video url');
-    is ($candidate->facebook_url, $facebook_url, 'facebook url');
-    is ($candidate->twitter_url, $twitter_url, 'twitter url');
-    is ($candidate->website_url, $website_url, 'website url');
-    is ($candidate->summary, $summary, 'summary');
-    is ($candidate->biography, $biography, 'biography');
-    is ($candidate->cielo_token, $cielo_token, 'cielo token');
+    # Tentando editar outro candidato.
+    create_candidate;
+    rest_put "/api/candidate/" . stash 'candidate.id',
+        name    => "can't edit other candidate",
+        is_fail => 1,
+        code    => 403,
+        params  => {
+            name => "Junior Moraes",
+        },
+    ;
 };
 
 done_testing();
