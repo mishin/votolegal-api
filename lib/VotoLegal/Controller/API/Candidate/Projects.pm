@@ -44,6 +44,8 @@ sub projects_GET {
 sub projects_POST {
     my ($self, $c) = @_;
 
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+
     my $project = $c->stash->{collection}->execute(
         $c,
         for  => 'create',
@@ -72,6 +74,8 @@ sub project_GET {
 sub project_PUT {
     my ($self, $c) = @_;
 
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+
     $c->stash->{project}->execute(
         $c,
         for  => "update",
@@ -83,6 +87,8 @@ sub project_PUT {
 
 sub project_DELETE {
     my ($self, $c) = @_;
+
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     $c->stash->{project}->delete();
 

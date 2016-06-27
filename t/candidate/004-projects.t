@@ -23,6 +23,19 @@ db_transaction {
     };
 
     diag "Adding project...";
+
+    rest_post "/api/candidate/${id_candidate}/projects",
+        name    => "can't add project when not logged in",
+        is_fail => 1,
+        code    => 403,
+        params  => {
+            title => ucfirst lorem_words(3),
+            scope => lorem_paragraphs(),
+        },
+    ;
+
+    api_auth_as candidate_id => stash 'candidate.id'; 
+
     rest_post "/api/candidate/${id_candidate}/projects",
         name   => "adding project",
         stash  => "project",
