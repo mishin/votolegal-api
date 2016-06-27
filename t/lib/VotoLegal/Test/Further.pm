@@ -146,11 +146,17 @@ sub create_candidate {
 sub lorem_words {
     my ($words) = @_;
 
-    $words ||= 5;
+    my $lorem = Text::Lorem->new();
+
+    return $lorem->words($words || 5);
+}
+
+sub lorem_paragraphs {
+    my ($n) = @_;
 
     my $lorem = Text::Lorem->new();
 
-    return $lorem->words($words);
+    return $lorem->paragraphs($n || 3);
 }
 
 1;
