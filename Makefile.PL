@@ -80,9 +80,10 @@ my %WriteMakefileArgs = (
     "FindBin" => 0,
     "JSON::MaybeXS" => 0,
     "Test::More" => 0,
+    "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160624,
+  "VERSION" => 20160627,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/misc/*.t t/party/*.t t/workers/*.t"
   }
@@ -145,6 +146,7 @@ my %FallbackPrereqs = (
   "Scalar::Util" => 0,
   "Template" => 0,
   "Test::More" => 0,
+  "Text::Lorem" => 0,
   "base" => 0,
   "common::sense" => 0,
   "lib" => 0,
