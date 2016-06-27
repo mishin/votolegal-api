@@ -3,7 +3,7 @@
 
 BEGIN;
 
-CREATE TABLE projects (
+CREATE TABLE project (
     id           SERIAL PRIMARY KEY,
     candidate_id INTEGER NOT NULL REFERENCES candidate(id),
     title        TEXT NOT NULL,
