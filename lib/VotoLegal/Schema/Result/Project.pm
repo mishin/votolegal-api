@@ -116,7 +116,46 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-27 09:38:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3WXqxdSFhRjpnYpVVttajA
 
+use Data::Verifier;
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+with 'VotoLegal::Role::Verification';
+with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
+
+sub verifiers_specs {
+    my $self = shift;
+
+    return {
+        update => Data::Verifier->new(
+            filters => [qw(trim)],
+            profile => {
+                title => {
+                    required => 0,
+                    type     => 'Str',
+                },
+                scope => {
+                    required => 0,
+                    type     => 'Str',
+                },
+            },
+        ),
+    };
+}
+
+sub action_specs {
+    my $self = shift;
+
+    return {
+        update => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+            not defined $values{$_} and delete $values{$_} for keys %values;
+
+            return $self->update(\%values);
+        },
+    };
+}
+
+
 __PACKAGE__->meta->make_immutable;
 1;
