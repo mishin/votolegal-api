@@ -50,7 +50,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     }
 }
 
-sub candidate : Chained('object') : PathPart('') : ActionClass('REST') { }
+sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub candidate_GET {
     my ($self, $c) = @_;
