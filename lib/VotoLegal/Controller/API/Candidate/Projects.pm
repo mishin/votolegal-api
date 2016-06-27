@@ -46,13 +46,15 @@ sub projects_POST {
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
+    if ($c->stash->{collection}->count >= 20) {
+        die { error_code => 400, message => "Max projects limit reached", msg => "" };
+    }
+
     my $project = $c->stash->{collection}->execute(
         $c,
         for  => 'create',
         with => $c->req->params,
     );
-
-    my $uri = $c->uri_for_action($c->action, $c->req->captures, $project->id)->as_string;
 
     $self->status_created(
         $c,

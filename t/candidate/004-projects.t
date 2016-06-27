@@ -76,6 +76,26 @@ db_transaction {
         0,
         'project deleted'
     );
+
+    diag "Can't add more than 20 projects.";
+    for (1 .. 20) {
+        rest_post "/api/candidate/${id_candidate}/projects",
+            name    => "adding project $_",
+            params  => {
+                title => "Project $_",
+                scope => lorem_paragraphs(),
+            },
+        ;
+    }
+
+    rest_post "/api/candidate/${id_candidate}/projects",
+        name    => "adding project 21",
+        is_fail => 1,
+        params  => {
+            title => "Project 21",
+            scope => lorem_paragraphs(),
+        },
+    ;
 };
 
 done_testing();
