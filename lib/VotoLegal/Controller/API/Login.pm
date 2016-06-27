@@ -4,21 +4,11 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
+sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 
-=head1 NAME
+sub base : Chained('root') : PathPart('login') : CaptureArgs(0) { }
 
-VotoLegal::Controller::API::Login - Catalyst Controller
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=cut
-
-sub login : Chained('/api/root') : PathPart('login') : ActionClass('REST') { }
+sub login : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub login_POST {
     my ($self, $c) = @_;
