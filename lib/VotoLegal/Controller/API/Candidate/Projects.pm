@@ -2,8 +2,6 @@ package VotoLegal::Controller::API::Candidate::Projects;
 use Moose;
 use namespace::autoclean;
 
-use DDP;
-
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
@@ -67,7 +65,7 @@ sub project_GET {
     my ($self, $c) = @_;
 
     return $self->status_ok($c, entity => {
-        map { $_ => $c->stash->{project}->$_ } qw(id title scope)   
+        map { $_ => $c->stash->{project}->$_ } qw(id title scope)
     });
 }
 
