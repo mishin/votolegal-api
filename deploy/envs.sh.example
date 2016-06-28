@@ -4,6 +4,9 @@ export VOTOLEGAL_DB_PORT="5432"
 export VOTOLEGAL_DB_USER="postgres"
 export VOTOLEGAL_DB_NAME="votolegal_dev"
 
+export VOTOLEGAL_AWS_ACCESS_KEY=""
+export VOTOLEGAL_AWS_SECRET_KEY=""
+
 export VOTOLEGAL_SMTP_SERVER=""
 export VOTOLEGAL_SMTP_USER=""
 export VOTOLEGAL_SMTP_PASSWD=""
