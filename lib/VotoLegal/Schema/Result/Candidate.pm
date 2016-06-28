@@ -173,6 +173,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 instagram_url
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -230,6 +235,8 @@ __PACKAGE__->add_columns(
   "biography",
   { data_type => "text", is_nullable => 1 },
   "cielo_token",
+  { data_type => "text", is_nullable => 1 },
+  "instagram_url",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -363,8 +370,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-24 14:29:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XK84JTket9gs14cjR/q6Ew
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-28 18:01:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aB98vQbqj6XbL8We5/KnBg
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -571,6 +578,11 @@ sub verifiers_specs {
                 cielo_token => {
                     required => 0,
                     type     => "Str",
+                },
+                instagram_url => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('instagram_url') },
                 },
             },
         ),

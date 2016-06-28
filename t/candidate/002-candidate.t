@@ -59,13 +59,14 @@ db_transaction {
     ;
 
     # Cadastro completo.
-    my $video_url    = "https://www.youtube.com/watch?v=Pff7fkgBzfQ";
-    my $facebook_url = "https://www.facebook.com/HumorIguapense/";
-    my $twitter_url  = "https://twitter.com/fvox";
-    my $website_url  = "http://eokoe.com/";
-    my $summary      = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
-    my $biography    = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
-    my $cielo_token  = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
+    my $video_url     = "https://www.youtube.com/watch?v=Pff7fkgBzfQ";
+    my $facebook_url  = "https://www.facebook.com/HumorIguapense/";
+    my $twitter_url   = "https://twitter.com/fvox";
+    my $instagram_url = "https://www.instagram.com/fv0x/";
+    my $website_url   = "http://eokoe.com/";
+    my $summary       = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
+    my $biography     = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
+    my $cielo_token   = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
 
     rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid video url",
@@ -113,13 +114,14 @@ db_transaction {
             picture => "$Bin/picture.jpg",
         },
         params => {
-            video_url    => $video_url,
-            facebook_url => $facebook_url,
-            twitter_url  => $twitter_url,
-            website_url  => $website_url,
-            summary      => $summary,
-            biography    => $biography,
-            cielo_token  => $cielo_token,
+            video_url     => $video_url,
+            facebook_url  => $facebook_url,
+            twitter_url   => $twitter_url,
+            instagram_url => $instagram_url,
+            website_url   => $website_url,
+            summary       => $summary,
+            biography     => $biography,
+            cielo_token   => $cielo_token,
         },
     ;
 
