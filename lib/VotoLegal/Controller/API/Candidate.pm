@@ -1,20 +1,18 @@
 package VotoLegal::Controller::API::Candidate;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-=head1 NAME
+use Crypt::PRNG qw(random_string);
+use VotoLegal::Uploader;
 
-VotoLegal::Controller::API::Candidate - Catalyst Controller
-
-=head1 DESCRIPTION
-
-Catalyst Controller.
-
-=head1 METHODS
-
-=cut
+has s3 => (
+    is      => "ro",
+    isa     => "VotoLegal::Uploader",
+    default => sub { VotoLegal::Uploader->new() },
+);
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
@@ -90,7 +88,10 @@ sub candidate_PUT {
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
-    my $picture = $self->_upload_picture($c->req->upload('file'));
+    my $picture ;
+    if (my $upload = $c->req->upload('file')) {
+        $picture = $self->_upload_picture($upload, $c->stash->{candidate}->id);
+    }
 
     my $candidate = $c->stash->{candidate}->execute(
         $c,
@@ -106,15 +107,22 @@ sub candidate_PUT {
 }
 
 sub _upload_picture {
-    my ($self, $upload) = @_;
+    my ($self, $upload, $id_candidate) = @_;
 
     return unless $upload;
 
     die \['file', 'empty file']    unless $upload->size > 0;
     die \['file', 'invalid image'] unless $upload->type =~ m{^image\/};
 
-    # TODO Implementar o upload na Amazon S3.
-    return "https://avatars0.githubusercontent.com/u/711681?v=3&s=460";
+    my $path = join "/", "votolegal", random_string(2), random_string(3), DateTime->now->datetime, $id_candidate;
+
+    my $url = $self->s3->upload({
+        path => $path,
+        file => $upload->tempname,
+        type => $upload->type,
+    });
+
+    return $url->as_string;
 }
 
 =encoding utf8
