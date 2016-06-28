@@ -42,6 +42,10 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
         $c->detach();
     }
 
+    # Essa Controller possui uma lógica diferente: algumas actions são públicas, e outras são restritas. O GET
+    # do candidate, por exemplo, não deve retornar todos os dados (como CPF e email privado) se ele não estiver
+    # logado. E as actions de PUT devem ser feitas somente por quem está logado. Para isso criei essa flag 'is_me'
+    # onde eu verifico se o candidato é o usuário que está logado.
     $c->stash->{is_me} = 0;
     if (ref $c->user && ($c->user->id == $candidate->user_id)) {
         $c->stash->{is_me} = 1;
@@ -53,7 +57,6 @@ sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST')
 sub candidate_GET {
     my ($self, $c) = @_;
 
-    # Se o candidato for o que está logado, retornaremos mais colunas. Se não, escondemos alguns dados.
     my $candidate = {
         party                      => { $c->stash->{candidate}->party->get_columns() },
         candidate_issue_priorities => [
@@ -61,6 +64,7 @@ sub candidate_GET {
         ],
     };
 
+    # Se o candidato for o que está logado, retornaremos mais colunas. Se não, escondemos alguns dados.
     if ($c->stash->{is_me}) {
         $candidate = {
             %{$candidate},
@@ -85,7 +89,6 @@ sub candidate_PUT {
 
     # Somente pessoas logadas podem editar.
     $c->forward("/api/logged");
-
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     my $picture ;
