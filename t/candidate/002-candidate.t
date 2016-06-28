@@ -103,14 +103,14 @@ db_transaction {
         name    => "can't upload empty image",
         is_fail => 1,
         files   => {
-            file => "$Bin/empty.jpg",
+            picture => "$Bin/empty.jpg",
         },
     ;
 
     rest_put "/api/candidate/${candidate_id}",
         name  => 'edit myself',
         files => {
-            file => "$Bin/picture.jpg",
+            picture => "$Bin/picture.jpg",
         },
         params => {
             video_url    => $video_url,

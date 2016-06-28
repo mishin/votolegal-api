@@ -92,7 +92,7 @@ sub candidate_PUT {
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     my $picture ;
-    if (my $upload = $c->req->upload('file')) {
+    if (my $upload = $c->req->upload('picture')) {
         $picture = $self->_upload_picture($upload, $c->stash->{candidate}->id);
     }
 
