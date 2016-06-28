@@ -132,6 +132,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 user_forgot_passwords
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::UserForgotPassword>
+
+=cut
+
+__PACKAGE__->has_many(
+  "user_forgot_passwords",
+  "VotoLegal::Schema::Result::UserForgotPassword",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_roles
 
 Type: has_many
@@ -173,10 +188,11 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-24 09:53:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uPQWyp91Cw823R+Qdo2MLw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-28 09:49:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ok0m6p3fVlFPmGdyCeQPig
 
 use Crypt::PRNG qw(random_string);
+use Data::Section::Simple qw(get_data_section);
 
 __PACKAGE__->remove_column('password');
 __PACKAGE__->add_column(
@@ -217,5 +233,30 @@ sub new_session {
     };
 }
 
+sub send_email_forgot_password {
+    my ($self, $token) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Recuperação de senha",
+        template => get_data_section('forgot_password.tt'),
+        vars     => {
+            name  => $self->email,
+            token => $token,
+        },
+    )->build_email();
+}
+
 __PACKAGE__->meta->make_immutable;
+
 1;
+
+__DATA__
+
+@@ forgot_password.tt
+
+Olá [% email %]!<br>
+
+Se você não solicitou a troca da senha, ignore este email.<br>
+Senão, <a href="http://eokoe.com/forgot_password/reset?token=[% token %]">clique aqui</a>.

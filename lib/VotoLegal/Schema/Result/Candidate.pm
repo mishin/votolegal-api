@@ -622,7 +622,7 @@ sub send_email_activation {
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
         from     => 'no-reply@votolegal.org',
-        subject  => "VotoLegal - Cadastro aprovado",,
+        subject  => "VotoLegal - Cadastro aprovado",
         template => get_data_section('candidate_activation.tt'),
         vars     => { map { $_ => $self->$_} qw(name) },
     )->build_email();
