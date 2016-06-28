@@ -31,7 +31,7 @@ sub reset_password_POST {
 
     my $forgot_password = $c->model('DB::UserForgotPassword')->search({ token => $token })->next
       or die \['token', 'invalid token'];
-    
+
     $forgot_password->execute(
         $c,
         for  => "reset",

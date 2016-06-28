@@ -34,7 +34,7 @@ db_transaction {
         },
     ;
 
-    api_auth_as candidate_id => stash 'candidate.id'; 
+    api_auth_as candidate_id => stash 'candidate.id';
 
     rest_post "/api/candidate/${id_candidate}/projects",
         name   => "adding project",
