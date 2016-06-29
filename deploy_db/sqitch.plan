@@ -25,3 +25,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0019-raising-goal [0018-instagram] 2016-06-29T13:27:57Z Junior Moraes,,, <junior@junior-eokoe> # ising-goal meta de arrecadacao
 0020-public-info [0019-raising-goal] 2016-06-29T13:42:16Z Junior Moraes,,, <junior@junior-eokoe> # blic-info email publico e planilha do tse
 0021-responsible [0020-public-info] 2016-06-29T14:19:37Z Junior Moraes,,, <junior@junior-eokoe> # sponsible informacoes do responsavel
+0022-cielo-merchant [0021-responsible] 2016-06-29T20:30:30Z Junior Moraes,,, <junior@junior-eokoe> # elo-merchant colunas de chave da cielo

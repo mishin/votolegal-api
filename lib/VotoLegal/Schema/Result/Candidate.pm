@@ -168,11 +168,6 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 cielo_token
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 instagram_url
 
   data_type: 'text'
@@ -200,6 +195,16 @@ __PACKAGE__->table("candidate");
   is_nullable: 1
 
 =head2 responsible_email
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 cielo_merchant_id
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 cielo_merchant_key
 
   data_type: 'text'
   is_nullable: 1
@@ -260,8 +265,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "biography",
   { data_type => "text", is_nullable => 1 },
-  "cielo_token",
-  { data_type => "text", is_nullable => 1 },
   "instagram_url",
   { data_type => "text", is_nullable => 1 },
   "raising_goal",
@@ -273,6 +276,10 @@ __PACKAGE__->add_columns(
   "responsible_name",
   { data_type => "text", is_nullable => 1 },
   "responsible_email",
+  { data_type => "text", is_nullable => 1 },
+  "cielo_merchant_id",
+  { data_type => "text", is_nullable => 1 },
+  "cielo_merchant_key",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -406,8 +413,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 11:20:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U697+0jHc2kdPgUEa3mwRg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 17:33:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xa4SCZivf0pEFzGxUMsebA
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -612,10 +619,6 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Str",
                 },
-                cielo_token => {
-                    required => 0,
-                    type     => "Str",
-                },
                 instagram_url => {
                     required   => 0,
                     type       => "Str",
@@ -640,6 +643,14 @@ sub verifiers_specs {
                 responsible_email => {
                     required => 0,
                     type     => EmailAddress,
+                },
+                cielo_merchant_id => {
+                    required => 0,
+                    type     => "Str",
+                },
+                cielo_merchant_key => {
+                    required => 0,
+                    type     => "Str",
                 },
             },
         ),
