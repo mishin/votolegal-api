@@ -114,9 +114,18 @@ db_transaction {
     ;
 
     rest_put "/api/candidate/${candidate_id}",
+        name    => "can't upload invalid spreadsheet",
+        is_fail => 1,
+        files   => {
+            spending_spreadsheet => "$Bin/picture.jpg",
+        },
+    ;
+
+    rest_put "/api/candidate/${candidate_id}",
         name  => 'edit myself',
         files => {
-            picture => "$Bin/picture.jpg",
+            picture              => "$Bin/picture.jpg",
+            spending_spreadsheet => "$Bin/tse_spreadsheet.csv",
         },
         params => {
             video_url         => $video_url,
@@ -135,17 +144,20 @@ db_transaction {
     ;
 
     my $candidate = $schema->resultset('Candidate')->find($candidate_id);
-    is ($candidate->video_url, $video_url);
-    is ($candidate->facebook_url, $facebook_url);
-    is ($candidate->instagram_url, $instagram_url);
-    is ($candidate->website_url, $website_url);
-    is ($candidate->summary, $summary);
-    is ($candidate->biography, $biography);
-    is ($candidate->cielo_token, $cielo_token);
-    ok ($candidate->raising_goal == $raising_goal);
-    is ($candidate->public_email, $public_email);
-    is ($candidate->responsible_name, $responsible_name);
-    is ($candidate->responsible_email, $responsible_email);
+    is ($candidate->video_url, $video_url, 'video_url');
+    is ($candidate->facebook_url, $facebook_url, 'facebook_url');
+    is ($candidate->instagram_url, $instagram_url, 'instagram_url');
+    is ($candidate->website_url, $website_url, 'website_url');
+    is ($candidate->summary, $summary, 'summary');
+    is ($candidate->biography, $biography, 'biography');
+    is ($candidate->cielo_token, $cielo_token, 'cielo_token');
+    ok ($candidate->raising_goal == $raising_goal, 'raising goal');
+    is ($candidate->public_email, $public_email, 'public email');
+    ok ($candidate->spending_spreadsheet =~ m{^https?:\/\/}, 'spending spreadsheet');
+    is ($candidate->responsible_name, $responsible_name, 'responsible name');
+    is ($candidate->responsible_email, $responsible_email, 'responsible email');
+
+    p $candidate->spending_spreadsheet;
 
     # Tentando editar outro candidato.
     create_candidate;

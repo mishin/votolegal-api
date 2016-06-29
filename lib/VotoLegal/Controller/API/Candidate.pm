@@ -5,8 +5,9 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use Crypt::PRNG qw(random_string);
+use File::MimeInfo;
 use VotoLegal::Uploader;
+use Crypt::PRNG qw(random_string);
 
 has s3 => (
     is      => "ro",
@@ -92,8 +93,13 @@ sub candidate_PUT {
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     my $picture ;
-    if (my $upload = $c->req->upload('picture')) {
-        $picture = $self->_upload_picture($upload, $c->stash->{candidate}->id);
+    if (my $upload = $c->req->upload("picture")) {
+        $picture = $self->_upload_picture($upload);
+    }
+
+    my $spending_spreadsheet ;
+    if (my $upload = $c->req->upload("spending_spreadsheet")) {
+        $spending_spreadsheet = $self->_upload_spreadsheet($upload);
     }
 
     my $candidate = $c->stash->{candidate}->execute(
@@ -101,8 +107,9 @@ sub candidate_PUT {
         for => 'update',
         with => {
             %{ $c->req->params },
-            picture => $picture,
-            roles   => [ $c->user->roles ],
+            picture              => $picture,
+            spending_spreadsheet => $spending_spreadsheet,
+            roles                => [ $c->user->roles ],
         }
     );
 
@@ -110,19 +117,38 @@ sub candidate_PUT {
 }
 
 sub _upload_picture {
-    my ($self, $upload, $id_candidate) = @_;
+    my ($self, $upload) = @_;
 
-    return unless $upload;
+    my $mimetype = mimetype($upload->tempname);
 
-    die \['file', 'empty file']    unless $upload->size > 0;
-    die \['file', 'invalid image'] unless $upload->type =~ m{^image\/};
+    die \['picture', 'empty file']    unless $upload->size > 0;
+    die \['picture', 'invalid image'] unless $mimetype =~ m{^image\/};
 
-    my $path = join "/", "votolegal", random_string(2), random_string(3), DateTime->now->datetime, $id_candidate;
+    my $path = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $upload->tempname;
 
     my $url = $self->s3->upload({
         path => $path,
         file => $upload->tempname,
-        type => $upload->type,
+        type => $mimetype,
+    });
+
+    return $url->as_string;
+}
+
+sub _upload_spreadsheet {
+    my ($self, $upload) = @_;
+
+    my $mimetype = mimetype($upload->tempname);
+
+    die \['spending_spreadsheet', 'empty file']   unless $upload->size > 0;
+    die \['spending_spreadsheet', 'invalid file'] unless $mimetype =~ m{^(text\/|application\/vnd\.)};
+
+    my $path = join "/", "votolegal", "spreadsheet", random_string(3), DateTime->now->epoch, $upload->tempname;
+
+    my $url = $self->s3->upload({
+        path => $path,
+        file => $upload->tempname,
+        type => $mimetype,
     });
 
     return $url->as_string;
