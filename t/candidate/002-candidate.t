@@ -157,8 +157,6 @@ db_transaction {
     is ($candidate->responsible_name, $responsible_name, 'responsible name');
     is ($candidate->responsible_email, $responsible_email, 'responsible email');
 
-    p $candidate->spending_spreadsheet;
-
     # Tentando editar outro candidato.
     create_candidate;
     rest_put "/api/candidate/" . stash 'candidate.id',
