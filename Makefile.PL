@@ -52,6 +52,7 @@ my %WriteMakefileArgs = (
     "Email::Sender::Transport::SMTP::TLS" => 0,
     "Encode" => 0,
     "Exporter" => 0,
+    "File::MimeInfo" => 0,
     "MIME::Base64" => 0,
     "MIME::Lite" => 0,
     "Moose" => 0,
@@ -92,7 +93,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160628,
+  "VERSION" => 20160629,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/misc/*.t t/party/*.t t/workers/*.t"
   }
@@ -139,6 +140,7 @@ my %FallbackPrereqs = (
   "Email::Sender::Transport::SMTP::TLS" => 0,
   "Encode" => 0,
   "Exporter" => 0,
+  "File::MimeInfo" => 0,
   "FindBin" => 0,
   "JSON::MaybeXS" => 0,
   "LWP::Simple" => 0,
