@@ -2,6 +2,7 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+use Data::Faker;
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
@@ -59,16 +60,18 @@ db_transaction {
     ;
 
     # Cadastro completo.
-    my $video_url     = "https://www.youtube.com/watch?v=Pff7fkgBzfQ";
-    my $facebook_url  = "https://www.facebook.com/HumorIguapense/";
-    my $twitter_url   = "https://twitter.com/fvox";
-    my $instagram_url = "https://www.instagram.com/fv0x/";
-    my $website_url   = "http://eokoe.com/";
-    my $summary       = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
-    my $biography     = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
-    my $cielo_token   = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
-    my $raising_goal  = 10560.80;
-    my $public_email  = 'fvox@cpan.org';
+    my $video_url         = "https://www.youtube.com/watch?v=Pff7fkgBzfQ";
+    my $facebook_url      = "https://www.facebook.com/HumorIguapense/";
+    my $twitter_url       = "https://twitter.com/fvox";
+    my $instagram_url     = "https://www.instagram.com/fv0x/";
+    my $website_url       = "http://eokoe.com/";
+    my $summary           = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
+    my $biography         = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
+    my $cielo_token       = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
+    my $raising_goal      = 10560.80;
+    my $public_email      = Data::Faker->new->email;
+    my $responsible_name  = "Junior Moraes";
+    my $responsible_email = Data::Faker->new->email;
 
     rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid video url",
@@ -116,18 +119,33 @@ db_transaction {
             picture => "$Bin/picture.jpg",
         },
         params => {
-            video_url     => $video_url,
-            facebook_url  => $facebook_url,
-            twitter_url   => $twitter_url,
-            instagram_url => $instagram_url,
-            website_url   => $website_url,
-            summary       => $summary,
-            biography     => $biography,
-            cielo_token   => $cielo_token,
-            raising_goal  => $raising_goal,
-            public_email  => $public_email,
+            video_url         => $video_url,
+            facebook_url      => $facebook_url,
+            twitter_url       => $twitter_url,
+            instagram_url     => $instagram_url,
+            website_url       => $website_url,
+            summary           => $summary,
+            biography         => $biography,
+            cielo_token       => $cielo_token,
+            raising_goal      => $raising_goal,
+            public_email      => $public_email,
+            responsible_name  => $responsible_name,
+            responsible_email => $responsible_email,
         },
     ;
+
+    my $candidate = $schema->resultset('Candidate')->find($candidate_id);
+    is ($candidate->video_url, $video_url);
+    is ($candidate->facebook_url, $facebook_url);
+    is ($candidate->instagram_url, $instagram_url);
+    is ($candidate->website_url, $website_url);
+    is ($candidate->summary, $summary);
+    is ($candidate->biography, $biography);
+    is ($candidate->cielo_token, $cielo_token);
+    ok ($candidate->raising_goal == $raising_goal);
+    is ($candidate->public_email, $public_email);
+    is ($candidate->responsible_name, $responsible_name);
+    is ($candidate->responsible_email, $responsible_email);
 
     # Tentando editar outro candidato.
     create_candidate;

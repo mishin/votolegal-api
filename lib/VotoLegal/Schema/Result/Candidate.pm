@@ -194,6 +194,16 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 responsible_name
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 responsible_email
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -259,6 +269,10 @@ __PACKAGE__->add_columns(
   "public_email",
   { data_type => "text", is_nullable => 1 },
   "spending_spreadsheet",
+  { data_type => "text", is_nullable => 1 },
+  "responsible_name",
+  { data_type => "text", is_nullable => 1 },
+  "responsible_email",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -392,8 +406,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 10:45:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6HaB6iPp6eeVK3EI/fYRgQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 11:20:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U697+0jHc2kdPgUEa3mwRg
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -401,6 +415,7 @@ use Template;
 use VotoLegal::Types qw(CPF);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
+use MooseX::Types::Email qw(EmailAddress);
 use Data::Section::Simple qw(get_data_section);
 
 with 'VotoLegal::Role::Verification';
@@ -617,6 +632,14 @@ sub verifiers_specs {
                 spending_spreadsheet => {
                     required => 0,
                     type     => "Str",
+                },
+                responsible_name => {
+                    required => 0,
+                    type     => "Str",
+                },
+                responsible_email => {
+                    required => 0,
+                    type     => EmailAddress,
                 },
             },
         ),
