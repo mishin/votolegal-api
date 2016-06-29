@@ -184,6 +184,16 @@ __PACKAGE__->table("candidate");
   is_nullable: 1
   size: [11,2]
 
+=head2 public_email
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 spending_spreadsheet
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -246,6 +256,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "raising_goal",
   { data_type => "numeric", is_nullable => 1, size => [11, 2] },
+  "public_email",
+  { data_type => "text", is_nullable => 1 },
+  "spending_spreadsheet",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -378,8 +392,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 09:59:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0QW0rVibIFn0xE0iM9CYqA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 10:45:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6HaB6iPp6eeVK3EI/fYRgQ
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -595,6 +609,14 @@ sub verifiers_specs {
                 raising_goal => {
                     required => 0,
                     type     => "Num",
+                },
+                public_email => {
+                    required => 0,
+                    type     => EmailAddress,
+                },
+                spending_spreadsheet => {
+                    required => 0,
+                    type     => "Str",
                 },
             },
         ),
