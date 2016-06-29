@@ -22,3 +22,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0016-projects [0015-unused-email-queue-columns] 2016-06-24T22:24:50Z Junior Moraes,,, <junior@junior-eokoe> # ojects tabela de projetos
 0017-forgot-password [0016-projects] 2016-06-28T13:34:06Z Junior Moraes,,, <junior@junior-eokoe> # rgot-password tabela de tokens para recuperar senha
 0018-instagram [0017-forgot-password] 2016-06-28T21:01:23Z Junior Moraes,,, <junior@junior-eokoe> # stagram adicionando instagram_url no candidato
+0019-raising-goal [0018-instagram] 2016-06-29T13:27:57Z Junior Moraes,,, <junior@junior-eokoe> # ising-goal meta de arrecadacao

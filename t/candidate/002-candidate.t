@@ -67,6 +67,7 @@ db_transaction {
     my $summary       = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
     my $biography     = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
     my $cielo_token   = "6OwXjLLtn0YHXpK440fJBNPb49WR8jZK";
+    my $raising_goal  = 10560.80;
 
     rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid video url",
@@ -122,6 +123,7 @@ db_transaction {
             summary       => $summary,
             biography     => $biography,
             cielo_token   => $cielo_token,
+            raising_goal  => $raising_goal,
         },
     ;
 

@@ -178,6 +178,12 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 raising_goal
+
+  data_type: 'numeric'
+  is_nullable: 1
+  size: [11,2]
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -238,6 +244,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "instagram_url",
   { data_type => "text", is_nullable => 1 },
+  "raising_goal",
+  { data_type => "numeric", is_nullable => 1, size => [11, 2] },
 );
 
 =head1 PRIMARY KEY
@@ -370,8 +378,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-28 18:01:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aB98vQbqj6XbL8We5/KnBg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 09:59:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0QW0rVibIFn0xE0iM9CYqA
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -583,6 +591,10 @@ sub verifiers_specs {
                     required   => 0,
                     type       => "Str",
                     post_check => sub { is_web_uri $_[0]->get_value('instagram_url') },
+                },
+                raising_goal => {
+                    required => 0,
+                    type     => "Num",
                 },
             },
         ),
