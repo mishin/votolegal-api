@@ -155,7 +155,7 @@ sub _run_curl {
         }
     }
 
-    return undef;
+    return;
 }
 
 sub _brand_to_bandeira {
