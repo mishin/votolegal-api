@@ -79,6 +79,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => "Str",
                 },
+                credit_card_brand => {
+                    required => 1,
+                    type     => "Str",
+                },
             },
         ),
     };
@@ -98,6 +102,7 @@ sub action_specs {
             delete $values{credit_card_name};
             delete $values{credit_card_validity};
             delete $values{credit_card_number};
+            delete $values{credit_card_brand};
 
             return $self->create(\%values);
         },

@@ -144,7 +144,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-01 15:35:52
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uES591s4INL1nSr6Cog9Qw
 
+use Digest::MD5 qw(md5_hex);
 use VotoLegal::Payment::Cielo;
+
 use Data::Printer;
 
 has _cielo => (
@@ -176,6 +178,16 @@ has credit_card_number => (
     isa => "Str",
 );
 
+has credit_card_brand => (
+    is  => "rw",
+    isa => "Str",
+);
+
+has _card_token => (
+    is  => "rw",
+    isa => "Str",
+);
+
 sub tokenize {
     my ($self) = @_;
 
@@ -183,7 +195,7 @@ sub tokenize {
     defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
     defined $self->credit_card_number   or die "missing 'credit_card_number'.";
 
-    return $self->_cielo->tokenize_credit_card(
+    my $card_token = $self->_cielo->tokenize_credit_card(
         credit_card_data => {
             credit_card => {
                 validity     => $self->credit_card_validity,
@@ -193,6 +205,33 @@ sub tokenize {
                 number => $self->credit_card_number,
             },
         },
+    );
+
+    if ($card_token) {
+        $self->_card_token($card_token);
+
+        $self->update({
+            status => "tokenized",
+        });
+
+        return 1;
+    }
+    return 0;
+}
+
+sub authorize {
+    my ($self) = @_;
+
+    defined $self->_card_token       or die 'credit card not tokenized.';
+    defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
+
+    my $remote_id = substr(md5_hex($self->id), 0, 20);
+
+    return $self->_cielo->do_authorization(
+        token     => $self->_card_token,
+        remote_id => $remote_id,
+        brand     => $self->credit_card_brand,
+        amount    => $self->amount,
     );
 }
 

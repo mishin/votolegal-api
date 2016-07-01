@@ -62,6 +62,7 @@ db_transaction {
             credit_card_name     => "JUNIOR MORAES",
             credit_card_validity => "201801",
             credit_card_number   => "6362970000457013",
+            credit_card_brand    => "elo",
             amount               => 100,
         },
     ;
