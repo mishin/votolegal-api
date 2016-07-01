@@ -1,4 +1,5 @@
 package VotoLegal::Controller::API::Candidate::Donation;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
