@@ -2,7 +2,6 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
-use Data::Faker;
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
@@ -68,9 +67,9 @@ db_transaction {
     my $summary            = "Meu nome é Junior, moro em Iguape e sou candidato a vereador.";
     my $biography          = "Duis enim nulla, elementum nec pellentesque et, auctor eget ligula. Etiam consequat est in mauris rutrum vulputate.";
     my $raising_goal       = 10560.80;
-    my $public_email       = Data::Faker->new->email;
+    my $public_email       = fake_email()->();
     my $responsible_name   = "Junior Moraes";
-    my $responsible_email  = Data::Faker->new->email;
+    my $responsible_email  = fake_email()->();
     my $cielo_merchant_id  = random_string(12);
     my $cielo_merchant_key = random_string(20);
 

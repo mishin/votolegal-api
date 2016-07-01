@@ -7,12 +7,12 @@ use Catalyst::Test q(VotoLegal);
 use CatalystX::Eta::Test::REST;
 
 use Text::Lorem;
-use Data::Faker;
 use Data::Printer;
 use JSON::MaybeXS;
 use Crypt::PRNG qw(random_string);
 use Business::BR::CPF qw(random_cpf);
 use Business::BR::CNPJ qw(random_cnpj);
+use Data::Fake qw(Core Company Dates Internet Names Text);
 
 # ugly hack
 sub import {
@@ -115,8 +115,8 @@ sub api_auth_as {
 sub create_candidate {
     my (%opts) = @_;
 
-    my $fake = Data::Faker->new();
-    my $username = lc $fake->name;
+    my $name = fake_name()->();
+    my $username = lc $name;
     $username =~ s/\s+/_/g;
 
     return $obj->rest_post(
@@ -126,15 +126,15 @@ sub create_candidate {
         [
             username             => $username,
             password             => "foobarquux1",
-            name                 => $fake->first_name,
-            popular_name         => $fake->last_name,
-            email                => $fake->email,
+            name                 => fake_name(),
+            popular_name         => fake_surname(),
+            email                => fake_email()->(),
             cpf                  => random_cpf(),
             cnpj                 => random_cnpj(1),
             address_state        => 'São Paulo',
             address_city         => 'Iguape',
             address_zipcode      => '11920-000',
-            address_street       => $fake->street_address,
+            address_street       => "Rua Tiradentes",
             address_house_number => 1 + int(rand(2000)),
             office_id            => 2,
             party_id             => 5,
