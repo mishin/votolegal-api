@@ -26,9 +26,9 @@ has key => (
 );
 
 has soft_descriptor => (
-    is       => "rw",
-    isa      => "Str",
-    required => 1,
+    is      => "rw",
+    isa     => "Str",
+    default => "VotoLegal",
 );
 
 has api => (

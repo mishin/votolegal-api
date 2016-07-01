@@ -338,6 +338,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 donations
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Donation>
+
+=cut
+
+__PACKAGE__->has_many(
+  "donations",
+  "VotoLegal::Schema::Result::Donation",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 office
 
 Type: belongs_to
@@ -413,8 +428,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-29 17:33:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xa4SCZivf0pEFzGxUMsebA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-01 11:45:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NScMzUk0OH9N/06tPdhWvA
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
