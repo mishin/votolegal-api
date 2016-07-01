@@ -13,11 +13,11 @@ rest_get '/api/party',
 stash_test 'party', sub {
     my ($res) = @_;
 
-    is (ref $res->{parties}, 'ARRAY');
-    ok (scalar @{ $res->{parties} } > 0, 'has parties');
+    is (ref $res->{party}, 'ARRAY');
+    ok (scalar @{ $res->{party} } > 0, 'has parties');
 
     my $all_parties_has_name_and_acronym = 1;
-    for (@{ $res->{parties} }) {
+    for (@{ $res->{party} }) {
         $all_parties_has_name_and_acronym &= defined($_->{name}) && defined($_->{acronym});
     }
 
