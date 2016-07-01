@@ -83,8 +83,13 @@ my $auth_user = {};
 sub api_auth_as {
     my (%conf) = @_;
 
-    if (!defined($conf{user_id}) && !defined($conf{candidate_id})) {
-        croak "api_auth_as: missing 'user_id' or 'candidate_id'.";
+    if (!exists($conf{user_id}) && !exists($conf{candidate_id}) && !exists($conf{nobody})) {
+        croak "api_auth_as: missing 'user_id', 'candidate_id' or 'nobody'.";
+    }
+
+    if (exists($conf{nobody})) {
+        $obj->fixed_headers([]);
+        return ;
     }
 
     my $user_id      = $conf{user_id};
