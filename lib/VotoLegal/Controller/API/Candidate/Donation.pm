@@ -38,6 +38,18 @@ sub donate_POST {
         },
     );
 
+    # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
+    # da Model, armazenando assim apenas na RAM.
+    $donation->credit_card_name($c->req->params->{credit_card_name});
+    $donation->credit_card_validity($c->req->params->{credit_card_validity});
+    $donation->credit_card_number($c->req->params->{credit_card_number});
+
+    my $card_token ;
+    if (!($card_token = $donation->tokenize())) {
+        $self->status_bad_request($c, message => "não foi possível gerar o token do cartão.");
+        $c->detach();
+    }
+
     return $self->status_ok($c, entity => { });
 }
 

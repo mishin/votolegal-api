@@ -56,10 +56,13 @@ db_transaction {
         name    => "donate to candidate",
         code    => 200,
         params  => {
-            name   => fake_name()->(),
-            cpf    => random_cpf(),
-            email  => fake_email()->(),
-            amount => 100,
+            name                 => fake_name()->(),
+            cpf                  => random_cpf(),
+            email                => fake_email()->(),
+            credit_card_name     => "JUNIOR MORAES",
+            credit_card_validity => "201801",
+            credit_card_number   => "6362970000457013",
+            amount               => 100,
         },
     ;
 };

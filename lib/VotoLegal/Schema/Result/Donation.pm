@@ -179,7 +179,11 @@ has credit_card_number => (
 sub tokenize {
     my ($self) = @_;
 
-    my $card_token = $self->_cielo->tokenize_credit_card(
+    defined $self->credit_card_name     or die "missing 'credit_card_name'.";
+    defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
+    defined $self->credit_card_number   or die "missing 'credit_card_number'.";
+
+    return $self->_cielo->tokenize_credit_card(
         credit_card_data => {
             credit_card => {
                 validity     => $self->credit_card_validity,
@@ -190,11 +194,7 @@ sub tokenize {
             },
         },
     );
-
-    return $card_token;
 }
-
-
 
 __PACKAGE__->meta->make_immutable;
 1;
