@@ -94,6 +94,11 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
+            # Esses dados serviram apenas pra validação. Nós não armazenamos eles no banco de dados.
+            delete $values{credit_card_name};
+            delete $values{credit_card_validity};
+            delete $values{credit_card_number};
+
             return $self->create(\%values);
         },
     };
