@@ -39,7 +39,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
         $c->stash->{candidate} = $candidate;
     }
     else {
-        $self->status_bad_request($c, message => 'Candidate not found');
+        $self->status_not_found($c, message => 'Candidate not found');
         $c->detach();
     }
 
