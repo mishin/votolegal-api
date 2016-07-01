@@ -50,9 +50,12 @@ sub donate_POST {
         $c->detach();
     }
 
-    my $authorize = $donation->authorize();
+    if (!$donation->authorize() || !$donation->capture()) {
+        $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
+        $c->detach();
+    }
 
-    return $self->status_ok($c, entity => { });
+    return $self->status_ok($c, entity => { id => $donation->id });
 }
 
 =encoding utf8

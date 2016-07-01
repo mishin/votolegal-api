@@ -188,6 +188,11 @@ has _card_token => (
     isa => "Str",
 );
 
+has _transaction_id => (
+    is  => "rw",
+    isa => "Str",
+);
+
 sub tokenize {
     my ($self) = @_;
 
@@ -225,20 +230,37 @@ sub authorize {
     defined $self->_card_token       or die 'credit card not tokenized.';
     defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
 
-    my $authorize = $self->_cielo->do_authorization(
+    my $res = $self->_cielo->do_authorization(
         token     => $self->_card_token,
-        remote_id => $substr(md5_hex($self->id), 0, 20),
+        remote_id => substr(md5_hex($self->id), 0, 20),
         brand     => $self->credit_card_brand,
         amount    => $self->amount,
     );
 
-    if ($authorize->{authorized}) {
-        $self->_transaction_id($authorize->{transaction_id});
+    if ($res->{authorized}) {
+        $self->_transaction_id($res->{transaction_id});
 
         $self->update({ status => "authorized" });
 
         return 1;
     }
+    return 0;
+}
+
+sub capture {
+    my ($self) = @_;
+
+    defined $self->_transaction_id or die 'transaction not authorized';
+
+    my $res = $self->_cielo->do_capture(
+        transaction_id => $self->_transaction_id
+    );
+
+    if ($res->{captured}) {
+        $self->update({ status => "captured" });
+        return 1;
+    }
+
     return 0;
 }
 
