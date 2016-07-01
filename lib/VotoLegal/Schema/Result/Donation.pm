@@ -225,14 +225,21 @@ sub authorize {
     defined $self->_card_token       or die 'credit card not tokenized.';
     defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
 
-    my $remote_id = substr(md5_hex($self->id), 0, 20);
-
-    return $self->_cielo->do_authorization(
+    my $authorize = $self->_cielo->do_authorization(
         token     => $self->_card_token,
-        remote_id => $remote_id,
+        remote_id => $substr(md5_hex($self->id), 0, 20),
         brand     => $self->credit_card_brand,
         amount    => $self->amount,
     );
+
+    if ($authorize->{authorized}) {
+        $self->_transaction_id($authorize->{transaction_id});
+
+        $self->update({ status => "authorized" });
+
+        return 1;
+    }
+    return 0;
 }
 
 __PACKAGE__->meta->make_immutable;
