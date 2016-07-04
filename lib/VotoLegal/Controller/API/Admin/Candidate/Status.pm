@@ -24,9 +24,11 @@ sub activate_PUT {
     my ($self, $c) = @_;
 
     my $candidate = $c->stash->{candidate};
+    my $status    = $candidate->status;
 
     $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "activated" } );
-    $candidate->send_email_activation();
+
+    $candidate->send_email_approval() if $status eq "pending";
 
     return $self->status_ok($c, entity => { id => $candidate->id });
 }
@@ -37,8 +39,11 @@ sub deactivate_PUT {
     my ($self, $c) = @_;
 
     my $candidate = $c->stash->{candidate};
+    my $status    = $candidate->status;
 
     $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "deactivated" } );
+
+    $candidate->send_email_disapproval() if $status eq "pending";
 
     return $self->status_ok($c, entity => { id => $candidate->id });
 }

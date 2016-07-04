@@ -711,15 +711,34 @@ sub send_email_registration {
     });
 }
 
-sub send_email_activation {
+sub send_email_approval {
     my ($self) = @_;
 
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
         from     => 'no-reply@votolegal.org',
         subject  => "VotoLegal - Cadastro aprovado",
-        template => get_data_section('candidate_activation.tt'),
-        vars     => { map { $_ => $self->$_} qw(name) },
+        template => get_data_section('candidate_approval.tt'),
+        vars     => {
+            name  => $self->name,
+            login => $self->user->email,
+        },
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
+sub send_email_disapproval {
+    my ($self) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->user->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Cadastro reprovado",
+        template => get_data_section('candidate_disapproval.tt'),
+        vars     => { name => $self->name },
     )->build_email();
 
     return $self->resultset('EmailQueue')->create({
@@ -736,11 +755,227 @@ __DATA__
 
 @@ candidate_registration.tt
 
-Olá [% name %]!<br>
-Seu cadastro está pendente para aprovação.<br>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
 
-@@ candidate_activation.tt
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="http://votolegal.org/" target="_blank"><img src="header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Parabéns [% name %], recebemos o seu pré-cadastro com sucesso.</b><br>
+      <br>
+      Caso o pré-cadastro seja aprovado, você será direcionado para completar seu cadastro.
+      </span></p>
+    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro acessando o link <a href="#" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal. </span></p></td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p dir="ltr">Dúvidas? Acesse <a href="#" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  Equipe Voto Legal</strong><a href="mailto:suporte@votolegal.org" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
 
-Olá [% name %]!<br>
-Seu cadastro foi aprovado com sucesso!<br>
+</body>
+</html>
+
+@@ candidate_approval.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="http://votolegal.org/"><img src="header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% nome %], </b><br>
+      <br></span></p>
+    <p> <strong> Parabéns, seu cadastro no Voto Legal foi aprovado!</strong></p>
+    <p>Agora você pode acessar seu Portal do Candidato e completar seu cadastro. A partir do dia 15.08.2016 o perfil ficará habilitado para receber doações.    </p>
+    <p>Seu login: xxxxx</p>
+  </td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+<tr>
+<td align="center" bgcolor="#ffffff" valign="top" style="padding-top:20px">
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
+<tbody>
+<tr>
+<td align="center" valign="middle"><a href="http://votolegal.org/" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>COMPLETAR CADASTRO</strong></a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p>Já se preparou para o cadastro completo? <a href="#" target="_blank" style="color:#4ab957">Acesse aqui</a> e visualize os itens necessários para realizar seu cadastro. Lembrando que você tem até o dia 14.08.2016 para deixar seu perfil completo, após essa data, o perfil ficará ativo e as doações começarão e não será possível alterar seu perfil.</p>
+  <p>Dúvidas? Acesse <a href="#" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  Equipe Voto Legal</strong><a href="mailto:suporte@votolegal.org" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+
+</body>
+</html>
+
+
+@@ candidate_disapproval.tt
+
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="http://votolegal.org/"><img src="header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %], </b><br>
+      <br></span></p>
+    <p>Enviamos este e-mail para informar que seu pré-cadastro no Voto Legal <strong>não foi aprovado</strong>. </p>
+    <p>Consulte as <a href="#" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
+    <p>Entre em contato conosco para obter mais informações <a href="#" target="_blank" style="color:#4ab957">clicando aqui</a>. </p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+
+</body>
+</html>
 
