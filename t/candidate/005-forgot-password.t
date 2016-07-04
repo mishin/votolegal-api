@@ -21,25 +21,38 @@ db_transaction {
     ;
 
     # O token retornado realmente pertence ao devido usuario?
-    my $token ;
-    stash_test 'fp' => sub {
-        my ($res) = @_;
+    my $forgot_password = $schema->resultset('UserForgotPassword')->search({
+        user_id     => $candidate->user->id,
+        valid_until => { '>=' => \'NOW()' },
+    })->next;
 
-        $token = $res->{token};
-        is (length $token, 40, 'token has 40 chars');
-
-        is (
-            $schema->resultset('UserForgotPassword')->search({ token => $token })->next->user_id,
-            $candidate->user->id,
-            'token belongs to user',
-        );
-    };
+    my $token = $forgot_password->token;
+    is (length $token, 40, 'token has 40 chars');
 
     # O email foi pra queue?
     ok ($schema->resultset('EmailQueue')->count, 'email queued');
 
     # Resetando o password.
     my $new_password = random_string(8);
+
+    # Não é possível utilizar um token expirado.
+    $forgot_password->update({
+        valid_until => \"(NOW() - '1 minutes'::interval)",
+    });
+
+    rest_post "/api/login/forgot_password/reset/$token",
+        name    => "reset password with invalid token",
+        is_fail => 1,
+        code    => 400,
+        params  => {
+            new_password => $new_password,
+        },
+    ;
+
+    # Agora volto o valor do valid_until e essa troca tem que funcionar.
+    $forgot_password->update({
+        valid_until => \"(NOW() + '1 days'::interval)",
+    });
 
     rest_post "/api/login/forgot_password/reset/$token",
         name   => "reset password",
