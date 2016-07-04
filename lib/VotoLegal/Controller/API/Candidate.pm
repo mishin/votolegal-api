@@ -75,8 +75,11 @@ sub candidate_GET {
     else {
         $candidate = {
             %{$candidate},
-            map { $_ => $c->stash->{candidate}->$_ }
-              qw(id name popular_name status reelection party_id office_id address_city address_state address_street address_house_number address_complement address_zipcode username)
+            map { $_ => $c->stash->{candidate}->$_ } qw(
+              id name popular_name status reelection party_id office_id status username picture 
+              video_url facebook_url twitter_url website_url summary biography instagram_url
+              raising_goal public_email spending_spreadsheet
+            )
         };
     }
 
