@@ -3,3 +3,4 @@ inc/*
 log/*
 deploy/envs.sh
 .build/*
+Makefile
