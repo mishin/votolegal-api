@@ -12,10 +12,12 @@ db_transaction {
         stash  => 'email',
         code   => 200,
         params => {
-            name    => 'Junior Moraes',
-            phone   => '11982012016',
-            email   => 'fvox@cpan.org',
-            message => "Morbi fringilla tellus eu maximus hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ex libero, scelerisque sed sem vel, aliquet interdum lacus."
+            name         => fake_name()->(),
+            phone        => fake_digits("## #####-####")->(),
+            email        => fake_email()->(),
+            message      => fake_sentences(3)->(),
+            is_candidate => fake_int(0, 1)->(),
+            type         => fake_sentences(1)->(),
         },
     ;
 

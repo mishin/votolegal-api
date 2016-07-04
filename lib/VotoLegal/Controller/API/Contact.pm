@@ -1,4 +1,5 @@
 package VotoLegal::Controller::API::Contact;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
@@ -10,19 +11,24 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('contact') : CaptureArgs(0) { }
 
-sub contact : Chained('base') : PathPart('') {
+sub contact : Chained('base') : Args(0) : PathPart('') {
     my ($self, $c) = @_;
 
-    for (qw(name email message)) {
+    for (qw(name is_candidate email phone type message)) {
         die \[$_, "missing"] unless defined $c->req->params->{$_};
     }
+
+    $c->req->params->{is_candidate} = $c->req->params->{is_candidate} ? "Sim" : "Não";
 
     my $email = VotoLegal::Mailer::Template->new(
         to       => $c->config->{email}->{contact_to},
         from     => $c->config->{email}->{default_from},
         subject  => "VotoLegal - Contato",
         template => get_data_section('contact.tt'),
-        vars     => { map { $_ => $c->req->params->{$_} } qw(name phone email message) }
+        vars     => {
+            map { $_ => $c->req->params->{$_} }
+              qw(name is_candidate email phone type message)
+        }
     )->build_email();
 
     my $queued = $c->model('DB::EmailQueue')->create({ body => $email->as_string });
@@ -52,6 +58,10 @@ __DATA__
 @@ contact.tt
 
 Nome: [%name%]
+<br>
+Candidato: [%is_candidate%]
+<br>
+Tipo do contato: [%type%]
 <br>
 Email: [%email%]
 <br>
