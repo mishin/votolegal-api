@@ -29,9 +29,14 @@ sub projects : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { 
 sub projects_GET {
     my ($self, $c) = @_;
 
+    my $page    = $c->req->params->{page}    || 1;
+    my $results = $c->req->params->{results} || 20;
+
     my @all = $c->stash->{collection}->search(
         undef,
         {
+            page         => $page,
+            rows         => $results,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         },
     )->all;

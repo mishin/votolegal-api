@@ -10,7 +10,7 @@ db_transaction {
     create_candidate;
     my $id_candidate = stash 'candidate.id';
 
-    diag "Listing projects...";
+    # Listando os projetos.
     rest_get "/api/candidate/${id_candidate}/projects",
         name  => "listing projects",
         stash => "list1",
@@ -22,8 +22,7 @@ db_transaction {
         ok (scalar @{$res->{projects}} == 0, 'has no projects');
     };
 
-    diag "Adding project...";
-
+    # Adicionando projeto.
     rest_post "/api/candidate/${id_candidate}/projects",
         name    => "can't add project when not logged in",
         is_fail => 1,
@@ -51,7 +50,7 @@ db_transaction {
         'project added'
     );
 
-    diag "Edit project...";
+    # Editando o projeto.
     rest_put stash 'project.url',
         name   => "editing project",
         stash  => "e1",
@@ -66,7 +65,7 @@ db_transaction {
         'project edited',
     );
 
-    diag "Delete project...";
+    # Deletando o projeto.
     rest_delete stash 'project.url',
         name => "delete project",
     ;
@@ -77,7 +76,7 @@ db_transaction {
         'project deleted'
     );
 
-    diag "Can't add more than 20 projects.";
+    # Não é possível adicionar mais de 20 projetos.
     for (1 .. 20) {
         rest_post "/api/candidate/${id_candidate}/projects",
             name    => "adding project $_",
@@ -96,6 +95,26 @@ db_transaction {
             scope => lorem_paragraphs(),
         },
     ;
+
+    # Listando os projetos com paginacao.
+    rest_get "/api/candidate/${id_candidate}/projects",
+        name   => "listing projects",
+        stash  => "list2",
+        params => {
+            page    => 2,
+            results => 5,
+        },
+    ;
+
+    stash_test 'list2' => sub {
+        my ($res) = @_;
+
+        # A listagem retornou 5 projetos.
+        ok (scalar @{$res->{projects}} == 5, 'has 5 projects');
+
+        # E o quinto projeto da segunda página é o 'Projeto 10'.
+        is ($res->{projects}->[-1]->{title}, "Project 10");
+    };
 };
 
 done_testing();
