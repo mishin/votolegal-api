@@ -6,9 +6,10 @@ use Email::Sender::Transport::SMTP::TLS;
 
 BEGIN {
     if (!$ENV{HARNESS_ACTIVE} && $0 !~ /forkprove/) {
-        defined $ENV{VOTOLEGAL_SMTP_SERVER} || die "ENV 'VOTOLEGAL_SMTP_SERVER' MISSING";
-        defined $ENV{VOTOLEGAL_SMTP_USER}   || die "ENV 'VOTOLEGAL_SMTP_USER' MISSING";
-        defined $ENV{VOTOLEGAL_SMTP_PASSWD} || die "ENV 'VOTOLEGAL_SMTP_PASSWD' MISSING";
+        $ENV{VOTOLEGAL_SMTP_SERVER} || die "ENV 'VOTOLEGAL_SMTP_SERVER' MISSING";
+        $ENV{VOTOLEGAL_SMTP_USER}   || die "ENV 'VOTOLEGAL_SMTP_USER' MISSING";
+        $ENV{VOTOLEGAL_SMTP_PASSWD} || die "ENV 'VOTOLEGAL_SMTP_PASSWD' MISSING";
+        $ENV{VOTOLEGAL_SMTP_PORT}   || die "ENV 'VOTOLEGAL_SMTP_PORT' MISSING";
     }
 }
 
@@ -27,7 +28,7 @@ sub _build_transport {
         helo     => "votolegal",
         host     => $ENV{VOTOLEGAL_SMTP_SERVER},
         timeout  => 20,
-        port     => 587,
+        port     => $ENV{VOTOLEGAL_SMTP_PORT},
         username => $ENV{VOTOLEGAL_SMTP_USER},
         password => $ENV{VOTOLEGAL_SMTP_PASSWD},
     );

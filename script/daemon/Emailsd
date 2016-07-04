@@ -3,7 +3,6 @@ package VotoLegal::Daemon::Emailsd;
 use common::sense;
 use FindBin qw($RealBin $Script);
 use lib "$RealBin/../../lib";
-use Data::Printer;
 
 use AnyEvent;
 use Daemon::Generic;
