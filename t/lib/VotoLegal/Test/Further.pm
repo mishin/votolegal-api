@@ -131,8 +131,8 @@ sub create_candidate {
         [
             username             => $username,
             password             => "foobarquux1",
-            name                 => fake_name(),
-            popular_name         => fake_surname(),
+            name                 => fake_name()->(),
+            popular_name         => fake_surname()->(),
             email                => fake_email()->(),
             cpf                  => random_cpf(),
             cnpj                 => random_cnpj(1),
