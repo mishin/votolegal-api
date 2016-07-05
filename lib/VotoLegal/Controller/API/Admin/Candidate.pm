@@ -50,7 +50,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     }
 }
 
-sub list : Chained('base') : PathPart('') : ActionClass('REST') { }
+sub list : Chained('base') : PathPart('list') : Args(0) : ActionClass('REST') { }
 
 sub list_GET {
     my ($self, $c) = @_;
@@ -71,6 +71,18 @@ sub list_GET {
     }
 
     return $self->status_ok($c, entity => \@rows);
+}
+
+sub count : Chained('base') : PathPart('count') : Args(0) : ActionClass('REST') { }
+
+sub count_GET {
+    my ($self, $c) = @_;
+
+    my $count = $c->stash->{collection}->search({})->count;
+
+    return $self->status_ok($c, entity => {
+        count => $count,
+    });
 }
 
 =encoding utf8

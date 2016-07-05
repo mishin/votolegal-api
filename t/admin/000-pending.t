@@ -4,14 +4,12 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
-my $schema = VotoLegal->model('DB');
-
 db_transaction {
-
     create_candidate;
     api_auth_as candidate_id => stash 'candidate.id';
 
-    rest_get '/api/admin/candidate',
+    # List.
+    rest_get '/api/admin/candidate/list',
         name    => "pending candidates -- candidate is not allowed",
         is_fail => 1,
         code    => 403,
@@ -21,18 +19,16 @@ db_transaction {
     ;
 
     api_auth_as user_id => 1;
-
-    rest_get '/api/admin/candidate',
+    rest_get '/api/admin/candidate/list',
         name   => "pending candidates",
         stash  => "pending",
-        code   => 200,
         params => {
             status => "pending",
         },
     ;
 
     stash_test 'pending', sub {
-        my ($res) = @_;
+        my $res = shift;
 
         is (ref $res, 'ARRAY');
 
@@ -41,9 +37,22 @@ db_transaction {
             is ($_->{status}, "pending", "candidate id $_->{id} is pending");
         }
     };
+
+    # Count.
+    rest_get '/api/admin/candidate/count',
+        name   => "count pendings",
+        stash  => "count",
+        params => {
+            status => "pending",
+        },
+    ;
+
+    stash_test 'count' => sub {
+        my $res = shift;
+
+        ok ($res->{count} > 0, 'count pending candidates');
+    };
 };
 
 done_testing();
-
-
 
