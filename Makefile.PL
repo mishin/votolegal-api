@@ -13,7 +13,7 @@ my %WriteMakefileArgs = (
     "ExtUtils::MakeMaker" => 0
   },
   "DISTNAME" => "VotoLegal",
-  "LICENSE" => "gpl",
+  "LICENSE" => "open_source",
   "MIN_PERL_VERSION" => "5.014002",
   "NAME" => "VotoLegal",
   "PREREQ_PM" => {
