@@ -1,4 +1,5 @@
 package VotoLegal::Schema::ResultSet::Donation;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 use utf8;
@@ -7,6 +8,8 @@ extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
 
+use Time::HiRes;
+use Digest::MD5 qw(md5_hex);
 use Data::Verifier;
 use VotoLegal::Types qw(CPF);
 use MooseX::Types::Email qw(EmailAddress);
@@ -104,7 +107,12 @@ sub action_specs {
             delete $values{credit_card_number};
             delete $values{credit_card_brand};
 
-            return $self->create(\%values);
+            my $id = md5_hex(Time::HiRes::time());
+
+            return $self->create({
+                id => $id,
+                %values
+            });
         },
     };
 }

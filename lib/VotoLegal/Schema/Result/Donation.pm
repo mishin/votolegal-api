@@ -44,10 +44,9 @@ __PACKAGE__->table("donation");
 
 =head2 id
 
-  data_type: 'integer'
-  is_auto_increment: 1
+  data_type: 'varchar'
   is_nullable: 0
-  sequence: 'donation_id_seq'
+  size: 32
 
 =head2 candidate_id
 
@@ -89,12 +88,7 @@ __PACKAGE__->table("donation");
 
 __PACKAGE__->add_columns(
   "id",
-  {
-    data_type         => "integer",
-    is_auto_increment => 1,
-    is_nullable       => 0,
-    sequence          => "donation_id_seq",
-  },
+  { data_type => "varchar", is_nullable => 0, size => 32 },
   "candidate_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
@@ -141,8 +135,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-01 15:35:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uES591s4INL1nSr6Cog9Qw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-05 10:31:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ODH2XUq+mVRG7o8xDicrOw
 
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Payment::Cielo;
