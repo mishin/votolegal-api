@@ -1,4 +1,5 @@
 package VotoLegal::Controller::API::Candidate::Projects;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
@@ -32,17 +33,13 @@ sub projects_GET {
     my $page    = $c->req->params->{page}    || 1;
     my $results = $c->req->params->{results} || 20;
 
-    my @all = $c->stash->{collection}->search(
-        undef,
-        {
-            page         => $page,
-            rows         => $results,
-            result_class => "DBIx::Class::ResultClass::HashRefInflator",
-        },
-    )->all;
-
     return $self->status_ok($c, entity => {
-        projects => \@all,
+        projects => [
+            map { {
+                $_->get_columns,
+                votes => $_->project_votes->count,
+            } } $c->stash->{collection}->search({}, { page => $page, rows => $results })->all
+        ],
     });
 }
 
@@ -73,9 +70,11 @@ sub project : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {
 sub project_GET {
     my ($self, $c) = @_;
 
-    return $self->status_ok($c, entity => {
+    my $response = {
         map { $_ => $c->stash->{project}->$_ } qw(id title scope)
-    });
+    };
+
+    return $self->status_ok($c, entity => $response);
 }
 
 sub project_PUT {
