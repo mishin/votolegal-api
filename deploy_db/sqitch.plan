@@ -28,3 +28,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0022-cielo-merchant [0021-responsible] 2016-06-29T20:30:30Z Junior Moraes,,, <junior@junior-eokoe> # elo-merchant colunas de chave da cielo
 0023-donation [0022-cielo-merchant] 2016-07-01T20:02:38Z Junior Moraes,,, <junior@junior-eokoe> # nation tabela de doacoes
 0024-donation-hash [0023-donation] 2016-07-05T14:11:41Z Junior Moraes,,, <junior@junior-eokoe> # nation-hash id deixou de ser autoincrement
+0025-project-votes [0024-donation-hash] 2016-07-05T17:29:38Z Junior Moraes,,, <junior@junior-eokoe> # oject-votes votacao dos projetos

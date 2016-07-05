@@ -112,9 +112,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 project_votes
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-27 09:38:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3WXqxdSFhRjpnYpVVttajA
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::ProjectVote>
+
+=cut
+
+__PACKAGE__->has_many(
+  "project_votes",
+  "VotoLegal::Schema::Result::ProjectVote",
+  { "foreign.project_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-05 11:31:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0BINhs94hvPipfuYy8ISLA
 
 use Data::Verifier;
 
