@@ -5,27 +5,28 @@ VOTOLEGAL_API_WORKERS="4"
 
 STARMAN_BIN="$(which starman)"
 DAEMON="$(which start_server)"
+GIT_DIR=$(git rev-parse --show-toplevel)
 
 line (){
     perl -e "print '-' x 40, $/";
 }
 
-mkdir -p log/
+mkdir -p $GIT_DIR/log/
 
 up_server (){
     PSGI_APP_NAME="$1"
     PORT="$2"
     WORKERS="$3"
 
-    ERROR_LOG="log/votolegal.error.log"
-    STATUS="log/votolegal.start_server.status"
-    PIDFILE="log/votolegal.start_server.pid"
+    ERROR_LOG="$GIT_DIR/log/votolegal.error.log"
+    STATUS="$GIT_DIR/log/votolegal.start_server.status"
+    PIDFILE="$GIT_DIR/log/votolegal.start_server.pid"
 
     touch $ERROR_LOG
     touch $PIDFILE
     touch $STATUS
 
-    STARMAN="$STARMAN_BIN -Ilib --preload-app --workers $WORKERS $PSGI_APP_NAME"
+    STARMAN="$STARMAN_BIN -Ilib --preload-app --workers $WORKERS $GIT_DIR/$PSGI_APP_NAME"
 
     DAEMON_ARGS=" --pid-file=$PIDFILE --signal-on-hup=QUIT --status-file=$STATUS --port $PORT -- $STARMAN"
 
