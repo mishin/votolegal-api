@@ -46,7 +46,7 @@ sub listen_queue {
         $self->logger->info("Todos os items foram processados com sucesso") if $self->logger;
     }
     else {
-        $self->logger->info("Não há itens pendentes na fila.") if $self->logger;
+        #$self->logger->info("Não há itens pendentes na fila.") if $self->logger;
     }
 }
 
