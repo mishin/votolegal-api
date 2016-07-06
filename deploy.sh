@@ -36,14 +36,21 @@ up_server (){
 
     DAEMON_ARGS=" --pid-file=$PIDFILE --signal-on-hup=QUIT --status-file=$STATUS --port $PORT -- $STARMAN"
 
-    echo "Restarting...  $DAEMON --restart $DAEMON_ARGS"
+    echo STDERR "Restarting...  $DAEMON --restart $DAEMON_ARGS"
     $DAEMON --restart $DAEMON_ARGS
 
     if [ $? -gt 0 ]; then
-        echo "Restart failed, application likely not running. Starting..."
+        echo STDERR "Restart failed, application likely not running. Starting..."
 
-        echo "/sbin/start-stop-daemon -b --start --pidfile $PIDFILE --chuid $USER -u $USER --exec $DAEMON --$DAEMON_ARGS"
+        echo STDERR "/sbin/start-stop-daemon -b --start --pidfile $PIDFILE --chuid $USER -u $USER --exec $DAEMON --$DAEMON_ARGS"
         /sbin/start-stop-daemon -b --start --pidfile $PIDFILE --chuid $USER -u $USER --exec $DAEMON --$DAEMON_ARGS
+
+        if [ $? -gt 0 ]; then
+            echo STDERR "Start failed again... starting in foreground";
+
+            /sbin/start-stop-daemon --start --pidfile $PIDFILE --chuid $USER -u $USER --exec $DAEMON --$DAEMON_ARGS
+
+        fi
     fi
 }
 
@@ -52,7 +59,7 @@ sqitch deploy -t $SQITCH_DEPLOY
 
 export DBIC_TRACE=0
 
-echo "Restaring server...";
+echo STDERR "Restaring server...";
 up_server "votolegal.psgi" $VOTOLEGAL_API_PORT $VOTOLEGAL_API_WORKERS
 
 line
@@ -61,6 +68,6 @@ line
 ./script/daemon/Emailsd restart
 
 line
-echo "sleeping 5..."
+echo STDERR "sleeping 5..."
 sleep 5
 ./script/daemon/Emailsd status
