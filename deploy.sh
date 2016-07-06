@@ -43,6 +43,8 @@ up_server (){
 : ${SQITCH_DEPLOY:=local}
 sqitch deploy -t $SQITCH_DEPLOY
 
+export DBIC_TRACE=0
+
 echo "Restaring server...";
 up_server "votolegal.psgi" $VOTOLEGAL_API_PORT $VOTOLEGAL_API_WORKERS
 
@@ -50,5 +52,3 @@ line
 
 # Daemons.
 ./script/daemon/Emailsd restart
-
-export DBIC_TRACE=0
