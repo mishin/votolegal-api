@@ -20,7 +20,6 @@ sub get_schema {
     }
 
     return VotoLegal::Schema->connect($db_config);
-
 }
 
 1;
