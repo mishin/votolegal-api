@@ -4,3 +4,4 @@ log/*
 deploy/envs.sh
 .build/*
 Makefile
+votolegal.conf
