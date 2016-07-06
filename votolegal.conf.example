@@ -9,6 +9,7 @@ name VotoLegal
         quote_char "\""
         name_sep "."
         user postgres
+        password postgres
         pg_enable_utf8 1
     </connect_info>
 
