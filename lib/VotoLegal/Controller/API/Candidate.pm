@@ -9,7 +9,7 @@ use File::MimeInfo;
 use VotoLegal::Uploader;
 use Crypt::PRNG qw(random_string);
 
-has s3 => (
+has uploader => (
     is      => "ro",
     isa     => "VotoLegal::Uploader",
     default => sub { VotoLegal::Uploader->new() },
@@ -17,6 +17,11 @@ has s3 => (
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
+
+    # Configuracoes do uploader.
+    $self->uploader->access_key($c->config->{amazon_s3}->{access_key});
+    $self->uploader->secret_key($c->config->{amazon_s3}->{secret_key});
+    $self->uploader->media_bucket($c->config->{amazon_s3}->{media_bucket});
 
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
         undef,
@@ -129,7 +134,7 @@ sub _upload_picture {
 
     my $path = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $upload->tempname;
 
-    my $url = $self->s3->upload({
+    my $url = $self->uploader->upload({
         path => $path,
         file => $upload->tempname,
         type => $mimetype,
@@ -148,7 +153,7 @@ sub _upload_spreadsheet {
 
     my $path = join "/", "votolegal", "spreadsheet", random_string(3), DateTime->now->epoch, $upload->tempname;
 
-    my $url = $self->s3->upload({
+    my $url = $self->uploader->upload({
         path => $path,
         file => $upload->tempname,
         type => $mimetype,
