@@ -26,7 +26,7 @@ up_server (){
     touch $PIDFILE
     touch $STATUS
 
-    STARMAN="$STARMAN_BIN -Ilib --preload-app --workers $WORKERS $GIT_DIR/$PSGI_APP_NAME"
+    STARMAN="$STARMAN_BIN -I$GIT_DIR/lib --preload-app --workers $WORKERS $GIT_DIR/$PSGI_APP_NAME"
 
     DAEMON_ARGS=" --pid-file=$PIDFILE --signal-on-hup=QUIT --status-file=$STATUS --port $PORT -- $STARMAN"
 
