@@ -27,7 +27,7 @@ up_server (){
 
     STARMAN="$STARMAN_BIN -Ilib --preload-app --workers $WORKERS $PSGI_APP_NAME"
 
-    DAEMON_ARGS=" --pid-file=$PIDFILE --signal-on-hup=QUIT --status-file=$STATUS --port 0.0.0.0:$PORT -- $STARMAN"
+    DAEMON_ARGS=" --pid-file=$PIDFILE --signal-on-hup=QUIT --status-file=$STATUS --port $PORT -- $STARMAN"
 
     echo "Restarting...  $DAEMON --restart $DAEMON_ARGS"
     $DAEMON --restart $DAEMON_ARGS
@@ -40,7 +40,8 @@ up_server (){
     fi
 }
 
-sqitch deploy -t local
+: ${SQITCH_DEPLOY:=local}
+sqitch deploy -t $SQITCH_DEPLOY
 
 echo "Restaring server...";
 up_server "votolegal.psgi" $VOTOLEGAL_API_PORT $VOTOLEGAL_API_WORKERS
