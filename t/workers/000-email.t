@@ -11,6 +11,7 @@ db_transaction {
 
     my $worker = new_ok('VotoLegal::Worker::Email', [
         schema => $schema,
+        config => get_config,
     ]);
 
     ok ($worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Email does VotoLegal::Worker');

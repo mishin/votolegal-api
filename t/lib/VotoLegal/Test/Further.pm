@@ -1,5 +1,6 @@
 package VotoLegal::Test::Further;
 use common::sense;
+use FindBin qw($RealBin);
 use Carp;
 
 use Test::More;
@@ -7,6 +8,7 @@ use Catalyst::Test q(VotoLegal);
 use CatalystX::Eta::Test::REST;
 
 use Text::Lorem;
+use Config::General;
 use Data::Printer;
 use JSON::MaybeXS;
 use Crypt::PRNG qw(random_string);
@@ -163,6 +165,13 @@ sub lorem_paragraphs {
     my $lorem = Text::Lorem->new();
 
     return $lorem->paragraphs($n || 3);
+}
+
+sub get_config {
+    my $conf = new Config::General("$RealBin/../../votolegal.conf");
+    my %config = $conf->getall;
+
+    return \%config;
 }
 
 1;

@@ -1,36 +1,65 @@
 package VotoLegal::Mailer;
+use common::sense;
 use Moose;
 
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP::TLS;
 
-BEGIN {
-    if (!$ENV{HARNESS_ACTIVE} && $0 !~ /forkprove/) {
-        $ENV{VOTOLEGAL_SMTP_SERVER} || die "ENV 'VOTOLEGAL_SMTP_SERVER' MISSING";
-        $ENV{VOTOLEGAL_SMTP_USER}   || die "ENV 'VOTOLEGAL_SMTP_USER' MISSING";
-        $ENV{VOTOLEGAL_SMTP_PASSWD} || die "ENV 'VOTOLEGAL_SMTP_PASSWD' MISSING";
-        $ENV{VOTOLEGAL_SMTP_PORT}   || die "ENV 'VOTOLEGAL_SMTP_PORT' MISSING";
-    }
-}
+has smtp_server => (
+    is       => "rw",
+    isa      => "Str",
+    required => 1,
+);
+
+has smtp_port => (
+    is       => "rw",
+    isa      => "Int",
+    required => 1,
+);
+
+has smtp_username => (
+    is       => "rw",
+    isa      => "Str",
+    required => 1,
+);
+
+has smtp_password => (
+    is       => "rw",
+    isa      => "Str",
+    required => 1,
+);
+
+has smtp_timeout => (
+    is      => "rw",
+    isa     => "Int",
+    default => 20,
+);
 
 has from => (
     is      => "ro",
     default => 'no-reply@votolegal.org'
 );
 
-has transport => (
+has _transport => (
     is         => "ro",
     lazy_build => 1,
 );
 
-sub _build_transport {
+sub _build__transport {
+    my $self = shift;
+
+    defined $self->smtp_server   or die "missing 'smtp_server'.";
+    defined $self->smtp_port     or die "missing 'smtp_port'.";
+    defined $self->smtp_username or die "missing 'smtp_username'.";
+    defined $self->smtp_password or die "missing 'smtp_passwd'.";
+
     return Email::Sender::Transport::SMTP::TLS->new(
         helo     => "votolegal",
-        host     => $ENV{VOTOLEGAL_SMTP_SERVER},
-        timeout  => 20,
-        port     => $ENV{VOTOLEGAL_SMTP_PORT},
-        username => $ENV{VOTOLEGAL_SMTP_USER},
-        password => $ENV{VOTOLEGAL_SMTP_PASSWD},
+        host     => $self->smpt_host,
+        timeout  => $self->smtp_timeout,
+        port     => $self->smtp_port,
+        username => $self->smtp_username,
+        password => $self->smtp_password,
     );
 }
 

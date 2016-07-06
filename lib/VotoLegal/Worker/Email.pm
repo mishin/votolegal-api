@@ -12,9 +12,9 @@ has timer => (
 );
 
 has mailer => (
-    is       => "ro",
-    isa      => "VotoLegal::Mailer",
-    default  => sub { VotoLegal::Mailer->new() },
+    is         => "ro",
+    isa        => "VotoLegal::Mailer",
+    lazy_build => 1,
 );
 
 has schema => (
@@ -83,6 +83,17 @@ sub exec_item {
     }
 
     return 0;
+}
+
+sub _build_mailer {
+    my $self = shift;
+
+    return VotoLegal::Mailer->new(
+        smtp_server   => $self->config->{sendmail}->{smtp_server},
+        smtp_port     => $self->config->{sendmail}->{smtp_port},
+        smtp_username => $self->config->{sendmail}->{smtp_username},
+        smtp_password => $self->config->{sendmail}->{smtp_password},
+    );
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -21,8 +21,8 @@ sub contact : Chained('base') : Args(0) : PathPart('') {
     $c->req->params->{is_candidate} = $c->req->params->{is_candidate} ? "Sim" : "Não";
 
     my $email = VotoLegal::Mailer::Template->new(
-        to       => $c->config->{email}->{contact_to},
-        from     => $c->config->{email}->{default_from},
+        to       => $c->config->{sendmail}->{contact_to},
+        from     => $c->config->{sendmail}->{default_from},
         subject  => "VotoLegal - Contato",
         template => get_data_section('contact.tt'),
         vars     => {

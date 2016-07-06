@@ -17,5 +17,11 @@ has logger => (
     required => 0,
 );
 
+has config => (
+    is      => "rw",
+    isa     => "HashRef",
+    default => sub { {} },
+);
+
 1;
 
