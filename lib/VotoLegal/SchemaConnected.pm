@@ -1,5 +1,8 @@
 package VotoLegal::SchemaConnected;
 use common::sense;
+use FindBin qw($RealBin);
+use Config::General;
+
 require Exporter;
 
 our @ISA    = qw(Exporter);
@@ -8,23 +11,15 @@ our @EXPORT = qw(get_schema);
 sub get_schema {
     require VotoLegal::Schema;
 
-    my $db_host = $ENV{VOTOLEGAL_DB_HOST} || 'localhost';
-    my $db_pass = $ENV{VOTOLEGAL_DB_PASS} || 'no-password';
-    my $db_port = $ENV{VOTOLEGAL_DB_PORT} || '5432';
-    my $db_user = $ENV{VOTOLEGAL_DB_USER} || 'postgres';
-    my $db_name = $ENV{VOTOLEGAL_DB_NAME} || 'votolegal_dev';
+    my $conf = new Config::General("$RealBin/../../votolegal.conf");
+    my %config = $conf->getall;
 
-    VotoLegal::Schema->connect(
-        "dbi:Pg:host=$db_host;port=$db_port;dbname=$db_name",
-        $db_user, $db_pass,
-        {
-            "AutoCommit"     => 1,
-            "quote_char"     => "\"",
-            "name_sep"       => ".",
-            "pg_enable_utf8" => 1,
-            "on_connect_do"  => "SET client_encoding=UTF8"
-        }
-    );
+    my $db_config = $config{model}->{DB}->{connect_info};
+    if ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/) {
+        $db_config = $config{model}->{DB}->{connect_info_test};
+    }
+
+    return VotoLegal::Schema->connect($db_config);
 
 }
 
