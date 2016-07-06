@@ -28,6 +28,7 @@ my %WriteMakefileArgs = (
     "CatalystX::Eta::Controller::Order" => 0,
     "CatalystX::Eta::Controller::REST" => 0,
     "CatalystX::Eta::Controller::Search" => 0,
+    "Config::General" => 0,
     "Crypt::PRNG" => 0,
     "DBD::Pg" => 0,
     "DBIx::Class::Core" => 0,
