@@ -1,17 +1,17 @@
 #!/bin/bash
 
 
+GIT_DIR=$(git rev-parse --show-toplevel)
+
+if [ -f $GIT_DIR/setup.sh ]; then
+    source $GIT_DIR/setup.sh
+fi
 
 VOTOLEGAL_API_PORT="8105"
 VOTOLEGAL_API_WORKERS="4"
 
 STARMAN_BIN="$(which starman)"
 DAEMON="$(which start_server)"
-GIT_DIR=$(git rev-parse --show-toplevel)
-
-if [ -f $GIT_DIR/setup.sh ]; then
-    source $GIT_DIR/setup.sh
-fi
 
 line (){
     perl -e "print '-' x 40, $/";
