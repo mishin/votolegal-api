@@ -17,6 +17,7 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.014002",
   "NAME" => "VotoLegal",
   "PREREQ_PM" => {
+    "App::Sqitch" => 0,
     "Business::BR::CEP" => 0,
     "Business::BR::CNPJ" => 0,
     "Business::BR::CPF" => 0,
@@ -28,7 +29,6 @@ my %WriteMakefileArgs = (
     "CatalystX::Eta::Controller::Order" => 0,
     "CatalystX::Eta::Controller::REST" => 0,
     "CatalystX::Eta::Controller::Search" => 0,
-    "Config::General" => 0,
     "Crypt::PRNG" => 0,
     "DBD::Pg" => 0,
     "DBIx::Class::Core" => 0,
@@ -109,6 +109,7 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "App::Sqitch" => 0,
   "Business::BR::CEP" => 0,
   "Business::BR::CNPJ" => 0,
   "Business::BR::CPF" => 0,
