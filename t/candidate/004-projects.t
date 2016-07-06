@@ -111,9 +111,6 @@ db_transaction {
 
         # A listagem retornou 5 projetos.
         ok (scalar @{$res->{projects}} == 5, 'has 5 projects');
-
-        # E o quinto projeto da segunda página é o 'Projeto 10'.
-        is ($res->{projects}->[-1]->{title}, "Project 10");
     };
 };
 
