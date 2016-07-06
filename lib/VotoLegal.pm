@@ -38,21 +38,20 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config(
-    name => 'VotoLegal',
+    name     => 'VotoLegal',
+    encoding => 'UTF-8',
+
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
-    enable_catalyst_header => 0, # Send X-Catalyst header
+    enable_catalyst_header                      => 0, # Send X-Catalyst header
 );
 
 before 'setup_components' => sub {
     my $app = shift;
 
-    $app->config->{'Model::DB'}->{connect_info} = {
-        dsn         => "dbi:Pg:dbname=" . $ENV{VOTOLEGAL_DB_NAME} . ";host=" . $ENV{VOTOLEGAL_DB_HOST},
-        user        => $ENV{VOTOLEGAL_DB_USER},
-        password    => $ENV{VOTOLEGAL_DB_PASSWD},
-        quote_names => q(1),
-    };
+    if ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/) {
+        $app->config->{'Model::DB'}->{connect_info} = $app->config->{'Model::DB'}->{connect_info_test};
+    }
 };
 
 # Start the application
