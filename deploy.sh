@@ -53,3 +53,8 @@ line
 
 # Daemons.
 ./script/daemon/Emailsd restart
+
+line
+echo "sleeping 5..."
+sleep 5
+./script/daemon/Emailsd status
