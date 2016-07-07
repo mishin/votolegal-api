@@ -794,9 +794,9 @@ __DATA__
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
     <p><span><b>Parabéns [% name %], recebemos o seu pré-cadastro com sucesso.</b><br>
       <br>
-      Caso o pré-cadastro seja aprovado, você será direcionado para completar seu cadastro.
+      Após a aprovação dos candidatos pelo TSE, sua conta será liberada para a realização do cadastro completo. Iremos informar por e-mail.
       </span></p>
-    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro acessando o link <a href="https://votolegal.org.br/documentos-para-cadastro/" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal.</span></p></td>
+    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro, quando aprovado, acessando o link <a href="https://votolegal.org.br/documentos-para-cadastro/" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal.</span></p></td>
 </tr>
 <tr>
   <td height="40"></td>
