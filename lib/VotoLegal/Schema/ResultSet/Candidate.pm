@@ -1,7 +1,7 @@
 package VotoLegal::Schema::ResultSet::Candidate;
+use common::sense;
 use Moose;
 use namespace::autoclean;
-use utf8;
 
 extends 'DBIx::Class::ResultSet';
 
@@ -10,7 +10,6 @@ with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(CPF);
-use MooseX::Types::CNPJ qw(CNPJ);
 use MooseX::Types::Email qw(EmailAddress);
 
 use Data::Verifier;
@@ -100,7 +99,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $status = $r->get_value('status');
-                        $status =~ m{^(pending|activated|deactivated)$};
+                        return $status =~ m{^(pending|activated|deactivated)$};
                     }
                 },
                 reelection => {
@@ -134,8 +133,8 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $cep = $r->get_value('address_zipcode');
-                        return test_cep($cep);
 
+                        return test_cep($cep);
                     },
                 },
                 address_street => {
@@ -149,10 +148,6 @@ sub verifiers_specs {
                 address_complement => {
                     required   => 0,
                     type       => 'Str',
-                },
-                cnpj => {
-                    required => 1,
-                    type     => CNPJ,
                 },
             },
         ),

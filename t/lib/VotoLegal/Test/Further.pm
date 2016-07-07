@@ -137,7 +137,6 @@ sub create_candidate {
             popular_name         => fake_surname()->(),
             email                => fake_email()->(),
             cpf                  => random_cpf(),
-            cnpj                 => random_cnpj(1),
             address_state        => 'São Paulo',
             address_city         => 'Iguape',
             address_zipcode      => '11920-000',

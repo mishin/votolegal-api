@@ -11,7 +11,6 @@ db_transaction {
     my $candidate_id = stash 'candidate.id';
 
     # Testando o GET.
-    diag "Testing GET...";
     rest_get "/api/candidate/${candidate_id}",
         name  => 'get candidate',
         stash => 'get_logged_out',
@@ -35,11 +34,9 @@ db_transaction {
         my ($res) = @_;
 
         ok (defined($res->{candidate}->{cpf}),  'cpf');
-        ok (defined($res->{candidate}->{cnpj}), 'cnpj');
     };
 
     # Testando o PUT.
-    diag "Testing PUT...";
     rest_put "/api/candidate/${candidate_id}",
         name    => "edit myself -- can't change status",
         is_fail => 1,
