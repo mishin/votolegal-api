@@ -126,28 +126,30 @@ sub create_candidate {
     my $username = lc $name;
     $username =~ s/\s+/_/g;
 
+    my %params = (
+        username             => $username,
+        password             => "foobarquux1",
+        name                 => fake_name()->(),
+        popular_name         => fake_surname()->(),
+        email                => fake_email()->(),
+        cpf                  => random_cpf(),
+        address_state        => 'São Paulo',
+        address_city         => 'Iguape',
+        address_zipcode      => '11920-000',
+        address_street       => "Rua Tiradentes",
+        address_house_number => 1 + int(rand(2000)),
+        office_id            => 2,
+        party_id             => 5,
+        reelection           => 1,
+        ficha_limpa          => 1,
+        %opts,
+    );
+
     return $obj->rest_post(
         '/api/register',
         name  => 'add candidate',
         stash => 'candidate',
-        [
-            username             => $username,
-            password             => "foobarquux1",
-            name                 => fake_name()->(),
-            popular_name         => fake_surname()->(),
-            email                => fake_email()->(),
-            cpf                  => random_cpf(),
-            address_state        => 'São Paulo',
-            address_city         => 'Iguape',
-            address_zipcode      => '11920-000',
-            address_street       => "Rua Tiradentes",
-            address_house_number => 1 + int(rand(2000)),
-            office_id            => 2,
-            party_id             => 5,
-            reelection           => 1,
-            ficha_limpa          => 1,
-            %opts,
-        ],
+        [ %params ],
     );
 }
 
