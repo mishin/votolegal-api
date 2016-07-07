@@ -37,7 +37,7 @@ has smtp_timeout => (
 
 has from => (
     is      => "ro",
-    default => 'no-reply@votolegal.org'
+    default => 'no-reply@votolegal.org.br'
 );
 
 has _transport => (
@@ -55,7 +55,7 @@ sub _build__transport {
 
     return Email::Sender::Transport::SMTP::TLS->new(
         helo     => "votolegal",
-        host     => $self->smpt_host,
+        host     => $self->smtp_server,
         timeout  => $self->smtp_timeout,
         port     => $self->smtp_port,
         username => $self->smtp_username,
@@ -70,7 +70,7 @@ sub send {
         return 1;
     }
 
-    sendmail($email, { from => $self->from, transport => $self->transport });
+    sendmail($email, { from => $self->from, transport => $self->_transport });
 }
 
 __PACKAGE__->meta->make_immutable;

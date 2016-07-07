@@ -49,15 +49,12 @@ sub build_email {
     );
 
     my $email = MIME::Lite->new(
-        To      => Encode::encode("MIME-Header", $self->to),
-        Subject => Encode::encode("MIME-Header", $self->subject),
-        Type    => "multipart/related",
-        From    => $self->from,
-    );
-
-    $email->attach(
-        Type => "text/html",
-        Data => $content,
+        To       => Encode::encode("MIME-Header", $self->to),
+        Subject  => Encode::encode("MIME-Header", $self->subject),
+        From     => $self->from,
+        Type     => "text/html",
+        Data     => $content,
+        Encoding => 'base64',
     );
 
     return $email;
