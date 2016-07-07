@@ -1,4 +1,5 @@
 package VotoLegal::Controller::API::Admin::Candidate::Status;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
@@ -26,7 +27,13 @@ sub activate_PUT {
     my $candidate = $c->stash->{candidate};
     my $status    = $candidate->status;
 
-    $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "activated" } );
+    if (!$candidate->ficha_limpa) {
+        return $self->status_bad_request($c, message => 'Você não pode aprovar um candidato ficha suja.');
+    }
+
+    $candidate->update({
+        status => "activated",
+    });
 
     $candidate->send_email_approval() if $status eq "pending";
 
@@ -41,7 +48,9 @@ sub deactivate_PUT {
     my $candidate = $c->stash->{candidate};
     my $status    = $candidate->status;
 
-    $candidate->execute($c, for => 'update', with => { roles => [ $c->user->roles ], status => "deactivated" } );
+    $candidate->update({
+        status => "deactivated",
+    });
 
     $candidate->send_email_disapproval() if $status eq "pending";
 
