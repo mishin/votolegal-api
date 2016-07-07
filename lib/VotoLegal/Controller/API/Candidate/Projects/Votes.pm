@@ -22,7 +22,7 @@ sub votes_POST {
         donation_id => $c->req->params->{donation_id}
     })->count >= 3 and die \['donation_id', "max vote limits reached."];
 
-    my $vote = $c->stash->{collection}->execute(
+    $c->stash->{collection}->execute(
         $c,
         for  => "create",
         with => $c->req->params,
