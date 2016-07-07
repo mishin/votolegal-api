@@ -131,7 +131,7 @@ __PACKAGE__->table("candidate");
 =head2 cnpj
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 picture
 
@@ -209,6 +209,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 ficha_limpa
+
+  data_type: 'boolean'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -250,7 +255,7 @@ __PACKAGE__->add_columns(
   "address_house_number",
   { data_type => "integer", is_nullable => 0 },
   "cnpj",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "picture",
   { data_type => "text", is_nullable => 1 },
   "video_url",
@@ -281,6 +286,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "cielo_merchant_key",
   { data_type => "text", is_nullable => 1 },
+  "ficha_limpa",
+  { data_type => "boolean", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -428,8 +435,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-01 11:45:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NScMzUk0OH9N/06tPdhWvA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-07 10:35:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yEV49Hl+u+JYhr4QyBrVEA
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -666,6 +673,10 @@ sub verifiers_specs {
                 cielo_merchant_key => {
                     required => 0,
                     type     => "Str",
+                },
+                ficha_limpa => {
+                    required => 0,
+                    type     => 'Bool',
                 },
             },
         ),

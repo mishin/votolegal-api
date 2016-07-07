@@ -145,6 +145,7 @@ sub create_candidate {
             office_id            => 2,
             party_id             => 5,
             reelection           => 1,
+            ficha_limpa          => 1,
             %opts,
         ],
     );
