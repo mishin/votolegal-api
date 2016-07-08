@@ -785,7 +785,7 @@ __DATA__
 <td height="50"></td>
 </tr>
 <tr>
-<td colspan="2"><a href="https://votolegal.org.br/" target="_blank"><img src="https://votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+<td colspan="2"><a href="https://www.votolegal.org.br/" target="_blank"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
 </tr>
 <tr>
 <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
@@ -797,14 +797,14 @@ __DATA__
       <br>
       Após a aprovação dos candidatos pelo TSE, sua conta será liberada para a realização do cadastro completo. Iremos informar por e-mail.
       </span></p>
-    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro, quando aprovado, acessando o link <a href="https://votolegal.org.br/documentos-para-cadastro/" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal.</span></p></td>
+    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro, quando aprovado, acessando o link <a href="https://www.votolegal.org.br/documentos-para-cadastro/" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal.</span></p></td>
 </tr>
 <tr>
   <td height="40"></td>
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p dir="ltr">Dúvidas? Acesse <a href="https://votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
   Equipe Voto Legal</strong><a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
