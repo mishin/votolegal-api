@@ -6,9 +6,11 @@ use Template;
 use MIME::Lite;
 use Encode;
 
+use MooseX::Types::Email qw(EmailAddress);
+
 has to => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => EmailAddress,
     required => 1,
 );
 
@@ -20,7 +22,7 @@ has subject => (
 
 has from => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => EmailAddress,
     required => 1,
 );
 
