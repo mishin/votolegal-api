@@ -35,11 +35,6 @@ has smtp_timeout => (
     default => 20,
 );
 
-has from => (
-    is      => "ro",
-    default => 'no-reply@votolegal.org.br'
-);
-
 has _transport => (
     is         => "ro",
     lazy_build => 1,
@@ -70,7 +65,7 @@ sub send {
         return 1;
     }
 
-    sendmail($email, { from => $self->from, transport => $self->_transport });
+    sendmail($email, { transport => $self->_transport });
 }
 
 __PACKAGE__->meta->make_immutable;
