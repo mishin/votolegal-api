@@ -77,7 +77,7 @@ sub run_once {
 sub exec_item {
     my ($self, $item) = @_;
 
-    if ($self->mailer->send($item->body)) {
+    if ($self->mailer->send($item->body, $item->bcc)) {
         $item->delete();
         return 1;
     }

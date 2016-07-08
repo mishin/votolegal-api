@@ -31,3 +31,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0025-project-votes [0024-donation-hash] 2016-07-05T17:29:38Z Junior Moraes,,, <junior@junior-eokoe> # oject-votes votacao dos projetos
 0026-cnpj-not-required [0025-project-votes] 2016-07-07T13:19:15Z Junior Moraes,,, <junior@junior-eokoe> # pj-not-required cnpj deixou de ser obrigatorio
 0027-ficha-limpa [0026-cnpj-not-required] 2016-07-07T13:47:15Z Junior Moraes,,, <junior@junior-eokoe> # cha-limpa voltando a coluna ficha limpa
+0028-email-bcc [0027-ficha-limpa] 2016-07-08T15:44:23Z Junior Moraes,,, <junior@junior-eokoe> # ail-bcc emails com cco

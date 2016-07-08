@@ -711,7 +711,7 @@ sub send_email_registration {
 
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
-        from     => 'no-reply@votolegal.org',
+        from     => 'no-reply@votolegal.org.br',
         subject  => "VotoLegal - Cadastro realizado",
         template => get_data_section('candidate_registration.tt'),
         vars     => { map { $_ => $self->$_} qw(name) },
@@ -719,6 +719,7 @@ sub send_email_registration {
 
     return $self->resultset('EmailQueue')->create({
         body => $email->as_string,
+        bcc  => ['contato@votolegal.org.br'],
     });
 }
 
