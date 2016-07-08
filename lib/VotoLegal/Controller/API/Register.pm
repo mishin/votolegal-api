@@ -1,10 +1,15 @@
 package VotoLegal::Controller::API::Register;
+use common::sense;
 use Moose;
 use namespace::autoclean;
 
+use WebService::Slack::IncomingWebHook;
+
+use VotoLegal::Utils;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
+=encoding utf8
 
 =head1 NAME
 
@@ -26,7 +31,7 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
 
 sub base : Chained('root') : PathPart('register') : CaptureArgs(0) { }
 
-sub register : Chained('base') : PathPart('') : ActionClass('REST') { }
+sub register : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub register_POST {
     my ($self, $c) = @_;
@@ -40,7 +45,18 @@ sub register_POST {
         },
     );
 
+    # Enviando email de confirmação.
     $candidate->send_email_registration();
+
+    # Enviando notificação no Slack.
+    if (!is_test) {
+        my $name         = $c->req->params->{name};
+        my $popular_name = $c->req->params->{popular_name};
+
+        my $slack = WebService::Slack::IncomingWebHook->new(%{$c->config->{slack}});
+
+        $slack->post(text => "${name} (${popular_name}) realizou o pré cadastro.");
+    }
 
     $self->status_created(
         $c,
@@ -49,16 +65,9 @@ sub register_POST {
     );
 }
 
-=encoding utf8
-
 =head1 AUTHOR
 
-Junior Moraes,,,
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
+Junior Moraes L<juniorfvox@gmail.com|mailto:juniorfvox@gmail.com>.
 
 =cut
 
