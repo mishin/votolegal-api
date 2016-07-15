@@ -294,7 +294,7 @@ __DATA__
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
     <p><span><b>Olá [% name %], </b><br>
       <br></span></p>
-    <p> <strong> </strong>Recebemos a sua solicitação para uma nova senha de acesso ao Voto Legal. 
+    <p> <strong> </strong>Recebemos a sua solicitação para uma nova senha de acesso ao Voto Legal.
 É muito simples, clique no botão abaixo para trocar sua senha.</p>
   </td>
 </tr>
