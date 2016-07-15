@@ -40,11 +40,12 @@ db_transaction {
         code  => 200,
     ;
 
-    is(
-        $schema->resultset('EmailQueue')->count,
-        2,
-        'two emails on queue',
-    );
+    # Teste desativado temporariamente: o envio de email na troca de status está comentado enquanto não ajustamos o layout.
+    #is(
+    #    $schema->resultset('EmailQueue')->count,
+    #    2,
+    #    'two emails on queue',
+    #);
 
     ok ($candidate->discard_changes, 'reload candidate');
     is ($candidate->status, "activated", 'candidate is activated');
