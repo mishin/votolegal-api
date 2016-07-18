@@ -3,6 +3,8 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
+use List::Util qw(shuffle);
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
@@ -65,11 +67,13 @@ sub search_POST {
         $c->stash->{collection} = $c->stash->{collection}->search({ address_city => $address_city });
     }
 
+    my @random = shuffle $c->stash->{collection}->all;
+
     my @candidates ;
-    for my $candidate ($c->stash->{collection}->all) {
+    for my $candidate (@random) {
         push @candidates, {
             map { $_ => $candidate->$_ }
-              qw(id name popular_name username address_state address_city address_street picture )
+              qw(id name popular_name username address_state address_city address_street picture)
         };
     }
 
