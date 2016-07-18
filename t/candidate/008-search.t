@@ -57,6 +57,34 @@ db_transaction {
     stash_test 'office' => sub {
         is (shift->[0]->{id}, $candidate->id, 'by office');
     };
+
+    # Search by state.
+    rest_post "/api/search",
+        name   => "search by state",
+        stash  => 'state',
+        code   => 200,
+        params => {
+            address_state => "São Paulo",
+        },
+    ;
+
+    stash_test 'state' => sub {
+        is (shift->[0]->{id}, $candidate->id, 'by state');
+    };
+
+    # Search by city.
+    rest_post "/api/search",
+        name   => "search by city",
+        stash  => 'city',
+        code   => 200,
+        params => {
+            address_city => "Iguape",
+        },
+    ;
+
+    stash_test 'city' => sub {
+        is (shift->[0]->{id}, $candidate->id, 'by city');
+    };
 };
 
 done_testing();

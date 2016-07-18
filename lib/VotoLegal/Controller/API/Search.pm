@@ -21,6 +21,8 @@ sub search_POST {
     my $name             = $c->req->params->{name};
     my $party_id         = $c->req->params->{party_id};
     my $office_id        = $c->req->params->{office_id};
+    my $address_state    = $c->req->params->{address_state};
+    my $address_city     = $c->req->params->{address_city};
     my @issue_priorities = ();
 
     if ($c->req->params->{issue_priorities}) {
@@ -55,11 +57,19 @@ sub search_POST {
         );
     }
 
+    if ($address_state) {
+        $c->stash->{collection} = $c->stash->{collection}->search({ address_state => $address_state });
+    }
+
+    if ($address_city) {
+        $c->stash->{collection} = $c->stash->{collection}->search({ address_city => $address_city });
+    }
+
     my @candidates ;
     for my $candidate ($c->stash->{collection}->all) {
         push @candidates, {
             map { $_ => $candidate->$_ }
-              qw(id name popular_name username address_city address_street)
+              qw(id name popular_name username address_state address_city address_street picture )
         };
     }
 
