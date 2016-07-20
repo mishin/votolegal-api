@@ -229,10 +229,11 @@ sub new_session {
     my $candidate = $self->candidates->next;
 
     return {
-        user_id      => $self->id,
-        candidate_id => $candidate ? $candidate->id : undef,
-        roles        => [ map { $_->name } $self->roles ],
-        api_key      => $session->api_key,
+        user_id        => $self->id,
+        candidate_id   => $candidate ? $candidate->id   : undef,
+        candidate_name => $candidate ? $candidate->name : undef,
+        roles          => [ map { $_->name } $self->roles ],
+        api_key        => $session->api_key,
     };
 }
 

@@ -39,9 +39,11 @@ db_transaction {
     ;
 
     stash_test 'login', sub {
-        my ($me) = @_;
+        my ($res) = @_;
 
-        is(length $me->{api_key}, 128, 'api key ok');
+        is ($res->{candidate_id}, $candidate_id, 'candidate id');
+        is ($res->{candidate_name}, $candidate->name, 'candidate name');
+        is (length $res->{api_key}, 128, 'api key');
     };
 
 };

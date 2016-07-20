@@ -17,9 +17,7 @@ sub login_POST {
 
     $c->model('DB::User')->execute($c, for => 'login', with => $c->req->params);
 
-    my $authenticate = $c->authenticate($c->req->params);
-
-    if ($authenticate) {
+    if ($c->authenticate($c->req->params)) {
         my $session = $c->user->new_session(
             ip => $c->req->address,
             %{$c->req->params},
