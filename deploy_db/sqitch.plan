@@ -33,3 +33,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0027-ficha-limpa [0026-cnpj-not-required] 2016-07-07T13:47:15Z Junior Moraes,,, <junior@junior-eokoe> # cha-limpa voltando a coluna ficha limpa
 0028-email-bcc [0027-ficha-limpa] 2016-07-08T15:44:23Z Junior Moraes,,, <junior@junior-eokoe> # ail-bcc emails com cco
 0029-issue-priorities-prod [0028-email-bcc] 2016-07-21T13:33:16Z Junior Moraes,,, <junior@junior-eokoe> # sue-priorities-prod assuntos prioritários que deverão estar em produção
+0030-new-issue-priorities [0029-issue-priorities-prod] 2016-07-26T17:13:55Z Junior Moraes,,, <junior@junior-eokoe> # w-issue-priorities nova lista de assuntos prioritarios
