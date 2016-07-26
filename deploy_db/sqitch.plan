@@ -34,3 +34,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0028-email-bcc [0027-ficha-limpa] 2016-07-08T15:44:23Z Junior Moraes,,, <junior@junior-eokoe> # ail-bcc emails com cco
 0029-issue-priorities-prod [0028-email-bcc] 2016-07-21T13:33:16Z Junior Moraes,,, <junior@junior-eokoe> # sue-priorities-prod assuntos prioritários que deverão estar em produção
 0030-new-issue-priorities [0029-issue-priorities-prod] 2016-07-26T17:13:55Z Junior Moraes,,, <junior@junior-eokoe> # w-issue-priorities nova lista de assuntos prioritarios
+0031-issue-priorities-fix [0030-new-issue-priorities] 2016-07-26T17:28:51Z Junior Moraes,,, <junior@junior-eokoe> # sue-priorities-fix corrigindo um assunto prioritario
