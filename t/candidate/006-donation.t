@@ -50,10 +50,18 @@ db_transaction {
         },
     ;
 
+    # Listando as doações feitas para este candidato.
+    api_auth_as candidate_id => stash 'candidate.id';
+    rest_get "/api/candidate/$candidate_id/donate",
+        name  => "listing donations",
+        stash => "l1",
+    ;
+
     # Agora me deslogo de novo e realizo a doação.
     api_auth_as 'nobody';
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
+        stash   => 'd1',
         code    => 200,
         params  => {
             name                 => fake_name()->(),
@@ -66,6 +74,49 @@ db_transaction {
             amount               => 100,
         },
     ;
+
+    my $donation_id ;
+    stash_test 'd1' => sub {
+        my $res = shift;
+
+        ok ($donation_id = $res->{id}, 'has id');
+    };
+
+    # Depois de efetuar uma doação, vou listar novamente.
+    api_auth_as candidate_id => stash 'candidate.id';
+    rest_get "/api/candidate/$candidate_id/donate",
+        name  => "listing donations",
+        stash => "l2",
+    ;
+
+    stash_test "l2" => sub {
+        my $res = shift;
+
+        # A listagem só possui uma doação.
+        is (scalar @{$res->{donations}}, 1, 'one donation');
+
+        # O id da doação é o mesmo que recebi no POST.
+        is ($res->{donations}->[0]->{id}, $donation_id, 'donation id');
+
+        # Como estou logado como um candidato, devo ver dados como email e CPF.
+        for (qw(name cpf email amount)) {
+            ok (defined($res->{donations}->[0]->{$_}), "show '$_' logged as candidate");
+        }
+    };
+
+    # Agora vou deslogar e fazer a mesma request para listar. Dados como CPF e email não devem aparecer.
+    api_auth_as 'nobody';
+    rest_get "/api/candidate/$candidate_id/donate",
+        name  => "listing donations",
+        stash => "l3",
+    ;
+
+    stash_test "l3" => sub {
+        my $res = shift;
+
+        ok (defined($res->{donations}->[0]->{$_}),  "show $_ when logged out") for qw(id amount name);
+        ok (!defined($res->{donations}->[0]->{$_}), "hide $_ when logged out") for qw(cpf email);
+    };
 };
 
 done_testing();

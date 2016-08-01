@@ -26,6 +26,25 @@ sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
 
 sub donate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
+sub donate_GET {
+    my ($self, $c) = @_;
+
+    my @donations = $c->stash->{collection}->search(
+        { candidate_id => $c->stash->{candidate}->id },
+        {
+            columns      => [ $c->stash->{is_me} ? qw(id name email cpf amount) : qw(id name amount) ],
+            result_class => "DBIx::Class::ResultClass::HashRefInflator"
+        }
+    )->all;
+
+    return $self->status_ok(
+        $c,
+        entity => {
+            donations => \@donations,
+        }
+    );
+}
+
 sub donate_POST {
     my ($self, $c) = @_;
 
