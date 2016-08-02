@@ -851,7 +851,7 @@ __DATA__
 <td height="50"></td>
 </tr>
 <tr>
-<td colspan="2"><a href="http://votolegal.org/"><img src="header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
 </tr>
 <tr>
 <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
@@ -863,7 +863,7 @@ __DATA__
       <br></span></p>
     <p> <strong> Parabéns, seu cadastro no Voto Legal foi aprovado!</strong></p>
     <p>Agora você pode acessar seu Portal do Candidato e completar seu cadastro. A partir do dia 15.08.2016 o perfil ficará habilitado para receber doações.    </p>
-    <p>Seu login: xxxxx</p>
+    <p>Seu login: [% login %]</p>
   </td>
 </tr>
 <tr>
@@ -874,7 +874,7 @@ __DATA__
 <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
 <tbody>
 <tr>
-<td align="center" valign="middle"><a href="http://votolegal.org/" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>COMPLETAR CADASTRO</strong></a></td>
+<td align="center" valign="middle"><a href="http://votolegal.org.br/" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>COMPLETAR CADASTRO</strong></a></td>
 </tr>
 </tbody>
 </table>
@@ -885,9 +885,9 @@ __DATA__
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Já se preparou para o cadastro completo? <a href="#" target="_blank" style="color:#4ab957">Acesse aqui</a> e visualize os itens necessários para realizar seu cadastro. Lembrando que você tem até o dia 14.08.2016 para deixar seu perfil completo, após essa data, o perfil ficará ativo e as doações começarão e não será possível alterar seu perfil.</p>
-  <p>Dúvidas? Acesse <a href="#" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
-  Equipe Voto Legal</strong><a href="mailto:suporte@votolegal.org" target="_blank" style="color:#4ab957"></a></td>
+  <p>Já se preparou para o cadastro completo? <a href="https://www.votolegal.org.br/documentos-para-cadastro" target="_blank" style="color:#4ab957">Acesse aqui</a> e visualize os itens necessários para realizar seu cadastro. Lembrando que você tem até o dia 14.08.2016 para deixar seu perfil completo, após essa data, o perfil ficará ativo e as doações começarão e não será possível alterar seu perfil.</p>
+  <p>Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  Equipe Voto Legal</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
 <td height="30"></td>
@@ -936,7 +936,7 @@ __DATA__
 <td height="50"></td>
 </tr>
 <tr>
-<td colspan="2"><a href="http://votolegal.org/"><img src="header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
 </tr>
 <tr>
 <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
@@ -947,7 +947,7 @@ __DATA__
     <p><span><b>Olá [% name %], </b><br>
       <br></span></p>
     <p>Enviamos este e-mail para informar que seu pré-cadastro no Voto Legal <strong>não foi aprovado</strong>. </p>
-    <p>Consulte as <a href="#" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
+    <p>Consulte as <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
     <p>Entre em contato conosco para obter mais informações <a href="#" target="_blank" style="color:#4ab957">clicando aqui</a>. </p>
   </td>
 </tr>
@@ -957,7 +957,7 @@ __DATA__
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
   <p>Equipe Voto Legal</p>
-</strong><a href="mailto:suporte@votolegal.org" target="_blank" style="color:#4ab957"></a></td>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
 <td height="30"></td>
