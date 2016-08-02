@@ -604,29 +604,19 @@ sub verifiers_specs {
                     post_check => sub { is_web_uri $_[0]->get_value('picture') },
                 },
                 video_url => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    type       => "Str",
                     post_check => sub { is_web_uri $_[0]->get_value('video_url') },
                 },
                 facebook_url => {
-                    required => 0,
-                    type     => "Str",
-                    post_check => sub {
-                        my $r = shift;
-
-                        my $uri = URI->new($r->get_value('facebook_url'));
-                        $uri->host =~ m{(www\.)?facebook\.com$};
-                    },
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('facebook_url') },
                 },
                 twitter_url => {
-                    required => 0,
-                    type     => "Str",
-                    post_check => sub {
-                        my $r = shift;
-
-                        my $uri = URI->new($r->get_value('twitter_url'));
-                        $uri->host =~ m{(www\.)?twitter\.com$};
-                    }
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('twitter_url') },
                 },
                 website_url => {
                     required   => 0,

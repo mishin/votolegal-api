@@ -82,7 +82,7 @@ db_transaction {
         name    => "can't add invalid facebook url",
         is_fail => 1,
         params  => {
-            facebook_url => $twitter_url,
+            facebook_url => "/juniorfvox",
         },
     ;
 
@@ -90,7 +90,7 @@ db_transaction {
         name    => "can't add invalid twitter url",
         is_fail => 1,
         params  => {
-            twitter_url => $website_url,
+            twitter_url => '@fvox',
         },
     ;
 
