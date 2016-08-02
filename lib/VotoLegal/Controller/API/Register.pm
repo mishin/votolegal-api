@@ -49,7 +49,7 @@ sub register_POST {
     $candidate->send_email_registration();
 
     # Enviando notificação no Slack.
-    if (!is_test) {
+    if (!is_test && %{$c->config->{slack}}) {
         my $name         = $c->req->params->{name};
         my $popular_name = $c->req->params->{popular_name};
 
