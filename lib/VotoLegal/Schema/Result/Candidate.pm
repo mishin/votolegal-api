@@ -214,6 +214,12 @@ __PACKAGE__->table("candidate");
   data_type: 'boolean'
   is_nullable: 0
 
+=head2 payment_status
+
+  data_type: 'text'
+  default_value: 'unpaid'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -288,6 +294,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "ficha_limpa",
   { data_type => "boolean", is_nullable => 0 },
+  "payment_status",
+  { data_type => "text", default_value => "unpaid", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -435,8 +443,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-07-07 10:35:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yEV49Hl+u+JYhr4QyBrVEA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-03 10:10:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O3byQUM9ML8sJCz60E6OYQ
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
