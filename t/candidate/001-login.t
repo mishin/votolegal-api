@@ -10,15 +10,16 @@ db_transaction {
     create_candidate;
 
     stash_test 'candidate.get', sub {
-        my ($me) = @_;
+        my ($res) = @_;
 
-        ok($me->{candidate}->{id} > 0, 'candidate id');
-        is($me->{candidate}->{status}, "pending", 'candidate status pending');
+        ok ($res->{candidate}->{id} > 0, 'candidate id');
+        is ($res->{candidate}->{status}, "pending", 'candidate status pending');
     };
 
     my $candidate_id = stash 'candidate.id';
     my $candidate    = $schema->resultset('Candidate')->find($candidate_id);
 
+    # Utilizando uma senha incorreta.
     rest_post '/api/login',
         name    => 'candidate login --fail',
         is_fail => 1,
@@ -28,6 +29,7 @@ db_transaction {
         ],
     ;
 
+    # Senha correta.
     rest_post '/api/login',
         name  => 'candidate login',
         code  => 200,
@@ -46,6 +48,24 @@ db_transaction {
         is (length $res->{api_key}, 128, 'api key');
     };
 
+    # Candidatos que não foram aprovados não podem logar na plataforma.
+    api_auth_as user_id => 1;
+    rest_put "/api/admin/candidate/$candidate_id/deactivate",
+        name  => 'deactivate candidate',
+        code  => 200,
+    ;
+
+    is ($candidate->discard_changes->status, 'deactivated', 'candidate is deactivated');
+
+    # Logando com a senha correta mas o candidato não foi aprovado.
+    rest_post '/api/login',
+        name    => 'candidate login when deactivated',
+        is_fail => 1,
+        [
+            email    => $candidate->user->email,
+            password => 'foobarquux1',
+        ],
+    ;
 };
 
 done_testing();

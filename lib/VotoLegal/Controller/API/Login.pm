@@ -23,7 +23,12 @@ sub login_POST {
             %{$c->req->params},
         );
 
-        return $self->status_ok($c, entity => $session);
+        # Barrando o login de candidatos que foram desaprovados.
+        if (my $candidate = $c->user->candidates->next) {
+            if ($candidate->status ne "deactivated") {
+                return $self->status_ok($c, entity => $session);
+            }
+        }
     }
 
     return $self->status_bad_request($c, message => 'Bad email or password.');
