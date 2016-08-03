@@ -43,9 +43,13 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
-                        $self->search({
-                            username => $r->get_value('username'),
-                        })->count and die \["username", "already exists"];
+                        my $username = $r->get_value('username');
+
+                        if ($username !~ m{[a-zA-Z]}) {
+                            die \['username', "must have letters"];
+                        }
+
+                        $self->search({ username => $username })->count and die \["username", "already exists"];
 
                         return 1;
                     },

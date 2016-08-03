@@ -37,16 +37,24 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
 sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }
 
 sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
-    my ($self, $c, $candidate_id) = @_;
+    my ($self, $c, $args) = @_;
 
-    my $candidate = $c->stash->{collection}->search({ 'me.id' => $candidate_id })->next;
-    if ($candidate) {
-        $c->stash->{candidate} = $candidate;
+    # Quando o parâmetro é inteiramente numérico, o buscamos como id.
+    # Quando não é, pesquisamos pelo 'slug'.
+    my $candidate;
+    if ($args =~ m{^\d+$}) {
+        $candidate = $c->stash->{collection}->find($args);
     }
     else {
+        $candidate = $c->stash->{collection}->search({ 'me.username' => $args })->next;
+    }
+
+    if (!$candidate) {
         $self->status_not_found($c, message => 'Candidate not found');
         $c->detach();
     }
+
+    $c->stash->{candidate} = $candidate;
 
     # Essa Controller possui uma lógica diferente: algumas actions são públicas, e outras são restritas. O GET
     # do candidate, por exemplo, não deve retornar todos os dados (como CPF e email privado) se ele não estiver

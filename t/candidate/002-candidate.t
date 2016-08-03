@@ -24,17 +24,23 @@ db_transaction {
     };
 
     api_auth_as candidate_id => $candidate_id;
-
     rest_get "/api/candidate/${candidate_id}",
         name  => 'get candidate',
         stash => 'get_logged_in',
     ;
 
+    my $username ;
     stash_test 'get_logged_in' => sub {
         my ($res) = @_;
 
         ok (defined($res->{candidate}->{cpf}),  'cpf');
+        $username = $res->{candidate}->{username};
     };
+
+    # GET por username.
+    rest_get "/api/candidate/$username",
+        name  => 'get candidate by username',
+    ;
 
     # Testando o PUT.
     rest_put "/api/candidate/${candidate_id}",
