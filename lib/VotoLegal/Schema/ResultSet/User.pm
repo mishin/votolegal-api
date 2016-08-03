@@ -14,19 +14,6 @@ sub verifiers_specs {
     my $self = shift;
 
     return {
-        login => Data::Verifier->new(
-            filters => [qw(trim)],
-            profile => {
-                email => {
-                    required   => 1,
-                    type       => EmailAddress,
-                },
-                password => {
-                    required => 1,
-                    type     => 'Str',
-                },
-            },
-        ),
         create => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
@@ -69,7 +56,6 @@ sub action_specs {
     my ($self) = @_;
 
     return {
-        login  => sub { 1 },
         create => sub { 1 },
     };
 }
