@@ -2,7 +2,7 @@ package VotoLegal::Controller::API::Login;
 use Moose;
 use namespace::autoclean;
 
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(EmailAddress);
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -16,6 +16,8 @@ sub login : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub login_POST {
     my ($self, $c) = @_;
+
+    $c->req->params->{email} = lc $c->req->params->{email};
 
     $self->validate_request_params(
         $c,

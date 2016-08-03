@@ -8,12 +8,11 @@ extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(EmailAddress);
 
 use Data::Verifier;
 use Digest::SHA1 qw(sha1_hex);
 use Time::HiRes;
-use Data::Printer;
 
 sub verifiers_specs {
     my $self = shift;

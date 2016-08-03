@@ -5,9 +5,11 @@ use MooseX::Types -declare => [
   qw(
     NotTooBigString Int CEP
     CPF CNPJ PositiveInt
+    EmailAddress
   )
 ];
 
+use Email::Valid;
 use MooseX::Types::Common::String qw(NonEmptySimpleStr NonEmptyStr);
 use MooseX::Types::Moose qw(Str Int ArrayRef ScalarRef Num);
 use Moose::Util::TypeConstraints;
@@ -51,8 +53,13 @@ subtype CEP, as Str, where {
 
 coerce CEP, from Str, via {
   s/\D+//g;
-
-  #  s/^(\d+)(\d{3})$/$1-$2/;
   $_
 };
 
+subtype EmailAddress,
+    as Str,
+    where { Email::Valid->address( -address => $_ ) eq $_ },
+    message { 'Must be a valid email address' }
+;
+
+1;

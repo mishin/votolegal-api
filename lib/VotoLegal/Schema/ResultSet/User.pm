@@ -8,7 +8,7 @@ extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Role::Verification';
 
 use Data::Verifier;
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(EmailAddress);
 
 sub verifiers_specs {
     my $self = shift;

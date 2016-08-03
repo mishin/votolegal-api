@@ -11,8 +11,7 @@ with 'VotoLegal::Role::Verification';
 use Time::HiRes;
 use Digest::MD5 qw(md5_hex);
 use Data::Verifier;
-use VotoLegal::Types qw(CPF);
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(EmailAddress CPF);
 
 sub resultset {
     my $self = shift;

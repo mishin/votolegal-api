@@ -6,7 +6,7 @@ use Template;
 use MIME::Lite;
 use Encode;
 
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(EmailAddress);
 
 has to => (
     is       => 'ro',

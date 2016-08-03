@@ -9,8 +9,7 @@ with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
 use Business::BR::CEP qw(test_cep);
-use VotoLegal::Types qw(CPF);
-use MooseX::Types::Email qw(EmailAddress);
+use VotoLegal::Types qw(CPF EmailAddress);
 
 use Data::Verifier;
 

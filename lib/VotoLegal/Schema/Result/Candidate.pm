@@ -449,10 +449,9 @@ __PACKAGE__->many_to_many(
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
 use Template;
-use VotoLegal::Types qw(CPF);
+use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
-use MooseX::Types::Email qw(EmailAddress);
 use Data::Section::Simple qw(get_data_section);
 
 with 'VotoLegal::Role::Verification';
