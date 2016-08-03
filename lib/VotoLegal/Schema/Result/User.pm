@@ -252,7 +252,7 @@ sub send_email_forgot_password {
 
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->email,
-        from     => 'no-reply@votolegal.org',
+        from     => 'no-reply@votolegal.org.br',
         subject  => "VotoLegal - Recuperação de senha",
         template => get_data_section('forgot_password.tt'),
         vars     => {
@@ -260,6 +260,10 @@ sub send_email_forgot_password {
             token => $token,
         },
     )->build_email();
+
+    return $self->result_source->schema->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
 }
 
 __PACKAGE__->meta->make_immutable;

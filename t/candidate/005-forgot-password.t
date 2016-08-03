@@ -30,7 +30,7 @@ db_transaction {
     is (length $token, 40, 'token has 40 chars');
 
     # O email foi pra queue?
-    ok ($schema->resultset('EmailQueue')->count, 'email queued');
+    is ($schema->resultset('EmailQueue')->count, 2, 'two emails in queue');
 
     # Resetando o password.
     my $new_password = random_string(8);

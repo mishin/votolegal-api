@@ -17,9 +17,9 @@ sub forgot_password : Chained('base') : PathPart('') : Args(0) : ActionClass('RE
 sub forgot_password_POST {
     my ($self, $c) = @_;
 
-    my $forgot_password = $c->stash->{collection}->execute(
+    $c->stash->{collection}->execute(
         $c,
-        for => "create",
+        for  => "create",
         with => $c->req->params,
     );
 
