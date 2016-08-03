@@ -31,7 +31,6 @@ sub listen_queue {
         undef,
         {
             rows   => 20,
-            for    => "update",
             column => [ qw(me.id me.body) ],
         },
     )->all;
@@ -46,7 +45,7 @@ sub listen_queue {
         $self->logger->info("Todos os items foram processados com sucesso") if $self->logger;
     }
     else {
-        #$self->logger->info("Não há itens pendentes na fila.") if $self->logger;
+        $self->logger->debug("Não há itens pendentes na fila.") if $self->logger;
     }
 }
 
@@ -62,7 +61,6 @@ sub run_once {
             undef,
             {
                 rows   => 1,
-                for    => "update",
                 column => [ qw(me.id me.body) ],
             },
         )->next;
@@ -76,6 +74,8 @@ sub run_once {
 
 sub exec_item {
     my ($self, $item) = @_;
+
+    $self->logger->debug($item->body) if $self->logger;
 
     if ($self->mailer->send($item->body, $item->bcc)) {
         $item->delete();
