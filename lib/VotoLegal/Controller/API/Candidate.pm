@@ -96,6 +96,8 @@ sub candidate_GET {
         };
     }
 
+    $candidate->{total_donated} = $c->stash->{candidate}->total_donated();
+
     return $self->status_ok($c, entity => {
         candidate => $candidate,
     });

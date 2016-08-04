@@ -703,6 +703,12 @@ sub action_specs {
     };
 }
 
+sub total_donated {
+    my $self = shift;
+
+    return $self->donations->get_column('amount')->sum();
+}
+
 sub send_email_registration {
     my ($self) = @_;
 

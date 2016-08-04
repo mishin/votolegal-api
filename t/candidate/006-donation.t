@@ -10,6 +10,7 @@ db_transaction {
     create_candidate;
     my $candidate_id = stash 'candidate.id';
 
+    # Não pode doar pra candidato não aprovado.
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
         is_fail => 1,
@@ -64,6 +65,7 @@ db_transaction {
     };
 
     # Agora me deslogo de novo e realizo a doação.
+    my $total_amount = 100;
     api_auth_as 'nobody';
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
@@ -126,6 +128,9 @@ db_transaction {
 
     # Fazendo mais cinco doações pra testar a paginação.
     for (1 .. 5) {
+        my $amount = fake_pick(100, 500, 1000, 5000)->();
+        $total_amount += $amount;
+
         rest_post "/api/candidate/$candidate_id/donate",
             name    => "donation $_",
             code    => 200,
@@ -137,7 +142,7 @@ db_transaction {
                 credit_card_validity => "201801",
                 credit_card_number   => "6362970000457013",
                 credit_card_brand    => "elo",
-                amount               => 100,
+                amount               => $amount,
             },
         ;
     }
@@ -156,6 +161,22 @@ db_transaction {
         my $res = shift;
 
         is (scalar @{ $res->{donations} }, 2, 'two results on pagination');
+    };
+
+    # Dando GET no candidate para testar o total doado.
+    rest_get "/api/candidate/${candidate_id}",
+        name  => 'get candidate',
+        stash => 'g1',
+    ;
+
+    stash_test 'g1' => sub {
+        my ($res) = @_;
+
+        is(
+            $res->{candidate}->{total_donated},
+            $total_amount,
+            'total donated'
+        );
     };
 };
 
