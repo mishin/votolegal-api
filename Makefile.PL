@@ -117,7 +117,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160803,
+  "VERSION" => 20160804,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/misc/*.t t/office/*.t t/party/*.t t/workers/*.t"
   }
