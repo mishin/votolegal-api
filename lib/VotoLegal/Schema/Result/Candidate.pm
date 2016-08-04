@@ -671,10 +671,6 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Str",
                 },
-                ficha_limpa => {
-                    required => 0,
-                    type     => 'Bool',
-                },
             },
         ),
     };
@@ -686,6 +682,8 @@ sub action_specs {
     return {
         update => sub {
             my $r = shift;
+
+            die \['ficha_limpa', "ficha suja is not allowed."] unless $self->ficha_limpa;
 
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;

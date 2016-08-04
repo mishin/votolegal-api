@@ -7,7 +7,7 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
-    create_candidate(ficha_limpa => 0);
+    create_candidate;
 
     my $candidate_id = stash 'candidate.id';
     my $candidate    = $schema->resultset('Candidate')->find($candidate_id);
@@ -24,17 +24,7 @@ db_transaction {
     # As ações só podem ser executadas por admin.
     api_auth_as user_id => 1;
 
-    # Não é possível aprovar um candidato ficha suja.
-    rest_put "/api/admin/candidate/$candidate_id/activate",
-        name    => "can't activate candidate when ficha_limpa is false",
-        is_fail => 1,
-        code    => 400,
-    ;
-
-    # Editando o ficha_limpa.
-    ok ($candidate->update({ ficha_limpa => 1 }), 'ficha_limpa as true');
-
-    # Agora deve funcionar.
+    # Ativando usuário.
     rest_put "/api/admin/candidate/$candidate_id/activate",
         name  => 'activate candidate',
         code  => 200,
