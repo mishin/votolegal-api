@@ -43,8 +43,10 @@ sub login_POST {
                 return $self->status_ok($c, entity => $session);
             }
         }
-        # Se não for candidato, é admin.
-        return $self->status_ok($c, entity => $session);
+        else {
+            # Se não for candidato, é admin.
+            return $self->status_ok($c, entity => $session);
+        }
     }
 
     return $self->status_bad_request($c, message => 'Bad email or password.');
