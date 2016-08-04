@@ -220,6 +220,12 @@ __PACKAGE__->table("candidate");
   default_value: 'unpaid'
   is_nullable: 0
 
+=head2 publish
+
+  data_type: 'boolean'
+  default_value: false
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -296,6 +302,8 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", is_nullable => 0 },
   "payment_status",
   { data_type => "text", default_value => "unpaid", is_nullable => 0 },
+  "publish",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -443,8 +451,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-03 10:10:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:O3byQUM9ML8sJCz60E6OYQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-04 15:22:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:roKyfc9ryd53qMh+0A6RQw
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -673,6 +681,16 @@ sub verifiers_specs {
                 },
             },
         ),
+
+        publish => Data::Verifier->new(
+            filters => [],
+            profile => {},
+        ),
+
+        unpublish => Data::Verifier->new(
+            filters => [],
+            profile => {},
+        ),
     };
 }
 
@@ -697,6 +715,36 @@ sub action_specs {
             }
 
             return $self;
+        },
+
+        publish => sub {
+            # Não é possível publicar um candidato que não foi aprovado.
+            if ($self->status ne "activated") {
+                die \['status', "candidate is not activated."];
+            }
+
+            # Não é possível publicar um candidato que ainda não tenha pago o boleto.
+            if ($self->payment_status ne "paid") {
+                die \['payment_status', "can't publish unpaid candidate."];
+            }
+
+            # Validando se o candidato preencheu todos os campos necessários para publicar sua página.
+            my @required = qw(
+                cnpj video_url summary biography raising_goal public_email picture
+                spending_spreadsheet cielo_merchant_id cielo_merchant_key
+            );
+
+            for (@required) {
+                if (!$self->$_) {
+                    die \[$_, "can't publish until fill '$_'."];
+                }
+            }
+
+            return $self->update({ publish => 1 });
+        },
+
+        unpublish => sub {
+            $self->update({ publish => 0 });
         },
     };
 }

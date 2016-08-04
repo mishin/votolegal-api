@@ -37,3 +37,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0031-issue-priorities-fix [0030-new-issue-priorities] 2016-07-26T17:28:51Z Junior Moraes,,, <junior@junior-eokoe> # sue-priorities-fix corrigindo um assunto prioritario
 0032-payment-status [0031-issue-priorities-fix] 2016-08-03T13:41:37Z Junior Moraes,,, <junior@junior-eokoe> # yment-status status de pagamento
 0033-vice-prefeito [0032-payment-status] 2016-08-03T19:24:36Z Junior Moraes,,, <junior@junior-eokoe> # ce-prefeito adicionando novo cargo
+0034-publish [0033-vice-prefeito] 2016-08-04T19:39:24Z Junior Moraes,,, <junior@junior-eokoe> # blish feature de publicacao
