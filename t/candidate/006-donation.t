@@ -57,6 +57,12 @@ db_transaction {
         stash => "l1",
     ;
 
+    stash_test 'l1' => sub {
+        my ($res) = @_;
+
+        is_deeply ($res->{donations}, [], 'no donations');
+    };
+
     # Agora me deslogo de novo e realizo a doação.
     api_auth_as 'nobody';
     rest_post "/api/candidate/$candidate_id/donate",
@@ -116,6 +122,40 @@ db_transaction {
 
         ok (defined($res->{donations}->[0]->{$_}),  "show $_ when logged out") for qw(id amount name);
         ok (!defined($res->{donations}->[0]->{$_}), "hide $_ when logged out") for qw(cpf email);
+    };
+
+    # Fazendo mais cinco doações pra testar a paginação.
+    for (1 .. 5) {
+        rest_post "/api/candidate/$candidate_id/donate",
+            name    => "donation $_",
+            code    => 200,
+            params  => {
+                name                 => fake_name()->(),
+                cpf                  => random_cpf(),
+                email                => fake_email()->(),
+                credit_card_name     => "JUNIOR MORAES",
+                credit_card_validity => "201801",
+                credit_card_number   => "6362970000457013",
+                credit_card_brand    => "elo",
+                amount               => 100,
+            },
+        ;
+    }
+
+    # Listando as doações novamente, mas com parâmetros de paginação.
+    rest_get "/api/candidate/$candidate_id/donate",
+        name  => "listing donations",
+        stash => "l4",
+        params => {
+            page    => 3,
+            results => 2,
+        },
+    ;
+
+    stash_test 'l4' => sub {
+        my $res = shift;
+
+        is (scalar @{ $res->{donations} }, 2, 'two results on pagination');
     };
 };
 

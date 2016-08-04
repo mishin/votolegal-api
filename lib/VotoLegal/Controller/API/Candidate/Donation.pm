@@ -29,11 +29,16 @@ sub donate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub donate_GET {
     my ($self, $c) = @_;
 
+    my $page    = $c->req->params->{page}    || 1;
+    my $results = $c->req->params->{results} || 20;
+
     my @donations = $c->stash->{collection}->search(
         { candidate_id => $c->stash->{candidate}->id },
         {
             columns      => [ $c->stash->{is_me} ? qw(id name email cpf amount) : qw(id name amount) ],
-            result_class => "DBIx::Class::ResultClass::HashRefInflator"
+            page         => $page,
+            rows         => $results,
+            result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
     )->all;
 
