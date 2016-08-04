@@ -156,8 +156,6 @@ __PACKAGE__->has_many(
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Payment::Cielo;
 
-use Data::Printer;
-
 has _cielo => (
     is      => "rw",
     isa     => "VotoLegal::Payment::Cielo",

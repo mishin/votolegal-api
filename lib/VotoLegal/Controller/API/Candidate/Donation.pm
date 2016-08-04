@@ -70,12 +70,24 @@ sub donate_POST {
     $donation->credit_card_number($c->req->params->{credit_card_number});
     $donation->credit_card_brand($c->req->params->{credit_card_brand});
 
-    if (!$donation->tokenize()) {
+    my $tokenize ;
+    eval {
+        $tokenize = $donation->tokenize();
+    };
+
+    if (!$tokenize) {
         $self->status_bad_request($c, message => "não foi possível gerar o token do cartão.");
         $c->detach();
     }
 
-    if (!$donation->authorize() || !$donation->capture()) {
+    my $authorize ;
+    my $capture ;
+    eval {
+        $authorize = $donation->authorize();
+        $capture   = $donation->capture();
+    };
+
+    if (!$authorize || !$capture) {
         $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
         $c->detach();
     }
