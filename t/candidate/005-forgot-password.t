@@ -16,7 +16,7 @@ db_transaction {
         stash  => "fp",
         code   => 200,
         params => {
-            email => $candidate->user->email,
+            email => uc $candidate->user->email,
         },
     ;
 

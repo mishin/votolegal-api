@@ -28,7 +28,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         $self->result_source->schema->resultset('User')->search({
-                            email => $r->get_value('email'),
+                            email => lc $r->get_value('email'),
                         })->count;
                     }
                 },
