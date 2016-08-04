@@ -47,7 +47,7 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            my $email = $values{email};
+            my $email = lc $values{email};
             my $user  = $self->result_source->schema->resultset('User')->search({ email => $email })->next;
 
             my $forgot_password = $self->create({
