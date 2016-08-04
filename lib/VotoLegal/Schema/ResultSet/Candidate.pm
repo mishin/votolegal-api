@@ -180,6 +180,8 @@ sub action_specs {
             my %user;
             $user{$_} = delete $values{$_} for qw(email password);
 
+            $user{email} = lc $user{email};
+
             my $user = $self->result_source->schema->resultset('User')->create(\%user);
             $user->add_to_roles({ id => 2 });
 
