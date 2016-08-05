@@ -33,8 +33,8 @@ sub login_POST {
 
     if ($c->authenticate($c->req->params)) {
         my $session = $c->user->new_session(
-            ip => $c->req->address,
             %{$c->req->params},
+            ip => $c->req->address,
         );
 
         # Barrando o login de candidatos que foram desaprovados.
