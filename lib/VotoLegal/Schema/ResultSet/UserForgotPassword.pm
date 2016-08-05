@@ -24,11 +24,12 @@ sub verifiers_specs {
                 email => {
                     required => 1,
                     type     => EmailAddress,
+                    filters => [qw(lower)],
                     post_check => sub {
                         my $r = shift;
 
                         $self->result_source->schema->resultset('User')->search({
-                            email => lc $r->get_value('email'),
+                            email => $r->get_value('email'),
                         })->count;
                     }
                 },
@@ -47,7 +48,7 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            my $email = lc $values{email};
+            my $email = $values{email};
             my $user  = $self->result_source->schema->resultset('User')->search({ email => $email })->next;
 
             my $forgot_password = $self->create({

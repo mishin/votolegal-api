@@ -18,11 +18,12 @@ sub verifiers_specs {
 
     return {
         create => Data::Verifier->new(
-            filters => [qw(trim)],
+            filters => [ qw(trim) ],
             profile => {
                 email => {
-                    required => 1,
-                    type     => EmailAddress,
+                    required   => 1,
+                    type       => EmailAddress,
+                    filters    => [ qw(lower) ],
                     post_check => sub {
                         my $r = shift;
 
@@ -180,7 +181,7 @@ sub action_specs {
             my %user;
             $user{$_} = delete $values{$_} for qw(email password);
 
-            $user{email} = lc $user{email};
+            $user{email} = $user{email};
 
             my $user = $self->result_source->schema->resultset('User')->create(\%user);
             $user->add_to_roles({ id => 2 });
