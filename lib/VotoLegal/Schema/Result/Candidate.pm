@@ -818,67 +818,136 @@ __DATA__
 
 <!doctype html>
 <html>
-<head>
-<meta charset="UTF-8">
-</head>
-
-<body>
-<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-<tbody>
-<tr>
-<td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
-<tbody>
-<tr>
-<td height="50"></td>
-</tr>
-<tr>
-<td colspan="2"><a href="https://www.votolegal.org.br/" target="_blank"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
-</tr>
-<tr>
-<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
-<tbody>
-<tr>
-  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Parabéns [% name %], recebemos o seu pré-cadastro com sucesso.</b><br>
-      <br>
-      Após a aprovação dos candidatos pelo TSE, sua conta será liberada para a realização do cadastro completo. Iremos informar por e-mail.
-      </span></p>
-    <p><span>Aconselhamos preparar os demais itens e materiais para completar seu cadastro, quando aprovado, acessando o link <a href="https://www.votolegal.org.br/documentos-para-cadastro/" target="_blank" style="color:#4ab957">Documentos para cadastro</a> no site Voto Legal.</span></p></td>
-</tr>
-<tr>
-  <td height="40"></td>
-</tr>
-<tr>
-<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
-  Equipe Voto Legal</strong><a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
-</tr>
-<tr>
-<td height="30"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
-  <tbody>
-<tr>
-<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div></div>
+   <head><meta charset="UTF-8"></head>
+   <body>
+      <div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+         <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+            <tbody>
+               <tr>
+                  <td>
+                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+                        <tbody>
+                           <tr>
+                              <td height="50"></td>
+                           </tr>
+                           <tr>
+                              <td colspan="2"><a href="https://www.votolegal.org.br/" target="_blank"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+                                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+                                    <tbody>
+                                       <tr>
+                                          <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+                                             <p align="center">
+                                                <span>
+                                                <b>
+                                                Parabéns [% name %], recebemos o seu pré-cadastro com sucesso.
+                                                </b>
+                                                <br>
+                                                <br>
+                                                </span>
+                                             </p>
+                                             <p>
+                                                <font color="green">PRÓXIMO PASSO</font>
+                                             </p>
+                                             <p>
+                                                Você já pode acessar o menu <strong>Login do Candidato</strong>, preencher com o seu <strong>e-mail</strong> e <strong>senha</strong> e completar o cadastro completo.
+                                             </p>
+                                             <p>
+                                                <font color="green">IMPORTANTE</font>
+                                             <p>
+                                                <strong>Atenção:</strong> O software é livre e gratuito, qualquer candidato pode utilizar o software em sua própria infraestrutura caso queira sem nenhum custo, o código esta disponível em <a href="https://github.com/appcivico">https://github.com/appcivico</a> 
+                                             </p>
+                                             <p>
+                                                De maneira opcional, após a sua candidatura ser aprovada pelo TSE será disponibilizado o boleto para pagamento de taxa única no valor de R$ 99,00 (noventa e nove) reais pelo serviço de disponibilizar infraestrutura necessária para doações de cartão de crédito via internet, e que deve ser informado na prestação de contas ao TSE.
+                                             </p>
+                                             </p>
+                                             <p><font color="green">ATENÇÃO</font></p>
+                                             <p> O perfil será liberado para publicação e aberto para doações a partir do dia 16.08.16, se o candidato tiver:</p>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+                                             <ul>
+                                                <li>
+                                                   A candidatura aprovada pelo TSE;
+                                                </li>
+                                                    <p></p>
+                                                <li>
+                                                    A sua conta bancária aberta;
+                                                </li>
+                                                    <p></p>
+                                                <li>
+                                                    Contrato com a processadora de cartão de crédito;
+                                                </li>
+                                                    <p></p>
+                                                <li>
+                                                    Realizado o pagamento do boleto;
+                                                </li>
+                                                    <p></p>
+                                                <li>
+                                                    Preenchido os campos obrigatórios do cadastro completo.
+                                                </li>
+                                             </ul>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+                                             <p>
+                                                <font color="green">ATENÇÃO</font>
+                                             </p>
+                                             <p>
+                                                O software é livre e gratuito, qualquer candidato pode utilizá-lo em sua própria infraestrutura sem nenhum custo, o código esta disponível em: <a href="https://github.com/appcivico">https://github.com/appcivico</a> 
+                                             </p>
+                                             <p>
+                                                De maneira opcional, será disponibilizado o boleto para pagamento da taxa única no <strong><font color="green">valor de R$ 99,00</font></strong> (noventa e nove) reais pelo serviço de infraestrutura do Voto Legal que é necessária para doações de cartão de crédito via internet. Esta taxa deve ser informada na prestação de contas ao TSE.
+                                             </p>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td height="40"></td>
+                                       </tr>
+                                       <tr>
+                                          <td align="center" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px">
+                                             <strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+                                                <p>
+                                                  <strong>Mais informações sobre o Voto Legal: Assista o <a href="https://www.youtube.com/watch?v=SiWl8uE-rAE" style="color:green">Video</a> com as explicações e esclarecimentos do Luciano Santos, Diretor do MCCE.</strong>
+                                                </p>
+                                                <strong>
+                                                <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+                                                </strong>
+                                                Equipe Voto Legal
+                                             </strong>
+                                             <a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td height="30"></td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+                        <tbody>
+                           <tr>
+                              <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+                                 <span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      </div></div>
+    </body>
+</html>
 
 @@ candidate_approval.tt
 
