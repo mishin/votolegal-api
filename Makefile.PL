@@ -69,6 +69,7 @@ my %WriteMakefileArgs = (
     "File::MimeInfo" => 0,
     "File::Temp" => 0,
     "FindBin" => 0,
+    "JSON" => 0,
     "List::Util" => 0,
     "Log::Log4perl" => 0,
     "MIME::Base64" => 0,
@@ -88,6 +89,7 @@ my %WriteMakefileArgs = (
     "Net::Amazon::S3" => 0,
     "Net::Server::SS::PreFork" => 0,
     "POSIX" => 0,
+    "Proc::ProcessTable" => 0,
     "Scalar::Util" => 0,
     "Server::Starter" => 0,
     "Starman" => 0,
@@ -117,9 +119,9 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160805,
+  "VERSION" => 20160809,
   "test" => {
-    "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/misc/*.t t/office/*.t t/party/*.t t/workers/*.t"
+    "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
 );
 
@@ -182,6 +184,7 @@ my %FallbackPrereqs = (
   "File::Temp" => 0,
   "FindBin" => 0,
   "Furl" => 0,
+  "JSON" => 0,
   "JSON::MaybeXS" => 0,
   "List::Util" => 0,
   "Log::Log4perl" => 0,
@@ -202,6 +205,7 @@ my %FallbackPrereqs = (
   "Net::Amazon::S3" => 0,
   "Net::Server::SS::PreFork" => 0,
   "POSIX" => 0,
+  "Proc::ProcessTable" => 0,
   "Scalar::Util" => 0,
   "Server::Starter" => 0,
   "Starman" => 0,
