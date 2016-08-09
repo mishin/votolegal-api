@@ -56,8 +56,8 @@ name VotoLegal
     smtp_username   your_user
     smtp_password   your_passwd
 
-    default_from    no-reply@votolegal.org
-    contact_to      contato@votolegal.org
+    default_from    no-reply@votolegal.org.br
+    contact_to      contato@votolegal.org.br
 </sendmail>
 
 <slack>
@@ -66,3 +66,19 @@ name VotoLegal
     username        botlegal
     icon_emoji      :robot_face:
 </slack>
+
+<ethereum>
+    <testnet>
+        account     your-account
+        password    your-password
+        address     your-contract-address
+        abi         your-contract-abi
+    </testnet>
+
+    <mainnet>
+        account     your-account
+        password    your-password
+        address     your-contract-address
+        abi         your-contract-abi
+    </mainnet>
+</ethereum>
