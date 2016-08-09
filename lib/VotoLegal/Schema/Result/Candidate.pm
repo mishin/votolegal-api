@@ -818,7 +818,9 @@ __DATA__
 
 <!doctype html>
 <html>
-   <head><meta charset="UTF-8"></head>
+   <head>
+      <meta charset="UTF-8">
+   </head>
    <body>
       <div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
          <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
@@ -854,16 +856,7 @@ __DATA__
                                              <p>
                                                 Você já pode acessar o menu <strong>Login do Candidato</strong>, preencher com o seu <strong>e-mail</strong> e <strong>senha</strong> e completar o cadastro completo.
                                              </p>
-                                             <p>
-                                                <font color="green">IMPORTANTE</font>
-                                             <p>
-                                                <strong>Atenção:</strong> O software é livre e gratuito, qualquer candidato pode utilizar o software em sua própria infraestrutura caso queira sem nenhum custo, o código esta disponível em <a href="https://github.com/appcivico">https://github.com/appcivico</a> 
-                                             </p>
-                                             <p>
-                                                De maneira opcional, após a sua candidatura ser aprovada pelo TSE será disponibilizado o boleto para pagamento de taxa única no valor de R$ 99,00 (noventa e nove) reais pelo serviço de disponibilizar infraestrutura necessária para doações de cartão de crédito via internet, e que deve ser informado na prestação de contas ao TSE.
-                                             </p>
-                                             </p>
-                                             <p><font color="green">ATENÇÃO</font></p>
+                                             <p><font color="green">IMPORTANTE</font></p>
                                              <p> O perfil será liberado para publicação e aberto para doações a partir do dia 16.08.16, se o candidato tiver:</p>
                                           </td>
                                        </tr>
@@ -946,8 +939,6 @@ __DATA__
          </table>
       </div>
       </div></div>
-    </body>
-</html>
 
 @@ candidate_approval.tt
 
