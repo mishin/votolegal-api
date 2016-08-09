@@ -26,6 +26,7 @@ sub contact : Chained('base') : Args(0) : PathPart('') {
         subject  => "VotoLegal - Contato",
         template => get_data_section('contact.tt'),
         vars     => {
+            user_agent => $c->req->user_agent || "N/A",
             map { $_ => $c->req->params->{$_} }
               qw(name is_candidate email phone type message)
         }
@@ -57,14 +58,16 @@ __DATA__
 
 @@ contact.tt
 
-Nome: [%name%]
+Nome: [% name %]
 <br>
-Candidato: [%is_candidate%]
+Candidato: [% is_candidate %]
 <br>
-Tipo do contato: [%type%]
+Tipo do contato: [% type %]
 <br>
-Email: [%email%]
+Email: [% email %]
 <br>
-Telefone: [%phone%]
+Telefone: [% phone %]
+<br>
+User-Agent: [% user_agent %]
 <br><br>
 Mensagem: [%message%]
