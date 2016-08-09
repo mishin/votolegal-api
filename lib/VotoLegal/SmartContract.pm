@@ -53,7 +53,7 @@ sub addDonation {
     my $password = $self->password;
     my $address  = $self->address;
     my $abi      = $self->abi;
-    $gas         = $gas || 300000;
+    $gas         = $gas || 85000;
 
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
