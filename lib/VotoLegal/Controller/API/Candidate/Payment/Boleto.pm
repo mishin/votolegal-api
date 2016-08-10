@@ -30,23 +30,26 @@ sub boleto_GET {
         },
     );
 
+    # Separando DDD e número do 'phone'.
+    my $phone  = $c->stash->{candidate}->phone;
+    my $ddd    = substr($phone, 0, 2);
+    my $number = substr($phone, 2);
+
     my $payment = $c->stash->{collection}->getBoleto(
         senderHash                => $c->req->params->{senderHash},
         notificationURL           => $c->uri_for($c->controller('API::Candidate::Payment::Callback')->action_for('callback'), [ $c->stash->{candidate}->id ]),
         reference                 => $c->stash->{candidate}->id,
         senderName                => $c->stash->{candidate}->name,
         senderCNPJ                => $c->stash->{candidate}->cnpj,
-        #senderAreaCode            => $c->stash->{candidate}->,
-        #senderPhone               => $c->stash->{candidate}->,
+        senderAreaCode            => $ddd,
+        senderPhone               => $number,
         senderEmail               => (is_test ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
         shippingAddressPostalCode => $c->stash->{candidate}->address_zipcode,
         shippingAddressCity       => $c->stash->{candidate}->address_city,
         shippingAddressState      => $c->stash->{candidate}->address_state_code,
         shippingAddressStreet     => $c->stash->{candidate}->address_street,
         shippingAddressNumber     => $c->stash->{candidate}->address_house_number,
-        shippingAddressDistrict   => "Centro",
-        senderAreaCode            => "11",
-        senderPhone               => "1111111",
+        shippingAddressDistrict   => $c->stash->{candidate}->address_district,
     );
 
     if (!$payment) {

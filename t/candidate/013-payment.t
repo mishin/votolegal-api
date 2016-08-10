@@ -20,8 +20,10 @@ db_transaction {
     ;
 
     $candidate->update({
-        status => "activated",
-        cnpj   => random_cnpj(),
+        status           => "activated",
+        cnpj             => random_cnpj(),
+        phone            => fake_digits("###########")->(),
+        address_district => "Centro",
     });
 
     # Gerando uma session.
