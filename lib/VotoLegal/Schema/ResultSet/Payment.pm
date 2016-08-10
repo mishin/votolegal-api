@@ -106,7 +106,7 @@ sub getBoleto {
             extraAmount            => "0.00",
             itemId1                => "0001",
             itemDescription1       => "Pagamento VotoLegal",
-            itemAmount1            => "99.00",
+            itemAmount1            => "98.00",
             itemQuantity1          => "1",
             shippingAddressCountry => "BRA",
             notificationURL        => "https://hookb.in/va3nxWgn",
@@ -129,7 +129,28 @@ sub getBoleto {
     return ;
 }
 
-#__PACKAGE__->meta->make_immutable;
+sub getNotification {
+    my ($self, $notify) = @_;
+
+    ref $notify eq "VotoLegal::Model::DB::PaymentNotification" or die "notify must be 'VotoLegal::Model::DB::PaymentNotification'.";
+
+    my $email            = $self->email;
+    my $token            = $self->token;
+    my $notificationCode = $notify->notification_code;
+    my $endpoint         = $self->_endpoint;
+
+    my $req = $self->_ua->get($endpoint . "transactions/notifications/${notificationCode}?email=${email}&token=${token}");
+
+    if ($req->is_success()) {
+        my $xml = XMLin($req->content);
+
+        if (ref $xml) {
+            return $xml;
+        }
+    }
+
+    return ;
+}
 
 1;
 

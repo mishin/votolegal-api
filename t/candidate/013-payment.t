@@ -38,7 +38,7 @@ db_transaction {
     };
 
     # Gerando o boleto.
-    my $senderHash = "aca5f87211bba2a877dd837caaa09c5b06e118c4d29aefba11d61e6675597d0a";
+    my $senderHash = "7dfb47ed5bfdf5b2f625082e86bfb8ab1ee054a064ca625d5596c96445394db6";
 
     rest_get "/api/candidate/$id_candidate/payment/boleto",
         name    => "get boleto",
@@ -58,6 +58,17 @@ db_transaction {
     # Chamando o callback como se o boleto tivesse sido pago.
     ok (my $payment = $schema->resultset('Payment')->search({ boleto_url => $boletoUrl })->next, 'payment');
     is ($payment->candidate_id, $id_candidate, 'candidate id');
+
+    api_auth_as 'nobody';
+    rest_post "/api/candidate/$id_candidate/payment/callback",
+        name   => "callback",
+        stash  => 'c1',
+        code   => 200,
+        params => {
+            notificationCode => "35F7C2-C6D3F0D3F088-7664F32FBBA4-5F32FE",
+            notificationType => "transaction",
+        },
+    ;
 };
 
 done_testing();
