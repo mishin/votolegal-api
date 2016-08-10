@@ -406,6 +406,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 payments
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Payment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payments",
+  "VotoLegal::Schema::Result::Payment",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 projects
 
 Type: has_many
@@ -451,8 +466,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-04 15:22:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:roKyfc9ryd53qMh+0A6RQw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-10 13:33:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q1wNCF6HDgIon4imNNLpxw
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -464,6 +479,16 @@ use Data::Section::Simple qw(get_data_section);
 
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
+
+sub address_state_code {
+    my $self = shift;
+
+    my $state = $self->resultset('State')->search({ name => $self->address_state })->next;
+    if ($state) {
+        return $state->code;
+    }
+    return ;
+}
 
 sub resultset {
     my $self = shift;
