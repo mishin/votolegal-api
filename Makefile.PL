@@ -69,6 +69,7 @@ my %WriteMakefileArgs = (
     "File::MimeInfo" => 0,
     "File::Temp" => 0,
     "FindBin" => 0,
+    "Furl" => 0,
     "JSON" => 0,
     "List::Util" => 0,
     "Log::Log4perl" => 0,
@@ -113,13 +114,12 @@ my %WriteMakefileArgs = (
     "CatalystX::Eta::Test::REST" => 0,
     "Data::Fake" => 0,
     "Data::Printer" => 0,
-    "Furl" => 0,
     "JSON::MaybeXS" => 0,
     "Test::More" => 0,
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160809,
+  "VERSION" => 20160810,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
