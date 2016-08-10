@@ -164,6 +164,11 @@ sub action_specs {
             my $r = shift;
 
             my %values = $r->valid_values;
+
+            %values = map {
+                $_ => $r->get_original_value($_)
+            } keys %values;
+
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             return $self->update(\%values);

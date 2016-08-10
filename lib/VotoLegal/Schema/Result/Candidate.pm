@@ -704,6 +704,11 @@ sub action_specs {
             die \['ficha_limpa', "ficha suja is not allowed."] unless $self->ficha_limpa;
 
             my %values = $r->valid_values;
+
+            %values = map {
+                $_ => $r->get_original_value($_)
+            } keys %values;
+
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             # Deletando os values que não pertencem a entidade Candidate.
