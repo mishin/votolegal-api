@@ -39,3 +39,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0033-vice-prefeito [0032-payment-status] 2016-08-03T19:24:36Z Junior Moraes,,, <junior@junior-eokoe> # ce-prefeito adicionando novo cargo
 0034-publish [0033-vice-prefeito] 2016-08-04T19:39:24Z Junior Moraes,,, <junior@junior-eokoe> # blish feature de publicacao
 0035-boleto [0034-publish] 2016-08-10T17:56:20Z Junior Moraes,,, <junior@junior-eokoe> # leto integracao com pagseguro
+0036-boleto-notification [0035-boleto] 2016-08-10T20:03:50Z Junior Moraes,,, <junior@junior-eokoe> # leto-notification notification api do pagseguro
