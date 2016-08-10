@@ -109,7 +109,6 @@ sub getBoleto {
             itemAmount1            => "98.00",
             itemQuantity1          => "1",
             shippingAddressCountry => "BRA",
-            notificationURL        => "https://hookb.in/va3nxWgn",
         }
     );
 

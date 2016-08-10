@@ -32,6 +32,7 @@ sub boleto_GET {
 
     my $payment = $c->stash->{collection}->getBoleto(
         senderHash                => $c->req->params->{senderHash},
+        notificationURL           => $c->uri_for($c->controller('API::Candidate::Payment::Callback')->action_for('callback'), [ $c->stash->{candidate}->id ]),
         reference                 => $c->stash->{candidate}->id,
         senderName                => $c->stash->{candidate}->name,
         senderCNPJ                => $c->stash->{candidate}->cnpj,
