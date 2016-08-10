@@ -11,22 +11,18 @@ with 'CatalystX::Eta::Controller::TypesValidation';
 
 sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
 
-sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }
+sub base : Chained('root') : PathPart('session') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+}
 
 sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub session_POST {
     my ($self, $c) = @_;
 
-    my $pagseguro = $c->model('DB::Payment');
-
-    my $environment = is_test ? 'sandbox' : 'production';
-    my $auth        = $c->config->{pagseguro}->{$environment};
-
-    $pagseguro->email($auth->{email});
-    $pagseguro->token($auth->{token});
-
-    my $session_id = $pagseguro->newSession();
+    my $session_id = $c->stash->{collection}->newSession();
 
     if (!$session_id) {
         $self->status_bad_request($c, message => 'Invalid gateway response');

@@ -11,7 +11,11 @@ with 'CatalystX::Eta::Controller::TypesValidation';
 
 sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
 
-sub base : Chained('root') : PathPart('boleto') : CaptureArgs(0) { }
+sub base : Chained('root') : PathPart('boleto') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+}
 
 sub boleto : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
@@ -26,15 +30,7 @@ sub boleto_GET {
         },
     );
 
-    my $pagSeguro = $c->model('DB::Payment');
-
-    my $environment = is_test ? 'sandbox' : 'production';
-    my $auth        = $c->config->{pagseguro}->{$environment};
-
-    $pagSeguro->email($auth->{email});
-    $pagSeguro->token($auth->{token});
-
-    my $payment = $pagSeguro->getBoleto(
+    my $payment = $c->stash->{collection}->getBoleto(
         senderHash                => $c->req->params->{senderHash},
         reference                 => $c->stash->{candidate}->id,
         senderName                => $c->stash->{candidate}->name,
