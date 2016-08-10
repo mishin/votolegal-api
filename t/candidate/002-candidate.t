@@ -144,6 +144,8 @@ db_transaction {
             responsible_email  => $responsible_email,
             cielo_merchant_id  => $cielo_merchant_id,
             cielo_merchant_key => $cielo_merchant_key,
+            phone              => fake_digits("###########")->(),
+            address_district   => "Centro",
         },
     ;
 
@@ -161,6 +163,8 @@ db_transaction {
     is ($candidate->responsible_email, $responsible_email, 'responsible email');
     is ($candidate->cielo_merchant_id, $cielo_merchant_id, 'cielo_merchant_id');
     is ($candidate->cielo_merchant_key, $cielo_merchant_key, 'cielo_merchant_key');
+    is ($candidate->address_district, "Centro", 'address district');
+    ok ($candidate->phone =~ m{^\d+$}, 'phone');
 
     # Tentando editar outro candidato.
     create_candidate;

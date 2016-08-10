@@ -226,6 +226,16 @@ __PACKAGE__->table("candidate");
   default_value: false
   is_nullable: 0
 
+=head2 phone
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_district
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -304,6 +314,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", default_value => "unpaid", is_nullable => 0 },
   "publish",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "phone",
+  { data_type => "text", is_nullable => 1 },
+  "address_district",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -466,8 +480,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-10 13:33:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q1wNCF6HDgIon4imNNLpxw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-10 17:45:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RkQZ952Vp60OvS/DcHEzMQ
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -534,6 +548,15 @@ sub verifiers_specs {
                         })->count and die \["cpf", "already exists"];
 
                         return 1;
+                    },
+                },
+                phone => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $r = shift;
+
+                        $r->get_value('phone') =~ m{^\d{10,11}$};
                     },
                 },
                 office_id => {
@@ -611,6 +634,10 @@ sub verifiers_specs {
                 address_complement => {
                     required   => 0,
                     type       => 'Str',
+                },
+                address_district => {
+                    type     => "Str",
+                    required => 0,
                 },
                 cnpj => {
                     required => 0,
