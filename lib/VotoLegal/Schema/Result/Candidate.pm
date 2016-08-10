@@ -948,7 +948,7 @@ __DATA__
                                                 <font color="green">ATENÇÃO</font>
                                              </p>
                                              <p>
-                                                O software é livre e gratuito, qualquer candidato pode utilizá-lo em sua própria infraestrutura sem nenhum custo, o código esta disponível em: <a href="https://github.com/appcivico">https://github.com/appcivico</a> 
+                                                O software é livre e gratuito, qualquer candidato pode utilizá-lo em sua própria infraestrutura sem nenhum custo, o código esta disponível em: <a href="https://github.com/appcivico">https://github.com/appcivico</a>
                                              </p>
                                              <p>
                                                 De maneira opcional, será disponibilizado o boleto para pagamento da taxa única no <strong><font color="green">valor de R$ 99,00</font></strong> (noventa e nove) reais pelo serviço de infraestrutura do Voto Legal que é necessária para doações de cartão de crédito via internet. Esta taxa deve ser informada na prestação de contas ao TSE.
