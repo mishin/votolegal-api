@@ -55,6 +55,7 @@ my %WriteMakefileArgs = (
     "Data::Verifier::Results" => 0,
     "Data::Visitor" => 0,
     "Data::Visitor::Callback" => 0,
+    "Date::Calc" => 0,
     "DateTime" => 0,
     "DateTime::Format::Pg" => 0,
     "DateTimeX::Easy" => 0,
@@ -119,7 +120,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160810,
+  "VERSION" => 20160811,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -169,6 +170,7 @@ my %FallbackPrereqs = (
   "Data::Verifier::Results" => 0,
   "Data::Visitor" => 0,
   "Data::Visitor::Callback" => 0,
+  "Date::Calc" => 0,
   "DateTime" => 0,
   "DateTime::Format::Pg" => 0,
   "DateTimeX::Easy" => 0,
