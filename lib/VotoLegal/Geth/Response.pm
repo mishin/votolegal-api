@@ -25,7 +25,7 @@ sub getTransactionHash {
             }
         }
 
-        $self->_transactionHash($txid);
+        $self->_transactionHash($txid) if $txid;
     }
 
     return $self->_transactionHash;
