@@ -92,6 +92,11 @@ __PACKAGE__->table("donation");
 =head2 receipt_id
 
   data_type: 'integer'
+  is_nullable: 0
+
+=head2 transaction_hash
+
+  data_type: 'text'
   is_nullable: 1
 
 =cut
@@ -116,7 +121,9 @@ __PACKAGE__->add_columns(
   "birthdate",
   { data_type => "date", is_nullable => 0 },
   "receipt_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_nullable => 0 },
+  "transaction_hash",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -164,8 +171,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 12:03:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rxf4+8sCVRbwEqsN2tc+zg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 17:38:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bhk4/9sxK3EYapkl56XZPA
 
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Payment::Cielo;

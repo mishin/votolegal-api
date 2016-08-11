@@ -3,6 +3,9 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
+use VotoLegal::Utils;
+use VotoLegal::SmartContract;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
@@ -53,6 +56,8 @@ sub donate_GET {
 sub donate_POST {
     my ($self, $c) = @_;
 
+    my $donation ;
+
     $c->model('DB')->schema->txn_do(sub {
         # Lock.
         $c->model('DB::Candidate')->search(
@@ -71,7 +76,7 @@ sub donate_POST {
             die \['receipt_max', "O candidato atingiu o número máximo de recibos emitidos."];
         }
 
-        my $donation = $c->stash->{collection}->execute(
+        $donation = $c->stash->{collection}->execute(
             $c,
             for  => "create",
             with => {
@@ -110,9 +115,21 @@ sub donate_POST {
             $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
             $c->detach();
         }
-
-        return $self->status_ok($c, entity => { id => $donation->id });
     });
+
+    # Registrando a doação na blockchain.
+    my $environment   = is_test ? "testnet" : "mainnet";
+    my $smartContract = VotoLegal::SmartContract->new(%{ $c->config->{ethereum}->{$environment} });
+
+    my $res = $smartContract->addDonation($c->stash->{candidate}->id, $donation->id);
+
+    if (my $transactionHash = $res->getTransactionHash()) {
+        $donation->update({
+            transaction_hash => $transactionHash,
+        })
+    }
+
+    return $self->status_ok($c, entity => { id => $donation->id });
 }
 
 =encoding utf8

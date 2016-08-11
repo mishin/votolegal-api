@@ -43,3 +43,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0037-telefone-bairro [0036-boleto-notification] 2016-08-10T20:48:36Z Junior Moraes,,, <junior@junior-eokoe> # lefone-bairro novos campos do candidato
 0038-donation-birthdate [0037-telefone-bairro] 2016-08-11T14:34:03Z Junior Moraes,,, <junior@junior-eokoe> # nation-birthdate data de aniversario do doador
 0039-receipt [0038-donation-birthdate] 2016-08-11T17:04:02Z Junior Moraes,,, <junior@junior-eokoe> # ceipt sistema de recibos
+0040-donation-transaction-hash [0039-receipt] 2016-08-11T20:48:00Z Junior Moraes,,, <junior@junior-eokoe> # nation-transaction-hash id da transacao do ethereum
