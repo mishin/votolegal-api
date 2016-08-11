@@ -99,6 +99,11 @@ __PACKAGE__->table("donation");
   data_type: 'text'
   is_nullable: 1
 
+=head2 ip_address
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -124,6 +129,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "transaction_hash",
   { data_type => "text", is_nullable => 1 },
+  "ip_address",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -171,8 +178,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 17:38:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bhk4/9sxK3EYapkl56XZPA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 17:55:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ik9Bj3vPRKeLS4Q+GHlCkQ
 
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Payment::Cielo;

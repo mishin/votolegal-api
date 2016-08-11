@@ -100,6 +100,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => "Int",
                 },
+                ip_address => {
+                    required => 1,
+                    type     => "Str",
+                },
             },
         ),
     };

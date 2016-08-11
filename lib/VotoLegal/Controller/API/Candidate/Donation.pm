@@ -76,6 +76,8 @@ sub donate_POST {
             die \['receipt_max', "O candidato atingiu o número máximo de recibos emitidos."];
         }
 
+        my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+
         $donation = $c->stash->{collection}->execute(
             $c,
             for  => "create",
@@ -83,6 +85,7 @@ sub donate_POST {
                 %{ $c->req->params },
                 candidate_id => $c->stash->{candidate}->id,
                 receipt_id   => $receipt_id,
+                ip_address   => $ipAddr,
                 status       => "created",
             },
         );
