@@ -22,6 +22,8 @@ db_transaction {
         params => {
             cielo_merchant_id  => "1006993069",
             cielo_merchant_key => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
+            receipt_min        => 0,
+            receipt_max        => 10,
         },
     ;
 
@@ -51,6 +53,7 @@ db_transaction {
             cpf                  => random_cpf(),
             email                => fake_email()->(),
             credit_card_name     => "JUNIOR MORAES",
+            birthdate            => "1992-05-02",
             credit_card_validity => "201801",
             credit_card_number   => "6362970000457013",
             credit_card_brand    => "elo",
@@ -63,7 +66,7 @@ db_transaction {
 
     is (length $id_donation, 32, 'donation id has 32 chars');
 
-    # Votando nos projeto.
+    # Votando nos projetos.
     rest_post "/api/candidate/$id_candidate/projects/$id_projects[0]/votes",
         name    => 'voting with invalid donation_id',
         is_fail => 1,
