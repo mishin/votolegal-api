@@ -2,7 +2,6 @@ package VotoLegal::Schema::ResultSet::Donation;
 use common::sense;
 use Moose;
 use namespace::autoclean;
-use utf8;
 
 extends 'DBIx::Class::ResultSet';
 
@@ -11,6 +10,7 @@ with 'VotoLegal::Role::Verification';
 use Time::HiRes;
 use Digest::MD5 qw(md5_hex);
 use Data::Verifier;
+use Date::Calc qw(check_date);
 use VotoLegal::Types qw(EmailAddress CPF);
 
 sub resultset {
@@ -84,6 +84,17 @@ sub verifiers_specs {
                 credit_card_brand => {
                     required => 1,
                     type     => "Str",
+                },
+                birthdate => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        my $r = shift;
+                        my $birthdate = $r->get_value("birthdate");
+
+                        my @date = $birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/;
+                        check_date(@date);
+                    },
                 },
             },
         ),
