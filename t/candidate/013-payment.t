@@ -4,6 +4,8 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
+plan skip_all => "can't generate sender hash to use pagseguro sandbox.";
+
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
