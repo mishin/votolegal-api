@@ -13,8 +13,8 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $c->detach();
     }
 
-    for (qw(cielo_merchant_id cielo_merchant_key)) {
-        $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
+    for (qw(cielo_merchant_id cielo_merchant_key receipt_min receipt_max)) {
+        defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
     }
 }
 
@@ -53,46 +53,66 @@ sub donate_GET {
 sub donate_POST {
     my ($self, $c) = @_;
 
-    my $donation = $c->stash->{collection}->execute(
-        $c,
-        for  => "create",
-        with => {
-            %{ $c->req->params },
-            candidate_id => $c->stash->{candidate}->id,
-            status       => "created",
-        },
-    );
+    $c->model('DB')->schema->txn_do(sub {
+        # Lock.
+        $c->model('DB::Candidate')->search(
+            { id => $c->stash->{candidate}->id },
+            { for => 'update', columns => 'id' }
+        )->next;
 
-    # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
-    # da Model, armazenando assim apenas na RAM.
-    $donation->credit_card_name($c->req->params->{credit_card_name});
-    $donation->credit_card_validity($c->req->params->{credit_card_validity});
-    $donation->credit_card_number($c->req->params->{credit_card_number});
-    $donation->credit_card_brand($c->req->params->{credit_card_brand});
+        # Obtendo o id do recibo.
+        my $receipt_min     = $c->stash->{candidate}->receipt_min;
+        my $receipt_max     = $c->stash->{candidate}->receipt_max;
+        my $last_receipt_id = $c->stash->{candidate}->donations->get_column("receipt_id")->max || $receipt_min;
+        my $receipt_id      = $last_receipt_id + 1;
 
-    my $tokenize ;
-    eval {
-        $tokenize = $donation->tokenize();
-    };
+        # Verificando se o candidato possui recibos restantes disponíveis.
+        if ($receipt_id > $receipt_max) {
+            die \['receipt_max', "O candidato atingiu o número máximo de recibos emitidos."];
+        }
 
-    if (!$tokenize) {
-        $self->status_bad_request($c, message => "não foi possível gerar o token do cartão.");
-        $c->detach();
-    }
+        my $donation = $c->stash->{collection}->execute(
+            $c,
+            for  => "create",
+            with => {
+                %{ $c->req->params },
+                candidate_id => $c->stash->{candidate}->id,
+                receipt_id   => $receipt_id,
+                status       => "created",
+            },
+        );
 
-    my $authorize ;
-    my $capture ;
-    eval {
-        $authorize = $donation->authorize();
-        $capture   = $donation->capture();
-    };
+        # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
+        # da Model, armazenando assim apenas na RAM.
+        $donation->credit_card_name($c->req->params->{credit_card_name});
+        $donation->credit_card_validity($c->req->params->{credit_card_validity});
+        $donation->credit_card_number($c->req->params->{credit_card_number});
+        $donation->credit_card_brand($c->req->params->{credit_card_brand});
 
-    if (!$authorize || !$capture) {
-        $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
-        $c->detach();
-    }
+        my $tokenize ;
+        eval {
+            $tokenize = $donation->tokenize();
+        };
 
-    return $self->status_ok($c, entity => { id => $donation->id });
+        if (!$tokenize) {
+            $self->status_bad_request($c, message => "não foi possível gerar o token do cartão.");
+            $c->detach();
+        }
+
+        my $authorize ;
+        my $capture ;
+        eval {
+            $authorize = $donation->authorize();
+            $capture   = $donation->capture();
+        };
+
+        if (!$authorize || !$capture) {
+            $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
+            $c->detach();
+        }
+
+        return $self->status_ok($c, entity => { id => $donation->id });
+    });
 }
 
 =encoding utf8

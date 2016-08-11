@@ -236,6 +236,16 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 receipt_min
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 receipt_max
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -318,6 +328,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "address_district",
   { data_type => "text", is_nullable => 1 },
+  "receipt_min",
+  { data_type => "integer", is_nullable => 1 },
+  "receipt_max",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -480,8 +494,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-10 17:45:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RkQZ952Vp60OvS/DcHEzMQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 11:02:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Izh5gCQy4ELLIJHg/+QUyw
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -730,6 +744,14 @@ sub verifiers_specs {
                 cielo_merchant_key => {
                     required => 0,
                     type     => "Str",
+                },
+                receipt_min => {
+                    required => 0,
+                    type     => "Int",
+                },
+                receipt_max => {
+                    required => 0,
+                    type     => "Int",
                 },
             },
         ),

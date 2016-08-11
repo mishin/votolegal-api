@@ -96,6 +96,10 @@ sub verifiers_specs {
                         check_date(@date);
                     },
                 },
+                receipt_id => {
+                    required => 1,
+                    type     => "Int",
+                },
             },
         ),
     };

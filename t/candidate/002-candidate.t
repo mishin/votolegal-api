@@ -146,6 +146,8 @@ db_transaction {
             cielo_merchant_key => $cielo_merchant_key,
             phone              => fake_digits("###########")->(),
             address_district   => "Centro",
+            receipt_min        => 10000,
+            receipt_max        => 20000,
         },
     ;
 
@@ -165,6 +167,8 @@ db_transaction {
     is ($candidate->cielo_merchant_key, $cielo_merchant_key, 'cielo_merchant_key');
     is ($candidate->address_district, "Centro", 'address district');
     ok ($candidate->phone =~ m{^\d+$}, 'phone');
+    is ($candidate->receipt_min, 10000, 'receipt min');
+    is ($candidate->receipt_max, 20000, 'receipt min');
 
     # Tentando editar outro candidato.
     create_candidate;

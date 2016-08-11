@@ -48,6 +48,8 @@ db_transaction {
         params => {
             cielo_merchant_id  => "1006993069",
             cielo_merchant_key => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
+            receipt_min        => 10_000,
+            receipt_max        => 10_006,
         },
     ;
 
@@ -80,6 +82,7 @@ db_transaction {
             credit_card_number   => "6362970000457013",
             credit_card_brand    => "elo",
             amount               => 100,
+            birthdate            => "1992-05-02",
         },
     ;
 
@@ -143,6 +146,7 @@ db_transaction {
                 credit_card_number   => "6362970000457013",
                 credit_card_brand    => "elo",
                 amount               => $amount,
+                birthdate            => "1992-05-02",
             },
         ;
     }
@@ -178,6 +182,23 @@ db_transaction {
             'total donated'
         );
     };
+
+    # Eu liberei apenas 7 recibos de doações. A próxima que eu fizer, deve estourar o limite.
+    rest_post "/api/candidate/$candidate_id/donate",
+        name    => "no receipts available",
+        is_fail => 1,
+        params  => {
+            name                 => fake_name()->(),
+            cpf                  => random_cpf(),
+            email                => fake_email()->(),
+            credit_card_name     => "JUNIOR MORAES",
+            credit_card_validity => "201801",
+            credit_card_number   => "6362970000457013",
+            credit_card_brand    => "elo",
+            amount               => "500",
+            birthdate            => "1992-05-02",
+        },
+    ;
 };
 
 done_testing();
