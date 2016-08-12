@@ -57,7 +57,6 @@ sub donate_POST {
     my ($self, $c) = @_;
 
     my $donation ;
-
     $c->model('DB')->schema->txn_do(sub {
         # Lock a fim de evitar duplicidade de recibos. Isso garante que não ocorrerá doações simultâneas para
         # um mesmo candidato.
@@ -77,61 +76,23 @@ sub donate_POST {
             die \['receipt_max', "O candidato atingiu o número máximo de recibos emitidos."];
         }
 
-        my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+        # Criando a donation.
+        my $ipAddr      = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+        my $environment = is_test() ? 'sandbox' : 'production';
 
         $donation = $c->stash->{collection}->execute(
             $c,
             for  => "create",
             with => {
                 %{ $c->req->params },
+                merchant_id  => $c->config->{pagseguro}->{$environment}->{email},
+                merchant_key => $c->config->{pagseguro}->{$environment}->{token},
                 candidate_id => $c->stash->{candidate}->id,
                 receipt_id   => $receipt_id,
                 ip_address   => $ipAddr,
-                status       => "created",
             },
         );
-
-        # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente para um
-        # atributo da Model, assim trabalhando apenas na RAM.
-        $donation->credit_card_name($c->req->params->{credit_card_name});
-        $donation->credit_card_validity($c->req->params->{credit_card_validity});
-        $donation->credit_card_number($c->req->params->{credit_card_number});
-        $donation->credit_card_brand($c->req->params->{credit_card_brand});
-
-        my $tokenize ;
-        eval {
-            $tokenize = $donation->tokenize();
-        };
-
-        if (!$tokenize) {
-            $self->status_bad_request($c, message => "não foi possível gerar o token do cartão.");
-            $c->detach();
-        }
-
-        my $authorize ;
-        my $capture ;
-        eval {
-            $authorize = $donation->authorize();
-            $capture   = $donation->capture();
-        };
-
-        if (!$authorize || !$capture) {
-            $self->status_bad_request($c, message => "transação não autorizada pelo gateway.");
-            $c->detach();
-        }
     });
-
-    # Registrando a doação na blockchain.
-    my $environment   = is_test() ? "testnet" : "mainnet";
-    my $smartContract = VotoLegal::SmartContract->new(%{ $c->config->{ethereum}->{$environment} });
-
-    my $res = $smartContract->addDonation($c->stash->{candidate}->id, $donation->id);
-
-    if (my $transactionHash = $res->getTransactionHash()) {
-        $donation->update({
-            transaction_hash => $transactionHash,
-        })
-    }
 
     return $self->status_ok($c, entity => { id => $donation->id });
 }

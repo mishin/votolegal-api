@@ -185,10 +185,16 @@ use Digest::MD5 qw(md5_hex);
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
+use VotoLegal::Payment::PagSeguro;
 
 has _driver => (
     is   => "rw",
     does => "VotoLegal::Payment",
+);
+
+has credit_card_token => (
+    is  => "rw",
+    isa => "Str",
 );
 
 has credit_card_name => (
@@ -211,11 +217,6 @@ has credit_card_brand => (
     isa => "Str",
 );
 
-has _card_token => (
-    is  => "rw",
-    isa => "Str",
-);
-
 has _transaction_id => (
     is  => "rw",
     isa => "Str",
@@ -228,35 +229,41 @@ sub tokenize {
     defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
     defined $self->credit_card_number   or die "missing 'credit_card_number'.";
 
-    my $card_token = $self->driver->tokenize_credit_card(
-        credit_card_data => {
-            credit_card => {
-                validity     => $self->credit_card_validity,
-                name_on_card => $self->credit_card_name,
-            },
-            secret => {
-                number => $self->credit_card_number,
-            },
-        },
-    );
-
-    if ($card_token) {
-        $self->_card_token($card_token);
-
-        $self->update({
-            status => "tokenized",
-        });
+    # Alguns gateways de pagamento tokenizam o cartão de crédito no front-end. Desta forma, o token já deve estar
+    # definido no atributo 'credit_card_token'.
+    if (defined($self->credit_card_token)) {
+        $self->driver->setCreditCardToken($self->credit_card_token);
 
         return 1;
     }
+    else {
+        # Ok, o token não veio na request.
+        my $card_token = $self->driver->tokenize_credit_card(
+            credit_card_data => {
+                credit_card => {
+                    validity     => $self->credit_card_validity,
+                    name_on_card => $self->credit_card_name,
+                },
+                secret => {
+                    number => $self->credit_card_number,
+                },
+            },
+        );
+
+        if ($card_token) {
+            $self->driver->setCreditCardToken($card_token);
+            return 1;
+        }
+    }
+
     return 0;
 }
 
 sub authorize {
     my ($self) = @_;
 
-    defined $self->_card_token       or die 'credit card not tokenized.';
-    defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
+    defined $self->driver->getCreditCardToken or die 'credit card not tokenized.';
+    defined $self->credit_card_brand          or die "missing 'credit_card_brand'.";
 
     my $res = $self->driver->do_authorization(
         token     => $self->_card_token,

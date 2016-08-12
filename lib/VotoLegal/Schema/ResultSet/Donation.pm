@@ -11,7 +11,10 @@ use Time::HiRes;
 use Digest::MD5 qw(md5_hex);
 use Data::Verifier;
 use Date::Calc qw(check_date);
+use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF);
+use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
 
 sub resultset {
     my $self = shift;
@@ -26,6 +29,14 @@ sub verifiers_specs {
         create => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
+                merchant_id => {
+                    required => 1,
+                    type     => "Str",
+                },
+                merchant_key => {
+                    required => 1,
+                    type     => "Str",
+                },
                 name => {
                     required => 1,
                     type     => "Str",
@@ -39,49 +50,60 @@ sub verifiers_specs {
                     type     => CPF,
                 },
                 phone => {
-                    required => 0,
+                    required => 1,
+                    type     => "Str",
+                    post_check => sub {
+                        $_[0]->get_value('phone') =~ m{^\d{10,11}$};
+                    },
+                },
+                address_street => {
+                    required => 1,
+                    type     => "Str",
+                },
+                address_house_number => {
+                    required => 1,
+                    type     => "Int",
+                },
+                address_district => {
+                    required => 1,
+                    type     => "Str",
+                },
+                address_zipcode => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        test_cep($_[0]->get_value('address_zipcode'));
+                    },
+                },
+                address_city => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $city = $_[0]->get_value('address_city');
+                        $self->resultset('City')->search({ name => $city })->count;
+                    },
+                },
+                address_state => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $state = $_[0]->get_value('address_state');
+                        $self->resultset('State')->search({ code => $state })->count;
+                    },
+                },
+                sender_hash => {
+                    required => 1,
+                    type     => "Str",
+                },
+                credit_card_token => {
+                    required => 1,
                     type     => "Str",
                 },
                 amount => {
                     required => 1,
                     type     => "Int",
                 },
-                candidate_id => {
-                    required   => 1,
-                    type       => "Int",
-                    post_check => sub {
-                        my $r = shift;
-
-                        $self->resultset('Candidate')->find($r->get_value('candidate_id'));
-                    },
-                },
-                status => {
-                    required   => 1,
-                    type       => "Str",
-                    post_check => sub {
-                        my $r = shift;
-
-                        my $status = $r->get_value('status');
-                        $status    =~ m{^(created|tokenized|authorized|captured)$};
-                    },
-                },
                 credit_card_name => {
-                    required => 1,
-                    type     => "Str",
-                },
-                credit_card_validity => {
-                    required   => 1,
-                    type       => "Str",
-                    post_check => sub {
-                        my $credit_card_validity = $_[0]->get_value('credit_card_validity');
-                        $credit_card_validity =~ m{^[0-9]{6}$} or die \['credit_card_validity', "must be in AAAAMM format"]
-                    },
-                },
-                credit_card_number => {
-                    required => 1,
-                    type     => "Str",
-                },
-                credit_card_brand => {
                     required => 1,
                     type     => "Str",
                 },
@@ -89,12 +111,50 @@ sub verifiers_specs {
                     required   => 1,
                     type       => "Str",
                     post_check => sub {
-                        my $r = shift;
-                        my $birthdate = $r->get_value("birthdate");
+                        my $birthdate = $_[0]->get_value("birthdate");
 
                         my @date = $birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/;
                         check_date(@date);
                     },
+                },
+                billing_address_street => {
+                    required => 1,
+                    type     => "Str",
+                },
+                billing_address_house_number => {
+                    required => 1,
+                    type     => "Int",
+                },
+                billing_address_district => {
+                    required => 1,
+                    type     => "Str",
+                },
+                billing_address_zipcode => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        test_cep($_[0]->get_value('billing_address_zipcode'));
+                    },
+                },
+                billing_address_city => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $city = $_[0]->get_value('billing_address_city');
+                        $self->resultset('City')->search({ name => $city })->count;
+                    },
+                },
+                billing_address_state => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $state = $_[0]->get_value('billing_address_state');
+                        $self->resultset('State')->search({ code => $state })->count;
+                    },
+                },
+                billing_address_complement => {
+                    required => 1,
+                    type     => "Str",
                 },
                 receipt_id => {
                     required => 1,
@@ -103,6 +163,10 @@ sub verifiers_specs {
                 ip_address => {
                     required => 1,
                     type     => "Str",
+                },
+                candidate_id => {
+                    required => 1,
+                    type     => "Int",
                 },
             },
         ),
@@ -119,17 +183,72 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            # Esses dados serviram apenas pra validação. Nós não armazenamos eles no banco de dados.
-            delete $values{credit_card_name};
-            delete $values{credit_card_validity};
-            delete $values{credit_card_number};
-            delete $values{credit_card_brand};
+            # Driver do PagSeguro.
+            my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+                merchant_id  => delete $values{merchant_id},
+                merchant_key => delete $values{merchant_key},
+                sandbox      => is_test() ? 1 : 0,
+            );
 
-            my $id = md5_hex(Time::HiRes::time());
+            # Tratando alguns dados.
+            my $id          = md5_hex(Time::HiRes::time());
+            my $phone       = $values{phone};
+            my $phoneDDD    = substr($values{phone}, 0, 2);
+            my $phoneNumber = substr($values{phone}, 2);
+            my $amount      = sprintf("%.2f", $values{amount} / 100);
+            my $birthdate   = $values{birthdate};
+
+            if ($birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/) {
+                $birthdate = sprintf("%02d/%02d/%04d", $3, $2, $1);
+            }
+
+            my $req = $pagseguro->transaction(
+                itemQuantity1             => 1,
+                itemId1                   => "02",
+                itemDescription1          => "Doação VotoLegal",
+                itemAmount1               => $amount,
+                reference                 => $id,
+                senderName                => $values{name},
+                senderCPF                 => $values{cpf},
+                senderAreaCode            => $phoneDDD,
+                senderPhone               => $phoneNumber,
+                senderEmail               => $values{email},
+                shippingAddressStreet     => $values{address_street},
+                shippingAddressNumber     => $values{address_house_number},
+                shippingAddressDistrict   => $values{address_district},
+                shippingAddressPostalCode => $values{address_zipcode},
+                shippingAddressCity       => $values{address_city},
+                shippingAddressState      => $values{address_state},
+                senderHash                => $values{sender_hash},
+                creditCardToken           => $values{credit_card_token},
+                installmentQuantity       => 1,
+                installmentValue          => $amount,
+                creditCardHolderName      => $values{credit_card_name},
+                creditCardHolderCPF       => $values{cpf},
+                creditCardHolderBirthDate => $birthdate,
+                creditCardHolderAreaCode  => $phoneDDD,
+                creditCardHolderPhone     => $phoneNumber,
+                billingAddressStreet      => $values{billing_address_street},
+                billingAddressNumber      => $values{billing_address_house_number},
+                billingAddressComplement  => $values{billing_address_complement},
+                billingAddressDistrict    => $values{billing_address_district},
+                billingAddressPostalCode  => $values{billing_address_zipcode},
+                billingAddressCity        => $values{billing_address_city},
+                billingAddressState       => $values{billing_address_state},
+            );
 
             return $self->create({
-                id => $id,
-                %values
+                id           => $id,
+                candidate_id => $values{candidate_id},
+                name         => $values{name},
+                email        => $values{email},
+                cpf          => $values{cpf},
+                phone        => $values{phone},
+                amount       => $values{amount},
+                birthdate    => $values{birthdate},
+                receipt_id   => $values{receipt_id},
+                ip_address   => $values{ip_address},
+                status       => "created",
             });
         },
     };
