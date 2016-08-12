@@ -781,6 +781,16 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Int",
                 },
+                payment_gateway_id => {
+                    required   => 0,
+                    type       => "Int",
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $payment_gateway_id = $r->get_value('payment_gateway_id');
+                        $self->resultset('PaymentGateway')->find($payment_gateway_id);
+                    },
+                },
             },
         ),
 

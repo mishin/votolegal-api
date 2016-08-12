@@ -16,7 +16,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $c->detach();
     }
 
-    for (qw(merchant_id merchant_key receipt_min receipt_max)) {
+    for (qw(merchant_id merchant_key payment_gateway_id receipt_min receipt_max)) {
         defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
     }
 }
@@ -59,10 +59,11 @@ sub donate_POST {
     my $donation ;
 
     $c->model('DB')->schema->txn_do(sub {
-        # Lock.
+        # Lock a fim de evitar duplicidade de recibos. Isso garante que não ocorrerá doações simultâneas para
+        # um mesmo candidato.
         $c->model('DB::Candidate')->search(
             { id => $c->stash->{candidate}->id },
-            { for => 'update', columns => 'id' }
+            { for => 'update', columns => 'id' },
         )->next;
 
         # Obtendo o id do recibo.
@@ -90,8 +91,8 @@ sub donate_POST {
             },
         );
 
-        # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
-        # da Model, armazenando assim apenas na RAM.
+        # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente para um
+        # atributo da Model, assim trabalhando apenas na RAM.
         $donation->credit_card_name($c->req->params->{credit_card_name});
         $donation->credit_card_validity($c->req->params->{credit_card_validity});
         $donation->credit_card_number($c->req->params->{credit_card_number});

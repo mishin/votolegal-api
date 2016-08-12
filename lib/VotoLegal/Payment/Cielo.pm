@@ -15,12 +15,12 @@ with 'VotoLegal::Payment';
 
 BEGIN { whereis("curl") or die "could not find 'curl' in your PATH." }
 
-has affiliation => (
+has merchant_id => (
     is       => "rw",
     required => 1,
 );
 
-has key => (
+has merchant_key => (
     is       => "rw",
     required => 1,
 );
@@ -54,8 +54,8 @@ sub tokenize_credit_card {
         validade  => $opts{credit_card_data}->{credit_card}->{validity},
         portador  => $opts{credit_card_data}->{credit_card}->{name_on_card},
         numero    => $opts{credit_card_data}->{secret}->{number},
-        afiliacao => $self->affiliation,
-        chave     => $self->key,
+        afiliacao => $self->merchant_id,
+        chave     => $self->merchant_key,
     );
 
     my $ret = $self->_run_curl(xml => $xml);
@@ -76,8 +76,8 @@ sub do_authorization {
         pedido          => substr(md5_hex( $opts{remote_id} ), 0, 20),
         token           => $opts{token},
         bandeira        => $self->_brand_to_bandeira($opts{brand}),
-        afiliacao       => $self->affiliation,
-        chave           => $self->key,
+        afiliacao       => $self->merchant_id,
+        chave           => $self->merchant_key,
         soft_descriptor => $opts{soft_descriptor} ? $opts{soft_descriptor} : $self->soft_descriptor,
         valor           => $opts{amount},
         autorizar       => 3,       # autorizar nao presente
@@ -106,8 +106,8 @@ sub do_capture {
 
     my $xml = $self->api->capture_payment(
         tid       => $opts{transaction_id},
-        afiliacao => $self->affiliation,
-        chave     => $self->key,
+        afiliacao => $self->merchant_id,
+        chave     => $self->merchant_key,
     );
 
     my $ret = $self->_run_curl(xml => $xml);

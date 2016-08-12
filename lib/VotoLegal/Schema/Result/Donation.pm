@@ -182,20 +182,13 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ik9Bj3vPRKeLS4Q+GHlCkQ
 
 use Digest::MD5 qw(md5_hex);
+
+use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
 
-has _cielo => (
-    is      => "rw",
-    isa     => "VotoLegal::Payment::Cielo",
-    default => sub {
-        my $self = shift;
-
-        VotoLegal::Payment::Cielo->new(
-            affiliation => $self->candidate->merchant_id,
-            key         => $self->candidate->merchant_key,
-            sandbox     => ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/) ? 1 : 0,
-        );
-    },
+has _driver => (
+    is   => "rw",
+    does => "VotoLegal::Payment",
 );
 
 has credit_card_name => (
@@ -235,7 +228,7 @@ sub tokenize {
     defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
     defined $self->credit_card_number   or die "missing 'credit_card_number'.";
 
-    my $card_token = $self->_cielo->tokenize_credit_card(
+    my $card_token = $self->driver->tokenize_credit_card(
         credit_card_data => {
             credit_card => {
                 validity     => $self->credit_card_validity,
@@ -265,7 +258,7 @@ sub authorize {
     defined $self->_card_token       or die 'credit card not tokenized.';
     defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
 
-    my $res = $self->_cielo->do_authorization(
+    my $res = $self->driver->do_authorization(
         token     => $self->_card_token,
         remote_id => substr(md5_hex($self->id), 0, 20),
         brand     => $self->credit_card_brand,
@@ -287,7 +280,7 @@ sub capture {
 
     defined $self->_transaction_id or die 'transaction not authorized';
 
-    my $res = $self->_cielo->do_capture(
+    my $res = $self->driver->do_capture(
         transaction_id => $self->_transaction_id
     );
 
@@ -299,5 +292,34 @@ sub capture {
     return 0;
 }
 
+sub driver {
+    my ($self) = @_;
+
+    if (ref $self->_driver) {
+        return $self->_driver;
+    }
+
+    my $payment_gateway_id = $self->candidate->payment_gateway_id;
+
+    my $paymentGateway = $self->result_source->schema->resultset('PaymentGateway')->find($payment_gateway_id);
+    die "invalid 'payment_gateway_id'" unless $paymentGateway;
+
+    my $driverName = "VotoLegal::Payment::" . $paymentGateway->name;
+
+    my $driver = $driverName->new(
+        merchant_id  => $self->candidate->merchant_id,
+        merchant_key => $self->candidate->merchant_key,
+        sandbox      => is_test() ? 1 : 0,
+    );
+
+    if (ref $driver) {
+        $self->_driver($driver);
+    }
+
+    return $self->_driver;
+}
+
 __PACKAGE__->meta->make_immutable;
+
 1;
+

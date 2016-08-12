@@ -46,6 +46,7 @@ db_transaction {
     rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
         params => {
+            payment_gateway_id => 1,
             merchant_id        => "1006993069",
             merchant_key       => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
             receipt_min        => 10_000,
