@@ -6,7 +6,7 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 =head1 NAME
 
-VotoLegal::Controller::API::Party - Catalyst Controller
+VotoLegal::Controller::API::Office - Catalyst Controller
 
 =head1 DESCRIPTION
 
