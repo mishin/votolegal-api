@@ -45,3 +45,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0039-receipt [0038-donation-birthdate] 2016-08-11T17:04:02Z Junior Moraes,,, <junior@junior-eokoe> # ceipt sistema de recibos
 0040-donation-transaction-hash [0039-receipt] 2016-08-11T20:48:00Z Junior Moraes,,, <junior@junior-eokoe> # nation-transaction-hash id da transacao do ethereum
 0041-donation-ip [0040-donation-transaction-hash] 2016-08-11T21:19:06Z Junior Moraes,,, <junior@junior-eokoe> # nation-ip armazenando ip na doacao
+0042-new-issue-priorities [0041-donation-ip] 2016-08-12T13:23:34Z Junior Moraes,,, <junior@junior-eokoe> # w-issue-priorities novos assuntos prioritarios
