@@ -19,7 +19,7 @@ sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) {
 
     $c->stash->{collection} = $c->model('DB::Payment');
 
-    my $environment = is_test ? 'sandbox' : 'production';
+    my $environment = is_test() ? 'sandbox' : 'production';
     my $auth        = $c->config->{pagseguro}->{$environment};
 
     $c->stash->{collection}->email($auth->{email});

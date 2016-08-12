@@ -121,7 +121,7 @@ sub donate_POST {
     });
 
     # Registrando a doação na blockchain.
-    my $environment   = is_test ? "testnet" : "mainnet";
+    my $environment   = is_test() ? "testnet" : "mainnet";
     my $smartContract = VotoLegal::SmartContract->new(%{ $c->config->{ethereum}->{$environment} });
 
     my $res = $smartContract->addDonation($c->stash->{candidate}->id, $donation->id);
