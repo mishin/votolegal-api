@@ -7,8 +7,8 @@ use Test::More;
 use_ok 'VotoLegal::Payment::Cielo';
 
 my $cielo = new_ok ('VotoLegal::Payment::Cielo', => [
-    affiliation     => "1006993069",
-    key             => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
+    merchant_id     => "1006993069",
+    merchant_key    => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
     soft_descriptor => "VotoLegalTest",
     sandbox         => 1,
 ]);
