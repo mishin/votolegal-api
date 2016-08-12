@@ -246,6 +246,12 @@ __PACKAGE__->table("candidate");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 payment_gateway_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -332,6 +338,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "receipt_max",
   { data_type => "integer", is_nullable => 1 },
+  "payment_gateway_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -434,6 +442,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 payment_gateway
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::PaymentGateway>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "payment_gateway",
+  "VotoLegal::Schema::Result::PaymentGateway",
+  { id => "payment_gateway_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
 =head2 payments
 
 Type: has_many
@@ -494,8 +522,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 10:35:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y8zZwXExlPmrsiaL5I1yww
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 10:45:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bqxrJjGGZPex3ZspvSyuOw
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
