@@ -199,12 +199,12 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 cielo_merchant_id
+=head2 merchant_id
 
   data_type: 'text'
   is_nullable: 1
 
-=head2 cielo_merchant_key
+=head2 merchant_key
 
   data_type: 'text'
   is_nullable: 1
@@ -314,9 +314,9 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "responsible_email",
   { data_type => "text", is_nullable => 1 },
-  "cielo_merchant_id",
+  "merchant_id",
   { data_type => "text", is_nullable => 1 },
-  "cielo_merchant_key",
+  "merchant_key",
   { data_type => "text", is_nullable => 1 },
   "ficha_limpa",
   { data_type => "boolean", is_nullable => 0 },
@@ -494,8 +494,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 11:02:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Izh5gCQy4ELLIJHg/+QUyw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 10:35:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Y8zZwXExlPmrsiaL5I1yww
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -737,11 +737,11 @@ sub verifiers_specs {
                     required => 0,
                     type     => EmailAddress,
                 },
-                cielo_merchant_id => {
+                merchant_id => {
                     required => 0,
                     type     => "Str",
                 },
-                cielo_merchant_key => {
+                merchant_key => {
                     required => 0,
                     type     => "Str",
                 },
@@ -810,7 +810,7 @@ sub action_specs {
             # Validando se o candidato preencheu todos os campos necessários para publicar sua página.
             my @required = qw(
                 cnpj video_url summary biography raising_goal public_email picture
-                spending_spreadsheet cielo_merchant_id cielo_merchant_key
+                spending_spreadsheet merchant_id merchant_key
             );
 
             for (@required) {

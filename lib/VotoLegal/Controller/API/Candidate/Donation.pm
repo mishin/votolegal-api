@@ -16,7 +16,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $c->detach();
     }
 
-    for (qw(cielo_merchant_id cielo_merchant_key receipt_min receipt_max)) {
+    for (qw(merchant_id merchant_key receipt_min receipt_max)) {
         defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
     }
 }

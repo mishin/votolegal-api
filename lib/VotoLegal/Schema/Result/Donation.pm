@@ -191,8 +191,8 @@ has _cielo => (
         my $self = shift;
 
         VotoLegal::Payment::Cielo->new(
-            affiliation => $self->candidate->cielo_merchant_id,
-            key         => $self->candidate->cielo_merchant_key,
+            affiliation => $self->candidate->merchant_id,
+            key         => $self->candidate->merchant_key,
             sandbox     => ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/) ? 1 : 0,
         );
     },

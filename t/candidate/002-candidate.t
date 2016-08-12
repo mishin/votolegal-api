@@ -73,8 +73,8 @@ db_transaction {
     my $public_email       = fake_email()->();
     my $responsible_name   = "Junior Moraes";
     my $responsible_email  = fake_email()->();
-    my $cielo_merchant_id  = random_string(12);
-    my $cielo_merchant_key = random_string(20);
+    my $merchant_id        = random_string(12);
+    my $merchant_key       = random_string(20);
 
     rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid video url",
@@ -142,8 +142,8 @@ db_transaction {
             public_email       => $public_email,
             responsible_name   => $responsible_name,
             responsible_email  => $responsible_email,
-            cielo_merchant_id  => $cielo_merchant_id,
-            cielo_merchant_key => $cielo_merchant_key,
+            merchant_id        => $merchant_id,
+            merchant_key       => $merchant_key,
             phone              => fake_digits("###########")->(),
             address_district   => "Centro",
             receipt_min        => 10000,
@@ -163,8 +163,8 @@ db_transaction {
     ok ($candidate->spending_spreadsheet =~ m{^https?:\/\/}, 'spending spreadsheet');
     is ($candidate->responsible_name, $responsible_name, 'responsible name');
     is ($candidate->responsible_email, $responsible_email, 'responsible email');
-    is ($candidate->cielo_merchant_id, $cielo_merchant_id, 'cielo_merchant_id');
-    is ($candidate->cielo_merchant_key, $cielo_merchant_key, 'cielo_merchant_key');
+    is ($candidate->merchant_id, $merchant_id, 'merchant_id');
+    is ($candidate->merchant_key, $merchant_key, 'merchant_key');
     is ($candidate->address_district, "Centro", 'address district');
     ok ($candidate->phone =~ m{^\d+$}, 'phone');
     is ($candidate->receipt_min, 10000, 'receipt min');

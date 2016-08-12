@@ -45,8 +45,8 @@ db_transaction {
             raising_goal         => fake_int(1, 100_000)->(),
             spending_spreadsheet => "http://mock.com/tse.csv",
             picture              => "http://mock.com/picture.jpg",
-            cielo_merchant_id    => random_string(12),
-            cielo_merchant_key   => random_string(20),
+            merchant_id          => random_string(12),
+            merchant_key         => random_string(20),
         }),
         'full registration',
     );
