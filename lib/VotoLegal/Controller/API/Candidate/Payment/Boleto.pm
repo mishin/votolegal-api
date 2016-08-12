@@ -43,7 +43,7 @@ sub boleto_GET {
         senderCNPJ                => $c->stash->{candidate}->cnpj,
         senderAreaCode            => $ddd,
         senderPhone               => $number,
-        senderEmail               => (is_test ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
+        senderEmail               => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
         shippingAddressPostalCode => $c->stash->{candidate}->address_zipcode,
         shippingAddressCity       => $c->stash->{candidate}->address_city,
         shippingAddressState      => $c->stash->{candidate}->address_state_code,
