@@ -47,11 +47,6 @@ __PACKAGE__->table("payment_notification");
   data_type: 'text'
   is_nullable: 0
 
-=head2 notification_type
-
-  data_type: 'text'
-  is_nullable: 0
-
 =head2 created_at
 
   data_type: 'timestamp'
@@ -64,8 +59,6 @@ __PACKAGE__->table("payment_notification");
 __PACKAGE__->add_columns(
   "notification_code",
   { data_type => "text", is_nullable => 0 },
-  "notification_type",
-  { data_type => "text", is_nullable => 0 },
   "created_at",
   {
     data_type     => "timestamp",
@@ -76,8 +69,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-10 16:07:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bhl0AuVaTxx48y5Rzv4MJQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 21:37:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oHvtESLENdi73AC3E8+1Nw
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 

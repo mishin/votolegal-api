@@ -204,7 +204,7 @@ sub action_specs {
 
             my $req = $pagseguro->transaction(
                 itemQuantity1             => 1,
-                itemId1                   => "02",
+                itemId1                   => "2",
                 itemDescription1          => "Doação VotoLegal",
                 itemAmount1               => $amount,
                 reference                 => $id,
