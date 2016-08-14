@@ -42,6 +42,16 @@ db_transaction {
         },
     ;
 
+    # Por enquanto não é possível escolher outro gateway de pagamento que não seja o PagSeguro.
+    api_auth_as candidate_id => $candidate_id;
+    rest_put "/api/candidate/${candidate_id}",
+        name    => "other payment gateway",
+        is_fail => 1,
+        params  => {
+            payment_gateway_id => 1,
+        },
+
+
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
