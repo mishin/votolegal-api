@@ -16,23 +16,23 @@ db_transaction {
     ok (my $candidate = $schema->resultset('Candidate')->find($id_candidate));
 
     # Não pode gerar session de um candidato não aprovado.
-    rest_post "/api/candidate/$id_candidate/payment/session",
+    rest_get "/api/candidate/$id_candidate/payment/session",
         name    => "can't get session when not activated",
         is_fail => 1,
+        code    => 400,
     ;
 
     $candidate->update({
         status           => "activated",
         cnpj             => random_cnpj(),
-        phone            => fake_digits("###########")->(),
+        phone            => "11982012016",
         address_district => "Centro",
     });
 
     # Gerando uma session.
-    rest_post "/api/candidate/$id_candidate/payment/session",
+    rest_get "/api/candidate/$id_candidate/payment/session",
         name  => "get session",
         stash => "s1",
-        code  => 200,
     ;
 
     stash_test 's1' => sub {
@@ -42,11 +42,12 @@ db_transaction {
     };
 
     # Gerando o boleto.
-    my $senderHash = "7dfb47ed5bfdf5b2f625082e86bfb8ab1ee054a064ca625d5596c96445394db6";
+    my $senderHash = "a93d10e8417cf5cd9dde245a0de6c48f2505d532ed893f16f32f33abe33ab99e";
 
-    rest_get "/api/candidate/$id_candidate/payment/boleto",
+    rest_post "/api/candidate/$id_candidate/payment",
         name    => "get boleto",
         stash   => "b1",
+        code    => 200,
         params  => {
             senderHash => $senderHash,
         }
