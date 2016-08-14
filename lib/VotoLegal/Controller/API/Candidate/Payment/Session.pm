@@ -9,27 +9,27 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
-
-sub base : Chained('root') : PathPart('session') : CaptureArgs(0) {
+sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 }
 
+sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }
+
 sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
-sub session_POST {
+sub session_GET {
     my ($self, $c) = @_;
 
-    my $session_id = $c->stash->{collection}->newSession();
+    my $session = $c->stash->{pagseguro}->createSession();
 
-    if (!$session_id) {
+    if (!$session) {
         $self->status_bad_request($c, message => 'Invalid gateway response');
         $c->detach();
     }
 
-    return $self->status_ok($c, entity => { id => $session_id });
+    return $self->status_ok($c, entity => { id => $session->{id} });
 }
 
 =encoding utf8
