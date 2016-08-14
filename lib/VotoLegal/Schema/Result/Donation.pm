@@ -104,6 +104,13 @@ __PACKAGE__->table("donation");
   data_type: 'text'
   is_nullable: 0
 
+=head2 created_at
+
+  data_type: 'timestamp'
+  default_value: current_timestamp
+  is_nullable: 0
+  original: {default_value => \"now()"}
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -131,6 +138,13 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "ip_address",
   { data_type => "text", is_nullable => 0 },
+  "created_at",
+  {
+    data_type     => "timestamp",
+    default_value => \"current_timestamp",
+    is_nullable   => 0,
+    original      => { default_value => \"now()" },
+  },
 );
 
 =head1 PRIMARY KEY
@@ -178,8 +192,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-11 17:55:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ik9Bj3vPRKeLS4Q+GHlCkQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-14 17:48:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+D4MQ+53bhqW6PAjTHBLNQ
 
 use Digest::MD5 qw(md5_hex);
 
