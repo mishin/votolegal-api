@@ -54,6 +54,8 @@ up_server (){
     fi
 }
 
+cpanm . --installdeps
+
 : ${SQITCH_DEPLOY:=local}
 sqitch deploy -t $SQITCH_DEPLOY
 
