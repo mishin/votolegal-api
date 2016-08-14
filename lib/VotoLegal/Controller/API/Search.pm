@@ -27,6 +27,14 @@ sub search_POST {
     my $address_city     = $c->req->params->{address_city};
     my @issue_priorities = ();
 
+    my $page    = $c->req->params->{page}    || 1;
+    my $results = $c->req->params->{results} || 20;
+
+    $c->stash->{collection} = $c->stash->{collection}->search(
+        { },
+        { page => $page, rows => $results }
+    );
+
     if ($c->req->params->{issue_priorities}) {
         @issue_priorities = grep { int($_) == $_ } split(m{\s*,\s*}, $c->req->params->{issue_priorities});
     }

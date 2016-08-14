@@ -7,10 +7,10 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
-    create_candidate;
+    create_candidate for 1 .. 5;
+    $_->update({ status => "activated" }) for $schema->resultset('Candidate')->all;
 
     my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id');
-    $candidate->update({ status => "activated" });
 
     # Search by name.
     rest_post "/api/search",
@@ -69,7 +69,9 @@ db_transaction {
     ;
 
     stash_test 'state' => sub {
-        is (shift->[0]->{id}, $candidate->id, 'by state');
+        my $res = shift;
+
+        ok (grep($_->{id} == $candidate->id, @{$res}), 'by state');
     };
 
     # Search by city.
@@ -83,7 +85,26 @@ db_transaction {
     ;
 
     stash_test 'city' => sub {
-        is (shift->[0]->{id}, $candidate->id, 'by city');
+        my $res = shift;
+
+        ok (grep($_->{id} == $candidate->id, @{$res}), 'by city');
+    };
+
+    # Paginação.
+    rest_post "/api/search",
+        name   => "pagination",
+        stash  => "l1",
+        code   => 200,
+        params => {
+            page    => 2,
+            results => 1,
+        },
+    ;
+
+    stash_test 'l1' => sub {
+        my $res = shift;
+
+        is (scalar @{$res}, 1, 'one result');
     };
 };
 
