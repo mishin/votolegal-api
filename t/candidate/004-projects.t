@@ -2,6 +2,8 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+use Time::HiRes;
+use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
@@ -80,11 +82,30 @@ db_transaction {
     for (1 .. 20) {
         rest_post "/api/candidate/${id_candidate}/projects",
             name    => "adding project $_",
+            stash   => "p$_",
             params  => {
                 title => "Project $_",
                 scope => lorem_paragraphs(),
             },
         ;
+
+        # Mockando uma donation.
+        my $donation_id = md5_hex(Time::HiRes::time());
+        $schema->resultset('Donation')->create({
+            id           => $donation_id,
+            candidate_id => $id_candidate,
+            name         => fake_name()->(),
+            email        => fake_email()->(),
+            cpf          => random_cpf(),
+            phone        => fake_digits("##########")->(),
+            amount       => 100,
+            birthdate    => "1992-05-02",
+            receipt_id   => 1,
+            ip_address   => "127.0.0.1",
+            status       => "captured",
+        });
+
+        $schema->resultset('Project')->find(stash "p$_.id")->project_votes->create({ donation_id => $donation_id });
     }
 
     rest_post "/api/candidate/${id_candidate}/projects",

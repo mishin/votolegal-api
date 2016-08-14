@@ -37,7 +37,10 @@ sub projects_GET {
         projects => [
             map { {
                 $_->get_columns,
-                votes => $_->project_votes->count,
+                votes => $_->project_votes->search(
+                    { 'donation.status' => "captured" },
+                    { join => 'donation' },
+                )->count
             } } $c->stash->{collection}->search({}, { page => $page, rows => $results })->all
         ],
     });
@@ -71,7 +74,11 @@ sub project_GET {
     my ($self, $c) = @_;
 
     my $response = {
-        map { $_ => $c->stash->{project}->$_ } qw(id title scope)
+        ( map { $_ => $c->stash->{project}->$_ } qw(id title scope) ),
+        votes => $c->stash->{project}->project_votes->search(
+            { 'donation.status' => "captured" },
+            { join => 'donation' },
+        )->count,
     };
 
     return $self->status_ok($c, entity => $response);
