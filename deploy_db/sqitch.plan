@@ -49,3 +49,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0043-merchant [0042-new-issue-priorities] 2016-08-12T13:43:30Z Junior Moraes,,, <junior@junior-eokoe> # rchant merchant id e key
 0044-payment-gateway [0043-merchant] 2016-08-12T14:21:04Z Junior Moraes,,, <junior@junior-eokoe> # yment-gateway multiplos gateways de pagamento
 0045-payment-notification-type [0044-payment-gateway] 2016-08-13T00:26:08Z Junior Moraes,,, <junior@junior-eokoe> # yment-notification-type removendo coluna
+0046-donation-created-at [0045-payment-notification-type] 2016-08-14T19:39:10Z junior,,, <junior@fvox> # nation-created-at registro de criacao da doacao
