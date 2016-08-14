@@ -64,7 +64,10 @@ sub payment_POST {
         shippingAddressStreet     => $c->stash->{candidate}->address_street,
         shippingAddressNumber     => $c->stash->{candidate}->address_house_number,
         shippingAddressDistrict   => $c->stash->{candidate}->address_district,
-        notificationURL           => $c->uri_for($c->controller('API::Candidate::Payment::Callback')->action_for('callback'), [ $c->stash->{candidate}->id ]),
+        notificationURL           => $c->uri_for(
+            $c->controller('API::Candidate::Payment::Callback')->action_for('callback'),
+            [ $c->stash->{candidate}->id ]
+        ),
     );
 
     if (!$payment && !$payment->{paymentLink}) {
