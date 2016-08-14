@@ -22,30 +22,27 @@ sub callback_POST {
             type     => "Str",
             required => 1,
         },
-        notificationType => {
-            type     => "Str",
-            required => 1,
-        },
     );
 
+    my $notificationCode        = $c->req->params->{notificationCode};
     my $payment_notification_rs = $c->model('DB::PaymentNotification');
 
     # Buscando uma notificação com esse id.
     my $notify = $payment_notification_rs->search({
-        notification_code => $c->req->params->{notificationCode},
-        notification_type => $c->req->params->{notificationType},
+        notification_code => $notificationCode,
     })->next;
 
     # Se não encontrar, criamos esse registro no banco.
     if (!$notify) {
         $notify = $payment_notification_rs->create({
-            notification_code => $c->req->params->{notificationCode},
-            notification_type => $c->req->params->{notificationType},
+            notification_code => $notificationCode,
         });
     }
 
-    if (my $res = $c->stash->{collection}->getNotification($notify)) {
-        if ($res->{reference} == $c->stash->{candidate}->id) {
+    my $req = $c->stash->{pagseguro}->notification($notificationCode);
+
+    if (ref $req) {
+        if ($c->stash->{candidate}->id == $req->{reference}) {
             $c->stash->{candidate}->update({ payment_status => "paid" });
         }
     }
