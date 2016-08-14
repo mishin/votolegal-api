@@ -91,7 +91,7 @@ sub candidate_GET {
             map { $_ => $c->stash->{candidate}->$_ } qw(
               id name popular_name status reelection party_id office_id status username picture
               video_url facebook_url twitter_url website_url summary biography instagram_url
-              raising_goal public_email spending_spreadsheet ficha_limpa
+              raising_goal public_email spending_spreadsheet ficha_limpa address_city address_state
             )
         };
     }
