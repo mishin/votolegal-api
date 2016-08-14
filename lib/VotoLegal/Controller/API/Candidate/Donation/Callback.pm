@@ -7,6 +7,8 @@ use VotoLegal::Utils;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
+with 'CatalystX::Eta::Controller::TypesValidation';
+
 sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) { }
@@ -31,10 +33,11 @@ sub callback_POST {
     if (ref $notification) {
         my $donation_id = $notification->{reference};
 
-        my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next;
-        $donation->update({
-            status => "captured",
-        });
+        if (my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next) {
+            $donation->update({
+                status => "captured",
+            });
+        }
     }
 
     return $self->status_ok(
