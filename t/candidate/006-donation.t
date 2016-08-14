@@ -49,8 +49,8 @@ db_transaction {
         is_fail => 1,
         params  => {
             payment_gateway_id => 1,
-        },
-
+        }
+    ;
 
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
