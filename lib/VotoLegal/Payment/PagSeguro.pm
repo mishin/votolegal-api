@@ -86,10 +86,30 @@ sub transaction {
         }
     );
 
-    return XMLin($req->content);
+    if ($req->is_success()) {
+        return XMLin($req->content);
+    }
+
+    return ;
+}
+
+sub notification {
+    my ($self, $notificationCode) = @_;
+
+    defined $notificationCode or die "missing 'notification code'.";
+
+    my $req = $self->ua->get(
+        $self->endpoint
+        . "transactions/notifications/"
+        . $notificationCode
+        . "?email="
+        . $self->merchant_id
+        . "&token="
+        . $self->merchant_key
+    );
 
     if ($req->is_success()) {
-        p $req->content;
+        return XMLin($req->content);
     }
 
     return ;
