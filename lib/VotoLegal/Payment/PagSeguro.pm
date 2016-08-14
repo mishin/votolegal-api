@@ -59,8 +59,8 @@ sub createSession {
     if ($req->is_success()) {
         my $xml = XMLin($req->content);
 
-        if (ref $xml eq "HASH") {
-            return $xml->{id};
+        if (ref $xml) {
+            return $xml;
         }
     }
 
@@ -78,7 +78,6 @@ sub transaction {
             email                  => $self->merchant_id,
             token                  => $self->merchant_key,
             paymentMode            => "default",
-            paymentMethod          => "creditCard",
             receiverEmail          => $self->merchant_id,
             currency               => "BRL",
             shippingAddressCountry => "BRA",
