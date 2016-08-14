@@ -67,7 +67,7 @@ sub payment_POST {
         notificationURL           => $c->uri_for(
             $c->controller('API::Candidate::Payment::Callback')->action_for('callback'),
             [ $c->stash->{candidate}->id ]
-        ),
+        )->as_string,
     );
 
     if (!$payment && !$payment->{paymentLink}) {
