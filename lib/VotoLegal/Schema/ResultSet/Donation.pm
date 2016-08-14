@@ -168,6 +168,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => "Int",
                 },
+                notification_url => {
+                    required => 1,
+                    type     => "Str",
+                },
             },
         ),
     };
@@ -187,7 +191,7 @@ sub action_specs {
             my $pagseguro = VotoLegal::Payment::PagSeguro->new(
                 merchant_id  => delete $values{merchant_id},
                 merchant_key => delete $values{merchant_key},
-                sandbox      => is_test() ? 1 : 0,
+                sandbox      => is_test(),
             );
 
             # Tratando alguns dados.
@@ -236,10 +240,8 @@ sub action_specs {
                 billingAddressPostalCode  => $values{billing_address_zipcode},
                 billingAddressCity        => $values{billing_address_city},
                 billingAddressState       => $values{billing_address_state},
-                #notificationURL           => "https://hookbin.com/bin/vXDblaxr",
+                notificationURL           => $values{notification_url},
             );
-
-            use DDP; p $req;
 
             return $self->create({
                 id           => $id,

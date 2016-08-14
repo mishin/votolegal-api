@@ -25,6 +25,12 @@ sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     $c->stash->{collection} = $c->model('DB::Donation');
+
+    $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $c->stash->{candidate}->merchant_id,
+        merchant_key => $c->stash->{candidate}->merchant_key,
+        sandbox      => is_test(),
+    );
 }
 
 sub donate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
@@ -85,11 +91,15 @@ sub donate_POST {
             for  => "create",
             with => {
                 %{ $c->req->params },
-                merchant_id  => $c->config->{pagseguro}->{$environment}->{email},
-                merchant_key => $c->config->{pagseguro}->{$environment}->{token},
-                candidate_id => $c->stash->{candidate}->id,
-                receipt_id   => $receipt_id,
-                ip_address   => $ipAddr,
+                merchant_id      => $c->stash->{candidate}->merchant_id,
+                merchant_key     => $c->stash->{candidate}->merchant_key,
+                candidate_id     => $c->stash->{candidate}->id,
+                receipt_id       => $receipt_id,
+                ip_address       => $ipAddr,
+                notification_url => $c->uri_for(
+                    $c->controller('API::Candidate::Donation::Callback')->action_for('callback'),
+                    [ $c->stash->{candidate}->id ],
+                )->as_string,
             },
         );
     });
