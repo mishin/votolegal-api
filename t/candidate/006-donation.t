@@ -47,8 +47,8 @@ db_transaction {
         name   => 'edit candidate',
         params => {
             payment_gateway_id => 2,
-            merchant_id        => "1006993069",
-            merchant_key       => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
+            merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
+            merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
             receipt_min        => 10_000,
             receipt_max        => 10_006,
         },
