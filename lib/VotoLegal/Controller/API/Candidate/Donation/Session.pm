@@ -18,9 +18,9 @@ sub session_GET {
 
     # Driver do PagSeguro.
     my $pagseguro = VotoLegal::Payment::PagSeguro->new(
-        merchant_id  => $c->config->{pagseguro}->{sandbox}->{email},
-        merchant_key => $c->config->{pagseguro}->{sandbox}->{token},
-        sandbox      => is_test() ? 1 : 0,
+        merchant_id  => $c->stash->{candidate}->merchant_id,
+        merchant_key => $c->stash->{candidate}->merchant_key,
+        sandbox      => is_test(),
     );
 
     my $session_id = $pagseguro->createSession();
@@ -28,7 +28,7 @@ sub session_GET {
     return $self->status_ok(
         $c,
         entity => {
-            session => $session_id,
+            id => $session_id,
         }
     );
 }

@@ -80,7 +80,7 @@ db_transaction {
     stash_test 's1' => sub {
         my $res = shift;
 
-        ok ($res->{session} =~ m{^[a-f0-9]{32}$}, 'get session');
+        ok ($res->{id} =~ m{^[a-f0-9]{32}$}, 'get session');
     };
 
     rest_post "/api/candidate/$candidate_id/donate",
