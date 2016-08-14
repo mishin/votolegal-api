@@ -138,9 +138,9 @@ sub create_candidate {
         address_zipcode      => '11920-000',
         address_street       => "Rua Tiradentes",
         address_house_number => 1 + int(rand(2000)),
-        office_id            => 2,
-        party_id             => 5,
-        reelection           => 1,
+        office_id            => fake_int(1, 3)->(),
+        party_id             => fake_int(1, 35)->(),
+        reelection           => fake_int(0, 1)->(),
         ficha_limpa          => 1,
         %opts,
     );
