@@ -205,6 +205,7 @@ sub action_specs {
             my $req = $pagseguro->transaction(
                 itemQuantity1             => 1,
                 itemId1                   => "2",
+                paymentMethod             => "creditCard",
                 itemDescription1          => "Doação VotoLegal",
                 itemAmount1               => $amount,
                 reference                 => $id,
@@ -235,7 +236,10 @@ sub action_specs {
                 billingAddressPostalCode  => $values{billing_address_zipcode},
                 billingAddressCity        => $values{billing_address_city},
                 billingAddressState       => $values{billing_address_state},
+                #notificationURL           => "https://hookbin.com/bin/vXDblaxr",
             );
+
+            use DDP; p $req;
 
             return $self->create({
                 id           => $id,
