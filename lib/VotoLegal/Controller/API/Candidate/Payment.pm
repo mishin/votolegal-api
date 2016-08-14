@@ -4,26 +4,85 @@ use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
-
-sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) {
+sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    die \['status', "not activated"]         unless $c->stash->{candidate}->status eq "activated";
+    die \['status', "not activated"]         unless $c->stash->{candidate}->status         eq "activated";
     die \['payment_status', "already paid."] unless $c->stash->{candidate}->payment_status eq "unpaid";
 
-    $c->stash->{collection} = $c->model('DB::Payment');
-
     my $environment = is_test() ? 'sandbox' : 'production';
-    my $auth        = $c->config->{pagseguro}->{$environment};
 
-    $c->stash->{collection}->email($auth->{email});
-    $c->stash->{collection}->token($auth->{token});
+    $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
+        %{ $c->config->{pagseguro}->{$environment} },
+        sandbox => is_test(),
+    );
+}
+
+sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) { }
+
+sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
+
+sub payment_POST {
+    my ($self, $c) = @_;
+
+    $self->validate_request_params(
+        $c,
+        senderHash => {
+            type     => "Str",
+            required => 1,
+        },
+    );
+
+    # Separando DDD e número do 'phone'.
+    my $phone  = $c->stash->{candidate}->phone;
+    my $ddd    = substr($phone, 0, 2);
+    my $number = substr($phone, 2);
+
+    my $payment = $c->stash->{pagseguro}->transaction(
+        paymentMethod             => "boleto",
+        extraAmount               => "0.00",
+        itemId1                   => "1",
+        itemDescription1          => "Pagamento VotoLegal",
+        itemAmount1               => "98.00",
+        itemQuantity1             => "1",
+        senderHash                => $c->req->params->{senderHash},
+        reference                 => $c->stash->{candidate}->id,
+        senderName                => $c->stash->{candidate}->name,
+        senderCNPJ                => $c->stash->{candidate}->cnpj,
+        senderAreaCode            => $ddd,
+        senderPhone               => $number,
+        senderEmail               => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
+        shippingAddressPostalCode => $c->stash->{candidate}->address_zipcode,
+        shippingAddressCity       => $c->stash->{candidate}->address_city,
+        shippingAddressState      => $c->stash->{candidate}->address_state_code,
+        shippingAddressStreet     => $c->stash->{candidate}->address_street,
+        shippingAddressNumber     => $c->stash->{candidate}->address_house_number,
+        shippingAddressDistrict   => $c->stash->{candidate}->address_district,
+        notificationURL           => $c->uri_for($c->controller('API::Candidate::Payment::Callback')->action_for('callback'), [ $c->stash->{candidate}->id ]),
+    );
+
+    if (!$payment && !$payment->{paymentLink}) {
+        $self->status_bad_request($c, message => 'Invalid gateway response');
+        $c->detach();
+    }
+
+    $c->model('DB::Payment')->create({
+        code         => $payment->{code},
+        candidate_id => $c->stash->{candidate}->id,
+        sender_hash  => $c->req->params->{senderHash},
+        boleto_url   => $payment->{paymentLink},
+    });
+
+    return $self->status_ok(
+        $c,
+        entity   => { url => $payment->{paymentLink} },
+    );
 }
 
 =encoding utf8
