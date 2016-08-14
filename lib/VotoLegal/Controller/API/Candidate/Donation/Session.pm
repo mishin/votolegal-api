@@ -16,20 +16,11 @@ sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub session_GET {
     my ($self, $c) = @_;
 
-    # Driver do PagSeguro.
-    my $pagseguro = VotoLegal::Payment::PagSeguro->new(
-        merchant_id  => $c->stash->{candidate}->merchant_id,
-        merchant_key => $c->stash->{candidate}->merchant_key,
-        sandbox      => is_test(),
-    );
-
-    my $session_id = $pagseguro->createSession();
+    my $session = $c->stash->{pagseguro}->createSession();
 
     return $self->status_ok(
         $c,
-        entity => {
-            id => $session_id,
-        }
+        entity => { id => $session->{id} },
     );
 }
 
