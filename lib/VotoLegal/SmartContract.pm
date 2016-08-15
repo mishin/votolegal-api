@@ -53,12 +53,12 @@ sub addDonation {
     my $password = $self->password;
     my $address  = $self->address;
     my $abi      = $self->abi;
-    $gas         = $gas || 85000;
+    $gas         = $gas || 65000;
 
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
 personal.unlockAccount("$account", "$password");
-votoLegal.addDonation($id_candidate, "$id_donation", { from: "$account", gas: $gas });
+votoLegal.addDonation("$id_candidate", "$id_donation", { from: "$account", gas: $gas });
 exit;
 GETH_COMMAND
 
@@ -77,7 +77,7 @@ sub getAllDonationsFromCandidate {
 
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
-votoLegal.getAllDonationsFromCandidate($id_candidate);
+votoLegal.getAllDonationsFromCandidate("$id_candidate");
 exit;
 GETH_COMMAND
 
