@@ -5,7 +5,11 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
+sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+}
 
 sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }
 
@@ -13,8 +17,6 @@ sub publish : Chained('base') : PathPart('publish') : Args(0) : ActionClass('RES
 
 sub publish_POST {
     my ($self, $c) = @_;
-
-    $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     $c->stash->{candidate}->execute($c, for => "publish", with => {});
 
@@ -25,8 +27,6 @@ sub unpublish : Chained('base') : PathPart('unpublish') : Args(0) : ActionClass(
 
 sub unpublish_POST {
     my ($self, $c) = @_;
-
-    $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     $c->stash->{candidate}->execute($c, for => "unpublish", with => {});
 
