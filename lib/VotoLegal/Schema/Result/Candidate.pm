@@ -528,6 +528,7 @@ __PACKAGE__->many_to_many(
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
 use Template;
+use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
