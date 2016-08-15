@@ -42,8 +42,8 @@ sub search_POST {
     if ($name) {
         $c->stash->{collection} = $c->stash->{collection}->search({
             '-or' => [
-                'me.name'         => { 'like' => "%${name}%" },
-                'me.popular_name' => { 'like' => "%${name}%" },
+                'me.name'         => { 'ilike' => "%${name}%" },
+                'me.popular_name' => { 'ilike' => "%${name}%" },
             ],
         });
     }

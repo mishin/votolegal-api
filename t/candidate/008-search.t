@@ -15,16 +15,33 @@ db_transaction {
     # Search by name.
     rest_post "/api/search",
         name   => "search by name",
-        stash  => 'name',
+        stash  => 'n1',
         code   => 200,
         params => {
             name => $candidate->popular_name,
-            #issue_priorities => "1,2,3",
         },
     ;
 
-    stash_test 'name' => sub {
-        is (shift->[0]->{id}, $candidate->id, 'by name');
+    stash_test 'n1' => sub {
+        my $res = shift;
+
+        is ($res->[0]->{id}, $candidate->id, 'by name');
+    };
+
+    # Search with lower case.
+    rest_post "/api/search",
+        name   => "search by name",
+        stash  => 'n2',
+        code   => 200,
+        params => {
+            name => lc($candidate->popular_name),
+        },
+    ;
+
+    stash_test 'n2' => sub {
+        my $res = shift;
+
+        is ($res->[0]->{id}, $candidate->id, 'by name');
     };
 
     # Search by party_id.
