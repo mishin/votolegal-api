@@ -39,6 +39,18 @@ sub payment_POST {
         },
     );
 
+    # Campos que são obrigatórios para gerar o boleto.
+    my @required = qw(
+        name cnpj phone address_zipcode address_city address_state
+        address_street address_house_number address_district
+    );
+
+    for (@required) {
+        if (!defined($c->stash->{candidate}->$_)) {
+            die \[$_, "missing"];
+        }
+    }
+
     # Separando DDD e número do 'phone'.
     my $phone  = $c->stash->{candidate}->phone;
     my $ddd    = substr($phone, 0, 2);
