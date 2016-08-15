@@ -41,8 +41,8 @@ sub payment_POST {
 
     # Campos que são obrigatórios para gerar o boleto.
     my @required = qw(
-        name cnpj phone address_zipcode address_city address_state
-        address_street address_house_number address_district
+        name cnpj phone address_zipcode address_city address_state address_street address_house_number
+        address_district receipt_min receipt_max
     );
 
     for (@required) {
@@ -55,6 +55,9 @@ sub payment_POST {
     my $phone  = $c->stash->{candidate}->phone;
     my $ddd    = substr($phone, 0, 2);
     my $number = substr($phone, 2);
+
+    my $zipcode = $c->stash->{candidate}->address_zipcode;
+    $zipcode    =~ s/\D//g;
 
     my $payment = $c->stash->{pagseguro}->transaction(
         paymentMethod             => "boleto",
@@ -70,7 +73,7 @@ sub payment_POST {
         senderAreaCode            => $ddd,
         senderPhone               => $number,
         senderEmail               => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
-        shippingAddressPostalCode => $c->stash->{candidate}->address_zipcode,
+        shippingAddressPostalCode => $zipcode,
         shippingAddressCity       => $c->stash->{candidate}->address_city,
         shippingAddressState      => $c->stash->{candidate}->address_state_code,
         shippingAddressStreet     => $c->stash->{candidate}->address_street,
