@@ -204,6 +204,9 @@ sub action_specs {
             my $zipcode     = $values{address_zipcode};
             $zipcode        =~ s/\D//g;
 
+            my $cpf = $values{cpf};
+            $cpf    =~ s/\D//g;
+
             if ($birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/) {
                 $birthdate = sprintf("%02d/%02d/%04d", $3, $2, $1);
             }
@@ -216,7 +219,7 @@ sub action_specs {
                 itemAmount1               => $amount,
                 reference                 => $id,
                 senderName                => $values{name},
-                senderCPF                 => $values{cpf},
+                senderCPF                 => $cpf,
                 senderAreaCode            => $phoneDDD,
                 senderPhone               => $phoneNumber,
                 senderEmail               => $values{email},
@@ -231,7 +234,7 @@ sub action_specs {
                 installmentQuantity       => 1,
                 installmentValue          => $amount,
                 creditCardHolderName      => $values{credit_card_name},
-                creditCardHolderCPF       => $values{cpf},
+                creditCardHolderCPF       => $cpf,
                 creditCardHolderBirthDate => $birthdate,
                 creditCardHolderAreaCode  => $phoneDDD,
                 creditCardHolderPhone     => $phoneNumber,
