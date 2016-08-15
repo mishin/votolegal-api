@@ -4,6 +4,7 @@ use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::SmartContract;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -32,11 +33,24 @@ sub callback_POST {
 
     if (ref $notification) {
         my $donation_id = $notification->{reference};
+        my $type        = $notification->{type};
+        my $status      = $notification->{status};
 
-        if (my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next) {
-            $donation->update({
-                status => "captured",
-            });
+        if ($type == 1 && $status == 3) {
+            # Buscando o id da donation na database.
+            if (my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next) {
+                $donation->update({ status => "captured" });
+
+                # Registrando a doação na blockchain.
+                my $environment   = is_test() ? "testnet" : "mainnet";
+                my $smartContract = VotoLegal::SmartContract->new(%{ $c->config->{ethereum}->{$environment} });
+
+                my $res = $smartContract->addDonation($c->stash->{candidate}->cpf, $donation->id);
+
+                if (my $transactionHash = $res->getTransactionHash()) {
+                    $donation->update({ transaction_hash => $transactionHash });
+                }
+            }
         }
     }
 
