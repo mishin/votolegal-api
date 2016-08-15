@@ -7,8 +7,6 @@ use VotoLegal::Utils;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-with 'CatalystX::Eta::Controller::TypesValidation';
-
 sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
