@@ -37,9 +37,6 @@ has ua => (
 sub endpoint {
     my ($self) = @_;
 
-    # TODO Retirar para testar em produção.
-    return "https://ws.sandbox.pagseguro.uol.com.br/v2/";
-
     my $endpoint = $self->sandbox
         ? "https://ws.sandbox.pagseguro.uol.com.br/v2/"
         : "https://ws.pagseguro.uol.com.br/v2/";
