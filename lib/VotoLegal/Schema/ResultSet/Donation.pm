@@ -201,6 +201,8 @@ sub action_specs {
             my $phoneNumber = substr($values{phone}, 2);
             my $amount      = sprintf("%.2f", $values{amount} / 100);
             my $birthdate   = $values{birthdate};
+            my $zipcode     = $values{address_zipcode};
+            $zipcode        =~ s/\D//g;
 
             if ($birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/) {
                 $birthdate = sprintf("%02d/%02d/%04d", $3, $2, $1);
@@ -221,7 +223,7 @@ sub action_specs {
                 shippingAddressStreet     => $values{address_street},
                 shippingAddressNumber     => $values{address_house_number},
                 shippingAddressDistrict   => $values{address_district},
-                shippingAddressPostalCode => $values{address_zipcode},
+                shippingAddressPostalCode => $zipcode,
                 shippingAddressCity       => $values{address_city},
                 shippingAddressState      => $values{address_state},
                 senderHash                => $values{sender_hash},
