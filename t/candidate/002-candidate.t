@@ -131,23 +131,27 @@ db_transaction {
             spending_spreadsheet => "$Bin/tse_spreadsheet.csv",
         },
         params => {
-            video_url          => $video_url,
-            facebook_url       => $facebook_url,
-            twitter_url        => $twitter_url,
-            instagram_url      => $instagram_url,
-            website_url        => $website_url,
-            summary            => $summary,
-            biography          => $biography,
-            raising_goal       => $raising_goal,
-            public_email       => $public_email,
-            responsible_name   => $responsible_name,
-            responsible_email  => $responsible_email,
-            merchant_id        => $merchant_id,
-            merchant_key       => $merchant_key,
-            phone              => fake_digits("###########")->(),
-            address_district   => "Centro",
-            receipt_min        => 10000,
-            receipt_max        => 20000,
+            video_url           => $video_url,
+            facebook_url        => $facebook_url,
+            twitter_url         => $twitter_url,
+            instagram_url       => $instagram_url,
+            website_url         => $website_url,
+            summary             => $summary,
+            biography           => $biography,
+            raising_goal        => $raising_goal,
+            public_email        => $public_email,
+            responsible_name    => $responsible_name,
+            responsible_email   => $responsible_email,
+            merchant_id         => $merchant_id,
+            merchant_key        => $merchant_key,
+            phone               => fake_digits("###########")->(),
+            address_district    => "Centro",
+            receipt_min         => 10000,
+            receipt_max         => 20000,
+            bank_code           => "237",
+            bank_agency         => "0120",
+            bank_account_number => "1234",
+            bank_account_dv     => "5",
         },
     ;
 
@@ -169,6 +173,10 @@ db_transaction {
     ok ($candidate->phone =~ m{^\d+$}, 'phone');
     is ($candidate->receipt_min, 10000, 'receipt min');
     is ($candidate->receipt_max, 20000, 'receipt min');
+    is ($candidate->bank_code->id, 237, 'bank code');
+    is ($candidate->bank_agency, 120, 'bank agency');
+    is ($candidate->bank_account_number, 1234, 'bank account number');
+    is ($candidate->bank_account_dv, 5, 'bank account dv');
 
     # Tentando editar outro candidato.
     create_candidate;

@@ -252,6 +252,27 @@ __PACKAGE__->table("candidate");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 bank_code
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 bank_agency
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 bank_account_number
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 bank_account_dv
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -340,6 +361,14 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "payment_gateway_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "bank_code",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "bank_agency",
+  { data_type => "integer", is_nullable => 1 },
+  "bank_account_number",
+  { data_type => "integer", is_nullable => 1 },
+  "bank_account_dv",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -381,6 +410,26 @@ __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
 __PACKAGE__->add_unique_constraint("candidate_username_key", ["username"]);
 
 =head1 RELATIONS
+
+=head2 bank_code
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::Bank>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "bank_code",
+  "VotoLegal::Schema::Result::Bank",
+  { id => "bank_code" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
 
 =head2 candidate_issue_priorities
 
@@ -522,8 +571,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 10:45:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bqxrJjGGZPex3ZspvSyuOw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-15 19:19:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AV0fP27xEK1+M9+5o2ummQ
 
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
@@ -792,6 +841,28 @@ sub verifiers_specs {
                         $payment_gateway_id == 2;
                         #$self->resultset('PaymentGateway')->find($payment_gateway_id);
                     },
+                },
+                bank_code => {
+                    required   => 0,
+                    type       => "Int",
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $bank_code = $r->get_value('bank_code');
+                        $self->resultset('Bank')->find($bank_code);
+                    },
+                },
+                bank_agency => {
+                    required => 0,
+                    type     => "Int",
+                },
+                bank_account_number => {
+                    required => 0,
+                    type     => "Int",
+                },
+                bank_account_dv => {
+                    required => 0,
+                    type     => "Int",
                 },
             },
         ),
