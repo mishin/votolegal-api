@@ -59,6 +59,9 @@ sub payment_POST {
     my $zipcode = $c->stash->{candidate}->address_zipcode;
     $zipcode    =~ s/\D//g;
 
+    my $cpf = $c->stash->{candidate}->cpf;
+    $cpf    =~ s/\D//g;
+
     my $payment = $c->stash->{pagseguro}->transaction(
         paymentMethod             => "boleto",
         extraAmount               => "0.00",
@@ -69,7 +72,7 @@ sub payment_POST {
         senderHash                => $c->req->params->{senderHash},
         reference                 => $c->stash->{candidate}->id,
         senderName                => $c->stash->{candidate}->name,
-        senderCNPJ                => $c->stash->{candidate}->cnpj,
+        senderCPF                 => $cpf,
         senderAreaCode            => $ddd,
         senderPhone               => $number,
         senderEmail               => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $c->stash->{candidate}->user->email),
