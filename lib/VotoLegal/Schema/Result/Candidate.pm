@@ -815,8 +815,6 @@ sub action_specs {
         update => sub {
             my $r = shift;
 
-            die \['ficha_limpa', "ficha suja is not allowed."] unless $self->ficha_limpa;
-
             my %values = $r->valid_values;
 
             %values = map {

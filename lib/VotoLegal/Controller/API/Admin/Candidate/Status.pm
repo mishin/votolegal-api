@@ -27,10 +27,6 @@ sub activate_PUT {
     my $candidate = $c->stash->{candidate};
     my $status    = $candidate->status;
 
-    if (!$candidate->ficha_limpa) {
-        return $self->status_bad_request($c, message => 'Você não pode aprovar um candidato ficha suja.');
-    }
-
     $candidate->update({
         status => "activated",
     });

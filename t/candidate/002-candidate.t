@@ -180,16 +180,6 @@ db_transaction {
             name => "Junior Moraes",
         },
     ;
-
-    # Não deve ser possível editar um candidato ficha suja.
-    $candidate->update({ ficha_limpa => 0 });
-    rest_put "/api/candidate/$candidate_id",
-        name    => "can't edit candidate ficha suja",
-        is_fail => 1,
-        params  => {
-            name => "Junior Moraes",
-        },
-    ;
 };
 
 done_testing();

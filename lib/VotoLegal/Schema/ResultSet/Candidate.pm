@@ -154,13 +154,8 @@ sub verifiers_specs {
                     type       => 'Str',
                 },
                 ficha_limpa => {
-                    required   => 1,
+                    required   => 0,
                     type       => 'Bool',
-                    post_check => sub {
-                        die \['ficha_limpa', "ficha suja is not allowed."]
-                          unless $_[0]->get_value('ficha_limpa');
-                        1;
-                    },
                 },
             },
         ),
