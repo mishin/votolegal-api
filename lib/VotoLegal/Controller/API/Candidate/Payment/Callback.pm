@@ -39,10 +39,11 @@ sub callback_POST {
         });
     }
 
-    my $req = $c->stash->{pagseguro}->notification($notificationCode);
+    if (my $req = $c->stash->{pagseguro}->notification($notificationCode)) {
+        my $type   = $req->{type};
+        my $status = $req->{status};
 
-    if (ref $req) {
-        if ($c->stash->{candidate}->id == $req->{reference}) {
+        if ($type == 1 && $status == 3) {
             $c->stash->{candidate}->update({ payment_status => "paid" });
         }
     }
