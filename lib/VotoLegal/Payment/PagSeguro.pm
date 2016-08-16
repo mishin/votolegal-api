@@ -34,6 +34,10 @@ has ua => (
     lazy    => 1,
 );
 
+has logger => (
+    is => "rw",
+);
+
 sub endpoint {
     my ($self) = @_;
 
@@ -55,6 +59,8 @@ sub createSession {
             token => $self->merchant_key,
         }
     );
+
+    $self->logger->info($req->content) if $self->logger;
 
     if ($req->is_success()) {
         my $xml = XMLin($req->content);
@@ -85,6 +91,8 @@ sub transaction {
         }
     );
 
+    $self->logger->info($req->content) if $self->logger;
+
     if ($req->is_success()) {
         return XMLin($req->content);
     }
@@ -106,6 +114,8 @@ sub notification {
         . "&token="
         . $self->merchant_key
     );
+
+    $self->logger->info($req->content) if $self->logger;
 
     if ($req->is_success()) {
         return XMLin($req->content);

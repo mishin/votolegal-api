@@ -21,6 +21,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
         %{ $c->config->{pagseguro}->{$environment} },
         sandbox => is_test(),
+        logger  => $c->log,
     );
 }
 
@@ -67,7 +68,7 @@ sub payment_POST {
         extraAmount               => "0.00",
         itemId1                   => "1",
         itemDescription1          => "Pagamento VotoLegal",
-        itemAmount1               => "98.00",
+        itemAmount1               => "99.00",
         itemQuantity1             => "1",
         senderHash                => $c->req->params->{senderHash},
         reference                 => $c->stash->{candidate}->id,
