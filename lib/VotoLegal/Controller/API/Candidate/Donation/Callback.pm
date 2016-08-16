@@ -33,10 +33,9 @@ sub callback_POST {
 
     if (ref $notification) {
         my $donation_id = $notification->{reference};
-        my $type        = $notification->{type};
         my $status      = $notification->{status};
 
-        if ($type == 1 && $status == 3) {
+        if ($status == 3) {
             # Buscando o id da donation na database.
             if (my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next) {
                 $donation->update({ status => "captured" });
