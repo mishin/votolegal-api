@@ -60,7 +60,7 @@ sub createSession {
         }
     );
 
-    $self->logger->info($req->content) if $self->logger;
+    $self->logger->info("PagSeguro response: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
         my $xml = XMLin($req->content);
@@ -91,7 +91,7 @@ sub transaction {
         }
     );
 
-    $self->logger->info($req->content) if $self->logger;
+    $self->logger->info("PagSeguro response: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
         return XMLin($req->content);
@@ -115,7 +115,7 @@ sub notification {
         . $self->merchant_key
     );
 
-    $self->logger->info($req->content) if $self->logger;
+    $self->logger->info("PagSeguro response: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
         return XMLin($req->content);
