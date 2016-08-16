@@ -135,7 +135,7 @@ __PACKAGE__->table("donation");
 
   data_type: 'text'
   default_value: (empty string)
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address_house_number
 
@@ -173,6 +173,11 @@ __PACKAGE__->table("donation");
   is_nullable: 0
 
 =head2 billing_address_complement
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_district
 
   data_type: 'text'
   is_nullable: 0
@@ -220,7 +225,7 @@ __PACKAGE__->add_columns(
   "address_street",
   { data_type => "text", is_nullable => 0 },
   "address_complement",
-  { data_type => "text", default_value => "", is_nullable => 0 },
+  { data_type => "text", default_value => "", is_nullable => 1 },
   "address_house_number",
   { data_type => "integer", is_nullable => 0 },
   "billing_address_street",
@@ -236,6 +241,8 @@ __PACKAGE__->add_columns(
   "billing_address_state",
   { data_type => "text", is_nullable => 0 },
   "billing_address_complement",
+  { data_type => "text", is_nullable => 1 },
+  "address_district",
   { data_type => "text", is_nullable => 0 },
 );
 
@@ -284,8 +291,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-16 17:01:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u5O0WGWTBKTSa2IAaagdtA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-16 17:09:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rwlTeOK+M9kyO9qMPFo53g
 
 use Digest::MD5 qw(md5_hex);
 
