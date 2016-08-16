@@ -40,10 +40,9 @@ sub callback_POST {
     }
 
     if (my $req = $c->stash->{pagseguro}->notification($notificationCode)) {
-        my $type   = $req->{type};
         my $status = $req->{status};
 
-        if ($type == 1 && $status == 3) {
+        if ($status == 3) {
             $c->stash->{candidate}->update({ payment_status => "paid" });
         }
     }
