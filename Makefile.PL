@@ -32,6 +32,7 @@ my %WriteMakefileArgs = (
     "Catalyst::Plugin::ConfigLoader" => 0,
     "Catalyst::Plugin::Static::Simple" => 0,
     "Catalyst::Runtime" => "5.80",
+    "Catalyst::TraitFor::Controller::reCAPTCHA" => 0,
     "CatalystX::Eta::Controller::Order" => 0,
     "CatalystX::Eta::Controller::REST" => 0,
     "CatalystX::Eta::Controller::Search" => 0,
@@ -120,7 +121,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160815,
+  "VERSION" => 20160816,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -144,6 +145,7 @@ my %FallbackPrereqs = (
   "Catalyst::Plugin::Static::Simple" => 0,
   "Catalyst::Runtime" => "5.80",
   "Catalyst::Test" => 0,
+  "Catalyst::TraitFor::Controller::reCAPTCHA" => 0,
   "CatalystX::Eta::Controller::Order" => 0,
   "CatalystX::Eta::Controller::REST" => 0,
   "CatalystX::Eta::Controller::Search" => 0,
