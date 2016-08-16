@@ -46,6 +46,8 @@ sub verifiers_specs {
 
                         my $username = $r->get_value('username');
 
+                        $username =~ m{^[a-zA-Z0-9\._-]+$} or die \['username', 'invalid characters'];
+
                         if ($username !~ m{[a-zA-Z]}) {
                             die \['username', "must have letters"];
                         }
