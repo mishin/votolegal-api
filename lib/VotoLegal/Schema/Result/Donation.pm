@@ -111,6 +111,72 @@ __PACKAGE__->table("donation");
   is_nullable: 0
   original: {default_value => \"now()"}
 
+=head2 address_state
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_city
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_zipcode
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_street
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 address_complement
+
+  data_type: 'text'
+  default_value: (empty string)
+  is_nullable: 0
+
+=head2 address_house_number
+
+  data_type: 'integer'
+  is_nullable: 0
+
+=head2 billing_address_street
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 billing_address_house_number
+
+  data_type: 'integer'
+  is_nullable: 0
+
+=head2 billing_address_district
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 billing_address_zipcode
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 billing_address_city
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 billing_address_state
+
+  data_type: 'text'
+  is_nullable: 0
+
+=head2 billing_address_complement
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -145,6 +211,32 @@ __PACKAGE__->add_columns(
     is_nullable   => 0,
     original      => { default_value => \"now()" },
   },
+  "address_state",
+  { data_type => "text", is_nullable => 0 },
+  "address_city",
+  { data_type => "text", is_nullable => 0 },
+  "address_zipcode",
+  { data_type => "text", is_nullable => 0 },
+  "address_street",
+  { data_type => "text", is_nullable => 0 },
+  "address_complement",
+  { data_type => "text", default_value => "", is_nullable => 0 },
+  "address_house_number",
+  { data_type => "integer", is_nullable => 0 },
+  "billing_address_street",
+  { data_type => "text", is_nullable => 0 },
+  "billing_address_house_number",
+  { data_type => "integer", is_nullable => 0 },
+  "billing_address_district",
+  { data_type => "text", is_nullable => 0 },
+  "billing_address_zipcode",
+  { data_type => "text", is_nullable => 0 },
+  "billing_address_city",
+  { data_type => "text", is_nullable => 0 },
+  "billing_address_state",
+  { data_type => "text", is_nullable => 0 },
+  "billing_address_complement",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -192,8 +284,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-14 17:48:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+D4MQ+53bhqW6PAjTHBLNQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-16 17:01:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u5O0WGWTBKTSa2IAaagdtA
 
 use Digest::MD5 qw(md5_hex);
 

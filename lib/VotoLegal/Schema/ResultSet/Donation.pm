@@ -248,19 +248,36 @@ sub action_specs {
                 notificationURL           => $values{notification_url},
             );
 
-            return $self->create({
-                id           => $id,
-                candidate_id => $values{candidate_id},
-                name         => $values{name},
-                email        => $values{email},
-                cpf          => $values{cpf},
-                phone        => $values{phone},
-                amount       => $values{amount},
-                birthdate    => $values{birthdate},
-                receipt_id   => $values{receipt_id},
-                ip_address   => $values{ip_address},
-                status       => "created",
-            });
+            if ($req) {
+                return $self->create({
+                    id                           => $id,
+                    candidate_id                 => $values{candidate_id},
+                    name                         => $values{name},
+                    email                        => $values{email},
+                    cpf                          => $values{cpf},
+                    phone                        => $values{phone},
+                    amount                       => $values{amount},
+                    birthdate                    => $values{birthdate},
+                    receipt_id                   => $values{receipt_id},
+                    ip_address                   => $values{ip_address},
+                    address_state                => $values{address_state},
+                    address_city                 => $values{address_city},
+                    address_zipcode              => $values{address_zipcode},
+                    address_street               => $values{address_street},
+                    address_complement           => $values{address_complement},
+                    address_house_number         => $values{address_house_number},
+                    billing_address_street       => $values{billing_address_street},
+                    billing_address_house_number => $values{billing_address_house_number},
+                    billing_address_district     => $values{billing_address_district},
+                    billing_address_zipcode      => $values{billing_address_zipcode},
+                    billing_address_city         => $values{billing_address_city},
+                    billing_address_state        => $values{billing_address_state},
+                    billing_address_complement   => $values{billing_address_complement},
+                    status                       => "created",
+                });
+            }
+
+            return ;
         },
     };
 }

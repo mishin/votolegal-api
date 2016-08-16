@@ -91,8 +91,7 @@ sub donate_POST {
         }
 
         # Criando a donation.
-        my $ipAddr      = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
-        my $environment = is_test() ? 'sandbox' : 'production';
+        my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
         $donation = $c->stash->{collection}->execute(
             $c,
@@ -111,6 +110,11 @@ sub donate_POST {
             },
         );
     });
+
+    if (!$donation) {
+        $self->status_bad_request($c, message => 'Invalid gateway response');
+        $c->detach();
+    }
 
     return $self->status_ok($c, entity => { id => $donation->id });
 }
