@@ -21,6 +21,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
         %{ $c->config->{pagseguro}->{$environment} },
         sandbox => is_test(),
+        logger  => $c->log,
     );
 }
 
