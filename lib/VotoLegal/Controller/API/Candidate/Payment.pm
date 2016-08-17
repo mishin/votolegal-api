@@ -65,6 +65,15 @@ sub payment_POST {
 
     my $name = "ELEICAO 2016 " . $c->stash->{candidate}->name . " " . uc($c->stash->{candidate}->office->name);
 
+    # Montando a url de callback.
+    my $environment = is_test() ? 'sandbox' : 'production';
+
+    my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
+    $callback_url   .= "/" unless $callback_url =~ m{\/$};
+    $callback_url   .= "api/candidate/";
+    $callback_url   .= $c->stash->{candidate}->id;
+    $callback_url   .= "/payment/callback";
+
     my $payment = $c->stash->{pagseguro}->transaction(
         paymentMethod             => "boleto",
         extraAmount               => "0.00",
@@ -85,10 +94,7 @@ sub payment_POST {
         shippingAddressStreet     => $c->stash->{candidate}->address_street,
         shippingAddressNumber     => $c->stash->{candidate}->address_house_number,
         shippingAddressDistrict   => $c->stash->{candidate}->address_district,
-        notificationURL           => $c->uri_for(
-            $c->controller('API::Candidate::Payment::Callback')->action_for('callback'),
-            [ $c->stash->{candidate}->id ]
-        )->as_string,
+        notificationURL           => $callback_url,
     );
 
     if (!$payment && !$payment->{paymentLink}) {

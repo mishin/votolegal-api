@@ -94,6 +94,14 @@ sub donate_POST {
         # Criando a donation.
         my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
+        my $environment = is_test() ? 'sandbox' : 'production';
+
+        my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
+        $callback_url   .= "/" unless $callback_url =~ m{\/$};
+        $callback_url   .= "api/candidate/";
+        $callback_url   .= $c->stash->{candidate}->id;
+        $callback_url   .= "/donate/callback";
+
         $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
 
         $donation = $c->stash->{collection}->execute(
@@ -104,10 +112,7 @@ sub donate_POST {
                 candidate_id     => $c->stash->{candidate}->id,
                 receipt_id       => $receipt_id,
                 ip_address       => $ipAddr,
-                notification_url => $c->uri_for(
-                    $c->controller('API::Candidate::Donation::Callback')->action_for('callback'),
-                    [ $c->stash->{candidate}->id ],
-                )->as_string,
+                notification_url => $callback_url
             },
         );
     });

@@ -87,10 +87,12 @@ name VotoLegal
     <sandbox>
         merchant_id           your-pagseguro-sandbox-email
         merchant_key          your-pagseguro-sandbox-token
+        callback_url          your-callback-server
     </sandbox>
     <production>
         merchant_id           your-pagseguro-prod-email
         merchant_key          your-pagseguro-prod-token
+        callback_url          your-callback-server
     </production>
 </pagseguro>
 
