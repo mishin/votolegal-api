@@ -25,9 +25,9 @@ name VotoLegal
 </model>
 
 <amazon_s3>
-    access_key   your-access-key
-    secret_key   your-secret-key
-    media_bucket your-bucket
+    access_key                your-access-key
+    secret_key                your-secret-key
+    media_bucket              your-bucket
 </amazon_s3>
 
 <plugin Authentication>
@@ -51,34 +51,50 @@ name VotoLegal
 </plugin>
 
 <sendmail>
-    smtp_server     smtp.example.com
-    smtp_port       587
-    smtp_username   your_user
-    smtp_password   your_passwd
+    smtp_server               smtp.example.com
+    smtp_port                 587
+    smtp_username             your_user
+    smtp_password             your_passwd
 
-    default_from    no-reply@votolegal.org.br
-    contact_to      contato@votolegal.org.br
+    default_from              no-reply@votolegal.org.br
+    contact_to                contato@votolegal.org.br
 </sendmail>
 
 <slack>
-    webhook_url     https://hooks.slack.com/services/XXXXXXX/XXXXXXX/XXXXXXXXXXXXX
-    channel         \#votolegal
-    username        botlegal
-    icon_emoji      :robot_face:
+    webhook_url               https://hooks.slack.com/services/XXXXXXX/XXXXXXX/XXXXXXXXXXXXX
+    channel                   \#votolegal
+    username                  botlegal
+    icon_emoji                :robot_face:
 </slack>
 
 <ethereum>
     <testnet>
-        account     your-account
-        password    your-password
-        address     your-contract-address
-        abi         your-contract-abi
+        account               your-account
+        password              your-password
+        address               your-contract-address
+        abi                   your-contract-abi
     </testnet>
 
     <mainnet>
-        account     your-account
-        password    your-password
-        address     your-contract-address
-        abi         your-contract-abi
+        account               your-account
+        password              your-password
+        address               your-contract-address
+        abi                   your-contract-abi
     </mainnet>
 </ethereum>
+
+<pagseguro>
+    <sandbox>
+        merchant_id           your-pagseguro-sandbox-email
+        merchant_key          your-pagseguro-sandbox-token
+    </sandbox>
+    <production>
+        merchant_id           your-pagseguro-prod-email
+        merchant_key          your-pagseguro-prod-token
+    </production>
+</pagseguro>
+
+<recaptcha>
+    pub_key                   your-recaptcha-pubkey
+    priv_key                  your-recaptcha-privkey
+</recaptcha>
