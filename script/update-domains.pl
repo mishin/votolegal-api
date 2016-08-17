@@ -45,7 +45,7 @@ for my $record ( $cf->records->all ) {
 my $schema = get_schema;
 
 my @domains =
-  $schema->resultset('Candidate')->search( { username => { 'not in' => [ keys $exists ] } }, payment_status => 'paid' )
+  $schema->resultset('Candidate')->search( { username => { 'not in' => [ keys %$exists ] } }, payment_status => 'paid' )
   ->all;
 
 foreach my $r (@domains) {
