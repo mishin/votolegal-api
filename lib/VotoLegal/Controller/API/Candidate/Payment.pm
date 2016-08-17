@@ -63,7 +63,7 @@ sub payment_POST {
     my $cnpj = $c->stash->{candidate}->cnpj;
     $cnpj    =~ s/\D//g;
 
-    my $name = "Eleições 2016 " . $c->stash->{candidate}->name;
+    my $name = "ELEICAO 2016 " . $c->stash->{candidate}->name . " " . uc($c->stash->{candidate}->office->name);
 
     my $payment = $c->stash->{pagseguro}->transaction(
         paymentMethod             => "boleto",

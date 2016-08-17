@@ -15,6 +15,32 @@ db_transaction {
         is($me->{candidate}->{status}, "pending", 'candidate status pending');
     };
 
+    # Não pode registrar candidato sem sobrenome.
+    my $username = lc(fake_name()->());
+    $username    =~ s/\s+/_/g;
+
+    rest_post '/api/register',
+        name    => "candidato sem sobrenome",
+        is_fail => 1,
+        params  => {
+            username             => $username,
+            password             => "foobarquux1",
+            name                 => "Junior",
+            popular_name         => "Fvox",
+            email                => fake_email()->(),
+            cpf                  => random_cpf(),
+            address_state        => 'São Paulo',
+            address_city         => 'Iguape',
+            address_zipcode      => '11920-000',
+            address_street       => "Rua Tiradentes",
+            address_house_number => fake_int(1, 3000)->(),
+            office_id            => 2,
+            party_id             => 5,
+            reelection           => 1,
+            ficha_limpa          => 0,
+        },
+    ;
+
 };
 
 done_testing();
