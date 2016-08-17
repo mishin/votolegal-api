@@ -948,6 +948,14 @@ sub total_donated {
     return $self->donations->get_column('amount')->sum();
 }
 
+sub people_donated {
+    my $self = shift;
+
+    return $self->donations->search({
+        status => 'captured',
+    })->count;
+}
+
 sub send_email_registration {
     my ($self) = @_;
 
