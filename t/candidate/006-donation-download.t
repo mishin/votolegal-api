@@ -60,13 +60,16 @@ db_transaction {
         });
     }
 
-    rest_get "/api/candidate/$candidate_id/donate/download",
-        name  => "download as csv",
-        stash => "d1",
-        params => {
-            hours => 3,
-        },
-    ;
+    my $csv = $schema->resultset('Donation')->export_to_tse();
+    p $csv;
+
+    #rest_get "/api/candidate/$candidate_id/donate/download",
+    #    name  => "download as csv",
+    #    stash => "d1",
+    #    params => {
+    #        hours => 3,
+    #    },
+    #;
 
 };
 
