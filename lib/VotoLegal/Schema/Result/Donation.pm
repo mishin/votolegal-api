@@ -134,7 +134,6 @@ __PACKAGE__->table("donation");
 =head2 address_complement
 
   data_type: 'text'
-  default_value: (empty string)
   is_nullable: 1
 
 =head2 address_house_number
@@ -225,7 +224,7 @@ __PACKAGE__->add_columns(
   "address_street",
   { data_type => "text", is_nullable => 0 },
   "address_complement",
-  { data_type => "text", default_value => "", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "address_house_number",
   { data_type => "integer", is_nullable => 0 },
   "billing_address_street",
@@ -291,8 +290,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-16 17:09:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rwlTeOK+M9kyO9qMPFo53g
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-17 10:54:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kTsURkPB5azIBnQLMPy0Ng
 
 use Digest::MD5 qw(md5_hex);
 

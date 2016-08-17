@@ -91,6 +91,10 @@ sub verifiers_specs {
                         $self->resultset('State')->search({ code => $state })->count;
                     },
                 },
+                address_complement => {
+                    required => 0,
+                    type     => 'Str',
+                },
                 sender_hash => {
                     required => 1,
                     type     => "Str",
