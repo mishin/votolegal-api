@@ -10,14 +10,17 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) { }
+sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) {
+}
 
-sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) { }
+sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
+}
 
-sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
+sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
+}
 
 sub callback_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $self->validate_request_params(
         $c,
@@ -31,32 +34,33 @@ sub callback_POST {
 
     my $notification = $c->stash->{pagseguro}->notification($notificationCode);
 
-    if (ref $notification) {
+    if ( ref $notification ) {
         my $donation_id = $notification->{reference};
         my $status      = $notification->{status};
 
-        if ($status == 3) {
+        if ( $status == 3 ) {
+
             # Buscando o id da donation na database.
-            if (my $donation = $c->model('DB::Donation')->search({ id => $donation_id })->next) {
-                $donation->update({ status => "captured" });
+            if ( my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next ) {
+                $donation->update( { status => "captured" } );
 
-                # Registrando a doação na blockchain.
-                my $environment   = is_test() ? "testnet" : "mainnet";
-                my $smartContract = VotoLegal::SmartContract->new(%{ $c->config->{ethereum}->{$environment} });
+                if ( !exists $ENV{VOTOLEGAL_NO_GETH} ) {
 
-                my $res = $smartContract->addDonation($c->stash->{candidate}->cpf, $donation->id);
+                    # Registrando a doação na blockchain.
+                    my $environment = is_test() ? "testnet" : "mainnet";
+                    my $smartContract = VotoLegal::SmartContract->new( %{ $c->config->{ethereum}->{$environment} } );
 
-                if (my $transactionHash = $res->getTransactionHash()) {
-                    $donation->update({ transaction_hash => $transactionHash });
+                    my $res = $smartContract->addDonation( $c->stash->{candidate}->cpf, $donation->id );
+
+                    if ( my $transactionHash = $res->getTransactionHash() ) {
+                        $donation->update( { transaction_hash => $transactionHash } );
+                    }
                 }
             }
         }
     }
 
-    return $self->status_ok(
-        $c,
-        entity => { ok => 1 },
-    );
+    return $self->status_ok( $c, entity => { ok => 1 }, );
 }
 
 =encoding utf8

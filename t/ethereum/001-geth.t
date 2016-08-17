@@ -2,8 +2,10 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+
 use VotoLegal;
 use VotoLegal::Test::Further;
+plan skip_all => "geth disabled." if exists $ENV{VOTOLEGAL_NO_GETH} && $ENV{VOTOLEGAL_NO_GETH};
 
 use VotoLegal::Geth;
 
