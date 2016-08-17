@@ -63,6 +63,8 @@ sub payment_POST {
     my $cnpj = $c->stash->{candidate}->cnpj;
     $cnpj    =~ s/\D//g;
 
+    my $name = "Eleições 2016 " . $c->stash->{candidate}->name;
+
     my $payment = $c->stash->{pagseguro}->transaction(
         paymentMethod             => "boleto",
         extraAmount               => "0.00",
@@ -72,7 +74,7 @@ sub payment_POST {
         itemQuantity1             => "1",
         senderHash                => $c->req->params->{senderHash},
         reference                 => $c->stash->{candidate}->id,
-        senderName                => $c->stash->{candidate}->name,
+        senderName                => $name,
         senderCNPJ                => $cnpj,
         senderAreaCode            => $ddd,
         senderPhone               => $number,
