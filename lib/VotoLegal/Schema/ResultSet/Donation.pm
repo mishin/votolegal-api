@@ -258,6 +258,7 @@ sub action_specs {
                     ip_address                   => $values{ip_address},
                     address_state                => $values{address_state},
                     address_city                 => $values{address_city},
+                    address_district             => $values{address_district},
                     address_zipcode              => $values{address_zipcode},
                     address_street               => $values{address_street},
                     address_complement           => $values{address_complement},
