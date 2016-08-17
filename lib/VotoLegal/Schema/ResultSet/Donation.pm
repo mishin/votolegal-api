@@ -107,7 +107,7 @@ sub verifiers_specs {
                     type       => "Int",
                     post_check => sub {
                         my $amount = $_[0]->get_value('amount');
-                        $amount >= 10000;
+                        $amount >= 1000;
                     },
                 },
                 credit_card_name => {
