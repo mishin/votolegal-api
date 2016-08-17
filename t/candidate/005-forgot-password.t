@@ -68,9 +68,8 @@ db_transaction {
     });
 
     rest_post "/api/login/forgot_password/reset/$token",
-        name    => "reset password with invalid token",
-        is_fail => 1,
-        code    => 400,
+        name    => "reset password with invalid token returns ok",
+        code    => 200,
         params  => {
             new_password => $new_password,
         },
@@ -83,7 +82,6 @@ db_transaction {
 
     rest_post "/api/login/forgot_password/reset/$token",
         name   => "reset password",
-        stash  => "rp",
         code   => 200,
         params => {
             new_password => $new_password,
@@ -91,7 +89,7 @@ db_transaction {
     ;
 
     # O token deve ter expirado da tabela.
-    is ($schema->resultset('UserForgotPassword')->search({ token => $token })->count, 0, 'token expired');
+    ok (!defined($schema->resultset('UserForgotPassword')->search({ token => $token })->next), 'token expired');
 
     # Agora eu devo conseguir logar com a nova senha.
     rest_post '/api/login',

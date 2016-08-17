@@ -34,13 +34,15 @@ sub reset_password_POST {
     my $forgot_password = $c->stash->{collection}->search({
         token       => $token,
         valid_until => { '>=', \'NOW()' },
-    })->next or die \['token', 'invalid token'];
+    })->next;
 
-    $forgot_password->execute(
-        $c,
-        for  => "reset",
-        with => $c->req->params,
-    );
+    if ($forgot_password) {
+        $forgot_password->execute(
+            $c,
+            for  => "reset",
+            with => $c->req->params,
+        );
+    }
 
     return $self->status_ok($c, entity => { message => "ok" });
 }
