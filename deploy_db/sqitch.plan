@@ -55,3 +55,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0049-donation-address [0048-candidate-bank] 2016-08-16T19:56:45Z Junior Moraes,,, <junior@junior-eokoe> # nation-address endereco do doador
 0050-donation-address-fix [0049-donation-address] 2016-08-16T20:09:27Z Junior Moraes,,, <junior@junior-eokoe> # nation-address-fix corrigindo algumas colunas
 0051-donation-address-default [0050-donation-address-fix] 2016-08-17T13:54:22Z Junior Moraes,,, <junior@junior-eokoe> # nation-address-default drop default
+0052-add-issue-priority [0051-donation-address-default] 2016-08-17T14:25:04Z Junior Moraes,,, <junior@junior-eokoe> # d-issue-priority adicionando assuntos prioritarios
