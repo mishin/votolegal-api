@@ -32,6 +32,7 @@ sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
         merchant_id  => $c->stash->{candidate}->merchant_id,
         merchant_key => $c->stash->{candidate}->merchant_key,
         sandbox      => is_test(),
+        logger       => $c->log,
     );
 }
 
