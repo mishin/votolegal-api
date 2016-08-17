@@ -89,7 +89,7 @@ db_transaction {
 
     stash_test 's1' => sub {
         my $res = shift;
-use DDP; p $res;
+
         ok ($res->{id} =~ m{^[a-f0-9]{32}$}, 'get session');
     };
 
