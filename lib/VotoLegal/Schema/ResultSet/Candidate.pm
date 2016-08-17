@@ -66,6 +66,11 @@ sub verifiers_specs {
                 name => {
                     required => 1,
                     type     => 'Str',
+                    post_check => sub {
+                        my $name = $_[0]->get_value('name');
+
+                        scalar(split(m{ }, $name)) > 2;
+                    },
                 },
                 popular_name => {
                     required => 1,
