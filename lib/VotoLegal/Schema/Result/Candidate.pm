@@ -945,7 +945,9 @@ sub action_specs {
 sub total_donated {
     my $self = shift;
 
-    return $self->donations->get_column('amount')->sum();
+    return $self->donations->search({
+        status => 'captured',
+    })->get_column('amount')->sum();
 }
 
 sub people_donated {
@@ -953,7 +955,7 @@ sub people_donated {
 
     return $self->donations->search({
         status => 'captured',
-    })->count;
+    })->count();
 }
 
 sub send_email_registration {
