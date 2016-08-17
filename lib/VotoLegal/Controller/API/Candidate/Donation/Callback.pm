@@ -44,18 +44,18 @@ sub callback_POST {
             if ( my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next ) {
                 $donation->update( { status => "captured" } );
 
-                if ( !exists $ENV{VOTOLEGAL_NO_GETH} ) {
+                #if ( !exists $ENV{VOTOLEGAL_NO_GETH} ) {
 
-                    # Registrando a doação na blockchain.
-                    my $environment = is_test() ? "testnet" : "mainnet";
-                    my $smartContract = VotoLegal::SmartContract->new( %{ $c->config->{ethereum}->{$environment} } );
+                #    # Registrando a doação na blockchain.
+                #    my $environment = is_test() ? "testnet" : "mainnet";
+                #    my $smartContract = VotoLegal::SmartContract->new( %{ $c->config->{ethereum}->{$environment} } );
 
-                    my $res = $smartContract->addDonation( $c->stash->{candidate}->cpf, $donation->id );
+                #    my $res = $smartContract->addDonation( $c->stash->{candidate}->cpf, $donation->id );
 
-                    if ( my $transactionHash = $res->getTransactionHash() ) {
-                        $donation->update( { transaction_hash => $transactionHash } );
-                    }
-                }
+                #    if ( my $transactionHash = $res->getTransactionHash() ) {
+                #        $donation->update( { transaction_hash => $transactionHash } );
+                #    }
+                #}
             }
         }
     }
