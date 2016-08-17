@@ -94,6 +94,8 @@ sub donate_POST {
         # Criando a donation.
         my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
+        $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
+
         $donation = $c->stash->{collection}->execute(
             $c,
             for  => "create",

@@ -18,6 +18,11 @@ use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 
+has pagseguro => (
+    is  => "rw",
+    isa => "VotoLegal::Payment::PagSeguro",
+);
+
 sub resultset {
     my $self = shift;
 
@@ -193,13 +198,6 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            # Driver do PagSeguro.
-            my $pagseguro = VotoLegal::Payment::PagSeguro->new(
-                merchant_id  => delete $values{merchant_id},
-                merchant_key => delete $values{merchant_key},
-                sandbox      => is_test(),
-            );
-
             # Tratando alguns dados.
             my $id          = md5_hex(Time::HiRes::time());
             my $phone       = $values{phone};
@@ -217,7 +215,7 @@ sub action_specs {
                 $birthdate = sprintf("%02d/%02d/%04d", $3, $2, $1);
             }
 
-            my $req = $pagseguro->transaction(
+            my $req = $self->pagseguro->transaction(
                 itemQuantity1             => 1,
                 itemId1                   => "2",
                 paymentMethod             => "creditCard",
