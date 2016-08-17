@@ -32,6 +32,7 @@ sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
         merchant_id  => $c->stash->{candidate}->merchant_id,
         merchant_key => $c->stash->{candidate}->merchant_key,
         sandbox      => is_test(),
+        logger       => $c->log,
     );
 }
 
@@ -93,13 +94,13 @@ sub donate_POST {
         # Criando a donation.
         my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
+        $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
+
         $donation = $c->stash->{collection}->execute(
             $c,
             for  => "create",
             with => {
                 %{ $c->req->params },
-                merchant_id      => $c->stash->{candidate}->merchant_id,
-                merchant_key     => $c->stash->{candidate}->merchant_key,
                 candidate_id     => $c->stash->{candidate}->id,
                 receipt_id       => $receipt_id,
                 ip_address       => $ipAddr,

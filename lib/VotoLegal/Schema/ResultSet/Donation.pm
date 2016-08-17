@@ -7,6 +7,8 @@ extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
 
+use Text::CSV;
+use File::Temp;
 use Time::HiRes;
 use Digest::MD5 qw(md5_hex);
 use Data::Verifier;
@@ -15,6 +17,11 @@ use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
+
+has pagseguro => (
+    is  => "rw",
+    isa => "VotoLegal::Payment::PagSeguro",
+);
 
 sub resultset {
     my $self = shift;
@@ -29,14 +36,6 @@ sub verifiers_specs {
         create => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
-                merchant_id => {
-                    required => 1,
-                    type     => "Str",
-                },
-                merchant_key => {
-                    required => 1,
-                    type     => "Str",
-                },
                 name => {
                     required => 1,
                     type     => "Str",
@@ -191,13 +190,6 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            # Driver do PagSeguro.
-            my $pagseguro = VotoLegal::Payment::PagSeguro->new(
-                merchant_id  => delete $values{merchant_id},
-                merchant_key => delete $values{merchant_key},
-                sandbox      => is_test(),
-            );
-
             # Tratando alguns dados.
             my $id          = md5_hex(Time::HiRes::time());
             my $phone       = $values{phone};
@@ -215,7 +207,7 @@ sub action_specs {
                 $birthdate = sprintf("%02d/%02d/%04d", $3, $2, $1);
             }
 
-            my $req = $pagseguro->transaction(
+            my $req = $self->pagseguro->transaction(
                 itemQuantity1             => 1,
                 itemId1                   => "2",
                 paymentMethod             => "creditCard",
@@ -266,6 +258,7 @@ sub action_specs {
                     ip_address                   => $values{ip_address},
                     address_state                => $values{address_state},
                     address_city                 => $values{address_city},
+                    address_district             => $values{address_district},
                     address_zipcode              => $values{address_zipcode},
                     address_street               => $values{address_street},
                     address_complement           => $values{address_complement},
@@ -284,6 +277,40 @@ sub action_specs {
             return ;
         },
     };
+}
+
+sub export_as_csv {
+    my ($self) = @_;
+
+    my $fh  = File::Temp->new();
+    my $csv = Text::CSV->new();
+
+    while (my $donation = $self->next) {
+        $csv->print(
+            $fh,
+            [
+                map { $donation->$_} qw(id email)
+            ],
+        );
+    }
+
+    return $fh->filename;
+}
+
+sub export_to_tse {
+    my ($self) = @_;
+
+    use DDP;
+    my $fh = File::Temp->new(UNLINK => 1);
+
+    # Escrevendo o header.
+    print $fh "";
+
+    while (my $donation = $self->next()) {
+        p $donation;
+    }
+
+    return $fh->filename;
 }
 
 1;
