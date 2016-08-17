@@ -47,6 +47,7 @@ my %WriteMakefileArgs = (
     "DBIx::Class::TimeStamp" => 0,
     "DDP" => 0,
     "Daemon::Generic" => 0,
+    "Mojo::Cloudflare"=>0,
     "Data::Diver" => 0,
     "Data::Manager" => 0,
     "Data::Printer" => 0,

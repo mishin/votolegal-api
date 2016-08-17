@@ -47,11 +47,17 @@ sub verifiers_specs {
                         my $username = $r->get_value('username');
 
                         $username =~ m{^[a-zA-Z0-9_-]+$} or die \['username', 'invalid characters'];
+                        # api/www/badges
+                        return 0 if $username =~ /^(www(\d+)?|ftp|email|.?api|.*badges.*)$/i;
+
 
                         if ($username !~ m{[a-zA-Z]}) {
                             die \['username', "must have letters"];
                         }
 
+                        die \['username', 'too short'] if length $username < 4;
+                        # só numeros
+                        return 0 if $username =~ /^([0-9]+)$/i;
                         $self->search({ username => $username })->count and die \["username", "already exists"];
 
                         return 1;
