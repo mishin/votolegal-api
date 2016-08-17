@@ -11,14 +11,41 @@ db_transaction {
 
     my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id');
 
+    # Vou chamar o forgot_password três vezes. Teoricamente ele criou três tokens, mas esses três tokens não podem
+    # ficar válidos simultaneamente por segurança.
     rest_post "/api/login/forgot_password",
         name   => "forgot password",
-        stash  => "fp",
         code   => 200,
         params => {
             email => uc $candidate->user->email,
         },
     ;
+
+    rest_post "/api/login/forgot_password",
+        name   => "forgot password",
+        code   => 200,
+        params => {
+            email => uc $candidate->user->email,
+        },
+    ;
+
+    rest_post "/api/login/forgot_password",
+        name   => "forgot password",
+        code   => 200,
+        params => {
+            email => uc $candidate->user->email,
+        },
+    ;
+
+    # Criei três tokens, mas apenas um deve ser válido.
+    is (
+        $schema->resultset('UserForgotPassword')->search({
+            user_id => $candidate->user->id,
+            valid_until => { '>=' => \'NOW()' },
+        })->count,
+        1,
+        'only one token valid',
+    );
 
     # O token retornado realmente pertence ao devido usuario?
     my $forgot_password = $schema->resultset('UserForgotPassword')->search({
@@ -30,7 +57,7 @@ db_transaction {
     is (length $token, 40, 'token has 40 chars');
 
     # O email foi pra queue?
-    is ($schema->resultset('EmailQueue')->count, 2, 'two emails in queue');
+    is ($schema->resultset('EmailQueue')->count, 4, 'two emails in queue');
 
     # Resetando o password.
     my $new_password = random_string(8);

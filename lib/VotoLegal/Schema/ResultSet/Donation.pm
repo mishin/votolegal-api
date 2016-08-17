@@ -103,8 +103,12 @@ sub verifiers_specs {
                     type     => "Str",
                 },
                 amount => {
-                    required => 1,
-                    type     => "Int",
+                    required   => 1,
+                    type       => "Int",
+                    post_check => sub {
+                        my $amount = $_[0]->get_value('amount');
+                        $amount >= 10000;
+                    },
                 },
                 credit_card_name => {
                     required => 1,
@@ -300,14 +304,14 @@ sub export_as_csv {
 sub export_to_tse {
     my ($self) = @_;
 
-    use DDP;
+    #use DDP;
     my $fh = File::Temp->new(UNLINK => 1);
 
     # Escrevendo o header.
     print $fh "";
 
     while (my $donation = $self->next()) {
-        p $donation;
+        #p $donation;
     }
 
     return $fh->filename;

@@ -51,6 +51,14 @@ sub action_specs {
             my $email = $values{email};
             my $user  = $self->result_source->schema->resultset('User')->search({ email => $email })->next;
 
+            # Inativando os tokens existentes desse usuário por segurança.
+            $self->search({
+                user_id     => $user->id,
+                valid_until => { '>=' => \'NOW()' },
+            })
+            ->update({ valid_until => \"(NOW() - '1 second'::interval)" });
+
+            # Criando um token válido por 24 horas.
             my $forgot_password = $self->create({
                 user        => $user,
                 token       => sha1_hex(Time::HiRes::time()),
