@@ -195,7 +195,7 @@ sub action_specs {
             my $phone       = $values{phone};
             my $phoneDDD    = substr($values{phone}, 0, 2);
             my $phoneNumber = substr($values{phone}, 2);
-            my $amount      = sprintf("%.2f", $values{amount});
+            my $amount      = sprintf("%.2f", $values{amount} / 100);
             my $birthdate   = $values{birthdate};
             my $zipcode     = $values{address_zipcode};
             $zipcode        =~ s/\D//g;
