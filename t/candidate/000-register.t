@@ -25,7 +25,7 @@ db_transaction {
         params  => {
             username             => $username,
             password             => "foobarquux1",
-            name                 => "Junior Fvox",
+            name                 => "Junior",
             popular_name         => "Fvox",
             email                => fake_email()->(),
             cpf                  => random_cpf(),

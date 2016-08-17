@@ -615,7 +615,7 @@ sub verifiers_specs {
                     post_check => sub {
                         my $name = $_[0]->get_value('name');
 
-                        scalar(split(m{ }, $name)) > 2;
+                        scalar(split(m{ }, $name)) > 1;
                     },
                 },
                 popular_name => {
