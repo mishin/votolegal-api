@@ -101,8 +101,6 @@ sub donate_POST {
             for  => "create",
             with => {
                 %{ $c->req->params },
-                merchant_id      => $c->stash->{candidate}->merchant_id,
-                merchant_key     => $c->stash->{candidate}->merchant_key,
                 candidate_id     => $c->stash->{candidate}->id,
                 receipt_id       => $receipt_id,
                 ip_address       => $ipAddr,
