@@ -98,3 +98,11 @@ name VotoLegal
     pub_key                   your-recaptcha-pubkey
     priv_key                  your-recaptcha-privkey
 </recaptcha>
+
+<cloudflare>
+    username                   your-cloudflare-username
+    apikey                     your-cloudflare-password
+    zoneurl                    your-site.org.br
+    dns_type                   CNAME
+    dns_value                  foobar.elb.amazonaws.com
+</recaptcha>
