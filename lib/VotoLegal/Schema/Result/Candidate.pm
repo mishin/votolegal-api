@@ -592,8 +592,6 @@ use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
 
-use Data::Printer;
-
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 
@@ -996,7 +994,6 @@ sub export_donations_to_tse {
     # Escrevendo doações.
     my $count = 0;
     while (my $donation = $donation_rs->next()) {
-        p { $donation->get_columns };
         # Tratando os campos.
         my $receipt_id         = left_padding_zeros($donation->receipt_id, 21);
         my $numero_doc         = left_padding_zeros("", 20); # TODO Duvida.
