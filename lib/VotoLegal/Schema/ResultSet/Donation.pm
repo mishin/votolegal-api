@@ -283,38 +283,5 @@ sub action_specs {
     };
 }
 
-sub export_as_csv {
-    my ($self) = @_;
-
-    my $fh  = File::Temp->new();
-    my $csv = Text::CSV->new();
-
-    while (my $donation = $self->next) {
-        $csv->print(
-            $fh,
-            [
-                map { $donation->$_} qw(id email)
-            ],
-        );
-    }
-
-    return $fh->filename;
-}
-
-sub export_to_tse {
-    my ($self) = @_;
-
-    #use DDP;
-    my $fh = File::Temp->new(UNLINK => 1);
-
-    # Escrevendo o header.
-    print $fh "";
-
-    while (my $donation = $self->next()) {
-        #p $donation;
-    }
-
-    return $fh->filename;
-}
-
 1;
+
