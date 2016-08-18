@@ -7,7 +7,7 @@ with 'VotoLegal::Payment';
 use Carp;
 use Furl;
 use XML::Simple;
-use Data::Printer;
+use IO::Socket::SSL;
 
 has merchant_id => (
     is       => "rw",
@@ -30,8 +30,12 @@ has sandbox => (
 has ua => (
     is      => "rw",
     isa     => "Furl",
-    default => sub { Furl->new() },
-    lazy    => 1,
+    default => sub {
+        Furl->new(
+            ssl_opts => { SSL_verify_mode => SSL_VERIFY_NONE },
+        )
+    },
+    lazy => 1,
 );
 
 has logger => (
