@@ -4,8 +4,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
-
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
