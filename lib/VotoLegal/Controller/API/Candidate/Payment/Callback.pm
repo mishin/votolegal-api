@@ -2,8 +2,10 @@ package VotoLegal::Controller::API::Candidate::Payment::Callback;
 use common::sense;
 use Moose;
 use namespace::autoclean;
+
 use Mojo::Cloudflare;
-use VotoLegal::Utils qw/is_test/;
+use VotoLegal::Utils;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
@@ -45,23 +47,20 @@ sub callback_POST {
         if ( $status == 3 ) {
             $c->stash->{candidate}->update( { payment_status => "paid" } );
 
-            my $config = $c->config;
-            use DDP; p $config;
-            if ( !is_test && %{ $config->{cloudflare}{enabled} } ) {
-
+            if (!is_test() && $c->config->{cloudflare}->{enabled}) {
                 eval {
                     my $cf = Mojo::Cloudflare->new(
-                        email => $config->{cloudflare}{username},
-                        key   => $config->{cloudflare}{apikey},
-                        zone  => $config->{cloudflare}{zoneurl}
+                        email => $config->{cloudflare}->{username},
+                        key   => $config->{cloudflare}->{apikey},
+                        zone  => $config->{cloudflare}->{zoneurl}
                     );
 
                     my $domain = $config->{cloudflare}{zoneurl};
                     my $test   = $cf->record(
                         {
-                            content => $config->{cloudflare}{dns_value},
-                            name    => $c->stash->{candidate}->username . '.' . $config->{cloudflare}{zoneurl},
-                            type    => $config->{cloudflare}{dns_type},
+                            content => $config->{cloudflare}->{dns_value},
+                            name    => $c->stash->{candidate}->username . '.' . $config->{cloudflare}->{zoneurl},
+                            type    => $config->{cloudflare}->{dns_type},
                         }
                     )->save;
 
