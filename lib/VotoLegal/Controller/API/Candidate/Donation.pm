@@ -47,7 +47,11 @@ sub donate_GET {
     my @donations = $c->stash->{collection}->search(
         { candidate_id => $c->stash->{candidate}->id },
         {
-            columns      => [ $c->stash->{is_me} ? qw(id name email cpf amount) : qw(id name amount) ],
+            columns => [
+                $c->stash->{is_me}
+                ? qw(name email cpf amount transaction_hash phone)
+                : qw(name amount transaction_hash)
+            ],
             page         => $page,
             rows         => $results,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
