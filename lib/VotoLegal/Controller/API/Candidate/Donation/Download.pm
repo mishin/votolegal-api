@@ -3,7 +3,11 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends "CatalystX::Eta::Controller::REST" }
+use File::Temp ':seekable';
+
+BEGIN { extends "Catalyst::Controller" }
+
+with "CatalystX::Eta::Controller::TypesValidation";
 
 sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) { }
 
@@ -14,18 +18,27 @@ sub download : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { 
 sub download_GET {
     my ($self, $c) = @_;
 
-    if (my $hours = $c->req->params->{hours}) {
-
-    }
-
-    $c->stash->{collection} = $c->stash->{collection}->search({
-        created_at => { '>=', \"(now() - '3 hours'::interval)" }
-    });
-
-    return $self->status_ok(
+    $self->validate_request_params(
         $c,
-        entity => {},
+        date => {
+            type       => "Str",
+            required   => 1,
+            post_check => sub {
+                1;
+            },
+        },
     );
+
+    my $date       = $c->req->params->{date};
+    my $filehandle = $c->stash->{candidate}->export_donations_to_tse($date);
+    $filehandle->seek(0, SEEK_SET);
+
+    $c->response->content_type("text/plain");
+    $c->response->headers->header("content-disposition" => "attachment;filename=doacoes.txt");
+
+    $c->res->body($filehandle);
+
+    $c->detach();
 }
 
 =encoding utf8

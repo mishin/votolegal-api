@@ -34,15 +34,17 @@ sub callback_POST {
 
     my $notification = $c->stash->{pagseguro}->notification($notificationCode);
 
-    if ( ref $notification ) {
+    if (ref $notification) {
         my $donation_id = $notification->{reference};
         my $status      = $notification->{status};
 
-        if ( $status == 3 ) {
-
+        if ($status == 3) {
             # Buscando o id da donation na database.
-            if ( my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next ) {
-                $donation->update( { status => "captured" } );
+            if (my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next) {
+                $donation->update({
+                    status      => "captured",
+                    captured_at => \"now()",
+                });
 
                 #if ( !exists $ENV{VOTOLEGAL_NO_GETH} ) {
 

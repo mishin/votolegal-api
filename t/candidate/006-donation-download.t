@@ -2,6 +2,7 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+use POSIX qw(strftime);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
@@ -22,6 +23,7 @@ db_transaction {
     rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
         params => {
+            cnpj               => format_cnpj(random_cnpj()),
             payment_gateway_id => 2,
             merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
             merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
@@ -40,7 +42,7 @@ db_transaction {
             email                        => fake_email()->(),
             cpf                          => random_cpf(),
             phone                        => fake_digits("##########")->(),
-            amount                       => 500,
+            amount                       => fake_int(1000, 10000)->(),
             birthdate                    => "1992-01-01",
             receipt_id                   => $_,
             ip_address                   => "127.0.0.1",
@@ -57,20 +59,22 @@ db_transaction {
             billing_address_city         => "Iguape",
             billing_address_state        => "SP",
             status                       => "captured",
+            captured_at                  => \'now()',
         });
     }
 
-    my $csv = $schema->resultset('Donation')->export_to_tse();
-    p $csv;
+    # Obtendo a api_key do candidate.
+    ok (my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id'), 'candidate');
+    ok (
+        my $api_key = $schema->resultset('UserSession')->search({ user_id => $candidate->user_id })->next->api_key,
+        'api_key',
+    );
 
-    #rest_get "/api/candidate/$candidate_id/donate/download",
-    #    name  => "download as csv",
-    #    stash => "d1",
-    #    params => {
-    #        hours => 3,
-    #    },
-    #;
+    # Enviando a request.
+    my $date = strftime "%Y-%m-%d", localtime;
 
+    my $req  = request("/api/candidate/$candidate_id/donate/download?date=" . $date);
+    ok ($req->is_success(), 'download');
 };
 
 done_testing();

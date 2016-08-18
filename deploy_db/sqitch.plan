@@ -56,3 +56,5 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0050-donation-address-fix [0049-donation-address] 2016-08-16T20:09:27Z Junior Moraes,,, <junior@junior-eokoe> # nation-address-fix corrigindo algumas colunas
 0051-donation-address-default [0050-donation-address-fix] 2016-08-17T13:54:22Z Junior Moraes,,, <junior@junior-eokoe> # nation-address-default drop default
 0052-add-issue-priority [0051-donation-address-default] 2016-08-17T14:25:04Z Junior Moraes,,, <junior@junior-eokoe> # d-issue-priority adicionando assuntos prioritarios
+0053-bank-agency-dv [0052-add-issue-priority] 2016-08-18T15:03:30Z Junior Moraes,,, <junior@junior-eokoe> # nk-agency-dv adicionando digito verificador da agencia
+0054-donation-paid-at [0053-bank-agency-dv] 2016-08-18T15:18:10Z Junior Moraes,,, <junior@junior-eokoe> # nation-paid-at horario em que a doacao foi compensada

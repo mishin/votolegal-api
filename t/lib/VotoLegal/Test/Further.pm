@@ -13,7 +13,7 @@ use Data::Printer;
 use JSON::MaybeXS;
 use Crypt::PRNG qw(random_string);
 use Business::BR::CPF qw(random_cpf);
-use Business::BR::CNPJ qw(random_cnpj);
+use Business::BR::CNPJ qw(random_cnpj format_cnpj);
 use Data::Fake qw(Core Company Dates Internet Names Text);
 
 # ugly hack

@@ -273,6 +273,11 @@ __PACKAGE__->table("candidate");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 bank_agency_dv
+
+  data_type: 'smallint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -369,6 +374,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "bank_account_dv",
   { data_type => "integer", is_nullable => 1 },
+  "bank_agency_dv",
+  { data_type => "smallint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -571,17 +578,21 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-15 19:19:14
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AV0fP27xEK1+M9+5o2ummQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-18 12:04:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+XAMyWaA/eCFg1oQj47aJg
 
+use File::Temp q(:seekable);
 use Data::Verifier;
 use Data::Validate::URI qw(is_web_uri);
 use Template;
 use Business::BR::CEP qw(test_cep);
+use VotoLegal::Utils;
 use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
+
+use Data::Printer;
 
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
@@ -940,6 +951,85 @@ sub action_specs {
             $self->update({ publish => 0 });
         },
     };
+}
+
+sub export_donations_to_tse {
+    my ($self, $date) = @_;
+
+    defined $date or die "missing 'date'.";
+
+    my $donation_rs = $self->donations->search(\[
+        'CAST(captured_at AS DATE) = ?',
+        $date,
+    ]);
+
+    my $fh = File::Temp->new(UNLINK => 1);
+    $fh->autoflush(1);
+
+    # Tratando alguns campos do candidato.
+    my $cnpj                = $self->cnpj;
+    $cnpj                   =~ s/\D+//g;
+    $cnpj                   = left_padding_zeros($cnpj, 14);
+    my $data_movimentacao   = ""; # TODO Preencher.
+    my $bank_code           = left_padding_zeros($self->bank_code, 3);
+    my $bank_agency         = left_padding_zeros($self->bank_agency, 8);
+    my $bank_agency_dv      = left_padding_zeros($self->bank_agency_dv, 2);
+    my $bank_account_number = left_padding_zeros($self->bank_account_number, 18);
+    my $bank_account_dv     = left_padding_zeros($self->bank_account_dv, 2);
+
+    # Escrevendo o header.
+    print $fh "1";                     # Registro.
+    print $fh $cnpj;                   # CNPJ.
+    print $fh $data_movimentacao;      # Data da movimentação.
+    print $fh $bank_code;              # Código do banco.
+    print $fh $bank_agency;            # Numero da agência.
+    print $fh $bank_agency_dv;         # Dígito verificador da agência.
+    print $fh $bank_account_number;    # Número da conta.
+    print $fh $bank_account_dv;        # Digito verificador da conta.
+    print $fh "400";                   # Versao do layout.
+    print $fh "DOACINTE";              # Nome do layout.
+    print $fh " " x 93;                # Preencher com espaços em branco.
+
+    # Fim do header: line break.
+    print $fh "\r\n";
+
+    # Escrevendo doações.
+    my $count = 0;
+    while (my $donation = $donation_rs->next()) {
+        p { $donation->get_columns };
+        # Tratando os campos.
+        my $receipt_id         = left_padding_zeros($donation->receipt_id, 21);
+        my $numero_doc         = left_padding_zeros("", 20); # TODO Duvida.
+        my $numero_autorizacao = left_padding_zeros("", 20); # TODO duvida.
+        my $cpf                = left_padding_zeros($donation->cpf, 11);
+        my $name               = left_padding_whitespaces($donation->name, 60);
+        my $captured_at        = $donation->captured_at->strftime('%m%d%Y');
+        my $amount             = sprintf("%.2f", $donation->amount / 100);
+        $amount                =~ s/\.//;
+        $amount                = left_padding_zeros($amount, 18);
+
+        print $fh "2";                  # Registro.
+        print $fh $receipt_id;          # Id do recibo.
+        print $fh $numero_doc;          # Numero do documento.
+        print $fh $numero_autorizacao;  # Numero do documento.
+        print $fh "01";                 # Tipo da doação. TODO Duvida.
+        print $fh "02";                 # Espécie do recurso: cartão de crédito.
+        print $fh $cpf;                 # CPF do doador.
+        print $fh "F";                  # Pessoa física.
+        print $fh $captured_at;         # Data da doação.
+        print $fh $amount;              # Valor da doação.
+
+        # Fim da doação.
+        print $fh "\r\n";
+        $count++;
+    }
+
+    # Trailer.
+    print $fh "3";         # Registro.
+    print $fh $count;      # Total de doações presentes neste arquivo.
+    print $fh " " x 154;   # Espaços em branco.
+
+    return $fh;
 }
 
 sub total_donated {

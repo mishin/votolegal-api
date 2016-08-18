@@ -181,6 +181,11 @@ __PACKAGE__->table("donation");
   data_type: 'text'
   is_nullable: 0
 
+=head2 captured_at
+
+  data_type: 'timestamp'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -243,6 +248,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "address_district",
   { data_type => "text", is_nullable => 0 },
+  "captured_at",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -290,8 +297,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-17 10:54:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kTsURkPB5azIBnQLMPy0Ng
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-18 12:19:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S7c7LFHfBM+LYHNdUf3LJQ
 
 use Digest::MD5 qw(md5_hex);
 
