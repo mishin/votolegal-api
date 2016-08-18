@@ -68,8 +68,7 @@ sub callback_POST {
                     $test->service_mode(1);
                     $test->save;
                 };
-                $c->log->error("Cloudflare error: $@");
-
+                $c->log->error("Cloudflare error: $@") if $@;
             }
         }
     }
