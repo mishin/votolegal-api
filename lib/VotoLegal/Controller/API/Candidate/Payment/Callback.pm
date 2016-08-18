@@ -47,7 +47,8 @@ sub callback_POST {
         if ( $status == 3 ) {
             $c->stash->{candidate}->update( { payment_status => "paid" } );
 
-            if (!is_test() && $c->config->{cloudflare}->{enabled}) {
+            my $config = $c->config;
+            if (!is_test() && $config->{cloudflare}->{enabled}) {
                 eval {
                     my $cf = Mojo::Cloudflare->new(
                         email => $config->{cloudflare}->{username},
@@ -55,7 +56,7 @@ sub callback_POST {
                         zone  => $config->{cloudflare}->{zoneurl}
                     );
 
-                    my $domain = $config->{cloudflare}{zoneurl};
+                    my $domain = $config->{cloudflare}->{zoneurl};
                     my $test   = $cf->record(
                         {
                             content => $config->{cloudflare}->{dns_value},
