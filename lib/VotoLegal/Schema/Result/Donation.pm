@@ -545,7 +545,7 @@ __DATA__
                                                 <br>
                                                 Nome do candidato: [% candidate_name %]
                                                 <br>
-                                                CNPJ do candidato: [% candidate_cnpj %]    
+                                                CNPJ do candidato: [% candidate_cnpj %]
                                              </p>
                                              <p>É importante ressaltar que o Voto Legal é uma plataforma aberta e baseada em software livre. Os realizadores não se responsabilizam pelas informações fornecidas pelos candidatos, nem pelo comportamento deles durante o período eleitoral, e se eleitos, durante seus respectivos mandatos. O Voto Legal não é uma intermediadora, a doação é realizada diretamente do doador para a conta de campanha do candidato. O Voto Legal não cobra taxas e não tem nenhuma responsabilidade sobre a transação.</p>
                                              <strong>
