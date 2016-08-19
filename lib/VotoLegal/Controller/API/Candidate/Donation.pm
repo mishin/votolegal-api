@@ -45,11 +45,14 @@ sub donate_GET {
     my $results = $c->req->params->{results} || 20;
 
     my @donations = $c->stash->{collection}->search(
-        { candidate_id => $c->stash->{candidate}->id },
+        {
+            candidate_id => $c->stash->{candidate}->id,
+            status       => "captured",
+        },
         {
             columns => [
                 $c->stash->{is_me}
-                ? qw(name email cpf amount transaction_hash phone)
+                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash)
                 : qw(name amount transaction_hash)
             ],
             page         => $page,
