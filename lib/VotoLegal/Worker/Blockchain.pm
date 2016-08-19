@@ -101,7 +101,6 @@ sub _build_smartContract {
         $smartContract->geth->isMainnet() or die "geth isn't running on mainnet.";
     }
 
-
     return $smartContract;
 }
 
