@@ -164,7 +164,7 @@ sub verifiers_specs {
                     },
                 },
                 billing_address_complement => {
-                    required => 1,
+                    required => 0,
                     type     => "Str",
                 },
                 receipt_id => {
@@ -199,14 +199,15 @@ sub action_specs {
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             # Tratando alguns dados.
-            my $id          = md5_hex(Time::HiRes::time());
-            my $phone       = $values{phone};
-            my $phoneDDD    = substr($values{phone}, 0, 2);
-            my $phoneNumber = substr($values{phone}, 2);
-            my $amount      = sprintf("%.2f", $values{amount} / 100);
-            my $birthdate   = $values{birthdate};
-            my $zipcode     = $values{address_zipcode};
-            $zipcode        =~ s/\D//g;
+            my $id                         = md5_hex(Time::HiRes::time());
+            my $billing_address_complement = $values{billing_address_complement};
+            my $phone                      = $values{phone};
+            my $phoneDDD                   = substr($values{phone}, 0, 2);
+            my $phoneNumber                = substr($values{phone}, 2);
+            my $amount                     = sprintf("%.2f", $values{amount} / 100);
+            my $birthdate                  = $values{birthdate};
+            my $zipcode                    = $values{address_zipcode};
+            $zipcode                       =~ s/\D//g;
 
             my $cpf = $values{cpf};
             $cpf    =~ s/\D//g;
@@ -244,14 +245,17 @@ sub action_specs {
                 creditCardHolderPhone     => $phoneNumber,
                 billingAddressStreet      => $values{billing_address_street},
                 billingAddressNumber      => $values{billing_address_house_number},
-                billingAddressComplement  => $values{billing_address_complement},
                 billingAddressDistrict    => $values{billing_address_district},
                 billingAddressPostalCode  => $values{billing_address_zipcode},
                 billingAddressCity        => $values{billing_address_city},
                 billingAddressState       => $values{billing_address_state},
                 notificationURL           => $values{notification_url},
+                (
+                    $billing_address_complement
+                    ? ( billingAddressComplement => $billing_address_complement )
+                    : ()
+                ),
             );
-
             if ($req) {
                 return $self->create({
                     id                           => $id,
