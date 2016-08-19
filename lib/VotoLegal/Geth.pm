@@ -24,10 +24,28 @@ sub execute {
     return VotoLegal::Geth::Response->new(data => [ @data[9 .. $#data - 1] ]);
 }
 
+sub isRunning {
+    my ($self) = @_;
+
+    if (`ps -aef | grep geth | grep -v 'geth attach' | grep -v grep`) {
+        return 1;
+    }
+    return 0;
+}
+
+sub isMainnet {
+    my ($self) = @_;
+
+    if (`ps -aef | grep geth | grep -v 'geth attach' | grep -v testnet | grep -v grep`) {
+        return 1;
+    }
+    return 0;
+}
+
 sub isTestnet {
     my ($self) = @_;
 
-    if (`ps -aef | grep geth | grep testnet | grep -v grep`) {
+    if (`ps -aef | grep geth | grep -v 'geth attach' | grep testnet | grep -v grep`) {
         return 1;
     }
     return 0;
