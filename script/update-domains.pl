@@ -14,9 +14,9 @@ die "missing cloudflare conf\n" unless $config->{cloudflare};
 
 use Mojo::Cloudflare;
 my $cf = Mojo::Cloudflare->new(
-    email => $config->{cloudflare}{username},
-    key   => $config->{cloudflare}{apikey},
-    zone  => $config->{cloudflare}{zoneurl}
+    email => $config->{cloudflare}->{username},
+    key   => $config->{cloudflare}->{apikey},
+    zone  => $config->{cloudflare}->{zoneurl}
 );
 
 my $domain    = $config->{cloudflare}{zoneurl};
@@ -27,7 +27,7 @@ my $exists = {};
 # retrieve and update records
 for my $record ( $cf->records->all ) {
 
-    next if $record->name eq $config->{cloudflare}{zoneurl};
+    next if $record->name eq $config->{cloudflare}->{zoneurl};
     next unless $record->type =~ /A|CNAME/i;
     next if $record->name =~ /^(www(\d+)?|ftp|email|.?api|.*badges.*)\.$domain_qr/i;
 
@@ -49,16 +49,17 @@ my @domains =
   ->all;
 
 foreach my $r (@domains) {
+    say "Adicionando o username '" . $r->username . "'.";
+
     my $test = $cf->record(
         {
-            content => $config->{cloudflare}{dns_value},
+            content => $config->{cloudflare}->{dns_value},
             name    => $r->username . '.' . $config->{cloudflare}{zoneurl},
-            type    => $config->{cloudflare}{dns_type},
+            type    => $config->{cloudflare}->{dns_type},
         }
     )->save;
 
     $test->service_mode(1);
     $test->save;
-
 }
 
