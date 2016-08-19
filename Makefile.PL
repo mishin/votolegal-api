@@ -48,6 +48,7 @@ my %WriteMakefileArgs = (
     "Daemon::Generic" => 0,
     "Data::Diver" => 0,
     "Data::Manager" => 0,
+    "Data::Printer" => 0,
     "Data::Section::Simple" => 0,
     "Data::Validate::URI" => 0,
     "Data::Verifier::Field" => 0,
@@ -117,13 +118,12 @@ my %WriteMakefileArgs = (
     "Catalyst::Test" => 0,
     "CatalystX::Eta::Test::REST" => 0,
     "Data::Fake" => 0,
-    "Data::Printer" => 0,
     "JSON::MaybeXS" => 0,
     "Test::More" => 0,
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160818,
+  "VERSION" => 20160819,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
