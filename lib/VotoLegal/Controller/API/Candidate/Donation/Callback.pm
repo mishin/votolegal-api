@@ -37,27 +37,16 @@ sub callback_POST {
     if (ref $notification) {
         my $donation_id = $notification->{reference};
         my $status      = $notification->{status};
+        my $code        = $notification->{code};
 
         if ($status == 3) {
             # Buscando o id da donation na database.
             if (my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next) {
                 $donation->update({
-                    status      => "captured",
-                    captured_at => \"now()",
+                    payment_gateway_code => $code,
+                    status               => "captured",
+                    captured_at          => \"now()",
                 });
-
-                #if ( !exists $ENV{VOTOLEGAL_NO_GETH} ) {
-
-                #    # Registrando a doação na blockchain.
-                #    my $environment = is_test() ? "testnet" : "mainnet";
-                #    my $smartContract = VotoLegal::SmartContract->new( %{ $c->config->{ethereum}->{$environment} } );
-
-                #    my $res = $smartContract->addDonation( $c->stash->{candidate}->cpf, $donation->id );
-
-                #    if ( my $transactionHash = $res->getTransactionHash() ) {
-                #        $donation->update( { transaction_hash => $transactionHash } );
-                #    }
-                #}
             }
         }
     }
