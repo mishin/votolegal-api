@@ -2,10 +2,12 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
-use VotoLegal::Test::Further;
-plan skip_all => "geth disabled." if exists $ENV{VOTOLEGAL_NO_GETH} && $ENV{VOTOLEGAL_NO_GETH};
 use Digest::MD5 qw(md5_hex);
+use VotoLegal::Test::Further;
 
+plan skip_all => "geth disabled." if exists $ENV{VOTOLEGAL_NO_GETH} && $ENV{VOTOLEGAL_NO_GETH};
+
+use VotoLegal::Utils;
 use VotoLegal::SmartContract;
 
 my $smartContract = VotoLegal::SmartContract->new(%{ VotoLegal->config->{ethereum}->{testnet} });
@@ -14,11 +16,17 @@ if (!$smartContract->geth->isTestnet()) {
     plan skip_all => "geth isn't running on testnet.";
 }
 
-db_transaction {
-    my $cpf          = random_cpf();
-    my $id_donation  = md5_hex(time());
+my $schema = VotoLegal->model('DB');
 
-    ok (my $res = $smartContract->addDonation($cpf, $id_donation), 'add donation');
+db_transaction {
+    create_candidate;
+
+    my $candidate = $schema->resultset("Candidate")->find(stash 'candidate.id');
+    my $amount    = fake_int(1000, 50000)->();
+    my $date      = DateTime->now(time_zone => "America/Sao_Paulo")->strftime('%Y%m%d');
+    my $donation  = random_cpf() . "-" . $amount . "-" . $date;
+
+    ok (my $res = $smartContract->addDonation($candidate->cpf, $donation), 'add donation');
 
     isa_ok $res, 'VotoLegal::Geth::Response';
 
@@ -27,7 +35,7 @@ db_transaction {
     is (length($transactionHash), 66, 'transaction hash has 66 chars');
     my $isTxConfirmed = 0;
 
-    for ( 1 .. 20 ) {
+    for ( 1 .. 25 ) {
         my $txStatus    = $smartContract->getTransactionStatus($transactionHash);
         my $blockNumber = $txStatus->{blockNumber};
 
@@ -41,8 +49,8 @@ db_transaction {
     ok ($isTxConfirmed, 'tx confirmed');
 
     is_deeply(
-        [ $smartContract->getAllDonationsFromCandidate($cpf) ],
-        [ $id_donation ],
+        [ $smartContract->getAllDonationsFromCandidate($candidate->cpf) ],
+        [ $donation ],
         'getAllDonationsFromCandidate'
     );
 };

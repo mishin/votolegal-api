@@ -11,8 +11,8 @@ contract VotoLegal {
         owner = msg.sender;
     }
 
-    function addDonation(bytes32 cpf, bytes32 id_donation) ownerOnly {
-        donations[cpf].push(id_donation);
+    function addDonation(bytes32 cpf, bytes32 donation) ownerOnly {
+        donations[cpf].push(donation);
     }
 
     function getAllDonationsFromCandidate(bytes32 cpf) constant returns (bytes32[]) {

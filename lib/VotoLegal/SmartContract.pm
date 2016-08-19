@@ -44,10 +44,10 @@ has _json => (
 );
 
 sub addDonation {
-    my ($self, $id_candidate, $id_donation, $gas) = @_;
+    my ($self, $candidate, $donation, $gas) = @_;
 
-    defined $id_candidate or die "missing 'id_candidate'";
-    defined $id_donation  or die "missing 'id_donation'";
+    defined $candidate or die "missing 'candidate'";
+    defined $donation     or die "missing 'donation'";
 
     my $account  = $self->account;
     my $password = $self->password;
@@ -58,7 +58,7 @@ sub addDonation {
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
 personal.unlockAccount("$account", "$password");
-votoLegal.addDonation("$id_candidate", "$id_donation", { from: "$account", gas: $gas });
+votoLegal.addDonation("$candidate", "$donation", { from: "$account", gas: $gas });
 exit;
 GETH_COMMAND
 
@@ -68,16 +68,16 @@ GETH_COMMAND
 }
 
 sub getAllDonationsFromCandidate {
-    my ($self, $id_candidate) = @_;
+    my ($self, $candidate) = @_;
 
-    defined $id_candidate or die "missing 'id_candidate'";
+    defined $candidate or die "missing 'candidate'";
 
     my $address  = $self->address;
     my $abi      = $self->abi;
 
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
-votoLegal.getAllDonationsFromCandidate("$id_candidate");
+votoLegal.getAllDonationsFromCandidate("$candidate");
 exit;
 GETH_COMMAND
 
@@ -87,9 +87,11 @@ GETH_COMMAND
     if (ref $json) {
         return map {
             my @split = unpack "(A2)*", $_;
-            shift @split; # Removendo o 0x.
+            shift @split; # Removendo o 0x do inicio.
 
-            @split = map { chr(hex($_)) } @split;
+            # Quando a string gravada não possui 32 bytes, ela é completada com 0x00.
+            @split = grep { $_ ne "00" }   @split;
+            @split = map  { chr(hex($_)) } @split;
             join("", @split);
         } @$json;
     }
@@ -109,16 +111,16 @@ sub getTransactionStatus {
 }
 
 sub getDonation {
-    my ($self, $id_donation) = @_;
+    my ($self, $donation) = @_;
 
-    defined $id_donation or die "missing 'id_donation'.";
+    defined $donation or die "missing 'donation'.";
 
     my $address = $self->address;
     my $abi     = $self->abi;
 
     my $gethCommand = <<"GETH_COMMAND";
 var votoLegal = eth.contract($abi).at("$address");
-votoLegal.getDonation("$id_donation");
+votoLegal.getDonation("$donation");
 exit;
 GETH_COMMAND
 
