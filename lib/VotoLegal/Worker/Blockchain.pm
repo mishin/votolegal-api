@@ -29,6 +29,24 @@ sub listen_queue {
     my ($self) = @_;
 
     $self->logger->debug("Buscando itens na fila...") if $self->logger;
+
+    my @items = $self->schema->resultset("Donation")->search(
+        { transaction_hash => undef, candidate_id => 426 },
+        { rows   => 20 },
+    )->all;
+
+    if (@items) {
+        $self->logger->info(sprintf("'%d' itens serão processados.", scalar @items)) if $self->logger;
+
+        for my $item (@items) {
+            $self->exec_item($item);
+        }
+
+        $self->logger->info("Todos os items foram processados com sucesso") if $self->logger;
+    }
+    else {
+        $self->logger->debug("Não há itens pendentes na fila.") if $self->logger;
+    }
 }
 
 sub run_once {
