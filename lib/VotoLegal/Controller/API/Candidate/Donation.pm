@@ -70,11 +70,11 @@ sub donate_POST {
     my ($self, $c) = @_;
 
     # Validando o captcha.
-    if (!is_test()) {
-        if (!$c->forward("captcha_check")) {
-            die \["captcha", "invalid"];
-        }
-    }
+    #if (!is_test()) {
+    #    if (!$c->forward("captcha_check")) {
+    #        die \["captcha", "invalid"];
+    #    }
+    #}
 
     my $donation ;
     $c->model('DB')->schema->txn_do(sub {
