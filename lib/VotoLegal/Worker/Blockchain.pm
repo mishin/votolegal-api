@@ -55,16 +55,30 @@ sub run_once {
 }
 
 sub exec_item {
-    my ($self, $donation) = @_;
+    my ($self, $item) = @_;
 
-    my $donation_id = $donation->id;
+    my $donation_id     = $item->id;
+    my $donation_cpf    = $item->cpf;
+    my $donation_amount = $item->amount;
+    my $donation_date   = $item->captured_at->strftime("%Y%m%d");
+    my $candidate_cpf   = $item->candidate->cpf;
 
     $self->logger->info("Processando a doação id '$donation_id'...") if $self->logger;
 
-    my $cpf = $donation->candidate->cpf;
-    my $res = $self->smartContract->addDonation($cpf, $donation->id);
+    my $donation = $donation_cpf . "-" . $donation_amount . "-" . $donation_date;
 
-    p $res;
+    $self->logger->info("Registrando a transação na blockchain...") if $self->logger;
+    $self->logger->debug("CPF: '$candidate_cpf'")                   if $self->logger;
+    $self->logger->debug("Registro: '$donation'")                   if $self->logger;
+
+    my $res = $self->smartContract->addDonation($candidate_cpf, $donation);
+
+    if (my $transactionHash = $res->getTransactionHash()) {
+        $item->update({ transaction_hash => $transactionHash });
+        $item->send_email();
+
+        return 1;
+    }
 
     return 0;
 }

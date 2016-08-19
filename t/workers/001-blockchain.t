@@ -3,7 +3,13 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
 use Digest::MD5 qw(md5_hex);
+use VotoLegal::Geth;
 use VotoLegal::Test::Further;
+
+my $geth = VotoLegal::Geth->new();
+if (!$geth->isTestnet()) {
+    plan skip_all => "geth isn't running on testnet.";
+}
 
 my $schema = VotoLegal->model('DB');
 
@@ -57,7 +63,7 @@ db_transaction {
 
     ok ($worker->run_once(), 'run once');
 
-    ##is ($email_rs->count, 0, 'email out of queue');
+    is (length($donation->discard_changes->transaction_hash), 66, 'transaction hash');
 };
 
 done_testing();
