@@ -141,7 +141,6 @@ sub create_candidate {
         office_id            => fake_int(1, 3)->(),
         party_id             => fake_int(1, 35)->(),
         reelection           => fake_int(0, 1)->(),
-        ficha_limpa          => 1,
         %opts,
     );
 

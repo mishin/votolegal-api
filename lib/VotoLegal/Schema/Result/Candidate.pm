@@ -209,11 +209,6 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 ficha_limpa
-
-  data_type: 'boolean'
-  is_nullable: 0
-
 =head2 payment_status
 
   data_type: 'text'
@@ -350,8 +345,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "merchant_key",
   { data_type => "text", is_nullable => 1 },
-  "ficha_limpa",
-  { data_type => "boolean", is_nullable => 0 },
   "payment_status",
   { data_type => "text", default_value => "unpaid", is_nullable => 0 },
   "publish",
@@ -578,8 +571,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-18 12:04:26
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+XAMyWaA/eCFg1oQj47aJg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-19 16:00:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rXbXrok3bfPpURA/8QncrQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;
