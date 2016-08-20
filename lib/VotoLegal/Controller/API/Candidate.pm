@@ -121,6 +121,13 @@ sub candidate_PUT {
         $spending_spreadsheet = $self->_upload_spreadsheet($upload);
     }
 
+    # O Data::Verifier ignora strings "" e as seta como undef. :(
+    for (keys %{ $c->req->params }) {
+        if ($c->req->params->{$_} eq "") {
+            $c->req->params->{$_} = "_SET_NULL_";
+        }
+    }
+
     my $candidate = $c->stash->{candidate}->execute(
         $c,
         for => 'update',

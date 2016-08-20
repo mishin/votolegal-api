@@ -626,7 +626,7 @@ sub verifiers_specs {
                 },
                 party_id    => {
                     required   => 0,
-                    type       => 'Int',
+                    type       => "Int",
                     post_check => sub {
                         my $r = shift;
 
@@ -654,18 +654,10 @@ sub verifiers_specs {
                     type       => "Str",
                     post_check => sub {
                         my $r = shift;
-
+                        my $phone = $r->get_value('phone');
+                        return 1 if $phone eq '_SET_NULL_';
+                        
                         $r->get_value('phone') =~ m{^\d{10,11}$};
-                    },
-                },
-                office_id => {
-                    required   => 0,
-                    type       => 'Int',
-                    post_check => sub {
-                        my $r         = shift;
-                        my $office_id = $r->get_value('office_id');
-
-                        $self->resultset('Office')->search({ id => $office_id })->count;
                     },
                 },
                 reelection => {
@@ -728,7 +720,11 @@ sub verifiers_specs {
                 },
                 address_house_number => {
                     required   => 0,
-                    type       => 'Int',
+                    type       => 'Str',
+                    type_check => sub {
+                        my $address_house_number = $_[0]->get_value('address_house_number');
+                        $address_house_number =~ m{^\d+$};
+                    },
                 },
                 address_complement => {
                     required   => 0,
@@ -772,22 +768,38 @@ sub verifiers_specs {
                 video_url => {
                     required   => 0,
                     type       => "Str",
-                    post_check => sub { is_web_uri $_[0]->get_value('video_url') },
+                    post_check => sub {
+                        my $video_url = $_[0]->get_value('video_url');
+                        return 1 if $video_url eq "_SET_NULL_";
+                        is_web_uri $video_url
+                    },
                 },
                 facebook_url => {
                     required   => 0,
                     type       => "Str",
-                    post_check => sub { is_web_uri $_[0]->get_value('facebook_url') },
+                    post_check => sub {
+                        my $facebook_url = $_[0]->get_value('facebook_url');
+                        return 1 if $facebook_url eq "_SET_NULL_";
+                        is_web_uri $facebook_url;
+                    },
                 },
                 twitter_url => {
                     required   => 0,
                     type       => "Str",
-                    post_check => sub { is_web_uri $_[0]->get_value('twitter_url') },
+                    post_check => sub {
+                        my $twitter_url = $_[0]->get_value('twitter_url');
+                        return 1 if $twitter_url eq "_SET_NULL_";
+                        is_web_uri $twitter_url;
+                    },
                 },
                 website_url => {
                     required   => 0,
                     type       => "Str",
-                    post_check => sub { is_web_uri $_[0]->get_value('website_url') },
+                    post_check => sub {
+                        my $website_url = $_[0]->get_value('website_url');
+                        return 1 if $website_url eq "_SET_NULL_";
+                        is_web_uri $website_url;
+                    },
                 },
                 summary => {
                     required => 0,
@@ -808,7 +820,7 @@ sub verifiers_specs {
                 },
                 public_email => {
                     required => 0,
-                    type     => EmailAddress,
+                    type     => "Str",
                 },
                 spending_spreadsheet => {
                     required => 0,
@@ -820,7 +832,7 @@ sub verifiers_specs {
                 },
                 responsible_email => {
                     required => 0,
-                    type     => EmailAddress,
+                    type     => "Str",
                 },
                 merchant_id => {
                     required => 0,
@@ -832,11 +844,11 @@ sub verifiers_specs {
                 },
                 receipt_min => {
                     required => 0,
-                    type     => "Int",
+                    type     => "Str",
                 },
                 receipt_max => {
                     required => 0,
-                    type     => "Int",
+                    type     => "Str",
                 },
                 payment_gateway_id => {
                     required   => 0,
@@ -861,15 +873,15 @@ sub verifiers_specs {
                 },
                 bank_agency => {
                     required => 0,
-                    type     => "Int",
+                    type     => "Str",
                 },
                 bank_account_number => {
                     required => 0,
-                    type     => "Int",
+                    type     => "Str",
                 },
                 bank_account_dv => {
                     required => 0,
-                    type     => "Int",
+                    type     => "Str",
                 },
             },
         ),
@@ -895,6 +907,12 @@ sub action_specs {
 
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
+
+            for (keys %values) {
+                if ($values{$_} eq "_SET_NULL_") {
+                    $values{$_} = undef;
+                }
+            }
 
             # Deletando os values que não pertencem a entidade Candidate.
             delete $values{roles};

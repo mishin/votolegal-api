@@ -178,6 +178,31 @@ db_transaction {
     is ($candidate->bank_account_number, 1234, 'bank account number');
     is ($candidate->bank_account_dv, 5, 'bank account dv');
 
+    # Quando envio um campo em branco no PUT, deve setar NULL.
+    rest_put "/api/candidate/${candidate_id}",
+        name  => 'clear',
+        params => {
+            facebook_url        => "",
+            responsible_email   => "",
+            merchant_id         => "",
+            merchant_key        => "",
+            phone               => "",
+            address_district    => "",
+            receipt_max         => "",
+            bank_agency         => "",
+        },
+    ;
+
+    ok ($candidate->discard_changes, 'discard changes');
+    is ($candidate->facebook_url, undef, 'clear fb url');
+    is ($candidate->responsible_email, undef, 'clear responsible email');
+    is ($candidate->merchant_id, undef, 'clear merchant id');
+    is ($candidate->merchant_key, undef, 'clear merchant key');
+    is ($candidate->address_district, undef, 'clear address district');
+    is ($candidate->phone, undef, 'clear phone');
+    is ($candidate->receipt_max, undef, 'clear receipt max');
+    is ($candidate->bank_agency, undef, 'clear bank_agency');
+
     # Tentando editar outro candidato.
     create_candidate;
     rest_put "/api/candidate/" . stash 'candidate.id',
