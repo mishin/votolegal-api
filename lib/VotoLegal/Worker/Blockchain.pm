@@ -31,7 +31,10 @@ sub listen_queue {
     $self->logger->debug("Buscando itens na fila...") if $self->logger;
 
     my @items = $self->schema->resultset("Donation")->search(
-        { transaction_hash => undef },
+        {
+            status           => "captured",
+            transaction_hash => undef,
+        },
         { rows   => 20 },
     )->all;
 
@@ -55,14 +58,18 @@ sub run_once {
     my $item ;
     if (defined($item_id)) {
         $item = $self->schema->resultset("Donation")->search({
+            status           => "captured",
             id               => $item_id,
             transaction_hash => undef,
         });
     }
     else {
         $item = $self->schema->resultset("Donation")->search(
-            { transaction_hash => undef },
-            { rows             => 1 },
+            {
+                status           => "captured",
+                transaction_hash => undef,
+            },
+            { rows => 1 },
         )->next;
     }
 
