@@ -75,13 +75,21 @@ sub search_POST {
         $c->stash->{collection} = $c->stash->{collection}->search({ address_city => $address_city });
     }
 
-    my @random = shuffle $c->stash->{collection}->all;
+    my @random = shuffle $c->stash->{collection}->search({
+        status         => "activated",
+        payment_status => "paid",
+    },
+    {
+        prefetch     => ['party'],
+        result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+    })->all();
 
     my @candidates ;
     for my $candidate (@random) {
         push @candidates, {
-            map { $_ => $candidate->$_ }
-              qw(id name popular_name username address_state address_city address_street picture)
+            (map { $_ => $candidate->{$_} } qw(
+              id name popular_name username address_state address_city address_street picture website_url party
+            )),
         };
     }
 

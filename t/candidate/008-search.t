@@ -8,7 +8,9 @@ my $schema = VotoLegal->model('DB');
 
 db_transaction {
     create_candidate for 1 .. 5;
-    $_->update({ status => "activated" }) for $schema->resultset('Candidate')->all;
+    for my $candidate ($schema->resultset("Candidate")->all) {
+        $candidate->update({ status => "activated", payment_status => "paid" });
+    }
 
     my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id');
 
