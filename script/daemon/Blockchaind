@@ -60,7 +60,7 @@ sub gd_run {
 
     my $cv = AnyEvent->condvar;
 
-    my $worker = VotoLegal::Worker::Email->new(
+    my $worker = VotoLegal::Worker::Blockchain->new(
         schema => get_schema(),
         logger => get_logger(),
         config => \%config,
