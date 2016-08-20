@@ -473,7 +473,7 @@ sub send_email {
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->email,
         from     => 'no-reply@votolegal.org.br',
-        subject  => "VotoLegal - Doação confirmada",
+        subject  => "Doação confirmada",
         template => get_data_section('email.tt'),
         vars     => {
             donation_name    => $self->name,
@@ -517,9 +517,6 @@ __DATA__
                               </td>
                            </tr>
                            <tr>
-                              <td colspan="2"><a href="http://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
-                           </tr>
-                           <tr>
                               <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
                                  <table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
                                     <tbody>
@@ -547,11 +544,7 @@ __DATA__
                                                 <br>
                                                 CNPJ do candidato: [% candidate_cnpj %]
                                              </p>
-                                             <p>É importante ressaltar que o Voto Legal é uma plataforma aberta e baseada em software livre. Os realizadores não se responsabilizam pelas informações fornecidas pelos candidatos, nem pelo comportamento deles durante o período eleitoral, e se eleitos, durante seus respectivos mandatos. O Voto Legal não é uma intermediadora, a doação é realizada diretamente do doador para a conta de campanha do candidato. O Voto Legal não cobra taxas e não tem nenhuma responsabilidade sobre a transação.</p>
-                                             <strong>
-                                                <p>Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq/" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
-                                                Equipe Voto Legal
-                                             </strong>
+                                             <p>É obrigatório declarar no imposto de renda a doação. Existe uma seção específica chamada: Doações para Partidos Políticos, Comitês Financeiros e Candidatos a Cargos Eletivos. Basta informar o nome e o CNPJ do candidato.</p>
                                           </td>
                                        </tr>
                                        <tr>
@@ -567,7 +560,6 @@ __DATA__
                         <tbody>
                            <tr>
                               <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-                                 <span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span>
                               </td>
                            </tr>
                         </tbody>
