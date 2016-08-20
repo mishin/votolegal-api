@@ -16,7 +16,7 @@ has schema => (
 
 has timer => (
     is      => "rw",
-    default => 5,
+    default => 30,
 );
 
 has smartContract => (
@@ -31,7 +31,7 @@ sub listen_queue {
     $self->logger->debug("Buscando itens na fila...") if $self->logger;
 
     my @items = $self->schema->resultset("Donation")->search(
-        { transaction_hash => undef, candidate_id => 426 },
+        { transaction_hash => undef },
         { rows   => 20 },
     )->all;
 
