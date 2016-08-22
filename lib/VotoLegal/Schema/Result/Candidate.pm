@@ -656,7 +656,7 @@ sub verifiers_specs {
                         my $r = shift;
                         my $phone = $r->get_value('phone');
                         return 1 if $phone eq '_SET_NULL_';
-                        
+
                         $r->get_value('phone') =~ m{^\d{10,11}$};
                     },
                 },
