@@ -93,8 +93,8 @@ sub exec_item {
     my $donation = $donation_cpf . "-" . $donation_amount . "-" . $donation_date;
 
     $self->logger->info("Registrando a transação na blockchain...") if $self->logger;
-    $self->logger->debug("CPF: '$candidate_cpf'")                   if $self->logger;
-    $self->logger->debug("Registro: '$donation'")                   if $self->logger;
+    $self->logger->info("CPF: '$candidate_cpf'")                    if $self->logger;
+    $self->logger->info("Registro: '$donation'")                    if $self->logger;
 
     my $res = $self->smartContract->addDonation($candidate_cpf, $donation);
 
