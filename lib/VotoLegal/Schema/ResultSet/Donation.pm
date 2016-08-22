@@ -198,6 +198,18 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
+            # Buscando uma possível doação repetida. Se aconteceu há menos de 15min, travamos o processo.
+            my $repeatedDonation = $self->search({
+                candidate_id => $values{candidate_id},
+                cpf          => $values{cpf},
+                amount       => $values{amount},
+                created_at   => { ">=" => \"(now() - '15 minutes'::interval)" },
+            })->next;
+
+            if ($repeatedDonation) {
+                die \['donation', 'repeated'];
+            }
+
             # Tratando alguns dados.
             my $id                         = md5_hex(Time::HiRes::time());
             my $billing_address_complement = $values{billing_address_complement};

@@ -2,6 +2,7 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
@@ -78,8 +79,8 @@ db_transaction {
     };
 
     # Agora me deslogo de novo e realizo a doação.
-    my $total_amount = 100;
     api_auth_as 'nobody';
+    my $total_amount = 100;
 
     # Obtendo a sessão do PagSeguro.
     rest_get "/api/candidate/$candidate_id/donate/session",
@@ -93,9 +94,72 @@ db_transaction {
         ok ($res->{id} =~ m{^[a-f0-9]{32}$}, 'get session');
     };
 
-    # Não consigo testar o pagseguro.
-    done_testing(); exit 0;
+    # Se fiz uma doação com o mesmo valor há menos de 15min, deve travar.
+    my $fakeCpf     = random_cpf();
+    my $fakeAmount  = 1000;
 
+    ok(
+        $schema->resultset('Donation')->create({
+            id                           => md5_hex(Time::HiRes::time()),
+            candidate_id                 => $candidate_id,
+            name                         => fake_name()->(),
+            email                        => fake_email()->(),
+            cpf                          => $fakeCpf,
+            phone                        => fake_digits("##########")->(),
+            address_state                => "SP",
+            address_city                 => "Iguape",
+            address_district             => "Centro",
+            address_zipcode              => "11920-000",
+            address_street               => "Rua Tiradentes",
+            address_house_number         => 123,
+            billing_address_street       => "Rua Tiradentes",
+            billing_address_house_number => 123,
+            billing_address_district     => "Centro",
+            billing_address_zipcode      => "11920-000",
+            billing_address_city         => "Iguape",
+            billing_address_state        => "SP",
+            amount                       => $fakeAmount,
+            birthdate                    => "1992-05-02",
+            receipt_id                   => 1,
+            ip_address                   => "127.0.0.1",
+            status                       => "created",
+        }),
+        'fake donation',
+    );
+
+    # Depois de inserir a doação fake, vou tentar fazer uma de verdade.
+    rest_post "/api/candidate/$candidate_id/donate",
+        name    => "can't donate",
+        is_fail => 1,
+        params  => {
+            name                         => fake_name()->(),
+            cpf                          => $fakeCpf,
+            email                        => fake_email()->(),
+            phone                        => fake_digits("##########")->(),
+            amount                       => $fakeAmount,
+            birthdate                    => "1992-05-02",
+            address_state                => "SP",
+            address_city                 => "Iguape",
+            address_district             => "Centro",
+            address_zipcode              => "11920-000",
+            address_street               => "Rua Tiradentes",
+            address_house_number         => 123,
+            billing_address_street       => "Rua Tiradentes",
+            billing_address_house_number => 123,
+            billing_address_district     => "Centro",
+            billing_address_zipcode      => "11920-000",
+            billing_address_city         => "Iguape",
+            billing_address_state        => "SP",
+            amount                       => $fakeAmount,
+            birthdate                    => "1992-05-02",
+            sender_hash                  => random_string(8),
+            credit_card_name             => "JUNIOR MORAES",
+            credit_card_token            => random_string(12),
+        },
+    ;
+
+    # O PagSeguro gera senderHash e credit_card_token no front-end, o que me impede de testar.
+    done_testing; exit 0;
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
         stash   => 'd1',
@@ -125,9 +189,6 @@ db_transaction {
             credit_card_name             => "JUNIOR MORAES",
         },
     ;
-
-    # O PagSeguro gera senderHash e credit_card_token no front-end, o que me impede de testar.
-    done_testing; exit 0;
 
     my $donation_id ;
     stash_test 'd1' => sub {
