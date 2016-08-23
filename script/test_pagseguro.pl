@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use common::sense;
+use open ':locale';
 use FindBin qw($RealBin $Script);
 use lib "$RealBin/../lib";
 
