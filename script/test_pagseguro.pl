@@ -29,6 +29,17 @@ while (my $candidate = $candidate_rs->next()) {
     my $merchant_id  = $candidate->merchant_id;
     my $merchant_key = $candidate->merchant_key;
 
+    if (!$merchant_id || !$merchant_key) {
+        printf(
+            "O candidato '%s' (id %d) não configurou os dados de pagamento corretamente. [merchant_id: '%s'] [merchant_key: '%s']\n",
+            $candidate->name,
+            $candidate->id,
+            $merchant_id,
+            $merchant_key,
+        );
+        next;
+    }
+
     my $pagseguro = VotoLegal::Payment::PagSeguro->new(
         merchant_id  => $merchant_id,
         merchant_key => $merchant_key,
