@@ -51,9 +51,10 @@ while (my $candidate = $candidate_rs->next()) {
 
     if (!$session) {
         printf(
-            "'%s' (id %d) não configurou os dados de pagamento corretamente. [merchant_id: '%s'] [merchant_key: '%s']\n",
+            "'%s' (id %d) não configurou os dados de pagamento corretamente. Fone: '%s'. [merchant_id: '%s'] [merchant_key: '%s']\n",
             $candidate->name,
             $candidate->id,
+            $candidate->phone,
             $merchant_id,
             $merchant_key,
         );
