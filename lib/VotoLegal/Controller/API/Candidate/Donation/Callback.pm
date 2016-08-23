@@ -39,13 +39,19 @@ sub callback_POST {
         my $status      = $notification->{status};
         my $code        = $notification->{code};
 
-        if ($status == 3) {
-            # Buscando o id da donation na database.
-            if (my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next) {
+        # Buscando o id da donation na database.
+        if (my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next) {
+            if ($status == 3) {
                 $donation->update({
                     payment_gateway_code => $code,
                     status               => "captured",
                     captured_at          => \"now()",
+                });
+            }
+            elsif ($status == 6 || $status == 8) {
+                $donation->update({
+                    payment_gateway_code => $code,
+                    status               => "chargeback",
                 });
             }
         }

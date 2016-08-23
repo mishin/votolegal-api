@@ -61,3 +61,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0055-issue-priority [0054-donation-paid-at] 2016-08-18T18:31:33Z Junior Moraes,,, <junior@junior-eokoe> # sue-priority adicionando novos assuntos prioritarios
 0056-remove-ficha-limpa [0055-issue-priority] 2016-08-19T18:59:32Z Junior Moraes,,, <junior@junior-eokoe> # move-ficha-limpa removendo o campo ficha limpa
 0057-payment-gateway-code [0056-remove-ficha-limpa] 2016-08-19T19:31:18Z Junior Moraes,,, <junior@junior-eokoe> # yment-gateway-code armazenando codigo da transacao
+0058-donation-chargeback [0057-payment-gateway-code] 2016-08-23T12:52:45Z Junior Moraes,,, <junior@junior-eokoe> # nation-chargeback add status de chargeback da doacao
