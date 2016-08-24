@@ -68,6 +68,7 @@ my %WriteMakefileArgs = (
     "Email::Valid" => 0,
     "Encode" => 0,
     "Exporter" => 0,
+    "File::Basename" => 0,
     "File::MimeInfo" => 0,
     "File::Temp" => 0,
     "FindBin" => 0,
@@ -123,7 +124,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160823,
+  "VERSION" => 20160824,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -185,6 +186,7 @@ my %FallbackPrereqs = (
   "Email::Valid" => 0,
   "Encode" => 0,
   "Exporter" => 0,
+  "File::Basename" => 0,
   "File::MimeInfo" => 0,
   "File::Temp" => 0,
   "FindBin" => 0,
