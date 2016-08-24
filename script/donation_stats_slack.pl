@@ -15,13 +15,13 @@ my $schema = VotoLegal::Schema->connect($config->{model}->{DB}->{connect_info});
 
 my $donation_rs = $schema->resultset('Donation')->search(
     { "me.status" => "captured" },
-    {   
+    {
         join     => "candidate",
         select   => [ "candidate.name", { sum => "amount", '-as' => "total_amount" } ],
         as       => [ qw(candidate_name total_amount) ],
         group_by => [ "candidate_id", "candidate.name" ],
         order_by => { '-desc' => "total_amount" },
-    },  
+    },
 );
 
 my $post = "Total de doações recebidas por candidato: \n\n";
