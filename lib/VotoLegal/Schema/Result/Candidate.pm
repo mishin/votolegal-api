@@ -273,6 +273,11 @@ __PACKAGE__->table("candidate");
   data_type: 'smallint'
   is_nullable: 1
 
+=head2 party_fund
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -369,6 +374,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "bank_agency_dv",
   { data_type => "smallint", is_nullable => 1 },
+  "party_fund",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -571,8 +578,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-19 16:00:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rXbXrok3bfPpURA/8QncrQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-24 15:50:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDv5dv6SWszVbS8++O8rWg
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -882,6 +889,10 @@ sub verifiers_specs {
                 bank_account_dv => {
                     required => 0,
                     type     => "Str",
+                },
+                party_fund => {
+                    required => 0,
+                    type     => "Int",
                 },
             },
         ),
