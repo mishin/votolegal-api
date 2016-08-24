@@ -71,9 +71,7 @@ db_transaction {
     );
 
     # Enviando a request.
-    my $date = strftime "%Y-%m-%d", localtime;
-
-    my $req  = request("/api/candidate/$candidate_id/donate/download?date=" . $date);
+    my $req  = request("/api/candidate/$candidate_id/donate/download/csv?api_key=$api_key");
     ok ($req->is_success(), 'download');
 };
 
