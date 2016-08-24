@@ -20,7 +20,7 @@ my $donation_rs = $schema->resultset('Donation')->search(
         select   => [ "candidate.name", { sum => "amount", '-as' => "total_amount" } ],
         as       => [ qw(candidate_name total_amount) ],
         group_by => [ "candidate_id", "candidate.name" ],
-        order_by => { '-desc' => "total_amount" },
+        order_by => { '-asc' => "total_amount" },
     },
 );
 
