@@ -52,9 +52,10 @@ sub donate_GET {
         {
             columns => [
                 $c->stash->{is_me}
-                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash)
-                : qw(name amount transaction_hash)
+                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash captured_at)
+                : qw(name amount transaction_hash captured_at)
             ],
+            order_by     => { '-desc' => "captured_at" },
             page         => $page,
             rows         => $results,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
