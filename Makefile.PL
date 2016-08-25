@@ -118,13 +118,14 @@ my %WriteMakefileArgs = (
   "TEST_REQUIRES" => {
     "Catalyst::Test" => 0,
     "CatalystX::Eta::Test::REST" => 0,
+    "DDP" => 0,
     "Data::Fake" => 0,
     "JSON::MaybeXS" => 0,
     "Test::More" => 0,
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160824,
+  "VERSION" => 20160825,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -162,6 +163,7 @@ my %FallbackPrereqs = (
   "DBIx::Class::ResultSet" => 0,
   "DBIx::Class::Schema" => 0,
   "DBIx::Class::TimeStamp" => 0,
+  "DDP" => 0,
   "Daemon::Generic" => 0,
   "Data::Diver" => 0,
   "Data::Fake" => 0,
