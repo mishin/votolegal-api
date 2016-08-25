@@ -52,7 +52,7 @@ sub donate_GET {
         {
             columns => [
                 $c->stash->{is_me}
-                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash)
+                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash payment_gateway_code)
                 : qw(name amount transaction_hash captured_at)
             ],
             order_by     => { '-desc' => "captured_at" },
@@ -60,7 +60,19 @@ sub donate_GET {
             rows         => $results,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
-    )->all;
+    )->all();
+
+    # O 'Número do documento' e 'Número de autorização' é composto pelo payment_gateway_code splitado em duas partes.
+    if ($c->stash->{is_me}) {
+        for my $donation (@donations) {
+            my $payment_gateway_code = delete $donation->{payment_gateway_code};
+            $payment_gateway_code    =~ s/\-//g;
+
+            my ($docNumber, $authNumber)      = unpack("(A16)*", $payment_gateway_code);
+            $donation->{document_number}      = $docNumber;
+            $donation->{authorization_number} = $authNumber;
+        }
+    }
 
     return $self->status_ok(
         $c,
