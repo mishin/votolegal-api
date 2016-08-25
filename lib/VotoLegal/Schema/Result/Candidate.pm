@@ -891,8 +891,14 @@ sub verifiers_specs {
                     type     => "Str",
                 },
                 party_fund => {
-                    required => 0,
-                    type     => "Int",
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $party_fund = $_[0]->get_value('party_fund');
+                        return 1 if $party_fund eq "_SET_NULL_";
+
+                        $party_fund =~ m{^\d+$};
+                    },
                 },
             },
         ),

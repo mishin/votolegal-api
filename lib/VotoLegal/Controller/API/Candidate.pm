@@ -91,12 +91,11 @@ sub candidate_GET {
             map { $_ => $c->stash->{candidate}->$_ } qw(
               id name popular_name status reelection party_id office_id status username picture
               video_url facebook_url twitter_url website_url summary biography instagram_url cnpj
-              raising_goal public_email spending_spreadsheet address_city address_state
+              raising_goal public_email spending_spreadsheet address_city address_state party_fund
             )
         };
     }
 
-    $candidate->{party_fund}     = $c->stash->{candidate}->party_fund || 0;
     $candidate->{total_donated}  = $c->stash->{candidate}->total_donated();
     $candidate->{people_donated} = $c->stash->{candidate}->people_donated();
 
