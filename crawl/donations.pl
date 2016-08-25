@@ -86,6 +86,7 @@ for my $candidate (@candidates) {
         $cnpj =~ s/\D//g;
 
         # TODO Obter o prestador de http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/71072/11/18/18/250000015112
+        # http://divulgacandcontas.tse.jus.br/divulga/#/candidato/2016/2/71072/250000015112/integra/receitas
 
         # Se o CNPJ bater, legal, encontrei o candidato! Vamos buscar as doações recebidas pelo mesmo.
         #if ($cnpj eq $candidateData->{cnpjcampanha}) {
