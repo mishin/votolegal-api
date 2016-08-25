@@ -82,17 +82,10 @@ for my $candidate (@candidates) {
 
         my $candidateData = decode_json $candidateReq->content;
 
-        p $candidateData;
-
         my $cnpj = $candidate->cnpj;
         $cnpj =~ s/\D//g;
 
-        #p $cityCode;
-        #p $candidateId;
-        delete $candidateData->{bens};
-        delete $candidateData->{propostas};
-        delete $candidateData->{certidoes};
-        p $candidateData;
+        # TODO Obter o prestador de http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/71072/11/18/18/250000015112
 
         # Se o CNPJ bater, legal, encontrei o candidato! Vamos buscar as doações recebidas pelo mesmo.
         #if ($cnpj eq $candidateData->{cnpjcampanha}) {
