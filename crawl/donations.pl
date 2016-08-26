@@ -5,11 +5,10 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
 use Furl;
-use JSON::XS;
+use JSON;
 use Time::HiRes;
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
-use HTML::TreeBuilder::XPath;
 use Business::BR::CPF qw(test_cpf);
 
 my $schema = get_schema();
