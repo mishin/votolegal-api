@@ -295,6 +295,8 @@ sub action_specs {
                     billing_address_state        => $values{billing_address_state},
                     billing_address_complement   => $values{billing_address_complement},
                     status                       => "created",
+                    species                      => "Cartão de crédito",
+                    by_votolegal                 => 't',
                 });
             }
 
