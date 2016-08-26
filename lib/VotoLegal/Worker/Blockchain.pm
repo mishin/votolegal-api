@@ -34,6 +34,7 @@ sub listen_queue {
         {
             status           => "captured",
             transaction_hash => undef,
+            by_votolegal     => 't',
         },
         { rows   => 20 },
     )->all;
@@ -59,6 +60,7 @@ sub run_once {
     if (defined($item_id)) {
         $item = $self->schema->resultset("Donation")->search({
             status           => "captured",
+            by_votolegal     => 't',
             id               => $item_id,
             transaction_hash => undef,
         });
@@ -67,6 +69,7 @@ sub run_once {
         $item = $self->schema->resultset("Donation")->search(
             {
                 status           => "captured",
+                by_votolegal     => 't',
                 transaction_hash => undef,
             },
             { rows => 1 },
