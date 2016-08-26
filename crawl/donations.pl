@@ -5,15 +5,15 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
 use Furl;
-#use LWP::UserAgent::Cached;
 use JSON::XS;
+use Time::HiRes;
+use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
 use HTML::TreeBuilder::XPath;
-
-use Data::Printer;
+use Business::BR::CPF qw(test_cpf);
 
 my $schema = get_schema();
-my $furl   = Furl->new();
+my $furl   = Furl->new(timeout => 30);
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
@@ -85,19 +85,92 @@ for my $candidate (@candidates) {
         my $cnpj = $candidate->cnpj;
         $cnpj =~ s/\D//g;
 
-        # TODO Obter o prestador de http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/71072/11/18/18/250000015112
-        # http://divulgacandcontas.tse.jus.br/divulga/#/candidato/2016/2/71072/250000015112/integra/receitas
-
         # Se o CNPJ bater, legal, encontrei o candidato! Vamos buscar as doações recebidas pelo mesmo.
-        #if ($cnpj eq $candidateData->{cnpjcampanha}) {
-        #    #p $cnpj;
-        #    last;
-        #}
+        if ($cnpj eq $candidateData->{cnpjcampanha}) {
+            printf "Legal, o candidato id '%d' de cnpj '%s' bateu com o cnpj '%s'!\n",
+                $candidate->id,
+                $candidate->cnpj,
+                $candidateData->{cnpjcampanha}
+            ;
+
+            # Para obter as receitas eu preciso do numero do partido e do número do candidato.
+            my $numPartido   = $candidateData->{partido}->{numero};
+            my $numCandidato = $candidateData->{numero};
+
+            # Obtendo numero do prestador.
+            my $prestadorReq = $furl->get(
+                "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/$cityCode/11/$numPartido/$numCandidato/$candidateId"
+            );
+
+            my $prestador = decode_json $prestadorReq->content;
+
+            # Obtendo as receitas.
+            # Eu não faço ideia a que se refere esses números, mas descobri que preciso deles.
+            my $sqEntregaPrestacao = $prestador->{dadosConsolidados}->{sqEntregaPrestacao};
+            my $sqPrestadorConta   = $prestador->{dadosConsolidados}->{sqPrestadorConta};
+
+            if (!defined($sqEntregaPrestacao) || !defined($sqPrestadorConta)) {
+                printf "O candidato '%s' (id %d) não prestou contas das declarações.\n", $candidate->name, $candidate->id;
+                next;
+            }
+
+            my $receitasReq = $furl->get(
+                "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/receitas/2/$sqPrestadorConta/$sqEntregaPrestacao"
+            );
+
+            my $receitas = decode_json $receitasReq->content;
+
+            #p $receitas;
+            for my $receita (@{ $receitas }) {
+                test_cpf($receita->{cpfCnpjDoador}) or next;
+                next if $receita->{fonteOrigem} eq "Fundo Partidário";
+
+                # Pesquisando a doação no banco.
+                my $donation = $candidate->donations->search({
+                    cpf            => $receita->{cpfCnpjDoador},
+                    amount         => $receita->{valorReceita} * 100,
+                    species        => $receita->{especieRecurso},
+                    by_votolegal   => 'f',
+                })
+                ->search(\['DATE(captured_at) = ?', $receita->{dtReceita}])
+                ->next;
+
+                if ($donation) {
+                    printf "A doação para o candidato '%d' do cpf %s no valor de R\$ %s já estava registrada.\n",
+                        $candidate->id,
+                        $receita->{cpfCnpjDoador},
+                        $receita->{valorReceita},
+                    ;
+                }
+                else {
+                    printf "Armazenando doação para o candidato %d do cpf %s no valor de R\$ %s.\n",
+                        $candidate->id,
+                        $receita->{cpfCnpjDoador},
+                        $receita->{valorReceita},
+                    ;
+
+                    $candidate->donations->create({
+                        id           => md5_hex(Time::HiRes::time()),
+                        name         => $receita->{nomeDoador},
+                        cpf          => $receita->{cpfCnpjDoador},
+                        amount       => $receita->{valorReceita} * 100,
+                        species      => $receita->{especieRecurso},
+                        ip_address   => "127.0.0.1",
+                        by_votolegal => 'f',
+                        status       => "captured",
+                        captured_at  => $receita->{dtReceita},
+                    });
+                }
+            }
+            last;
+        }
+        else {
+            printf "O cnpj '%s' do candidato id '%d' não bateu com '%s'.\n",
+                $candidate->cnpj,
+                $candidate->id,
+                $candidateData->{cnpjcampanha}
+            ;
+        }
     }
-
-
-    # http://divulgacandcontas.tse.jus.br/divulga/#/
-    # TODO Buscando doações.
-    # TODO Salvando doações no banco de dados.
-    last;
 }
+
