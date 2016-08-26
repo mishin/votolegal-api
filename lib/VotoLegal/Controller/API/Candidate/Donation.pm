@@ -44,16 +44,22 @@ sub donate_GET {
     my $page    = $c->req->params->{page}    || 1;
     my $results = $c->req->params->{results} || 20;
 
+    # O candidato vê apenas doações do VotoLegal.
     my @donations = $c->stash->{collection}->search(
         {
             candidate_id => $c->stash->{candidate}->id,
             status       => "captured",
+            (
+                $c->stash->{is_me}
+                ? ( by_votolegal => 't' )
+                : ()
+            ),
         },
         {
             columns => [
                 $c->stash->{is_me}
                 ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash payment_gateway_code)
-                : qw(name amount transaction_hash captured_at)
+                : qw(name amount transaction_hash captured_at species)
             ],
             order_by     => { '-desc' => "captured_at" },
             page         => $page,
