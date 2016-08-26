@@ -63,3 +63,6 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0057-payment-gateway-code [0056-remove-ficha-limpa] 2016-08-19T19:31:18Z Junior Moraes,,, <junior@junior-eokoe> # yment-gateway-code armazenando codigo da transacao
 0058-donation-chargeback [0057-payment-gateway-code] 2016-08-23T12:52:45Z Junior Moraes,,, <junior@junior-eokoe> # nation-chargeback add status de chargeback da doacao
 0059-party-fund [0058-donation-chargeback] 2016-08-24T18:51:05Z Junior Moraes,,, <junior@junior-eokoe> # rty-fund add party fund
+0060-donation-crawl [0059-party-fund] 2016-08-26T17:26:42Z junior,,, <junior@fvox> # nation-crawl infos que nao vem nas doacoes crawleadas
+0061-donation-crawl [0060-donation-crawl] 2016-08-26T18:00:28Z junior,,, <junior@fvox> # nation-crawl adicionando colunas
+0062-donation-receipt-id-tse [0061-donation-crawl] 2016-08-26T18:07:23Z junior,,, <junior@fvox> # nation-receipt-id-tse id do recibo eleitoral

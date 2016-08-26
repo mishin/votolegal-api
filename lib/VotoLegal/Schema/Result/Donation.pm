@@ -92,7 +92,7 @@ __PACKAGE__->table("donation");
 =head2 receipt_id
 
   data_type: 'integer'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 transaction_hash
 
@@ -174,6 +174,7 @@ __PACKAGE__->table("donation");
 =head2 billing_address_complement
 
   data_type: 'text'
+  default_value: (empty string)
   is_nullable: 1
 
 =head2 address_district
@@ -189,6 +190,17 @@ __PACKAGE__->table("donation");
 =head2 payment_gateway_code
 
   data_type: 'text'
+  is_nullable: 1
+
+=head2 species
+
+  data_type: 'text'
+  default_value: 'Cartão de crédito'
+  is_nullable: 1
+
+=head2 by_votolegal
+
+  data_type: 'boolean'
   is_nullable: 1
 
 =cut
@@ -213,7 +225,7 @@ __PACKAGE__->add_columns(
   "birthdate",
   { data_type => "date", is_nullable => 0 },
   "receipt_id",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
   "transaction_hash",
   { data_type => "text", is_nullable => 1 },
   "ip_address",
@@ -250,13 +262,21 @@ __PACKAGE__->add_columns(
   "billing_address_state",
   { data_type => "text", is_nullable => 0 },
   "billing_address_complement",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", default_value => "", is_nullable => 1 },
   "address_district",
   { data_type => "text", is_nullable => 0 },
   "captured_at",
   { data_type => "timestamp", is_nullable => 1 },
   "payment_gateway_code",
   { data_type => "text", is_nullable => 1 },
+  "species",
+  {
+    data_type     => "text",
+    default_value => "Cart\xE3o de cr\xE9dito",
+    is_nullable   => 1,
+  },
+  "by_votolegal",
+  { data_type => "boolean", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -304,8 +324,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-19 16:32:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mLk8MuKBG23zdXucQC44ig
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-26 15:21:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jx+/VeVQdY/gj06KHqw1DQ
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);
