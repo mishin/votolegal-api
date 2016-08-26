@@ -14,7 +14,10 @@ $config = { $config->getall };
 my $schema = VotoLegal::Schema->connect($config->{model}->{DB}->{connect_info});
 
 my $donation_rs = $schema->resultset('Donation')->search(
-    { "me.status" => "captured" },
+    {
+        "me.status"       => "captured",
+        "me.by_votolegal" => 't',
+    },
     {
         join     => "candidate",
         select   => [ "candidate.name", { sum => "amount", '-as' => "total_amount" } ],
