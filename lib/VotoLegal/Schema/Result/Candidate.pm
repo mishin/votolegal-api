@@ -1064,6 +1064,14 @@ sub people_donated {
     my $self = shift;
 
     return $self->donations->search({
+        status => 'captured',
+    })->count();
+}
+
+sub people_donated_by_votolegal {
+    my $self = shift;
+
+    return $self->donations->search({
         status       => 'captured',
         by_votolegal => 't',
     })->count();
