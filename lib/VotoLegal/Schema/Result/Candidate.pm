@@ -883,12 +883,24 @@ sub verifiers_specs {
                     type     => "Str",
                 },
                 bank_account_number => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $bank_account_number = $_[0]->get_value('bank_account_number');
+                        return 1 if $bank_account_number eq "_SET_NULL_";
+
+                        $bank_account_number =~ m{^\d+$};
+                    },
                 },
                 bank_account_dv => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $bank_account_dv = $_[0]->get_value('bank_account_dv');
+                        return 1 if $bank_account_dv eq "_SET_NULL_";
+
+                        $bank_account_dv =~ m{^([a-zA-Z0-9]+)$};
+                    }
                 },
                 party_fund => {
                     required   => 0,
