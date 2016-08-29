@@ -39,26 +39,32 @@ sub verifiers_specs {
                     type     => 'Str',
                 },
                 username => {
-                    required => 1,
-                    type     => 'Str',
+                    required   => 1,
+                    type       => 'Str',
+                    filters    => [ qw(lower) ],
                     post_check => sub {
                         my $r = shift;
 
                         my $username = $r->get_value('username');
 
-                        $username =~ m{^[a-zA-Z0-9_-]+$} or die \['username', 'invalid characters'];
+                        $username =~ m{^[a-z0-9_-]+$} or die \['username', 'invalid characters'];
+
                         # api/www/badges
                         return 0 if $username =~ /^(www(\d+)?|ftp|email|.?api|.*badges.*)$/i;
 
-
-                        if ($username !~ m{[a-zA-Z]}) {
+                        if ($username !~ m{[a-z]}) {
                             die \['username', "must have letters"];
                         }
 
+                        # Menos de 4 caracteres.
                         die \['username', 'too short'] if length $username < 4;
-                        # só numeros
+
+                        # Só numeros.
                         return 0 if $username =~ /^([0-9]+)$/i;
-                        $self->search({ username => $username })->count and die \["username", "already exists"];
+                        # Inicia com número.
+                        return 0 if $username =~ /^\d/i;
+
+                        $self->search({ username => { 'ilike' => $username } })->count and die \["username", "already exists"];
 
                         return 1;
                     },
