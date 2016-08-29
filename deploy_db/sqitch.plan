@@ -66,3 +66,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0060-donation-crawl [0059-party-fund] 2016-08-26T17:26:42Z junior,,, <junior@fvox> # nation-crawl infos que nao vem nas doacoes crawleadas
 0061-donation-crawl [0060-donation-crawl] 2016-08-26T18:00:28Z junior,,, <junior@fvox> # nation-crawl adicionando colunas
 0062-donation-receipt-id-tse [0061-donation-crawl] 2016-08-26T18:07:23Z junior,,, <junior@fvox> # nation-receipt-id-tse id do recibo eleitoral
+0063-dv-alfanum [0062-donation-receipt-id-tse] 2016-08-29T14:32:50Z Junior Moraes,,, <junior@junior-eokoe> # -alfanum digitos verificadores sao alfanumeros

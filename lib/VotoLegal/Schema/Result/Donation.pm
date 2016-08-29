@@ -62,7 +62,7 @@ __PACKAGE__->table("donation");
 =head2 email
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 cpf
 
@@ -87,7 +87,7 @@ __PACKAGE__->table("donation");
 =head2 birthdate
 
   data_type: 'date'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 receipt_id
 
@@ -114,22 +114,22 @@ __PACKAGE__->table("donation");
 =head2 address_state
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address_city
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address_zipcode
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address_street
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address_complement
 
@@ -139,37 +139,37 @@ __PACKAGE__->table("donation");
 =head2 address_house_number
 
   data_type: 'integer'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_street
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_house_number
 
   data_type: 'integer'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_district
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_zipcode
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_city
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_state
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 billing_address_complement
 
@@ -180,7 +180,7 @@ __PACKAGE__->table("donation");
 =head2 address_district
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 captured_at
 
@@ -213,7 +213,7 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "text", is_nullable => 0 },
   "email",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "cpf",
   { data_type => "text", is_nullable => 0 },
   "phone",
@@ -223,7 +223,7 @@ __PACKAGE__->add_columns(
   "status",
   { data_type => "text", is_nullable => 0 },
   "birthdate",
-  { data_type => "date", is_nullable => 0 },
+  { data_type => "date", is_nullable => 1 },
   "receipt_id",
   { data_type => "integer", is_nullable => 1 },
   "transaction_hash",
@@ -238,33 +238,33 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "address_state",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "address_city",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "address_zipcode",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "address_street",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "address_complement",
   { data_type => "text", is_nullable => 1 },
   "address_house_number",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
   "billing_address_street",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "billing_address_house_number",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
   "billing_address_district",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "billing_address_zipcode",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "billing_address_city",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "billing_address_state",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "billing_address_complement",
   { data_type => "text", default_value => "", is_nullable => 1 },
   "address_district",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "captured_at",
   { data_type => "timestamp", is_nullable => 1 },
   "payment_gateway_code",
@@ -324,8 +324,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-26 15:21:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jx+/VeVQdY/gj06KHqw1DQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:28:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VN3ZHlnQYM4SBbC2r4wrsQ
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

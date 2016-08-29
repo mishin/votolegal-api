@@ -265,13 +265,15 @@ __PACKAGE__->table("candidate");
 
 =head2 bank_account_dv
 
-  data_type: 'integer'
+  data_type: 'varchar'
   is_nullable: 1
+  size: 2
 
 =head2 bank_agency_dv
 
-  data_type: 'smallint'
+  data_type: 'varchar'
   is_nullable: 1
+  size: 2
 
 =head2 party_fund
 
@@ -371,9 +373,9 @@ __PACKAGE__->add_columns(
   "bank_account_number",
   { data_type => "integer", is_nullable => 1 },
   "bank_account_dv",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "varchar", is_nullable => 1, size => 2 },
   "bank_agency_dv",
-  { data_type => "smallint", is_nullable => 1 },
+  { data_type => "varchar", is_nullable => 1, size => 2 },
   "party_fund",
   { data_type => "integer", is_nullable => 1 },
 );
@@ -578,8 +580,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-24 15:50:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kDv5dv6SWszVbS8++O8rWg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:32:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rFSQZgqJSh+HuIYj0wE0fA
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -884,6 +886,10 @@ sub verifiers_specs {
                     },
                 },
                 bank_agency => {
+                    required => 0,
+                    type     => "Str",
+                },
+                bank_agency_dv => {
                     required => 0,
                     type     => "Str",
                 },
