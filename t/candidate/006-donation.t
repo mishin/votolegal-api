@@ -78,6 +78,9 @@ db_transaction {
         is_deeply ($res->{donations}, [], 'no donations');
     };
 
+    # O PagSeguro gera senderHash e credit_card_token no front-end, o que me impede de testar.
+    done_testing; exit 0;
+
     # Agora me deslogo de novo e realizo a doação.
     api_auth_as 'nobody';
     my $total_amount = 100;
@@ -158,8 +161,6 @@ db_transaction {
         },
     ;
 
-    # O PagSeguro gera senderHash e credit_card_token no front-end, o que me impede de testar.
-    done_testing; exit 0;
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
         stash   => 'd1',
