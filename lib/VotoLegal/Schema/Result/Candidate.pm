@@ -819,7 +819,12 @@ sub verifiers_specs {
                 instagram_url => {
                     required   => 0,
                     type       => "Str",
-                    post_check => sub { is_web_uri $_[0]->get_value('instagram_url') },
+                    post_check => sub {
+                        my $instagram_url = $_[0]->get_value('instagram_url');
+                        return 1 if $instagram_url eq "_SET_NULL_";
+
+                        is_web_uri $instagram_url;
+                    },
                 },
                 raising_goal => {
                     required => 0,
