@@ -2,7 +2,6 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
-use POSIX qw(strftime);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
@@ -27,8 +26,6 @@ db_transaction {
             payment_gateway_id => 2,
             merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
             merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
-            receipt_min        => 10_000,
-            receipt_max        => 10_006,
         },
     ;
 
@@ -44,7 +41,6 @@ db_transaction {
             phone                        => fake_digits("##########")->(),
             amount                       => fake_int(1000, 10000)->(),
             birthdate                    => "1992-01-01",
-            receipt_id                   => $_,
             ip_address                   => "127.0.0.1",
             address_state                => "SP",
             address_city                 => "Iguape",

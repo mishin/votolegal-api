@@ -167,10 +167,6 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Str",
                 },
-                receipt_id => {
-                    required => 1,
-                    type     => "Int",
-                },
                 ip_address => {
                     required => 1,
                     type     => "Str",
@@ -278,7 +274,6 @@ sub action_specs {
                     phone                        => $values{phone},
                     amount                       => $values{amount},
                     birthdate                    => $values{birthdate},
-                    receipt_id                   => $values{receipt_id},
                     ip_address                   => $values{ip_address},
                     address_state                => $values{address_state},
                     address_city                 => $values{address_city},

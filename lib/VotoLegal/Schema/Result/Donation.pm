@@ -89,11 +89,6 @@ __PACKAGE__->table("donation");
   data_type: 'date'
   is_nullable: 1
 
-=head2 receipt_id
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 transaction_hash
 
   data_type: 'text'
@@ -224,8 +219,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "birthdate",
   { data_type => "date", is_nullable => 1 },
-  "receipt_id",
-  { data_type => "integer", is_nullable => 1 },
   "transaction_hash",
   { data_type => "text", is_nullable => 1 },
   "ip_address",
@@ -324,8 +317,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:28:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VN3ZHlnQYM4SBbC2r4wrsQ
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 16:07:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F9Gj5SqE32x7SFt/61jXeg
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

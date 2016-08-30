@@ -63,7 +63,6 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     # Header do CSV.
     $csv->print($fh, [ qw(
-        receipt_id
         name
         cpf
         email
@@ -73,7 +72,6 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     while (my $result = $donation_rs->next()) {
         $csv->print($fh, [
-            $result->receipt_id,
             $result->name,
             $result->cpf,
             $result->email,

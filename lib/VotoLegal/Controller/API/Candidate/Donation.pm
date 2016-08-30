@@ -19,7 +19,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $c->detach();
     }
 
-    for (qw(merchant_id merchant_key payment_gateway_id receipt_min receipt_max)) {
+    for (qw(merchant_id merchant_key payment_gateway_id)) {
         defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
     }
 }
@@ -59,7 +59,7 @@ sub donate_GET {
         {
             columns => [
                 $c->stash->{is_me}
-                ? qw(name email cpf phone amount birthdate receipt_id captured_at transaction_hash payment_gateway_code)
+                ? qw(name email cpf phone amount birthdate captured_at transaction_hash payment_gateway_code)
                 : qw(name amount transaction_hash captured_at species)
             ],
             order_by     => { '-desc' => "captured_at" },
@@ -117,17 +117,6 @@ sub donate_POST {
             { for => 'update', columns => 'id' },
         )->next;
 
-        # Obtendo o id do recibo.
-        my $receipt_min     = $c->stash->{candidate}->receipt_min;
-        my $receipt_max     = $c->stash->{candidate}->receipt_max;
-        my $last_receipt_id = $c->stash->{candidate}->donations->search({ by_votolegal => 't' })->get_column("receipt_id")->max || $receipt_min;
-        my $receipt_id      = $last_receipt_id + 1;
-
-        # Verificando se o candidato possui recibos restantes disponíveis.
-        if ($receipt_id > $receipt_max) {
-            die \['receipt_max', "O candidato atingiu o número máximo de recibos emitidos."];
-        }
-
         # Criando a donation.
         my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
@@ -147,7 +136,6 @@ sub donate_POST {
             with => {
                 %{ $c->req->params },
                 candidate_id     => $c->stash->{candidate}->id,
-                receipt_id       => $receipt_id,
                 ip_address       => $ipAddr,
                 notification_url => $callback_url
             },

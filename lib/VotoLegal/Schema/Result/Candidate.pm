@@ -231,16 +231,6 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
-=head2 receipt_min
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 receipt_max
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 payment_gateway_id
 
   data_type: 'integer'
@@ -360,10 +350,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "address_district",
   { data_type => "text", is_nullable => 1 },
-  "receipt_min",
-  { data_type => "integer", is_nullable => 1 },
-  "receipt_max",
-  { data_type => "integer", is_nullable => 1 },
   "payment_gateway_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "bank_code",
@@ -595,8 +581,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 18:07:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LocolQvgCB7dJcG4YPDx3Q
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 16:07:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Tfj653GXU657OP/miGXng
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -871,14 +857,6 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Str",
                 },
-                receipt_min => {
-                    required => 0,
-                    type     => "Str",
-                },
-                receipt_max => {
-                    required => 0,
-                    type     => "Str",
-                },
                 payment_gateway_id => {
                     required   => 0,
                     type       => "Int",
@@ -1010,84 +988,6 @@ sub action_specs {
             $self->update({ publish => 0 });
         },
     };
-}
-
-sub export_donations_to_tse {
-    my ($self, $date) = @_;
-
-    defined $date or die "missing 'date'.";
-
-    my $donation_rs = $self->donations->search(\[
-        'CAST(captured_at AS DATE) = ?',
-        $date,
-    ]);
-
-    my $fh = File::Temp->new(UNLINK => 1);
-    $fh->autoflush(1);
-
-    # Tratando alguns campos do candidato.
-    my $cnpj                = $self->cnpj;
-    $cnpj                   =~ s/\D+//g;
-    $cnpj                   = left_padding_zeros($cnpj, 14);
-    my $data_movimentacao   = ""; # TODO Preencher.
-    my $bank_code           = left_padding_zeros($self->bank_code, 3);
-    my $bank_agency         = left_padding_zeros($self->bank_agency, 8);
-    my $bank_agency_dv      = left_padding_zeros($self->bank_agency_dv, 2);
-    my $bank_account_number = left_padding_zeros($self->bank_account_number, 18);
-    my $bank_account_dv     = left_padding_zeros($self->bank_account_dv, 2);
-
-    # Escrevendo o header.
-    print $fh "1";                     # Registro.
-    print $fh $cnpj;                   # CNPJ.
-    print $fh $data_movimentacao;      # Data da movimentação.
-    print $fh $bank_code;              # Código do banco.
-    print $fh $bank_agency;            # Numero da agência.
-    print $fh $bank_agency_dv;         # Dígito verificador da agência.
-    print $fh $bank_account_number;    # Número da conta.
-    print $fh $bank_account_dv;        # Digito verificador da conta.
-    print $fh "400";                   # Versao do layout.
-    print $fh "DOACINTE";              # Nome do layout.
-    print $fh " " x 93;                # Preencher com espaços em branco.
-
-    # Fim do header: line break.
-    print $fh "\r\n";
-
-    # Escrevendo doações.
-    my $count = 0;
-    while (my $donation = $donation_rs->next()) {
-        # Tratando os campos.
-        my $receipt_id         = left_padding_zeros($donation->receipt_id, 21);
-        my $numero_doc         = left_padding_zeros("", 20); # TODO Duvida.
-        my $numero_autorizacao = left_padding_zeros("", 20); # TODO duvida.
-        my $cpf                = left_padding_zeros($donation->cpf, 11);
-        my $name               = left_padding_whitespaces($donation->name, 60);
-        my $captured_at        = $donation->captured_at->strftime('%m%d%Y');
-        my $amount             = sprintf("%.2f", $donation->amount / 100);
-        $amount                =~ s/\.//;
-        $amount                = left_padding_zeros($amount, 18);
-
-        print $fh "2";                  # Registro.
-        print $fh $receipt_id;          # Id do recibo.
-        print $fh $numero_doc;          # Numero do documento.
-        print $fh $numero_autorizacao;  # Numero do documento.
-        print $fh "01";                 # Tipo da doação. TODO Duvida.
-        print $fh "02";                 # Espécie do recurso: cartão de crédito.
-        print $fh $cpf;                 # CPF do doador.
-        print $fh "F";                  # Pessoa física.
-        print $fh $captured_at;         # Data da doação.
-        print $fh $amount;              # Valor da doação.
-
-        # Fim da doação.
-        print $fh "\r\n";
-        $count++;
-    }
-
-    # Trailer.
-    print $fh "3";         # Registro.
-    print $fh $count;      # Total de doações presentes neste arquivo.
-    print $fh " " x 154;   # Espaços em branco.
-
-    return $fh;
 }
 
 sub total_donated {

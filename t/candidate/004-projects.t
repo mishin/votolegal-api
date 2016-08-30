@@ -112,7 +112,6 @@ db_transaction {
             billing_address_state        => "SP",
             amount                       => 100,
             birthdate                    => "1992-05-02",
-            receipt_id                   => 1,
             ip_address                   => "127.0.0.1",
             status                       => "captured",
         });

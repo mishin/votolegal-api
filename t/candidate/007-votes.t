@@ -23,8 +23,6 @@ db_transaction {
             payment_gateway_id => 2,
             merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
             merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
-            receipt_min        => 0,
-            receipt_max        => 10,
         },
     ;
 

@@ -60,8 +60,6 @@ db_transaction {
             payment_gateway_id => 2,
             merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
             merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
-            receipt_min        => 10_000,
-            receipt_max        => 10_006,
         },
     ;
 
@@ -123,7 +121,6 @@ db_transaction {
             billing_address_state        => "SP",
             amount                       => $fakeAmount,
             birthdate                    => "1992-05-02",
-            receipt_id                   => 1,
             ip_address                   => "127.0.0.1",
             status                       => "created",
         }),
@@ -287,23 +284,6 @@ db_transaction {
             'total donated'
         );
     };
-
-    # Eu liberei apenas 7 recibos de doações. A próxima que eu fizer, deve estourar o limite.
-    rest_post "/api/candidate/$candidate_id/donate",
-        name    => "no receipts available",
-        is_fail => 1,
-        params  => {
-            name                 => fake_name()->(),
-            cpf                  => random_cpf(),
-            email                => fake_email()->(),
-            credit_card_name     => "JUNIOR MORAES",
-            credit_card_validity => "201801",
-            credit_card_number   => "6362970000457013",
-            credit_card_brand    => "elo",
-            amount               => "500",
-            birthdate            => "1992-05-02",
-        },
-    ;
 };
 
 done_testing();

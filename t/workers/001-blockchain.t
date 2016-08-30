@@ -30,10 +30,9 @@ db_transaction {
     # não chega. Dessa forma vou "mockar" uma doação diretamente na tabela donation com status de pago.
     my $donation_rs = $schema->resultset("Donation");
 
-    my $receipt_id = fake_int(100, 1000)->();
     ok (
         my $donation = $schema->resultset("Donation")->create({
-            id                           => md5_hex($receipt_id),
+            id                           => md5_hex(fake_int(100, 1000)->()),
             candidate_id                 => stash 'candidate.id',
             name                         => fake_name()->(),
             email                        => fake_email()->(),
@@ -41,7 +40,6 @@ db_transaction {
             phone                        => fake_digits("##########")->(),
             amount                       => fake_int(1000, 10000)->(),
             birthdate                    => "1992-01-01",
-            receipt_id                   => $receipt_id,
             ip_address                   => "127.0.0.1",
             address_state                => "SP",
             address_city                 => "Iguape",

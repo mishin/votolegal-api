@@ -146,8 +146,6 @@ db_transaction {
             merchant_key        => $merchant_key,
             phone               => fake_digits("###########")->(),
             address_district    => "Centro",
-            receipt_min         => 10000,
-            receipt_max         => 20000,
             bank_code           => "237",
             bank_agency         => "0120",
             bank_account_number => "1234",
@@ -172,8 +170,6 @@ db_transaction {
     is ($candidate->merchant_key, $merchant_key, 'merchant_key');
     is ($candidate->address_district, "Centro", 'address district');
     ok ($candidate->phone =~ m{^\d+$}, 'phone');
-    is ($candidate->receipt_min, 10000, 'receipt min');
-    is ($candidate->receipt_max, 20000, 'receipt min');
     is ($candidate->bank_code->id, 237, 'bank code');
     is ($candidate->bank_agency, 120, 'bank agency');
     is ($candidate->bank_account_number, 1234, 'bank account number');
@@ -190,7 +186,6 @@ db_transaction {
             merchant_key        => "",
             phone               => "",
             address_district    => "",
-            receipt_max         => "",
             bank_agency         => "",
         },
     ;
@@ -202,7 +197,6 @@ db_transaction {
     is ($candidate->merchant_key, undef, 'clear merchant key');
     is ($candidate->address_district, undef, 'clear address district');
     is ($candidate->phone, undef, 'clear phone');
-    is ($candidate->receipt_max, undef, 'clear receipt max');
     is ($candidate->bank_agency, undef, 'clear bank_agency');
 
     # Tentando editar outro candidato.
