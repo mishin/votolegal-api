@@ -75,6 +75,7 @@ my %WriteMakefileArgs = (
     "Furl" => 0,
     "IO::Socket::SSL" => 0,
     "JSON" => 0,
+    "LWP::UserAgent::OfflineCache" => 0,
     "List::Util" => 0,
     "Log::Log4perl" => 0,
     "MIME::Base64" => 0,
@@ -125,7 +126,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160829,
+  "VERSION" => 20160830,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -195,6 +196,7 @@ my %FallbackPrereqs = (
   "IO::Socket::SSL" => 0,
   "JSON" => 0,
   "JSON::MaybeXS" => 0,
+  "LWP::UserAgent::OfflineCache" => 0,
   "List::Util" => 0,
   "Log::Log4perl" => 0,
   "MIME::Base64" => 0,
