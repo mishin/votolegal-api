@@ -120,7 +120,7 @@ sub donate_POST {
         # Obtendo o id do recibo.
         my $receipt_min     = $c->stash->{candidate}->receipt_min;
         my $receipt_max     = $c->stash->{candidate}->receipt_max;
-        my $last_receipt_id = $c->stash->{candidate}->donations->get_column("receipt_id")->max || $receipt_min;
+        my $last_receipt_id = $c->stash->{candidate}->donations->search({ by_votolegal => 't' })->get_column("receipt_id")->max || $receipt_min;
         my $receipt_id      = $last_receipt_id + 1;
 
         # Verificando se o candidato possui recibos restantes disponíveis.
