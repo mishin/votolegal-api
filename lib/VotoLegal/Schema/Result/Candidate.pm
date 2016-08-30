@@ -470,6 +470,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 expenditures
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Expenditure>
+
+=cut
+
+__PACKAGE__->has_many(
+  "expenditures",
+  "VotoLegal::Schema::Result::Expenditure",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 office
 
 Type: belongs_to
@@ -580,8 +595,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 11:32:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rFSQZgqJSh+HuIYj0wE0fA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 18:07:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LocolQvgCB7dJcG4YPDx3Q
 
 use File::Temp q(:seekable);
 use Data::Verifier;
