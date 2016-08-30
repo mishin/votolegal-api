@@ -65,6 +65,8 @@ db_transaction {
     stash_test 'e1' => sub {
         my $res = shift;
 
+        is ($res->{total_amount}, 60000, 'total amount');
+
         is_deeply(
             $res->{expenditure}->[0],
             {

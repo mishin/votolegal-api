@@ -43,7 +43,8 @@ sub expenditure_GET {
     return $self->status_ok(
         $c,
         entity => {
-            expenditure => \@expenditures,
+            total_amount => $c->stash->{collection}->get_column("amount")->sum,
+            expenditure  => \@expenditures,
         }
     );
 }
