@@ -4,15 +4,19 @@ use open q(:locale);
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
-use Furl;
 use JSON;
 use Time::HiRes;
+use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
+use LWP::UserAgent::OfflineCache;
 use Business::BR::CPF qw(test_cpf);
 
 my $schema = get_schema();
-my $furl   = Furl->new(timeout => 30);
+my $ua = LWP::UserAgent::OfflineCache->new(
+    cache_dir => tempdir(CLEANUP => 1),
+    delay     => 0,
+);
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
@@ -30,11 +34,11 @@ for my $candidate (@candidates) {
 
     # Município.
     printf "Buscando id do município do candidato '%d'.\n", $candidate->id;
-    my $reqCity = $furl->get(
+    my $reqCity = $ua->get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/eleicao/buscar/${state}/2/municipios"
     );
 
-    my $cities = decode_json $reqCity->content;
+    my $cities = decode_json $reqCity;
 
     my $cityCode ;
     for (@{ $cities->{municipios} }) {
@@ -47,10 +51,10 @@ for my $candidate (@candidates) {
 
     # Buscando o código do cargo.
     printf "Buscando os cargos do município do candidato '%d'.\n", $candidate->id;
-    my $officeReq = $furl->get(
+    my $officeReq = $ua->get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/eleicao/listar/municipios/2/${cityCode}/cargos"
     );
-    my $offices = decode_json $officeReq->content;
+    my $offices = decode_json $officeReq;
 
     my $officeCode;
     for (@{ $offices->{cargos} }) {
@@ -61,10 +65,10 @@ for my $candidate (@candidates) {
     }
 
     # Listando os candidatos que concorrem ao mesmo cargo.
-    my $candidatesReq = $furl->get(
+    my $candidatesReq = $ua->get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2016/$cityCode/2/$officeCode/candidatos"
     );
-    my $candidates = decode_json $candidatesReq->content;
+    my $candidates = decode_json $candidatesReq;
 
     # A API do TSE só pode estar de brinks: o campo 'cnpjcampanha' nesta ultima request não é populado, sempre vem
     # null. Serei obrigado a entrar na página de cada candidato para confrontar o CNPJ.
@@ -75,11 +79,11 @@ for my $candidate (@candidates) {
 
         my $candidateId = $_->{id};
 
-        my $candidateReq = $furl->get(
+        my $candidateReq = $ua->get(
             "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2016/$cityCode/2/candidato/$candidateId"
         );
 
-        my $candidateData = decode_json $candidateReq->content;
+        my $candidateData = decode_json $candidateReq;
 
         my $cnpj = $candidate->cnpj;
         $cnpj =~ s/\D//g;
@@ -97,11 +101,11 @@ for my $candidate (@candidates) {
             my $numCandidato = $candidateData->{numero};
 
             # Obtendo numero do prestador.
-            my $prestadorReq = $furl->get(
+            my $prestadorReq = $ua->get(
                 "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/$cityCode/11/$numPartido/$numCandidato/$candidateId"
             );
 
-            my $prestador = decode_json $prestadorReq->content;
+            my $prestador = decode_json $prestadorReq;
 
             # Obtendo as receitas.
             # Eu não faço ideia a que se refere esses números, mas descobri que preciso deles.
@@ -113,11 +117,11 @@ for my $candidate (@candidates) {
                 next;
             }
 
-            my $receitasReq = $furl->get(
+            my $receitasReq = $ua->get(
                 "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/receitas/2/$sqPrestadorConta/$sqEntregaPrestacao"
             );
 
-            my $receitas = decode_json $receitasReq->content;
+            my $receitas = decode_json $receitasReq;
 
             #p $receitas;
             for my $receita (@{ $receitas }) {
