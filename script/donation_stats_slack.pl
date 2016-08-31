@@ -37,7 +37,7 @@ while (my $donation = $donation_rs->next()) {
 }
 
 $schema->resultset('SlackQueue')->create({
-    channel => "votolegal-test",
+    channel => "votolegal-bot",
     message => $post,
 });
 
