@@ -4,7 +4,7 @@ use Moose;
 
 with 'VotoLegal::Worker';
 
-use VotoLegal::Mailer;
+use WebService::Slack::IncomingWebHook;
 
 has timer => (
     is      => "rw",
