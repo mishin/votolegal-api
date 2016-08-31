@@ -69,3 +69,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0063-dv-alfanum [0062-donation-receipt-id-tse] 2016-08-29T14:32:50Z Junior Moraes,,, <junior@junior-eokoe> # -alfanum digitos verificadores sao alfanumeros
 0064-expenditure [0063-dv-alfanum] 2016-08-30T13:46:18Z Junior Moraes,,, <junior@junior-eokoe> # penditure adicionando tabela
 0065-no-receipt [0064-expenditure] 2016-08-30T19:08:01Z Junior Moraes,,, <junior@junior-eokoe> # -receipt removendo sistema de recibos
+0066-slack-queue [0065-no-receipt] 2016-08-31T13:30:05Z Junior Moraes,,, <junior@junior-eokoe> # ack-queue queue do slack
