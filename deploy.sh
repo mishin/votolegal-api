@@ -68,8 +68,8 @@ line
 
 # Daemons.
 ./script/daemon/Emailsd restart
+./script/daemon/Slackd restart
 
 line
-echo STDERR "sleeping 5..."
-sleep 5
 ./script/daemon/Emailsd status
+./script/daemon/Slackd status
