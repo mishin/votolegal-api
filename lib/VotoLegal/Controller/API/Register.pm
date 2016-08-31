@@ -49,13 +49,14 @@ sub register_POST {
     $candidate->send_email_registration();
 
     # Enviando notificação no Slack.
-    if (!is_test && %{$c->config->{slack}}) {
+    if (!is_test) {
         my $name         = $c->req->params->{name};
         my $popular_name = $c->req->params->{popular_name};
 
-        my $slack = WebService::Slack::IncomingWebHook->new(%{$c->config->{slack}});
-
-        $slack->post(text => "${name} (${popular_name}) realizou o pré cadastro.");
+        $c->model('DB::SlackQueue')->create({
+            channel => "votolegal-bot",
+            message => "${name} (${popular_name}) realizou o pré cadastro."
+        });
     }
 
     $self->status_created(

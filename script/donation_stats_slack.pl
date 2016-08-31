@@ -36,7 +36,8 @@ while (my $donation = $donation_rs->next()) {
     $post .= "\n";
 }
 
-my $slack = WebService::Slack::IncomingWebHook->new(%{$config->{slack}});
-
-$slack->post(text => $post);
+$schema->resultset('SlackQueue')->create({
+    channel => "votolegal-test",
+    message => $post,
+});
 

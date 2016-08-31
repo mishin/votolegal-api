@@ -147,6 +147,16 @@ sub donate_POST {
         $c->detach();
     }
 
+    $c->model('DB::SlackQueue')->create({
+        channel => "votolegal-bot",
+        message => sprintf(
+            "'%s' acabou de doar R\$ %.2f para o candidato %s.",
+            $c->req->params->{name},
+            $c->req->params->{amount} / 100,
+            $c->stash->{candidate}->popular_name,
+        ),
+    });
+
     return $self->status_ok($c, entity => { id => $donation->id });
 }
 
