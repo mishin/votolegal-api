@@ -51,6 +51,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
     my $donation_rs = $c->stash->{collection}->search({
         candidate_id => $c->stash->{candidate}->id,
         status       => "captured",
+        by_votolegal => "t",
     });
 
     my $csv = Text::CSV->new({
