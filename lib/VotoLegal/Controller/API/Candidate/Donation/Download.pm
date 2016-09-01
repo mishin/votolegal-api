@@ -64,11 +64,11 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     # Header do CSV.
     $csv->print($fh, [ qw(
-        name
-        cpf
-        email
-        birthdate
-        date
+        NAME
+        CPF
+        EMAIL
+        BIRTHDATE
+        DATE
     )]);
 
     while (my $result = $donation_rs->next()) {
