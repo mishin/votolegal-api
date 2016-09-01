@@ -18,7 +18,7 @@ db_transaction {
     ok(
         $candidate->expenditures->create({
             name            => $name,
-            cnpj            => $cnpj,
+            cpf_cnpj        => $cnpj,
             date            => \"DATE(NOW())",
             amount          => 50000,
             type            => "Publicidade por adesivos",
@@ -32,7 +32,7 @@ db_transaction {
     ok(
         $candidate->expenditures->create({
             name            => $name,
-            cnpj            => $cnpj,
+            cpf_cnpj        => $cnpj,
             date            => \"DATE(NOW())",
             amount          => 10000,
             type            => "Publicidade por adesivos",
@@ -70,9 +70,9 @@ db_transaction {
         is_deeply(
             $res->{expenditure}->[0],
             {
-                name   => $name,
-                cnpj   => $cnpj,
-                amount => 60000,
+                name     => $name,
+                cpf_cnpj => $cnpj,
+                amount   => 60000,
             },
             'get expenditures'
         );

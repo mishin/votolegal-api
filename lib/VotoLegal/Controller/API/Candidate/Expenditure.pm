@@ -30,9 +30,9 @@ sub expenditure_GET {
     my @expenditures = $c->stash->{collection}->search(
         undef,
         {
-            select       => [ "name", "cnpj", { sum => "amount", '-as' => "amount" } ],
-            as           => [ qw(name cnpj amount) ],
-            group_by     => [ qw(name cnpj) ],
+            select       => [ "name", "cpf_cnpj", { sum => "amount", '-as' => "amount" } ],
+            as           => [ qw(name cpf_cnpj amount) ],
+            group_by     => [ qw(name cpf_cnpj) ],
             order_by     => { '-desc' => "amount" },
             page         => $page,
             rows         => $results,

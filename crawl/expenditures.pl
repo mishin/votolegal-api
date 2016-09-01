@@ -10,6 +10,7 @@ use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
 use LWP::UserAgent::OfflineCache;
+use Business::BR::CPF qw(test_cpf);
 use Business::BR::CNPJ qw(test_cnpj);
 
 my $schema = get_schema();
@@ -124,12 +125,13 @@ for my $candidate (@candidates) {
             my $despesas = decode_json $reqDespesas;
 
             for my $despesa (@{ $despesas }) {
-                # Validando CNPJ.
-                next unless test_cnpj($despesa->{cpjCnpjFornecedor} || "");
+                # Validando CNPJ ou CPF.
+                my $cpjCnpjFornecedor = $despesa->{cpjCnpjFornecedor} || "";
+                next if !test_cnpj($cpjCnpjFornecedor) && !test_cpf($cpjCnpjFornecedor);
 
                 # Buscando a despesa no banco de dados.
                 my $expenditure = $candidate->expenditures->search({
-                    cnpj            => $despesa->{cpjCnpjFornecedor},
+                    cpf_cnpj        => $cpjCnpjFornecedor,
                     date            => $despesa->{data},
                     amount          => $despesa->{valor} * 100,
                     type            => $despesa->{tipoDespesa},
@@ -139,22 +141,22 @@ for my $candidate (@candidates) {
                 })->next;
 
                 if (ref $expenditure) {
-                    printf "A despesa do candidato '%d' do cnpj %s no valor de R\$ %.2f já estava registrada.\n",
+                    printf "A despesa do candidato '%d' do cpf/cnpj %s no valor de R\$ %.2f já estava registrada.\n",
                         $candidate->id,
-                        $despesa->{cpjCnpjFornecedor},
+                        $cpjCnpjFornecedor,
                         $despesa->{valor},
                     ;
                 }
                 else {
-                    printf "Armazenando a despesa do candidato '%d' do cnpj %s no valor de R\$ %.2f.\n",
+                    printf "Armazenando a despesa do candidato '%d' do cpf/cnpj %s no valor de R\$ %.2f.\n",
                         $candidate->id,
-                        $despesa->{cpjCnpjFornecedor},
+                        $cpjCnpjFornecedor,
                         $despesa->{valor},
                     ;
 
                     $candidate->expenditures->create({
                         name            => $despesa->{nomeFornecedor},
-                        cnpj            => $despesa->{cpjCnpjFornecedor},
+                        cpf_cnpj        => $cpjCnpjFornecedor,
                         date            => $despesa->{data},
                         amount          => $despesa->{valor} * 100,
                         type            => $despesa->{tipoDespesa},

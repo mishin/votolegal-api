@@ -60,7 +60,7 @@ __PACKAGE__->table("expenditure");
   data_type: 'text'
   is_nullable: 0
 
-=head2 cnpj
+=head2 cpf_cnpj
 
   data_type: 'text'
   is_nullable: 0
@@ -116,7 +116,7 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
   { data_type => "text", is_nullable => 0 },
-  "cnpj",
+  "cpf_cnpj",
   { data_type => "text", is_nullable => 0 },
   "amount",
   { data_type => "integer", is_nullable => 0 },
@@ -169,8 +169,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-29 15:17:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DDgTBM5dWOrOosX1taiHzg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-01 12:02:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tb0CXClyWcSljfDMHG/XNA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
