@@ -61,6 +61,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
     });
 
     my $fh = File::Temp->new(UNLINK => 1, SUFFIX => ".csv");
+    binmode($fh, ":utf8");
 
     # Header do CSV.
     $csv->print($fh, [ qw(
