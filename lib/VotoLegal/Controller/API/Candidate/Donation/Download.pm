@@ -82,6 +82,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         ]);
     }
 
+    binmode($fh, ":raw");
     $fh->seek(0, SEEK_SET);
 
     $c->response->headers->header("content-disposition" => "attachment;filename=" . basename($fh->filename));
