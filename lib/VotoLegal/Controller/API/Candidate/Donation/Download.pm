@@ -60,7 +60,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         sep_char     => ',',
     });
 
-    my $fh = File::Temp->new(UNLINK => 1);
+    my $fh = File::Temp->new(UNLINK => 1, SUFFIX => ".csv");
 
     # Header do CSV.
     $csv->print($fh, [ qw(
