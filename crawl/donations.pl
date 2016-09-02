@@ -21,7 +21,6 @@ my $ua = LWP::UserAgent::OfflineCache->new(
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
     payment_status => "paid",
-    office_id      => 1,
 })->all();
 
 for my $candidate (@candidates) {
