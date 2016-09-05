@@ -11,6 +11,7 @@ use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
 use Business::BR::CPF qw(test_cpf);
+use Business::BR::CNPJ qw(test_cnpj);
 
 my $schema = get_schema();
 
@@ -122,43 +123,48 @@ for my $candidate (@candidates) {
 
             #p $receitas;
             for my $receita (@{ $receitas }) {
-                test_cpf($receita->{cpfCnpjDoador}) or next;
-                next if $receita->{fonteOrigem} eq "Fundo Partidário";
+                my $fonteOrigem      = $receita->{fonteOrigem};
+                my $cpfCnpjDoador    = $receita->{cpfCnpjDoador};
+                my $donation_type_id = $fonteOrigem eq "Fundo Partidário" ? 2 : 1;
+
+                next if !test_cnpj($cpfCnpjDoador) && !test_cpf($cpfCnpjDoador);
 
                 # Pesquisando a doação no banco.
                 my $donation = $candidate->donations->search({
-                    cpf            => $receita->{cpfCnpjDoador},
-                    amount         => $receita->{valorReceita} * 100,
-                    species        => $receita->{especieRecurso},
-                    by_votolegal   => 'f',
+                    cpf              => $receita->{cpfCnpjDoador},
+                    amount           => $receita->{valorReceita} * 100,
+                    species          => $receita->{especieRecurso},
+                    by_votolegal     => 'f',
+                    donation_type_id => $donation_type_id,
                 })
                 ->search(\['DATE(captured_at) = ?', $receita->{dtReceita}])
                 ->next;
 
                 if ($donation) {
-                    printf "A doação para o candidato '%d' do cpf %s no valor de R\$ %s já estava registrada.\n",
+                    printf "A doação para o candidato '%d' do cpf/cnpj %s no valor de R\$ %s já estava registrada.\n",
                         $candidate->id,
                         $receita->{cpfCnpjDoador},
                         $receita->{valorReceita},
                     ;
                 }
                 else {
-                    printf "Armazenando doação para o candidato %d do cpf %s no valor de R\$ %s.\n",
+                    printf "Armazenando doação para o candidato %d do cpf/cnpj %s no valor de R\$ %s.\n",
                         $candidate->id,
                         $receita->{cpfCnpjDoador},
                         $receita->{valorReceita},
                     ;
 
                     $candidate->donations->create({
-                        id           => md5_hex(Time::HiRes::time()),
-                        name         => $receita->{nomeDoador},
-                        cpf          => $receita->{cpfCnpjDoador},
-                        amount       => $receita->{valorReceita} * 100,
-                        species      => $receita->{especieRecurso},
-                        ip_address   => "127.0.0.1",
-                        by_votolegal => 'f',
-                        status       => "captured",
-                        captured_at  => $receita->{dtReceita},
+                        id               => md5_hex(Time::HiRes::time()),
+                        name             => $receita->{nomeDoador},
+                        cpf              => $receita->{cpfCnpjDoador},
+                        amount           => $receita->{valorReceita} * 100,
+                        species          => $receita->{especieRecurso},
+                        ip_address       => "127.0.0.1",
+                        by_votolegal     => 'f',
+                        status           => "captured",
+                        captured_at      => $receita->{dtReceita},
+                        donation_type_id => $donation_type_id,
                     });
                 }
             }

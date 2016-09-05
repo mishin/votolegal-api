@@ -265,11 +265,6 @@ __PACKAGE__->table("candidate");
   is_nullable: 1
   size: 2
 
-=head2 party_fund
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -362,8 +357,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 2 },
   "bank_agency_dv",
   { data_type => "varchar", is_nullable => 1, size => 2 },
-  "party_fund",
-  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -581,8 +574,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 16:07:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7Tfj653GXU657OP/miGXng
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-05 14:49:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1jMX7zRxF/Xv1g+sE4PwRw
 
 use File::Temp q(:seekable);
 use Data::Verifier;

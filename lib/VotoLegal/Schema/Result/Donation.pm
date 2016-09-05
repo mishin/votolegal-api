@@ -198,6 +198,12 @@ __PACKAGE__->table("donation");
   data_type: 'boolean'
   is_nullable: 1
 
+=head2 donation_type_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -270,6 +276,8 @@ __PACKAGE__->add_columns(
   },
   "by_votolegal",
   { data_type => "boolean", is_nullable => 1 },
+  "donation_type_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -301,6 +309,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 donation_type
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::DonationType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "donation_type",
+  "VotoLegal::Schema::Result::DonationType",
+  { id => "donation_type_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
 =head2 project_votes
 
 Type: has_many
@@ -317,8 +340,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 16:07:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F9Gj5SqE32x7SFt/61jXeg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-05 14:45:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AirbVk4lj4pFOTe4AS9gnw
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);
