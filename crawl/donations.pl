@@ -97,10 +97,11 @@ CANDIDATE: for my $candidate (@candidates) {
             # Para obter as receitas eu preciso do numero do partido e do número do candidato.
             my $numPartido   = $candidateData->{partido}->{numero};
             my $numCandidato = $candidateData->{numero};
+            my $nrCargo      = $candidateData->{cargo}->{codigo};
 
             # Obtendo numero do prestador.
             my $prestadorReq = get(
-                "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/$cityCode/11/$numPartido/$numCandidato/$candidateId"
+                "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/$cityCode/$nrCargo/$numPartido/$numCandidato/$candidateId"
             );
 
             my $prestador = decode_json $prestadorReq;
@@ -179,7 +180,7 @@ CANDIDATE: for my $candidate (@candidates) {
     }
 }
 
-printf "Fim da execução.";
+printf "Fim da execução.\n";
 
 sub get {
     my $url = shift;
