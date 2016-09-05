@@ -9,19 +9,23 @@ use Time::HiRes;
 use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
-use LWP::UserAgent::OfflineCache;
+use LWP::UserAgent::Cached;
 use Business::BR::CPF qw(test_cpf);
 
 my $schema = get_schema();
-my $ua = LWP::UserAgent::OfflineCache->new(
-    cache_dir => tempdir(CLEANUP => 1),
-    delay     => 0,
+
+my $ua = LWP::UserAgent::Cached->new(
+    cache_dir  => tempdir(),
+    nocache_if => sub {
+        my $res = shift;
+        return $res->code != 200;
+    },
 );
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
     payment_status => "paid",
-})->all();
+})->all;
 
 for my $candidate (@candidates) {
     printf "Processando o candidato '%s' (id #%d).\n",   $candidate->name, $candidate->id;
@@ -33,7 +37,7 @@ for my $candidate (@candidates) {
 
     # Município.
     printf "Buscando id do município do candidato '%d'.\n", $candidate->id;
-    my $reqCity = $ua->get(
+    my $reqCity = get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/eleicao/buscar/${state}/2/municipios"
     );
 
@@ -50,7 +54,7 @@ for my $candidate (@candidates) {
 
     # Buscando o código do cargo.
     printf "Buscando os cargos do município do candidato '%d'.\n", $candidate->id;
-    my $officeReq = $ua->get(
+    my $officeReq = get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/eleicao/listar/municipios/2/${cityCode}/cargos"
     );
     my $offices = decode_json $officeReq;
@@ -64,7 +68,7 @@ for my $candidate (@candidates) {
     }
 
     # Listando os candidatos que concorrem ao mesmo cargo.
-    my $candidatesReq = $ua->get(
+    my $candidatesReq = get(
         "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2016/$cityCode/2/$officeCode/candidatos"
     );
     my $candidates = decode_json $candidatesReq;
@@ -78,7 +82,7 @@ for my $candidate (@candidates) {
 
         my $candidateId = $_->{id};
 
-        my $candidateReq = $ua->get(
+        my $candidateReq = get(
             "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/buscar/2016/$cityCode/2/candidato/$candidateId"
         );
 
@@ -100,7 +104,7 @@ for my $candidate (@candidates) {
             my $numCandidato = $candidateData->{numero};
 
             # Obtendo numero do prestador.
-            my $prestadorReq = $ua->get(
+            my $prestadorReq = get(
                 "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2/2016/$cityCode/11/$numPartido/$numCandidato/$candidateId"
             );
 
@@ -116,7 +120,7 @@ for my $candidate (@candidates) {
                 next;
             }
 
-            my $receitasReq = $ua->get(
+            my $receitasReq = get(
                 "http://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/receitas/2/$sqPrestadorConta/$sqEntregaPrestacao"
             );
 
@@ -176,3 +180,16 @@ for my $candidate (@candidates) {
     }
 }
 
+sub get {
+    my $url = shift;
+
+    for ( 1 .. 5) {
+        my $req = $ua->get($url);
+
+        if ($req->is_success()) {
+            return $req->decoded_content;
+        }
+    }
+
+    die "Não foi possível obter a url '$url' após 5 tentativas.";
+}
