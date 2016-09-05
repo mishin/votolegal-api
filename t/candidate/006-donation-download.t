@@ -57,6 +57,7 @@ db_transaction {
             status                       => "captured",
             captured_at                  => \'now()',
             by_votolegal                 => "t",
+            donation_type_id             => 1,
         });
     }
 

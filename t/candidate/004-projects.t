@@ -114,6 +114,7 @@ db_transaction {
             birthdate                    => "1992-05-02",
             ip_address                   => "127.0.0.1",
             status                       => "captured",
+            donation_type_id             => 1,
         });
 
         $schema->resultset('Project')->find(stash "p$_.id")->project_votes->create({ donation_id => $donation_id });
