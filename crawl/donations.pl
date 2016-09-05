@@ -14,7 +14,7 @@ use Business::BR::CPF qw(test_cpf);
 
 my $schema = get_schema();
 
-my $ua = Furl->new();
+my $ua = Furl->new(timeout => 30);
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",

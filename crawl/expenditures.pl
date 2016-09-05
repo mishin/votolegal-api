@@ -15,7 +15,7 @@ use Business::BR::CNPJ qw(test_cnpj);
 
 my $schema = get_schema();
 
-my $ua = Furl->new();
+my $ua = Furl->new(timeout => 30);
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
