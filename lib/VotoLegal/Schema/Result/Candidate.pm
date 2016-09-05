@@ -998,6 +998,15 @@ sub people_donated_by_votolegal {
     })->count();
 }
 
+sub party_fund {
+    my $self = shift;
+
+    return $self->donations->search({
+        by_votolegal     => 'f',
+        donation_type_id => 2,
+    })->get_column("amount")->sum;
+}
+
 sub send_email_registration {
     my ($self) = @_;
 
