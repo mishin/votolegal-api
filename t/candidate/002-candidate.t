@@ -150,7 +150,6 @@ db_transaction {
             bank_agency         => "0120",
             bank_account_number => "1234",
             bank_account_dv     => "5",
-            party_fund          => 1_000_000,
         },
     ;
 
@@ -174,7 +173,6 @@ db_transaction {
     is ($candidate->bank_agency, 120, 'bank agency');
     is ($candidate->bank_account_number, 1234, 'bank account number');
     is ($candidate->bank_account_dv, 5, 'bank account dv');
-    is ($candidate->party_fund, 1_000_000, 'party fund');
 
     # Quando envio um campo em branco no PUT, deve setar NULL.
     rest_put "/api/candidate/${candidate_id}",
