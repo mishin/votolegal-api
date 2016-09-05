@@ -4,24 +4,18 @@ use open q(:locale);
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
+use Furl;
 use JSON;
 use Time::HiRes;
 use File::Temp qw(tempdir);
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::SchemaConnected;
-use LWP::UserAgent::Cached;
 use Business::BR::CPF qw(test_cpf);
 use Business::BR::CNPJ qw(test_cnpj);
 
 my $schema = get_schema();
 
-my $ua = LWP::UserAgent::Cached->new(
-    cache_dir  => tempdir(),
-    nocache_if => sub {
-        my $res = shift;
-        return $res->code != 200;
-    },
-);
+my $ua = Furl->new();
 
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
