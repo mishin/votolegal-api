@@ -48,8 +48,9 @@ sub donate_GET {
     # O candidato vê apenas doações do VotoLegal.
     my @donations = $c->stash->{collection}->search(
         {
-            candidate_id => $c->stash->{candidate}->id,
-            status       => "captured",
+            candidate_id     => $c->stash->{candidate}->id,
+            status           => "captured",
+            donation_type_id => 1,
             (
                 $c->stash->{is_me}
                 ? ( by_votolegal => 't' )
