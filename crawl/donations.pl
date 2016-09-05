@@ -22,7 +22,7 @@ my @candidates = $schema->resultset('Candidate')->search({
     payment_status => "paid",
 })->all;
 
-for my $candidate (@candidates) {
+CANDIDATE: for my $candidate (@candidates) {
     printf "Processando o candidato '%s' (id #%d).\n",   $candidate->name, $candidate->id;
 
     # Estado.
@@ -112,7 +112,7 @@ for my $candidate (@candidates) {
 
             if (!defined($sqEntregaPrestacao) || !defined($sqPrestadorConta)) {
                 printf "O candidato '%s' (id %d) não prestou contas das declarações.\n", $candidate->name, $candidate->id;
-                next;
+                next CANDIDATE;
             }
 
             my $receitasReq = get(
@@ -121,7 +121,6 @@ for my $candidate (@candidates) {
 
             my $receitas = decode_json $receitasReq;
 
-            #p $receitas;
             for my $receita (@{ $receitas }) {
                 my $fonteOrigem      = $receita->{fonteOrigem};
                 my $cpfCnpjDoador    = $receita->{cpfCnpjDoador};
