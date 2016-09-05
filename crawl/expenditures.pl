@@ -175,6 +175,8 @@ for my $candidate (@candidates) {
     }
 }
 
+printf "Fim da execução.";
+
 sub get {
     my $url = shift;
 
