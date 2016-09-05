@@ -56,6 +56,7 @@ db_transaction {
             billing_address_state        => "SP",
             status                       => "captured",
             captured_at                  => \'now()',
+            by_votolegal                 => "t",
         });
     }
 

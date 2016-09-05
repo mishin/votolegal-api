@@ -68,15 +68,29 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         NAME
         CPF
         EMAIL
+        PHONE
+        STATE
+        CITY
+        ADDRESS
+        AMOUNT
         BIRTHDATE
         DATE
     )]);
 
     while (my $result = $donation_rs->next()) {
+        my $address_street       = $result->address_street       || "";
+        my $address_complement   = $result->address_complement   || "";
+        my $address_house_number = $result->address_house_number || "";
+
         $csv->print($fh, [
             $result->name,
             $result->cpf,
             $result->email,
+            $result->phone,
+            $result->address_state,
+            $result->address_city,
+            sprintf("%s %s, %s", $address_street, $address_complement, $address_house_number),
+            sprintf("%.2f", $result->amount / 100),
             $result->birthdate->strftime("%d/%m/%Y"),
             $result->captured_at->strftime("%d/%m/%Y %H:%M:%S"),
         ]);
