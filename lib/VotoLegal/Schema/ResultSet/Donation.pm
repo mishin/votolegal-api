@@ -292,6 +292,7 @@ sub action_specs {
                     status                       => "created",
                     species                      => "Cartão de crédito",
                     by_votolegal                 => 't',
+                    donation_type_id             => 1,
                 });
             }
 
