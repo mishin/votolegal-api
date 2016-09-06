@@ -68,11 +68,11 @@ sub search_POST {
     }
 
     if ($address_state) {
-        $c->stash->{collection} = $c->stash->{collection}->search({ address_state => $address_state });
+        $c->stash->{collection} = $c->stash->{collection}->search({ address_state => { 'ilike' => $address_state } });
     }
 
     if ($address_city) {
-        $c->stash->{collection} = $c->stash->{collection}->search({ address_city => $address_city });
+        $c->stash->{collection} = $c->stash->{collection}->search({ address_city => { 'ilike' => $address_city } });
     }
 
     my @random = shuffle $c->stash->{collection}->search({
