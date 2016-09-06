@@ -41,11 +41,15 @@ sub callback_POST {
 
         # Buscando o id da donation na database.
         if (my $donation = $c->model('DB::Donation')->search( { id => $donation_id } )->next) {
-            if ($status == 3) {
+            if ($status == 3 || $status == 4) {
                 $donation->update({
                     payment_gateway_code => $code,
                     status               => "captured",
-                    captured_at          => \"now()",
+                    (
+                        defined($donation->captured_at)
+                        ? ()
+                        : ( captured_at => \"now()" )
+                    ),
                 });
             }
             elsif ($status == 6 || $status == 8) {
