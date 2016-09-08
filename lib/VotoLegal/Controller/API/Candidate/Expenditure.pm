@@ -26,9 +26,11 @@ sub expenditure_GET {
     my $page    = $c->req->params->{page}    || 1;
     my $results = $c->req->params->{results} || 20;
 
+    $c->stash->{collection} = $c->stash->{collection}->search({ "candidate.crawlable" => "true" });
+
     # O candidato vê apenas doações do VotoLegal.
     my @expenditures = $c->stash->{collection}->search(
-        { "candidate.crawlable" => "true" },
+        undef,
         {
             join         => "candidate",
             select       => [ "me.name", "me.cpf_cnpj", { sum => "me.amount", '-as' => "amount" } ],
