@@ -20,6 +20,7 @@ my $ua = Furl->new(timeout => 30);
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
     payment_status => "paid",
+    crawlable      => "true",
 })->all;
 
 CANDIDATE: for my $candidate (@candidates) {
@@ -134,7 +135,7 @@ CANDIDATE: for my $candidate (@candidates) {
                     cpf              => $receita->{cpfCnpjDoador},
                     amount           => $receita->{valorReceita} * 100,
                     species          => $receita->{especieRecurso},
-                    by_votolegal     => 'f',
+                    by_votolegal     => "false",
                     donation_type_id => $donation_type_id,
                 })
                 ->search(\['DATE(captured_at) = ?', $receita->{dtReceita}])
@@ -161,7 +162,7 @@ CANDIDATE: for my $candidate (@candidates) {
                         amount           => $receita->{valorReceita} * 100,
                         species          => $receita->{especieRecurso},
                         ip_address       => "127.0.0.1",
-                        by_votolegal     => 'f',
+                        by_votolegal     => "false",
                         status           => "captured",
                         captured_at      => $receita->{dtReceita},
                         donation_type_id => $donation_type_id,

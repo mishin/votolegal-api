@@ -20,6 +20,7 @@ my $ua = Furl->new(timeout => 30);
 my @candidates = $schema->resultset('Candidate')->search({
     status         => "activated",
     payment_status => "paid",
+    crawlable      => "true",
 })->all;
 
 CANDIDATE: for my $candidate (@candidates) {
