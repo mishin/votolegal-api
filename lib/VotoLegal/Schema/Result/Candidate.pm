@@ -993,8 +993,13 @@ sub total_donated {
     my $self = shift;
 
     return $self->donations->search({
-        status           => 'captured',
+        status           => "captured",
         donation_type_id => 1,
+        (
+            $self->crawlable
+            ? ()
+            : ( by_votolegal => "true" )
+        ),
     })->get_column('amount')->sum();
 }
 
@@ -1002,26 +1007,23 @@ sub people_donated {
     my $self = shift;
 
     return $self->donations->search({
-        status           => 'captured',
+        status           => "captured",
         donation_type_id => 1,
-    })->count();
-}
-
-sub people_donated_by_votolegal {
-    my $self = shift;
-
-    return $self->donations->search({
-        status           => 'captured',
-        donation_type_id => 1,
-        by_votolegal     => 't',
+        (
+            $self->crawlable
+            ? ()
+            : ( by_votolegal => "true" )
+        ),
     })->count();
 }
 
 sub party_fund {
     my $self = shift;
 
+    return 0 unless $self->crawlable;
+
     return $self->donations->search({
-        by_votolegal     => 'f',
+        by_votolegal     => "false",
         donation_type_id => 2,
     })->get_column("amount")->sum;
 }
