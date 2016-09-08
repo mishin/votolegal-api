@@ -196,7 +196,7 @@ __PACKAGE__->table("donation");
 =head2 by_votolegal
 
   data_type: 'boolean'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 donation_type_id
 
@@ -275,7 +275,7 @@ __PACKAGE__->add_columns(
     is_nullable   => 1,
   },
   "by_votolegal",
-  { data_type => "boolean", is_nullable => 1 },
+  { data_type => "boolean", is_nullable => 0 },
   "donation_type_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -340,8 +340,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-05 14:45:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AirbVk4lj4pFOTe4AS9gnw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-08 10:55:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TUgg1JJ8RPso43K1n76mzA
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);
