@@ -54,7 +54,9 @@ db_transaction {
             billing_address_city         => "Iguape",
             billing_address_state        => "SP",
             status                       => "captured",
-            captured_at                  => \'now()',
+            captured_at                  => \"now()",
+            by_votolegal                 => "true",
+            donation_type_id             => 1,
         }),
         "add donation",
     );
