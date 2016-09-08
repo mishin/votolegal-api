@@ -265,6 +265,12 @@ __PACKAGE__->table("candidate");
   is_nullable: 1
   size: 2
 
+=head2 crawlable
+
+  data_type: 'boolean'
+  default_value: true
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -357,6 +363,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 2 },
   "bank_agency_dv",
   { data_type => "varchar", is_nullable => 1, size => 2 },
+  "crawlable",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -574,8 +582,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-05 14:49:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1jMX7zRxF/Xv1g+sE4PwRw
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-08 16:05:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V3Zob1X9AtpqLeGbX1t0AQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -898,6 +906,14 @@ sub verifiers_specs {
 
                         $bank_account_dv =~ m{^([a-zA-Z0-9]+)$};
                     }
+                },
+                crawlable => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $crawlable = $_[0]->get_value('crawlable');
+                        $crawlable == "true" || $crawlable == "false";
+                    },
                 },
             },
         ),
