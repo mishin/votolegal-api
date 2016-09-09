@@ -52,7 +52,7 @@ sub donate_GET {
             status           => "captured",
             donation_type_id => 1,
             (
-                $c->stash->{is_me} || $c->stash->{candidate}->crawlable
+                $c->stash->{is_me} || !$c->stash->{candidate}->crawlable
                 ? ( by_votolegal => "true" )
                 : ()
             ),
