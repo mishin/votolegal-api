@@ -52,6 +52,12 @@ sub callback_POST {
                     ),
                 });
             }
+            elsif ($status == 7) {
+                $donation->update({
+                    payment_gateway_code => $code,
+                    status               => "canceled",
+                });
+            }
             elsif ($status == 6 || $status == 8) {
                 $donation->update({
                     payment_gateway_code => $code,
