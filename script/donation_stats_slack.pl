@@ -23,13 +23,14 @@ my $donation_rs = $schema->resultset('Donation')->search(
         select   => [ "candidate.name", { sum => "amount", '-as' => "total_amount" } ],
         as       => [ qw(candidate_name total_amount) ],
         group_by => [ "candidate_id", "candidate.name" ],
-        order_by => { '-asc' => "total_amount" },
+        order_by => { '-desc' => "total_amount" },
+        rows     => 20,
     },
 );
 
-my $post = "Total de doações recebidas por candidato: \n\n";
+my $post = "Os 20 candidatos que mais receberam doações:\n\n";
 
-while (my $donation = $donation_rs->next()) {
+for my $donation (reverse $donation_rs->all()) {
     $post .= $donation->get_column('candidate_name');
     $post .= ": R\$ ";
     $post .= sprintf("%.2f", ($donation->get_column("total_amount") / 100));
