@@ -529,6 +529,27 @@ sub send_email {
     });
 }
 
+sub send_email_canceled {
+    my $self = shift;
+
+    # Buildando o email.
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->email,
+        from     => 'no-reply@votolegal.org.br',
+        subject  => "Doação não efetuada",
+        template => get_data_section('canceled.tt'),
+        vars     => {
+            donation_name  => $self->name,
+            candidate_name => $self->candidate->name,
+        }
+    )->build_email();
+
+    # Inserindo na queue.
+    return $self->result_source->schema->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
@@ -607,5 +628,66 @@ __DATA__
       </div>
       </div>
       </div></div>
+   </body>
+</html>
+
+@@ canceled.tt
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!doctype html>
+<html>
+   <body>
+      <div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+         <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+            <tbody>
+               <tr>
+                  <td>
+                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+                        <tbody>
+                           <tr>
+                              <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+                                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+                                    <tbody>
+                                       <tr>
+                                          <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+                                             <p><span><b>Prezado(a) [% donation_name %],</b><br>
+                                                <br></span>
+                                             </p>
+                                             <p>A sua doação não pôde ser realizada!</p>
+                                             <p>O PagSeguro possui um sistema anti-fraude que detecta qualquer anormalidade no seu cadastro bloqueando a doação.</p>
+                                             <p>Por favor, certifique-se de que não ouve nenhum débito no seu cartão de crédito e realize sua doação para o candidato [% candidate_name %] novamente.</p>
+                                             <p>Antes de clicar em doar, confira se todos os seus dados estão corretos.</p>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td height="30"></td>
+                                       </tr>
+                                       <tr>
+                                          <td align="center" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px">
+                                             </p>
+                                          </td>
+                                       </tr>
+                                       <tr>
+                                          <td height="30"></td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+                        <tbody>
+                           <tr>
+                              <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
    </body>
 </html>

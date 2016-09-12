@@ -57,6 +57,8 @@ sub callback_POST {
                     payment_gateway_code => $code,
                     status               => "canceled",
                 });
+
+                $donation->send_email_canceled();
             }
             elsif ($status == 6 || $status == 8) {
                 $donation->update({
