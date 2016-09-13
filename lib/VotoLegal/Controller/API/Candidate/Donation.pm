@@ -13,7 +13,10 @@ with "Catalyst::TraitFor::Controller::reCAPTCHA";
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    if ($c->stash->{candidate}->status ne "activated") {
+    my $status         = $c->stash->{candidate}->status;
+    my $payment_status = $c->stash->{candidate}->payment_status;
+
+    if (!$status eq "activated" || !$payment_status eq "paid") {
         $self->status_bad_request($c, message => "candidato não aprovado.");
         $c->detach();
     }
