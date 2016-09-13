@@ -14,35 +14,6 @@ sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(
 
 sub base : Chained('root') : PathPart('download') : CaptureArgs(0) { }
 
-# Rota desativada por enquanto.
-#sub download : Chained('base') : PathPart('') : Args(0) { }
-
-sub download_GET {
-    my ($self, $c) = @_;
-
-    $self->validate_request_params(
-        $c,
-        date => {
-            type       => "Str",
-            required   => 1,
-            post_check => sub {
-                1;
-            },
-        },
-    );
-
-    my $date       = $c->req->params->{date};
-    my $filehandle = $c->stash->{candidate}->export_donations_to_tse($date);
-    $filehandle->seek(0, SEEK_SET);
-
-    $c->response->content_type("text/plain");
-    $c->response->headers->header("content-disposition" => "attachment;filename=doacoes.txt");
-
-    $c->res->body($filehandle);
-
-    $c->detach();
-}
-
 sub csv : Chained('base') : PathPart('csv') : Args(0) {
     my ($self, $c) = @_;
 
