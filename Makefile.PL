@@ -102,7 +102,6 @@ my %WriteMakefileArgs = (
     "Starman" => 0,
     "Template" => 0,
     "Text::CSV" => 0,
-    "Text::Unaccent" => 0,
     "Time::HiRes" => 0,
     "URI" => 0,
     "URI::Escape" => 0,
@@ -126,7 +125,7 @@ my %WriteMakefileArgs = (
     "Text::Lorem" => 0,
     "lib" => 0
   },
-  "VERSION" => 20160912,
+  "VERSION" => 20160913,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -225,7 +224,6 @@ my %FallbackPrereqs = (
   "Test::More" => 0,
   "Text::CSV" => 0,
   "Text::Lorem" => 0,
-  "Text::Unaccent" => 0,
   "Time::HiRes" => 0,
   "URI" => 0,
   "URI::Escape" => 0,
