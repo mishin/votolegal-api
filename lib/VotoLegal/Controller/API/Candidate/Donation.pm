@@ -3,7 +3,6 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
-use Text::Unaccent;
 use VotoLegal::Utils;
 use VotoLegal::SmartContract;
 
@@ -79,15 +78,6 @@ sub donate_GET {
             my ($docNumber, $authNumber)      = unpack("(A16)*", $payment_gateway_code);
             $donation->{document_number}      = $docNumber;
             $donation->{authorization_number} = $authNumber;
-        }
-    }
-
-    # Fix: estamos com um problema no frontend relacionado a encoding. Esta é uma solução temporária enquanto
-    # não encontramos a solução.
-    for my $donation (@donations) {
-        for (keys %{ $donation }) {
-            next unless defined $donation->{$_};
-            $donation->{$_} = unac_string("UTF-8", $donation->{$_});
         }
     }
 
