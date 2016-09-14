@@ -22,6 +22,11 @@ sub base : Chained('root') : PathPart('export') : CaptureArgs(0) { }
 sub export : Chained('base') : PathPart('') : Args(0) {
     my ($self, $c) = @_;
 
+    # Checando se o candidato possui os campos preenchidos.
+    for (qw(bank_code bank_agency bank_agency_dv bank_account_number bank_account_dv)) {
+        defined $c->stash->{candidate}->$_ or die \[$_, "missing"];
+    }
+
     $self->validate_request_params(
         $c,
         date => {
