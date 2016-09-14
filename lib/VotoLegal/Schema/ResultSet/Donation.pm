@@ -307,6 +307,8 @@ sub export {
     my $fh = File::Temp->new(UNLINK => 1);
     $fh->autoflush(1);
 
+    $self->count or die \['date', "no donations"];
+
     my $count       = 0;
     my $writeHeader = 1;
     while (my $donation = $self->next()) {
