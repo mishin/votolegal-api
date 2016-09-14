@@ -12,6 +12,8 @@ with "CatalystX::Eta::Controller::TypesValidation";
 sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+
     $c->stash->{collection} = $c->stash->{candidate}->donations;
 }
 
