@@ -39,6 +39,12 @@ sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
     );
 }
 
+sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
+    my ($self, $c, $donation_id) = @_;
+
+    $c->stash->{donation} = $c->stash->{collection}->search({ id => $donation_id })->next;
+}
+
 sub donate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub donate_GET {
