@@ -22,10 +22,15 @@ db_transaction {
     rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
         params => {
-            cnpj               => format_cnpj(random_cnpj()),
-            payment_gateway_id => 2,
-            merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
-            merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
+            cnpj                => format_cnpj(random_cnpj()),
+            payment_gateway_id  => 2,
+            merchant_id         => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
+            merchant_key        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
+            bank_code           => "001",
+            bank_agency         => "0000",
+            bank_agency_dv      => "9",
+            bank_account_number => "123456",
+            bank_account_dv     => "7",
         },
     ;
 
@@ -54,8 +59,8 @@ db_transaction {
             billing_address_zipcode      => "11920-000",
             billing_address_city         => "Iguape",
             billing_address_state        => "SP",
-            status                       => fake_pick(qw(captured chargeback canceled))->(),
-            captured_at                  => \"now()",
+            status                       => "captured",
+            captured_at                  => "2016-01-01 00:00:00",
             payment_gateway_code         => fake_digits("########-####-####-####-############")->(),
             by_votolegal                 => "t",
             donation_type_id             => 1,
@@ -70,7 +75,7 @@ db_transaction {
     );
 
     # Enviando a request.
-    my $req = request("/api/candidate/$candidate_id/donate/export?api_key=$api_key&receipt_id=25&date=2016-09-13");
+    my $req = request("/api/candidate/$candidate_id/donate/export?api_key=$api_key&receipt_id=25&date=2016-01-01");
 
     ok ($req->is_success(), 'export');
 };
