@@ -1003,6 +1003,16 @@ sub total_donated {
     })->get_column('amount')->sum();
 }
 
+sub total_donated_by_votolegal {
+    my $self = shift;
+
+    return $self->donations->search({
+        status           => "captured",
+        donation_type_id => 1,
+        by_votolegal     => "true",
+    })->get_column('amount')->sum();
+}
+
 sub people_donated {
     my $self = shift;
 
