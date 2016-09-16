@@ -126,39 +126,40 @@ CANDIDATE: for my $candidate (@candidates) {
             # Probleminha surpresa com o TSE: editaram a espécie de uma doação de "Em espécie" para
             # "Transferência eletrônica", o que confundiu o crawler. Como não são tantos dados assim, vou dar
             # um delete em tudo e depois reinserir.
-            $schema->txn_do(sub {
-                $candidate->donations->search({
-                    by_votolegal => "false",
-                })->delete if @$receitas;
+            my $guard = $schema->txn_scope_guard;
 
-                for my $receita (@{ $receitas }) {
-                    my $fonteOrigem      = $receita->{fonteOrigem};
-                    my $cpfCnpjDoador    = $receita->{cpfCnpjDoador};
-                    my $donation_type_id = $fonteOrigem eq "Fundo Partidário" ? 2 : 1;
+            $candidate->donations->search({
+                by_votolegal => "false",
+            })->delete if @$receitas;
 
-                    next if !test_cpf($cpfCnpjDoador) && !test_cnpj($cpfCnpjDoador);
+            for my $receita (@{ $receitas }) {
+                my $fonteOrigem      = $receita->{fonteOrigem};
+                my $cpfCnpjDoador    = $receita->{cpfCnpjDoador};
+                my $donation_type_id = $fonteOrigem eq "Fundo Partidário" ? 2 : 1;
 
-                    printf "Armazenando doação para o candidato %d do cpf/cnpj %s no valor de R\$ %s.\n",
-                        $candidate->id,
-                        $receita->{cpfCnpjDoador},
-                        $receita->{valorReceita},
-                    ;
+                next if !test_cpf($cpfCnpjDoador) && !test_cnpj($cpfCnpjDoador);
 
-                    $candidate->donations->create({
-                        id               => md5_hex(Time::HiRes::time()),
-                        name             => $receita->{nomeDoador},
-                        cpf              => $receita->{cpfCnpjDoador},
-                        amount           => $receita->{valorReceita} * 100,
-                        species          => $receita->{especieRecurso},
-                        ip_address       => "127.0.0.1",
-                        by_votolegal     => "false",
-                        status           => "captured",
-                        captured_at      => $receita->{dtReceita},
-                        donation_type_id => $donation_type_id,
-                    });
-                }
-                last;
-            });
+                printf "Armazenando doação para o candidato %d do cpf/cnpj %s no valor de R\$ %s.\n",
+                    $candidate->id,
+                    $receita->{cpfCnpjDoador},
+                    $receita->{valorReceita},
+                ;
+
+                $candidate->donations->create({
+                    id               => md5_hex(Time::HiRes::time()),
+                    name             => $receita->{nomeDoador},
+                    cpf              => $receita->{cpfCnpjDoador},
+                    amount           => $receita->{valorReceita} * 100,
+                    species          => $receita->{especieRecurso},
+                    ip_address       => "127.0.0.1",
+                    by_votolegal     => "false",
+                    status           => "captured",
+                    captured_at      => $receita->{dtReceita},
+                    donation_type_id => $donation_type_id,
+                });
+            }
+            $guard->commit;
+            last;
         }
         else {
             printf "O cnpj '%s' do candidato id '%d' não bateu com '%s'.\n",
