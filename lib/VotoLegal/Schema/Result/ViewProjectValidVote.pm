@@ -23,7 +23,7 @@ SELECT
   COUNT(project_vote.donation_id) AS votes
 FROM project
 LEFT JOIN project_vote
-  ON project.id = project_vote.project_id 
+  ON project.id = project_vote.project_id
 LEFT JOIN donation
   ON donation.id = project_vote.donation_id
   AND donation.status = 'captured'

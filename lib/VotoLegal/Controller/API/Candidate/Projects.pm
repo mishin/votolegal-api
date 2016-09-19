@@ -76,7 +76,7 @@ sub project_GET {
 
     my $response = {
         (
-            map { $_ => $c->stash->{project}->$_ } qw(id title scope) 
+            map { $_ => $c->stash->{project}->$_ } qw(id title scope)
         ),
         votes => $c->stash->{project}->project_votes->search(
             { 'donation.status' => "captured" },
