@@ -34,14 +34,15 @@ sub projects_GET {
     my $results = $c->req->params->{results} || 20;
 
     return $self->status_ok($c, entity => {
-        projects => [
-            map { {
-                $_->get_columns,
-                votes => $_->project_votes->search(
-                    { 'donation.status' => "captured" },
-                    { join => 'donation' },
-                )->count
-            } } $c->stash->{collection}->search({}, { page => $page, rows => $results })->all
+        projects => [ map { { $_->get_columns } }
+            $c->model('DB::ViewProjectValidVote')->search(
+                { candidate_id => $c->stash->{candidate}->id },
+                {
+                    page     => $page,
+                    rows     => $results,
+                    order_by => "votes",
+                }
+            )->all,
         ],
     });
 }
@@ -74,7 +75,9 @@ sub project_GET {
     my ($self, $c) = @_;
 
     my $response = {
-        ( map { $_ => $c->stash->{project}->$_ } qw(id title scope) ),
+        (
+            map { $_ => $c->stash->{project}->$_ } qw(id title scope) 
+        ),
         votes => $c->stash->{project}->project_votes->search(
             { 'donation.status' => "captured" },
             { join => 'donation' },
