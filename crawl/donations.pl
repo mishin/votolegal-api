@@ -141,27 +141,30 @@ CANDIDATE: for my $candidate (@candidates) {
 
                 # Mais uma surpresa. Os candidatos estão lançando as doações realizadas pelo VotoLegal no sistema
                 # do TSE. Diferente do que eu esperava, o campo "dtReceita" difere do nosso "captured_at" da doação.
-                # A única maneira segura do crawler não duplicar esses dados é checar a duplicidade pelo nome do
-                # doador, cpf e valor.
-                my $repeatedDonation = $candidate->donations->search({
-                    name         => { ilike => $receita->{nomeDoador} },
-                    cpf          => $receita->{cpfCnpjDoador},
-                    amount       => $receita->{valorReceita} * 100,
-                    species      => $receita->{especieRecurso},
-                    status       => "captured",
-                    by_votolegal => "true",
-                })->next;
+                # A única maneira segura do crawler não duplicar esses dados é checar a duplicidade pelo cpf do
+                # doador e o valor da doação.
+                if ($receita->{especieRecurso} eq "Cartão de crédito") {
+                    my $repeatedDonation = $candidate->donations->search({
+                        cpf          => $receita->{cpfCnpjDoador},
+                        amount       => $receita->{valorReceita} * 100,
+                        species      => $receita->{especieRecurso},
+                        status       => "captured",
+                        by_votolegal => "true",
+                    })->next;
 
-                if (defined($repeatedDonation)) {
-                    printf "A doação para o candidato %d do cpf %s no valor de R\$ %s já estava registrada.\n",
-                        $candidate->id,
-                        $receita->{cpfCnpjDoador},
-                        $receita->{valorReceita},
-                    ;
-                    next;
+                    if (defined($repeatedDonation)) {
+                        printf
+                            "A doação para o candidato %d do cpf %s no valor de R\$ %s foi realizada através do VotoLegal.\n",
+                            $candidate->id,
+                            $receita->{cpfCnpjDoador},
+                            $receita->{valorReceita},
+                        ;
+                        next;
+                    }
                 }
 
-                printf "Armazenando doação para o candidato %d do cpf/cnpj %s no valor de R\$ %s.\n",
+                printf
+                    "Armazenando doação para o candidato %d do cpf/cnpj %s no valor de R\$ %s.\n",
                     $candidate->id,
                     $receita->{cpfCnpjDoador},
                     $receita->{valorReceita},
