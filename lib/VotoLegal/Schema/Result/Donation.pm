@@ -204,6 +204,12 @@ __PACKAGE__->table("donation");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 payment_gateway_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -278,6 +284,8 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", is_nullable => 0 },
   "donation_type_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "payment_gateway_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -324,6 +332,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 payment_gateway
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::PaymentGateway>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "payment_gateway",
+  "VotoLegal::Schema::Result::PaymentGateway",
+  { id => "payment_gateway_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
 =head2 project_votes
 
 Type: has_many
@@ -340,8 +363,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-08 10:55:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TUgg1JJ8RPso43K1n76mzA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-20 14:44:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ntbVBztd9wrXA+DkMPO/7Q
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);
@@ -350,6 +373,8 @@ use Data::Section::Simple qw(get_data_section);
 use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
 use VotoLegal::Payment::PagSeguro;
+
+use Data::Printer;
 
 has _driver => (
     is   => "rw",
@@ -389,19 +414,13 @@ has _transaction_id => (
 sub tokenize {
     my ($self) = @_;
 
-    defined $self->credit_card_name     or die "missing 'credit_card_name'.";
-    defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
-    defined $self->credit_card_number   or die "missing 'credit_card_number'.";
+    if ($self->payment_gateway_id == 1) {
+        # Cielo.
+        defined $self->credit_card_name     or die "missing 'credit_card_name'.";
+        defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
+        defined $self->credit_card_number   or die "missing 'credit_card_number'.";
 
-    # Alguns gateways de pagamento tokenizam o cartão de crédito no front-end. Desta forma, o token já deve estar
-    # definido no atributo 'credit_card_token'.
-    if (defined($self->credit_card_token)) {
-        $self->driver->setCreditCardToken($self->credit_card_token);
-
-        return 1;
-    }
-    else {
-        # Ok, o token não veio na request.
+        # Tokenizando o cartão.
         my $card_token = $self->driver->tokenize_credit_card(
             credit_card_data => {
                 credit_card => {
@@ -414,10 +433,13 @@ sub tokenize {
             },
         );
 
-        if ($card_token) {
-            $self->driver->setCreditCardToken($card_token);
-            return 1;
-        }
+        $self->update({ status => "tokenized" });
+
+        $self->credit_card_token($card_token);
+        return 1;
+    }
+    else {
+        die "not implemented yet.";
     }
 
     return 0;
@@ -426,22 +448,27 @@ sub tokenize {
 sub authorize {
     my ($self) = @_;
 
-    defined $self->driver->getCreditCardToken or die 'credit card not tokenized.';
-    defined $self->credit_card_brand          or die "missing 'credit_card_brand'.";
+    if ($self->payment_gateway_id == 1) {
+        # Cielo.
+        defined $self->credit_card_token or die 'credit card not tokenized.';
+        defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
 
-    my $res = $self->driver->do_authorization(
-        token     => $self->_card_token,
-        remote_id => substr(md5_hex($self->id), 0, 20),
-        brand     => $self->credit_card_brand,
-        amount    => $self->amount,
-    );
+        my $res = $self->driver->do_authorization(
+            token     => $self->credit_card_token,
+            remote_id => substr(md5_hex($self->id), 0, 20),
+            brand     => $self->credit_card_brand,
+            amount    => $self->amount,
+        );
 
-    if ($res->{authorized}) {
-        $self->_transaction_id($res->{transaction_id});
+        if ($res->{authorized}) {
+            $self->_transaction_id($res->{transaction_id});
+            $self->update({ status => "authorized" });
 
-        $self->update({ status => "authorized" });
-
-        return 1;
+            return 1;
+        }
+    }
+    else {
+        die "not implemented yet.";
     }
     return 0;
 }
@@ -449,15 +476,21 @@ sub authorize {
 sub capture {
     my ($self) = @_;
 
-    defined $self->_transaction_id or die 'transaction not authorized';
+    if ($self->payment_gateway_id == 1) {
+        # Cielo.
+        defined $self->_transaction_id or die 'transaction not authorized';
 
-    my $res = $self->driver->do_capture(
-        transaction_id => $self->_transaction_id
-    );
+        my $res = $self->driver->do_capture(
+            transaction_id => $self->_transaction_id
+        );
 
-    if ($res->{captured}) {
-        $self->update({ status => "captured" });
-        return 1;
+        if ($res->{captured}) {
+            $self->update({ status => "captured" });
+            return 1;
+        }
+    }
+    else {
+        die "not implemented yet.";
     }
 
     return 0;
@@ -470,22 +503,17 @@ sub driver {
         return $self->_driver;
     }
 
-    my $payment_gateway_id = $self->candidate->payment_gateway_id;
+    my $payment_gateway_name = $self->payment_gateway->name;
 
-    my $paymentGateway = $self->result_source->schema->resultset('PaymentGateway')->find($payment_gateway_id);
-    die "invalid 'payment_gateway_id'" unless $paymentGateway;
-
-    my $driverName = "VotoLegal::Payment::" . $paymentGateway->name;
+    my $driverName = "VotoLegal::Payment::" . $payment_gateway_name;
 
     my $driver = $driverName->new(
         merchant_id  => $self->candidate->merchant_id,
         merchant_key => $self->candidate->merchant_key,
-        sandbox      => is_test() ? 1 : 0,
+        sandbox      => is_test(),
     );
 
-    if (ref $driver) {
-        $self->_driver($driver);
-    }
+    $self->_driver($driver);
 
     return $self->_driver;
 }

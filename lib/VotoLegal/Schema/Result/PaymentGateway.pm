@@ -97,9 +97,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 donations
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-12 10:35:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BzCTUarN80kcPwO4TdUmtA
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::Donation>
+
+=cut
+
+__PACKAGE__->has_many(
+  "donations",
+  "VotoLegal::Schema::Result::Donation",
+  { "foreign.payment_gateway_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-20 14:44:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yjKfDsPbsa/V3TeOejP62Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
