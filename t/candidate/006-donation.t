@@ -11,55 +11,47 @@ db_transaction {
     create_candidate;
     my $candidate_id = stash 'candidate.id';
 
-    # Não pode doar pra candidato não aprovado.
-    rest_post "/api/candidate/$candidate_id/donate",
-        name    => "donate to candidate",
-        is_fail => 1,
-        params  => {
-            name         => fake_name()->(),
-            cpf          => random_cpf(),
-            email        => fake_email()->(),
-            amount       => 100,
-        },
-    ;
-
     # Aprovando o candidato.
-    api_auth_as user_id => 1;
-    rest_put "/api/admin/candidate/$candidate_id/activate",
-        name  => 'activate candidate',
-        code  => 200,
+    ok(
+        $schema->resultset('Candidate')->find($candidate_id)->update({
+            status         => "activated",
+            payment_status => "paid",
+        }),
+        'activate',
+    );
+
+    # Listagem de payment_gateway.
+    rest_get "/api/payment_gateway",
+        name => "list payment gateways",
+        stash => "pg1",
     ;
 
-    # Não pode doar pra candidato que não tenha configurado os dados de pagamento.
-    api_auth_as 'nobody';
-    rest_post "/api/candidate/$candidate_id/donate",
-        name    => "donate to candidate",
-        is_fail => 1,
-        params  => {
-            name   => fake_name()->(),
-            cpf    => random_cpf(),
-            email  => fake_email()->(),
-            amount => 100,
-        },
-    ;
+    stash_test 'pg1' => sub {
+        my $res = shift;
 
-    # Por enquanto não é possível escolher outro gateway de pagamento que não seja o PagSeguro.
-    api_auth_as candidate_id => $candidate_id;
-    rest_put "/api/candidate/${candidate_id}",
-        name    => "other payment gateway",
-        is_fail => 1,
-        params  => {
-            payment_gateway_id => 1,
-        }
-    ;
+        is_deeply(
+            $res->{payment_gateway},
+            [
+                {
+                    id   => 1,
+                    name => "Cielo",
+                },
+                {
+                    id   => 2,
+                    name => "PagSeguro",
+                },
+            ],
+            'list payment gateways',
+        );
+    };
 
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
         name   => 'edit candidate',
         params => {
-            payment_gateway_id => 2,
-            merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
-            merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
+            payment_gateway_id => 1,
+            merchant_id        => "1006993069",
+            merchant_key       => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
         },
     ;
 
@@ -71,93 +63,13 @@ db_transaction {
     ;
 
     stash_test 'l1' => sub {
-        my ($res) = @_;
+        my $res = shift;
 
         is_deeply ($res->{donations}, [], 'no donations');
     };
 
-    # O PagSeguro gera senderHash e credit_card_token no front-end, o que me impede de testar.
-    done_testing; exit 0;
-
-    # Agora me deslogo de novo e realizo a doação.
+    # Fazendo uma doação.
     api_auth_as 'nobody';
-    my $total_amount = 100;
-
-    # Obtendo a sessão do PagSeguro.
-    rest_get "/api/candidate/$candidate_id/donate/session",
-        name  => "get session",
-        stash => 's1',
-    ;
-
-    stash_test 's1' => sub {
-        my $res = shift;
-
-        ok ($res->{id} =~ m{^[a-f0-9]{32}$}, 'get session');
-    };
-
-    # Se fiz uma doação com o mesmo valor há menos de 15min, deve travar.
-    my $fakeCpf     = random_cpf();
-    my $fakeAmount  = 1000;
-
-    ok(
-        $schema->resultset('Donation')->create({
-            id                           => md5_hex(Time::HiRes::time()),
-            candidate_id                 => $candidate_id,
-            name                         => fake_name()->(),
-            email                        => fake_email()->(),
-            cpf                          => $fakeCpf,
-            phone                        => fake_digits("##########")->(),
-            address_state                => "SP",
-            address_city                 => "Iguape",
-            address_district             => "Centro",
-            address_zipcode              => "11920-000",
-            address_street               => "Rua Tiradentes",
-            address_house_number         => 123,
-            billing_address_street       => "Rua Tiradentes",
-            billing_address_house_number => 123,
-            billing_address_district     => "Centro",
-            billing_address_zipcode      => "11920-000",
-            billing_address_city         => "Iguape",
-            billing_address_state        => "SP",
-            amount                       => $fakeAmount,
-            birthdate                    => "1992-05-02",
-            ip_address                   => "127.0.0.1",
-            status                       => "created",
-        }),
-        'fake donation',
-    );
-
-    # Depois de inserir a doação fake, vou tentar fazer uma de verdade.
-    rest_post "/api/candidate/$candidate_id/donate",
-        name    => "can't donate",
-        is_fail => 1,
-        params  => {
-            name                         => fake_name()->(),
-            cpf                          => $fakeCpf,
-            email                        => fake_email()->(),
-            phone                        => fake_digits("##########")->(),
-            amount                       => $fakeAmount,
-            birthdate                    => "1992-05-02",
-            address_state                => "SP",
-            address_city                 => "Iguape",
-            address_district             => "Centro",
-            address_zipcode              => "11920-000",
-            address_street               => "Rua Tiradentes",
-            address_house_number         => 123,
-            billing_address_street       => "Rua Tiradentes",
-            billing_address_house_number => 123,
-            billing_address_district     => "Centro",
-            billing_address_zipcode      => "11920-000",
-            billing_address_city         => "Iguape",
-            billing_address_state        => "SP",
-            amount                       => $fakeAmount,
-            birthdate                    => "1992-05-02",
-            sender_hash                  => random_string(8),
-            credit_card_name             => "JUNIOR MORAES",
-            credit_card_token            => random_string(12),
-        },
-    ;
-
     rest_post "/api/candidate/$candidate_id/donate",
         name    => "donate to candidate",
         stash   => 'd1',
@@ -166,122 +78,35 @@ db_transaction {
             name                         => fake_name()->(),
             cpf                          => random_cpf(),
             email                        => fake_email()->(),
-            phone                        => fake_digits("###########")->(),
-            birthdate                    => "1992-05-02",
-            address_street               => "Rua Tiradentes",
-            address_house_number         => "123",
+            credit_card_name             => "JUNIOR MORAES",
+            credit_card_validity         => "201801",
+            credit_card_number           => "6362970000457013",
+            credit_card_brand            => "elo",
+            amount                       => 1000,
             address_district             => "Centro",
-            address_zipcode              => "11920-000",
-            address_city                 => "Iguape",
+            birthdate                    => "1992-05-02",
             address_state                => "SP",
-            amount                       => 100,
-            sender_hash                  => random_string(6),
-            credit_card_token            => random_string(12),
-            billing_address_street       => "Rua Tiradentes",
-            billing_address_house_number => "123",
-            billing_address_complement   => "Apto 1",
+            address_city                 => "Iguape",
+            billing_address_house_number => fake_int(1, 1000)->(),
             billing_address_district     => "Centro",
-            billing_address_zipcode      => "11920-000",
+            address_street               => "Rua Tiradentes",
             billing_address_city         => "Iguape",
             billing_address_state        => "SP",
-            credit_card_name             => "JUNIOR MORAES",
+            address_zipcode              => "11920-000",
+            billing_address_street       => "Rua Tiradentes",
+            billing_address_zipcode      => "11920-000",
+            address_house_number         => fake_int(1, 1000)->(),
+            phone                        => fake_digits("##########")->(),
         },
     ;
 
-    my $donation_id ;
     stash_test 'd1' => sub {
         my $res = shift;
 
-        ok ($donation_id = $res->{id}, 'has id');
-    };
-
-    # Depois de efetuar uma doação, vou listar novamente.
-    api_auth_as candidate_id => stash 'candidate.id';
-    rest_get "/api/candidate/$candidate_id/donate",
-        name  => "listing donations",
-        stash => "l2",
-    ;
-
-    stash_test "l2" => sub {
-        my $res = shift;
-
-        # A listagem só possui uma doação.
-        is (scalar @{$res->{donations}}, 1, 'one donation');
-
-        # O id da doação é o mesmo que recebi no POST.
-        is ($res->{donations}->[0]->{id}, $donation_id, 'donation id');
-
-        # Como estou logado como um candidato, devo ver dados como email e CPF.
-        for (qw(name cpf email amount)) {
-            ok (defined($res->{donations}->[0]->{$_}), "show '$_' logged as candidate");
-        }
-    };
-
-    # Agora vou deslogar e fazer a mesma request para listar. Dados como CPF e email não devem aparecer.
-    api_auth_as 'nobody';
-    rest_get "/api/candidate/$candidate_id/donate",
-        name  => "listing donations",
-        stash => "l3",
-    ;
-
-    stash_test "l3" => sub {
-        my $res = shift;
-
-        ok (defined($res->{donations}->[0]->{$_}),  "show $_ when logged out") for qw(id amount name);
-        ok (!defined($res->{donations}->[0]->{$_}), "hide $_ when logged out") for qw(cpf email);
-    };
-
-    # Fazendo mais cinco doações pra testar a paginação.
-    for (1 .. 5) {
-        my $amount = fake_pick(100, 500, 1000, 5000)->();
-        $total_amount += $amount;
-
-        rest_post "/api/candidate/$candidate_id/donate",
-            name    => "donation $_",
-            code    => 200,
-            params  => {
-                name                 => fake_name()->(),
-                cpf                  => random_cpf(),
-                email                => fake_email()->(),
-                credit_card_name     => "JUNIOR MORAES",
-                credit_card_validity => "201801",
-                credit_card_number   => "6362970000457013",
-                credit_card_brand    => "elo",
-                amount               => $amount,
-                birthdate            => "1992-05-02",
-            },
-        ;
-    }
-
-    # Listando as doações novamente, mas com parâmetros de paginação.
-    rest_get "/api/candidate/$candidate_id/donate",
-        name  => "listing donations",
-        stash => "l4",
-        params => {
-            page    => 3,
-            results => 2,
-        },
-    ;
-
-    stash_test 'l4' => sub {
-        my $res = shift;
-
-        is (scalar @{ $res->{donations} }, 2, 'two results on pagination');
-    };
-
-    # Dando GET no candidate para testar o total doado.
-    rest_get "/api/candidate/${candidate_id}",
-        name  => 'get candidate',
-        stash => 'g1',
-    ;
-
-    stash_test 'g1' => sub {
-        my ($res) = @_;
-
-        is(
-            $res->{candidate}->{total_donated},
-            $total_amount,
-            'total donated'
+        is (
+            $schema->resultset('Donation')->find($res->{id})->status,
+            'captured',
+            "donation captured",
         );
     };
 };

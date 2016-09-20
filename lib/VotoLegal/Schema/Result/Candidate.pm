@@ -865,8 +865,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $payment_gateway_id = $r->get_value('payment_gateway_id');
-                        $payment_gateway_id == 2;
-                        #$self->resultset('PaymentGateway')->find($payment_gateway_id);
+                        $self->resultset('PaymentGateway')->find($payment_gateway_id);
                     },
                 },
                 bank_code => {

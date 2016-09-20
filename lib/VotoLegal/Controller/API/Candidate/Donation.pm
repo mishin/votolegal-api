@@ -6,9 +6,11 @@ use namespace::autoclean;
 use VotoLegal::Utils;
 use VotoLegal::SmartContract;
 
+use Data::Printer;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-with "Catalyst::TraitFor::Controller::reCAPTCHA";
+with "CatalystX::Eta::Controller::TypesValidation";
 
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
@@ -101,64 +103,135 @@ sub donate_GET {
 sub donate_POST {
     my ($self, $c) = @_;
 
-    # Validando o captcha.
-    #if (!is_test()) {
-    #    if (!$c->forward("captcha_check")) {
-    #        die \["captcha", "invalid"];
-    #    }
-    #}
+    my $payment_gateway_id = $c->stash->{candidate}->payment_gateway_id;
 
-    my $donation ;
-    $c->model('DB')->schema->txn_do(sub {
-        # Lock a fim de evitar duplicidade de recibos. Isso garante que não ocorrerá doações simultâneas para
-        # um mesmo candidato.
-        $c->model('DB::Candidate')->search(
-            { id => $c->stash->{candidate}->id },
-            { for => 'update', columns => 'id' },
-        )->next;
-
-        # Criando a donation.
-        my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
-
-        my $environment = is_test() ? 'sandbox' : 'production';
-
-        my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
-        $callback_url   .= "/" unless $callback_url =~ m{\/$};
-        $callback_url   .= "api/candidate/";
-        $callback_url   .= $c->stash->{candidate}->id;
-        $callback_url   .= "/donate/callback";
-
-        $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
-
-        $donation = $c->stash->{collection}->execute(
+    if ($payment_gateway_id == 1) {
+        # Cielo.
+        $self->validate_request_params(
             $c,
-            for  => "create",
-            with => {
-                %{ $c->req->params },
-                candidate_id     => $c->stash->{candidate}->id,
-                ip_address       => $ipAddr,
-                notification_url => $callback_url
+            credit_card_name => {
+                required => 1,
+                type     => "Str",
+            },
+            credit_card_validity => {
+                required => 1,
+                type     => "Str",
+            },
+            credit_card_number => {
+                required => 1,
+                type     => "Str",
+            },
+            credit_card_brand => {
+                required => 1,
+                type     => "Str",
             },
         );
-    });
+    }
+    elsif ($payment_gateway_id == 2) {
+        # PagSeguro.
+        $self->validate_request_params(
+            $c,
+            sender_hash => {
+                required => 1,
+                type     => "Str",
+            },
+            credit_card_token => {
+                required => 1,
+                type     => "Str",
+            },
+        );
+    }
+    else {
+        die \["payment_gateway_id", "invalid"];
+    }
 
-    if (!$donation) {
-        $self->status_bad_request($c, message => 'Invalid gateway response');
+    my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+
+    my $donation = $c->stash->{collection}->execute(
+        $c,
+        for  => "create",
+        with => {
+            %{ $c->req->params },
+            candidate_id       => $c->stash->{candidate}->id,
+            ip_address         => $ipAddr,
+            payment_gateway_id => $payment_gateway_id,
+            #notification_url => $callback_url
+        },
+    );
+
+    # TODO Passar os parâmetros requireds pelo PagSeguro.
+    # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
+    # da Model, armazenando assim apenas na RAM.
+    $donation->credit_card_name($c->req->params->{credit_card_name});
+    $donation->credit_card_validity($c->req->params->{credit_card_validity});
+    $donation->credit_card_number($c->req->params->{credit_card_number});
+    $donation->credit_card_brand($c->req->params->{credit_card_brand});
+
+    my $tokenize ;
+    eval {
+        $tokenize = $donation->tokenize();
+    };
+    if (!$tokenize) {
+        $self->status_bad_request($c, message => "Invalid gateway response.");
         $c->detach();
     }
 
-    $c->model('DB::SlackQueue')->create({
-        channel => "votolegal-bot",
-        message => sprintf(
-            "%s efetuou uma doação de R\$ %.2f para o candidato %s.",
-            $c->req->params->{name},
-            $c->req->params->{amount} / 100,
-            $c->stash->{candidate}->popular_name,
-        ),
-    });
+    my $authorize ;
+    my $capture ;
+    eval {
+        $authorize = $donation->authorize();
+        $capture   = $donation->capture();
+    };
+
+    if (!$authorize || !$capture) {
+        $self->status_bad_request($c, message => "Invalid gateway response.");
+        $c->detach();
+    }
+
+    #    my $environment = is_test() ? 'sandbox' : 'production';
+
+    #    my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
+    #    $callback_url   .= "/" unless $callback_url =~ m{\/$};
+    #    $callback_url   .= "api/candidate/";
+    #    $callback_url   .= $c->stash->{candidate}->id;
+    #    $callback_url   .= "/donate/callback";
+
+    #    $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
+
+    #    $donation = $c->stash->{collection}->execute(
+    #        $c,
+    #        for  => "create",
+    #        with => {
+    #            %{ $c->req->params },
+    #            candidate_id     => $c->stash->{candidate}->id,
+    #            ip_address       => $ipAddr,
+    #            notification_url => $callback_url
+    #        },
+    #    );
+    #});
+
+    if (!is_test()) {
+        $c->model('DB::SlackQueue')->create({
+            channel => "votolegal-bot",
+            message => sprintf(
+                "%s efetuou uma doação de R\$ %.2f para o candidato %s.",
+                $c->req->params->{name},
+                $c->req->params->{amount} / 100,
+                $c->stash->{candidate}->popular_name,
+            ),
+        });
+    }
 
     return $self->status_ok($c, entity => { id => $donation->id });
 }
+
+#sub donate_pagseguro :Private {
+#    my ($self, $c) = @_;
+#}
+#
+#sub donate_cielo :Private {
+#    my ($self, $c) = @_;
+#}
 
 =encoding utf8
 
