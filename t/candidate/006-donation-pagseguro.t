@@ -69,9 +69,7 @@ db_transaction {
             cpf                          => random_cpf(),
             email                        => fake_email()->(),
             credit_card_name             => "JUNIOR MORAES",
-            credit_card_validity         => "201801",
-            credit_card_number           => "6362970000457013",
-            credit_card_brand            => "elo",
+            credit_card_token            => random_string(12),
             amount                       => 1000,
             address_district             => "Centro",
             birthdate                    => "1992-05-02",
@@ -87,20 +85,19 @@ db_transaction {
             billing_address_zipcode      => "11920-000",
             address_house_number         => fake_int(1, 1000)->(),
             phone                        => fake_digits("##########")->(),
-            sender_hash                  => random_string(6),
-            credit_card_token            => random_string(12),
+            sender_hash                  => "faa2cfa1c37a1379576bba47b496037854369f6679b569d19b571ea3ac06b6ce",
         },
     ;
 
-    #stash_test 'd1' => sub {
-    #    my $res = shift;
+    stash_test 'd1' => sub {
+        my $res = shift;
 
-    #    is (
-    #        $schema->resultset('Donation')->find($res->{id})->status,
-    #        'captured',
-    #        "donation captured",
-    #    );
-    #};
+        is (
+            $schema->resultset('Donation')->find($res->{id})->status,
+            'created',
+            "donation created",
+        );
+    };
 };
 
 done_testing();
