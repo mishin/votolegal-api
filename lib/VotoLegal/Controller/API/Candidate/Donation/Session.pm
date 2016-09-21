@@ -4,6 +4,7 @@ use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -16,7 +17,14 @@ sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub session_GET {
     my ($self, $c) = @_;
 
-    my $session = $c->stash->{pagseguro}->createSession();
+    my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $c->stash->{candidate}->merchant_id,
+        merchant_key => $c->stash->{candidate}->merchant_key,
+        sandbox      => is_test(),
+        logger       => $c->log,
+    );
+
+    my $session = $pagseguro->createSession();
 
     return $self->status_ok(
         $c,

@@ -26,20 +26,11 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     for (qw(merchant_id merchant_key payment_gateway_id)) {
         defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
     }
-}
-
-sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) {
-    my ($self, $c) = @_;
 
     $c->stash->{collection} = $c->model('DB::Donation');
-
-    $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
-        merchant_id  => $c->stash->{candidate}->merchant_id,
-        merchant_key => $c->stash->{candidate}->merchant_key,
-        sandbox      => is_test(),
-        logger       => $c->log,
-    );
 }
+
+sub base : Chained('root') : PathPart('donate') : CaptureArgs(0) { }
 
 sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     my ($self, $c, $donation_id) = @_;
@@ -131,6 +122,10 @@ sub donate_POST {
         # PagSeguro.
         $self->validate_request_params(
             $c,
+            credit_card_name => {
+                required => 1,
+                type     => "Str",
+            },
             sender_hash => {
                 required => 1,
                 type     => "Str",
@@ -162,10 +157,26 @@ sub donate_POST {
     # TODO Passar os parâmetros requireds pelo PagSeguro.
     # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
     # da Model, armazenando assim apenas na RAM.
+    $donation->logger($c->log);
     $donation->credit_card_name($c->req->params->{credit_card_name});
-    $donation->credit_card_validity($c->req->params->{credit_card_validity});
-    $donation->credit_card_number($c->req->params->{credit_card_number});
-    $donation->credit_card_brand($c->req->params->{credit_card_brand});
+
+    if ($payment_gateway_id == 1) {
+        $donation->credit_card_validity($c->req->params->{credit_card_validity});
+        $donation->credit_card_number($c->req->params->{credit_card_number});
+        $donation->credit_card_brand($c->req->params->{credit_card_brand});
+    }
+    elsif ($payment_gateway_id == 2) {
+        my $environment = is_test() ? 'sandbox' : 'production';
+        my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
+        $callback_url   .= "/" unless $callback_url =~ m{\/$};
+        $callback_url   .= "api/candidate/";
+        $callback_url   .= $c->stash->{candidate}->id;
+        $callback_url   .= "/donate/callback";
+
+        $donation->notification_url($callback_url);
+        $donation->sender_hash($c->req->params->{sender_hash});
+        $donation->credit_card_token($c->req->params->{credit_card_token});
+    }
 
     my $tokenize ;
     eval {
@@ -188,28 +199,7 @@ sub donate_POST {
         $c->detach();
     }
 
-    #    my $environment = is_test() ? 'sandbox' : 'production';
-
-    #    my $callback_url = $c->config->{pagseguro}->{$environment}->{callback_url};
-    #    $callback_url   .= "/" unless $callback_url =~ m{\/$};
-    #    $callback_url   .= "api/candidate/";
-    #    $callback_url   .= $c->stash->{candidate}->id;
-    #    $callback_url   .= "/donate/callback";
-
-    #    $c->stash->{collection}->pagseguro($c->stash->{pagseguro});
-
-    #    $donation = $c->stash->{collection}->execute(
-    #        $c,
-    #        for  => "create",
-    #        with => {
-    #            %{ $c->req->params },
-    #            candidate_id     => $c->stash->{candidate}->id,
-    #            ip_address       => $ipAddr,
-    #            notification_url => $callback_url
-    #        },
-    #    );
-    #});
-
+    # Enviando a notificação pro Slack.
     if (!is_test()) {
         $c->model('DB::SlackQueue')->create({
             channel => "votolegal-bot",
@@ -224,14 +214,6 @@ sub donate_POST {
 
     return $self->status_ok($c, entity => { id => $donation->id });
 }
-
-#sub donate_pagseguro :Private {
-#    my ($self, $c) = @_;
-#}
-#
-#sub donate_cielo :Private {
-#    my ($self, $c) = @_;
-#}
 
 =encoding utf8
 

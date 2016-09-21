@@ -376,9 +376,10 @@ use VotoLegal::Payment::PagSeguro;
 
 use Data::Printer;
 
-has _driver => (
-    is   => "rw",
-    does => "VotoLegal::Payment",
+# Pagseguro.
+has sender_hash => (
+    is  => "rw",
+    isa => "Str",
 );
 
 has credit_card_token => (
@@ -386,6 +387,12 @@ has credit_card_token => (
     isa => "Str",
 );
 
+has notification_url => (
+    is  => "rw",
+    isa => "Str",
+);
+
+# Cielo.
 has credit_card_name => (
     is  => "rw",
     isa => "Str",
@@ -406,10 +413,20 @@ has credit_card_brand => (
     isa => "Str",
 );
 
+has _driver => (
+    is   => "rw",
+    does => "VotoLegal::Payment",
+);
+
 has _transaction_id => (
     is  => "rw",
     isa => "Str",
 );
+
+has logger => (
+    is => "rw",
+);
+
 
 sub tokenize {
     my ($self) = @_;
@@ -438,8 +455,9 @@ sub tokenize {
         $self->credit_card_token($card_token);
         return 1;
     }
-    else {
-        die "not implemented yet.";
+    elsif ($self->payment_gateway_id == 2) {
+        # PagSeguro.
+        return $self->credit_card_token;
     }
 
     return 0;
@@ -467,9 +485,11 @@ sub authorize {
             return 1;
         }
     }
-    else {
-        die "not implemented yet.";
+    elsif ($self->payment_gateway_id == 2) {
+        # PagSeguro.
+        return 1;
     }
+
     return 0;
 }
 
@@ -490,7 +510,62 @@ sub capture {
         }
     }
     else {
-        die "not implemented yet.";
+        # PagSeguro.
+
+        # Tratando alguns dados.
+        my $billing_address_complement = $self->billing_address_complement;
+        my $phone                      = $self->phone;
+        my $phoneDDD                   = substr($self->phone, 0, 2);
+        my $phoneNumber                = substr($self->phone, 2);
+        my $amount                     = sprintf("%.2f", $self->amount / 100);
+        my $birthdate                  = $self->birthdate->strftime("%d/%m/%Y");
+        my $zipcode                    = $self->address_zipcode;
+        my $cpf                        = $self->cpf;
+        $zipcode                       =~ s/\D//g;
+        $cpf                           =~ s/\D//g;
+
+        my $req = $self->driver->transaction(
+            itemQuantity1             => 1,
+            itemId1                   => "2",
+            paymentMethod             => "creditCard",
+            itemDescription1          => "Doação VotoLegal",
+            itemAmount1               => $amount,
+            reference                 => $self->id,
+            senderName                => $self->name,
+            senderCPF                 => $cpf,
+            senderAreaCode            => $phoneDDD,
+            senderPhone               => $phoneNumber,
+            senderEmail               => $self->email,
+            shippingAddressStreet     => $self->address_street,
+            shippingAddressNumber     => $self->address_house_number,
+            shippingAddressDistrict   => $self->address_district,
+            shippingAddressPostalCode => $zipcode,
+            shippingAddressCity       => $self->address_city,
+            shippingAddressState      => $self->address_state,
+            senderHash                => $self->sender_hash,
+            creditCardToken           => $self->credit_card_token,
+            installmentQuantity       => 1,
+            installmentValue          => $amount,
+            creditCardHolderName      => $self->credit_card_name,
+            creditCardHolderCPF       => $cpf,
+            creditCardHolderBirthDate => $birthdate,
+            creditCardHolderAreaCode  => $phoneDDD,
+            creditCardHolderPhone     => $phoneNumber,
+            billingAddressStreet      => $self->billing_address_street,
+            billingAddressNumber      => $self->billing_address_house_number,
+            billingAddressDistrict    => $self->billing_address_district,
+            billingAddressPostalCode  => $self->billing_address_zipcode,
+            billingAddressCity        => $self->billing_address_city,
+            billingAddressState       => $self->billing_address_state,
+            notificationURL           => $self->notification_url,
+            (
+                $billing_address_complement
+                ? ( billingAddressComplement => $billing_address_complement )
+                : ()
+            ),
+        );
+
+        return 1;
     }
 
     return 0;
@@ -511,6 +586,7 @@ sub driver {
         merchant_id  => $self->candidate->merchant_id,
         merchant_key => $self->candidate->merchant_key,
         sandbox      => is_test(),
+        logger       => $self->logger,
     );
 
     $self->_driver($driver);

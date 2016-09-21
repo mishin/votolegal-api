@@ -10,14 +10,11 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) {
-}
+sub root : Chained('/api/candidate/donation/base') : PathPart('') : CaptureArgs(0) { }
 
-sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
-}
+sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) { }
 
-sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
-}
+sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub callback_POST {
     my ( $self, $c ) = @_;
@@ -32,7 +29,14 @@ sub callback_POST {
 
     my $notificationCode = $c->req->params->{notificationCode};
 
-    my $notification = $c->stash->{pagseguro}->notification($notificationCode);
+    my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $c->stash->{candidate}->merchant_id,
+        merchant_key => $c->stash->{candidate}->merchant_key,
+        sandbox      => is_test(),
+        logger       => $c->log,
+    );
+
+    my $notification = $pagseguro->notification($notificationCode);
 
     if (ref $notification) {
         my $donation_id = $notification->{reference};
