@@ -76,6 +76,7 @@ db_transaction {
             payment_gateway_code         => fake_digits("########-####-####-####-############")->(),
             by_votolegal                 => "true",
             donation_type_id             => 1,
+            payment_gateway_id           => 2,
         }),
         'add donation',
     );

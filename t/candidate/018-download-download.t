@@ -58,6 +58,7 @@ db_transaction {
             captured_at                  => \'now()',
             by_votolegal                 => "t",
             donation_type_id             => 1,
+            payment_gateway_id           => 1,
         });
     }
 

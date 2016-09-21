@@ -64,15 +64,16 @@ db_transaction {
             payment_gateway_code         => fake_digits("########-####-####-####-############")->(),
             by_votolegal                 => "t",
             donation_type_id             => 1,
-        });
-    }
-
-    # Obtendo a api_key do candidate.
+            payment_gateway_id           => 2,
+        });                                    
+    }                                          
+                                               
+    # Obtendo a api_key do candidate.          
     ok (my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id'), 'candidate');
-    ok (
+    ok (                                       
         my $api_key = $schema->resultset('UserSession')->search({ user_id => $candidate->user_id })->next->api_key,
-        'api_key',
-    );
+        'api_key',                             
+    );                                         
 
     # Enviando a request.
     my $req = request("/api/candidate/$candidate_id/donate/export?api_key=$api_key&receipt_id=25&date=2016-01-01");

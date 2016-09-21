@@ -116,6 +116,7 @@ db_transaction {
             status                       => "captured",
             by_votolegal                 => "true",
             donation_type_id             => 1,
+            payment_gateway_id           => 2,
         });
 
         $schema->resultset('Project')->find(stash "p$_.id")->project_votes->create({ donation_id => $donation_id });
