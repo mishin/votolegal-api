@@ -467,7 +467,9 @@ sub tokenize {
     }
     elsif ($self->payment_gateway_id == 2) {
         # PagSeguro.
-        return 1;
+        if (defined($self->credit_card_token)) {
+            return 1;
+        }
     }
 
     return 0;
