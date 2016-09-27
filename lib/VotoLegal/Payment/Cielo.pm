@@ -47,7 +47,7 @@ has logger => (
 
 my $domains = {
     sandbox    => "https://apisandbox.cieloecommerce.cielo.com.br/1/",
-    production => "https://apisandbox.cieloecommerce.cielo.com.br/1/",
+    production => "https://api.cieloecommerce.cielo.com.br/1/",
 };
 
 sub tokenize_credit_card {
