@@ -154,7 +154,6 @@ sub donate_POST {
         },
     );
 
-    # TODO Passar os parâmetros requireds pelo PagSeguro.
     # Os dados do cartão *não* são salvos no banco de dados, então passo os parâmetros diretamente pra um atributo
     # da Model, armazenando assim apenas na RAM.
     $donation->logger($c->log);
@@ -182,6 +181,7 @@ sub donate_POST {
     eval {
         $tokenize = $donation->tokenize();
     };
+    $c->log->error("Cielo: $@") if $@;
     if (!$tokenize) {
         $self->status_bad_request($c, message => "Invalid gateway response.");
         $c->detach();
@@ -193,6 +193,7 @@ sub donate_POST {
         $authorize = $donation->authorize();
         $capture   = $donation->capture();
     };
+    $c->log->error("Cielo: $@") if $@;
 
     if (!$authorize || !$capture) {
         $self->status_bad_request($c, message => "Invalid gateway response.");
