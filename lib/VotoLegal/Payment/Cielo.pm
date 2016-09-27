@@ -70,7 +70,7 @@ sub tokenize_credit_card {
         encode_json({
             MerchantOrderId => $opts{order_data}->{id},
             Customer => {
-               Name => $opts{credit_card_data}->{credit_card}->{name_on_card},
+               Name => $opts{order_data}->{name},
             },
             Payment => {
                 Type         => "CreditCard",
