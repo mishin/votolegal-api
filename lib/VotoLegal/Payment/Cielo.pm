@@ -41,6 +41,10 @@ has payment_gateway_code => (
     is => "rw",
 );
 
+has logger => (
+    is => "rw",
+);
+
 my $domains = {
     sandbox    => "https://apisandbox.cieloecommerce.cielo.com.br/1/",
     production => "https://apisandbox.cieloecommerce.cielo.com.br/1/",
@@ -87,6 +91,8 @@ sub tokenize_credit_card {
         }),
     );
 
+    $self->logger->info("Cielo: " . $req->content) if $self->logger;
+
     if ($req->is_success) {
         my $json = decode_json $req->content;
 
@@ -122,6 +128,7 @@ sub do_capture {
         ],
         {},
     );
+    $self->logger->info("Cielo: " . $req->content) if $self->logger;
 
     if ($req->is_success) {
         my $json = decode_json $req->content;
