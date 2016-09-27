@@ -193,7 +193,7 @@ sub action_specs {
                 candidate_id => $values{candidate_id},
                 cpf          => $values{cpf},
                 amount       => $values{amount},
-                created_at   => { ">=" => \"(now() - '2 minutes'::interval)" },
+                created_at   => { ">=" => \"(now() - '30 seconds'::interval)" },
             })->next;
 
             if ($repeatedDonation) {
