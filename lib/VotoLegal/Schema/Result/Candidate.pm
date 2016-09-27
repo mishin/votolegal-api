@@ -911,7 +911,7 @@ sub verifiers_specs {
                     type       => "Str",
                     post_check => sub {
                         my $crawlable = $_[0]->get_value('crawlable');
-                        $crawlable == "true" || $crawlable == "false";
+                        $crawlable eq "true" || $crawlable eq "false";
                     },
                 },
             },
