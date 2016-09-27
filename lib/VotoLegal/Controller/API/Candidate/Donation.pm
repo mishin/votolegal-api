@@ -6,8 +6,6 @@ use namespace::autoclean;
 use VotoLegal::Utils;
 use VotoLegal::SmartContract;
 
-use Data::Printer;
-
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with "CatalystX::Eta::Controller::TypesValidation";
@@ -116,6 +114,10 @@ sub donate_POST {
                 required => 1,
                 type     => "Str",
             },
+            credit_card_cvv => {
+                required => 1,
+                type     => "Str",
+            },
         );
     }
     elsif ($payment_gateway_id == 2) {
@@ -150,7 +152,6 @@ sub donate_POST {
             candidate_id       => $c->stash->{candidate}->id,
             ip_address         => $ipAddr,
             payment_gateway_id => $payment_gateway_id,
-            #notification_url => $callback_url
         },
     );
 
@@ -163,6 +164,7 @@ sub donate_POST {
         $donation->credit_card_validity($c->req->params->{credit_card_validity});
         $donation->credit_card_number($c->req->params->{credit_card_number});
         $donation->credit_card_brand($c->req->params->{credit_card_brand});
+        $donation->credit_card_cvv($c->req->params->{credit_card_cvv});
     }
     elsif ($payment_gateway_id == 2) {
         my $environment = is_test() ? 'sandbox' : 'production';

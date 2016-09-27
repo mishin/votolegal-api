@@ -50,8 +50,8 @@ db_transaction {
         name   => 'edit candidate',
         params => {
             payment_gateway_id => 1,
-            merchant_id        => "1006993069",
-            merchant_key       => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
+            merchant_id        => VotoLegal->config->{cielo}->{sandbox}->{merchant_id},
+            merchant_key       => VotoLegal->config->{cielo}->{sandbox}->{merchant_key},
         },
     ;
 
@@ -78,10 +78,11 @@ db_transaction {
             name                         => fake_name()->(),
             cpf                          => random_cpf(),
             email                        => fake_email()->(),
-            credit_card_name             => "JUNIOR MORAES",
-            credit_card_validity         => "201801",
-            credit_card_number           => "6362970000457013",
-            credit_card_brand            => "elo",
+            credit_card_name             => "CARLOS A M JUNIOR",
+            credit_card_validity         => "201805",
+            credit_card_number           => "0000000000000001",
+            credit_card_brand            => "visa",
+            credit_card_cvv              => "123",
             amount                       => 1000,
             address_district             => "Centro",
             birthdate                    => "1992-05-02",

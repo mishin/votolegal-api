@@ -374,8 +374,6 @@ use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
 use VotoLegal::Payment::PagSeguro;
 
-use Data::Printer;
-
 # Pagseguro.
 has sender_hash => (
     is  => "rw",
@@ -413,6 +411,11 @@ has credit_card_brand => (
     isa => "Str",
 );
 
+has credit_card_cvv => (
+    is  => "rw",
+    isa => "Str",
+);
+
 has _driver => (
     is   => "rw",
     does => "VotoLegal::Payment",
@@ -436,6 +439,8 @@ sub tokenize {
         defined $self->credit_card_name     or die "missing 'credit_card_name'.";
         defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
         defined $self->credit_card_number   or die "missing 'credit_card_number'.";
+        defined $self->credit_card_brand    or die "missing 'credit_card_brand'.";
+        defined $self->credit_card_cvv      or die "missing 'credit_card_cvv'.";
 
         # Tokenizando o cartão.
         my $card_token = $self->driver->tokenize_credit_card(
@@ -443,16 +448,21 @@ sub tokenize {
                 credit_card => {
                     validity     => $self->credit_card_validity,
                     name_on_card => $self->credit_card_name,
+                    brand        => $self->credit_card_brand,
                 },
                 secret => {
                     number => $self->credit_card_number,
+                    cvv    => $self->credit_card_cvv,
                 },
             },
+            order_data => {
+                id     => $self->id,
+                amount => $self->amount,
+                name   => $self->name,
+            }
         );
 
         $self->update({ status => "tokenized" });
-
-        $self->credit_card_token($card_token);
         return 1;
     }
     elsif ($self->payment_gateway_id == 2) {
@@ -468,20 +478,8 @@ sub authorize {
 
     if ($self->payment_gateway_id == 1) {
         # Cielo.
-        defined $self->credit_card_token or die 'credit card not tokenized.';
-        defined $self->credit_card_brand or die "missing 'credit_card_brand'.";
-
-        my $res = $self->driver->do_authorization(
-            token     => $self->credit_card_token,
-            remote_id => substr(md5_hex($self->id), 0, 20),
-            brand     => $self->credit_card_brand,
-            amount    => $self->amount,
-        );
-
-        if ($res->{authorized}) {
-            $self->_transaction_id($res->{transaction_id});
+        if ($self->driver->do_authorization()) {
             $self->update({ status => "authorized" });
-
             return 1;
         }
     }
@@ -498,14 +496,12 @@ sub capture {
 
     if ($self->payment_gateway_id == 1) {
         # Cielo.
-        defined $self->_transaction_id or die 'transaction not authorized';
-
-        my $res = $self->driver->do_capture(
-            transaction_id => $self->_transaction_id
-        );
-
-        if ($res->{captured}) {
-            $self->update({ status => "captured" });
+        if ($self->driver->do_capture()) {
+            $self->update({
+                payment_gateway_code => $self->driver->payment_gateway_code,
+                status               => "captured",
+                captured_at          => \"now()",
+            });
             return 1;
         }
     }
