@@ -146,7 +146,7 @@ sub _brand_to_bandeira {
 
     my $from_to = {
         'visa'            => 'Visa',
-        'mastercard'      => 'Mastercard',
+        'mastercard'      => 'Master',
         'discover'        => 'Discover',
         'enroute'         => 'Diners',
         'jcb'             => 'JCB',
