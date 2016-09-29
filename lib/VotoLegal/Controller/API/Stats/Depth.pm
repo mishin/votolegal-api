@@ -17,7 +17,10 @@ sub depth_GET {
     return $self->status_ok($c, entity => {
         donators => [
             $c->model("DB::Donation")->search(
-                { status => "captured" },
+                {
+                    status       => "captured",
+                    by_votolegal => "true",
+                },
                 {
                     select => [
                         { extract => \"year from created_at" },
