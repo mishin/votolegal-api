@@ -4,13 +4,14 @@ use lib "$Bin/../lib";
 
 use Test::More;
 
+use VotoLegal::Test::Further;
+use Digest::MD5 qw(md5_hex);
+
 use_ok 'VotoLegal::Payment::Cielo';
 
 my $cielo = new_ok ('VotoLegal::Payment::Cielo', => [
-    merchant_id     => "1006993069",
-    merchant_key    => "25fbb99741c739dd84d7b06ec78c9bac718838630f30b112d033ce2e621b34f3",
-    soft_descriptor => "VotoLegalTest",
-    sandbox         => 1,
+    %{ VotoLegal->config->{cielo}->{sandbox} },
+    sandbox => 1,
 ]);
 
 ok ($cielo->does('VotoLegal::Payment'), 'does VotoLegal::Payment');
@@ -21,31 +22,27 @@ my $card_token = $cielo->tokenize_credit_card(
         credit_card => {
             validity     => "201805",
             name_on_card => "JUNIOR M MORAES",
+            brand        => "visa",
         },
         secret => {
-            number => "6362970000457013",
+            number => "0000000000000001",
+            cvv    => "123",
         },
     },
+    order_data => {
+        id     => md5_hex(time),
+        amount => "100",
+        name   => fake_name()->(),
+    }
 );
 
-is (length $card_token, 44, 'card_token');
+ok ($card_token, 'card token');
 
-# Authorization.
-my $auth = $cielo->do_authorization(
-    token     => $card_token,
-    remote_id => int(rand(100000) + 1),
-    brand     => "elo",
-    amount    => 100,   # 1 real.
-);
-
-ok ($auth->{authorized}, 'authorized');
+# Authorize.
+ok ($cielo->do_authorization(), 'authorized');
 
 # Capture.
-my $capture = $cielo->do_capture(
-    transaction_id => $auth->{transaction_id},
-);
-
-ok ($capture->{captured}, 'captured');
+ok ($cielo->do_capture(), 'captured');
 
 done_testing();
 
