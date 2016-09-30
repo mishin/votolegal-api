@@ -94,12 +94,19 @@ sub tokenize_credit_card {
     $self->logger->info("Cielo: " . $req->content) if $self->logger;
 
     if ($req->is_success) {
-        my $json = decode_json $req->content;
+        my $json       = decode_json $req->content;
+        my $returnCode = $json->{Payment}->{ReturnCode};
 
-        if ($json->{Payment}->{Status} == 1) {
-            $self->payment_gateway_code($json->{Payment}->{PaymentId});
-            return 1;
+        # Tratando da resposta. Veja a lista completa dos códigos de retorno da Cielo em
+        # http://developercielo.github.io/Webservice-3.0/#sandbox
+
+        # Não autorizado.
+        if (grep { $returnCode == $_ } qw(2 77 70 78 57 99)) {
+            die \['donation', "not authorized"];
         }
+
+        $self->payment_gateway_code($json->{Payment}->{PaymentId});
+        return 1;
     }
 
     return 0;

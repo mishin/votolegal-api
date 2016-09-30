@@ -179,23 +179,14 @@ sub donate_POST {
         $donation->credit_card_token($c->req->params->{credit_card_token});
     }
 
-    my $tokenize ;
-    eval {
-        $tokenize = $donation->tokenize();
-    };
-    $c->log->error("Cielo: $@") if $@;
+    my $tokenize = $donation->tokenize();
     if (!$tokenize) {
         $self->status_bad_request($c, message => "Invalid gateway response.");
         $c->detach();
     }
 
-    my $authorize ;
-    my $capture ;
-    eval {
-        $authorize = $donation->authorize();
-        $capture   = $donation->capture();
-    };
-    $c->log->error("Cielo: $@") if $@;
+    my $authorize = $donation->authorize();
+    my $capture   = $donation->capture();
 
     if (!$authorize || !$capture) {
         $self->status_bad_request($c, message => "Invalid gateway response.");
