@@ -72,6 +72,12 @@ sub depth_GET {
                 donation_type_id => 1,
             })->count,
         ),
+        donations_between_fivehundred_and_thousand => (
+             $c->model('DB::Donation')->search({
+                amount => { '>=' => 50000, '<=' => 100000 },
+                donation_type_id => 1,
+            })->count,
+        ),
     });
 }
 
