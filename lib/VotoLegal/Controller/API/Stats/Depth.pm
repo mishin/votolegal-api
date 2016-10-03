@@ -53,7 +53,7 @@ sub depth_GET {
             $c->model('DB::Donation')->search({
                 status       => "captured",
                 by_votolegal => "true",
-            })->count,
+            })->get_column("amount")->sum || 0,
         ),
         total_electronic_transfer => (
             $c->model('DB::Donation')->search({
@@ -62,20 +62,87 @@ sub depth_GET {
         ),
         donations_up_to_hundred => (
             $c->model('DB::Donation')->search({
-                amount => { '>=' => 10000 },
+                amount => { '<=' => 10000 },
+                status => "captured",
                 donation_type_id => 1,
-            })->get_column("amount")->sum || 0,
+            })->count,
         ),
         donations_between_hundred_and_fivehundred => (
              $c->model('DB::Donation')->search({
                 amount => { '>=' => 10000, '<=' => 50000 },
+                status => "captured",
                 donation_type_id => 1,
             })->count,
         ),
         donations_between_fivehundred_and_thousand => (
              $c->model('DB::Donation')->search({
                 amount => { '>=' => 50000, '<=' => 100000 },
+                status => "captured",
                 donation_type_id => 1,
+            })->count,
+        ),
+        donations_between_thousand_and_fiftythousand => (
+             $c->model('DB::Donation')->search({
+                amount => { '>=' => 100000, '<=' => 5000000 },
+                status => "captured",
+                donation_type_id => 1,
+            })->count,
+        ),
+        donations_greater_than_fiftythousand => (
+             $c->model('DB::Donation')->search({
+                amount => { '>=' => 5000000 },
+                donation_type_id => 1,
+            })->count,
+        ),
+        candidates_allowed_transparency => (
+            $c->model('DB::Candidate')->search({
+                status         => "activated",
+                payment_status => "paid",
+            })->count,
+        ),
+        donations_through_votolegal => (
+            $c->model('DB::Donation')->search({
+                status       => "captured",
+                by_votolegal => "true",
+            })->count,
+        ),
+        donations_canceled => (
+            $c->model('DB::Donation')->search({
+                status => "canceled",
+            })->count,
+        ),
+        candidates_received_via_credit_card => (
+            $c->model('DB::Donation')->search({}, {
+                columns  => [ qw(candidate_id) ],
+                group_by => [ qw(candidate_id) ],
+            })->count,
+        ),
+        donations_up_to_fifty_through_votolegal => (
+            $c->model('DB::Donation')->search({
+                amount       => { '<=' => 5000 },
+                status       => "captured",
+                by_votolegal => "true",
+            })->count,
+        ),
+        donations_between_fifty_and_hundred_through_votolegal => (
+            $c->model('DB::Donation')->search({
+                amount       => { '>=' => 5000, '<=' => 10000 },
+                status       => "captured",
+                by_votolegal => "true",
+            })->count,
+        ),
+        donations_between_hundred_and_fourhundred_through_votolegal => (
+            $c->model('DB::Donation')->search({
+                amount       => { '>=' => 10000, '<=' => 40000 },
+                status       => "captured",
+                by_votolegal => "true",
+            })->count,
+        ),
+        donations_between_fourhundred_and_thousand_through_votolegal => (
+            $c->model('DB::Donation')->search({
+                amount       => { '>=' => 40000, '<=' => 106410 },
+                status       => "captured",
+                by_votolegal => "true",
             })->count,
         ),
     });
