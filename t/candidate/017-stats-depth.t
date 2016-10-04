@@ -91,24 +91,24 @@ db_transaction {
         'donate R$ 999,00',
     );
 
-    # Uma doação entre R$ 1.000,00 e R$ 50.000,00.
+    # Uma doação entre R$ 1.000,00 e R$ 10.000,00.
     ok (
         $candidate->donations->create({
             %{ $fakeDonation->() },
-            amount     => 2500000,
+            amount     => 900000,
             created_at => "2016-10-01"
         }),
-        'donate R$ 25.000,00',
+        'donate R$ 9.000,00',
     );
 
-    # Uma doação maior que R$ 50.000,00.
+    # Uma doação maior que R$ 10.000,00.
     ok (
         $candidate->donations->create({
             %{ $fakeDonation->() },
-            amount     => 5000100,
+            amount     => 1000100,
             created_at => "2016-10-01"
         }),
-        'donate R$ 50.001,00',
+        'donate R$ 10.001,00',
     );
 
     # Uma doação cancelada.
@@ -147,20 +147,20 @@ db_transaction {
                 { count => 1, month => 2,  year => 2015, amount => "1000" },
                 { count => 1, month => 5,  year => 2016, amount => "1000" },
                 { count => 1, month => 9,  year => 2016, amount => "1000" },
-                { count => 5, month => 10, year => 2016, amount => "7642500" },
+                { count => 5, month => 10, year => 2016, amount => "2042500" },
             ],
         );
 
         is ($res->{donors}, 9, 'total donors');
-        is ($res->{total_amount}, 8646500, 'total amount');
+        is ($res->{total_amount}, 3046500, 'total amount');
         is ($res->{total_party_fund}, 1_000_000, 'total party fund');
-        is ($res->{total_credit_card}, 7645500, 'total credit card');
+        is ($res->{total_credit_card}, 2045500, 'total credit card');
         is ($res->{total_electronic_transfer}, 1000, 'total eletronic transfer');
         is ($res->{donations_up_to_hundred}, 5, 'donations up to hundred');
         is ($res->{donations_between_hundred_and_fivehundred}, 1, 'donations between hundred and five hundred');
         is ($res->{donations_between_fivehundred_and_thousand}, 1, 'donations between fivehundred and thousand');
-        is ($res->{donations_between_thousand_and_fiftythousand}, 1, 'donations between thousand and fifty thousand');
-        is ($res->{donations_greater_than_fiftythousand}, 1, 'donations greater than fifty thousand');
+        is ($res->{donations_between_thousand_and_ten_thousand}, 1, 'donations between thousand and ten thousand');
+        is ($res->{donations_greater_than_ten_thousand}, 1, 'donations greater than fifty thousand');
         is ($res->{candidates_allowed_transparency}, 1, 'candidates allowed transparency');
         is ($res->{donations_through_votolegal}, 8, 'donations through votolegal');
         is ($res->{donations_canceled}, 1, 'canceled donations');

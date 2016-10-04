@@ -81,16 +81,16 @@ sub depth_GET {
                 donation_type_id => 1,
             })->count,
         ),
-        donations_between_thousand_and_fiftythousand => (
+        donations_between_thousand_and_ten_thousand => (
              $c->model('DB::Donation')->search({
-                amount => { '>=' => 100000, '<=' => 5000000 },
+                amount => { '>=' => 100000, '<=' => 1000000 },
                 status => "captured",
                 donation_type_id => 1,
             })->count,
         ),
-        donations_greater_than_fiftythousand => (
+        donations_greater_than_ten_thousand => (
              $c->model('DB::Donation')->search({
-                amount => { '>=' => 5000000 },
+                amount => { '>=' => 1000000 },
                 donation_type_id => 1,
             })->count,
         ),
