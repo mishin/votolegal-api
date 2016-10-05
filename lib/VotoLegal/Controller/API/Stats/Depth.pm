@@ -62,28 +62,28 @@ sub depth_GET {
         ),
         donations_up_to_hundred => (
             $c->model('DB::Donation')->search({
-                amount => { '<=' => 10000 },
+                amount => { '<' => 10000 },
                 status => "captured",
                 donation_type_id => 1,
             })->count,
         ),
         donations_between_hundred_and_fivehundred => (
              $c->model('DB::Donation')->search({
-                amount => { '>=' => 10000, '<=' => 50000 },
+                amount => { '>=' => 10000, '<' => 50000 },
                 status => "captured",
                 donation_type_id => 1,
             })->count,
         ),
         donations_between_fivehundred_and_thousand => (
              $c->model('DB::Donation')->search({
-                amount => { '>=' => 50000, '<=' => 100000 },
+                amount => { '>=' => 50000, '<' => 100000 },
                 status => "captured",
                 donation_type_id => 1,
             })->count,
         ),
         donations_between_thousand_and_ten_thousand => (
              $c->model('DB::Donation')->search({
-                amount => { '>=' => 100000, '<=' => 1000000 },
+                amount => { '>=' => 100000, '<' => 1000000 },
                 status => "captured",
                 donation_type_id => 1,
             })->count,
