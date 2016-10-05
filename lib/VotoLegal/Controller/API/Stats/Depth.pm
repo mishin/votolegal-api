@@ -119,21 +119,21 @@ sub depth_GET {
         ),
         donations_up_to_fifty_through_votolegal => (
             $c->model('DB::Donation')->search({
-                amount       => { '<=' => 5000 },
+                amount       => { '<' => 5000 },
                 status       => "captured",
                 by_votolegal => "true",
             })->count,
         ),
         donations_between_fifty_and_hundred_through_votolegal => (
             $c->model('DB::Donation')->search({
-                amount       => { '>=' => 5000, '<=' => 10000 },
+                amount       => { '>=' => 5000, '<' => 10000 },
                 status       => "captured",
                 by_votolegal => "true",
             })->count,
         ),
         donations_between_hundred_and_fourhundred_through_votolegal => (
             $c->model('DB::Donation')->search({
-                amount       => { '>=' => 10000, '<=' => 40000 },
+                amount       => { '>=' => 10000, '<' => 40000 },
                 status       => "captured",
                 by_votolegal => "true",
             })->count,
