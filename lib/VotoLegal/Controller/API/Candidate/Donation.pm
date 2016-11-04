@@ -89,7 +89,7 @@ sub donate_GET {
     );
 }
 
-sub donate_POST {
+sub deactivated_donate_POST {
     my ($self, $c) = @_;
 
     my $payment_gateway_id = $c->stash->{candidate}->payment_gateway_id;
