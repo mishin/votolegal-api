@@ -69,8 +69,8 @@ CANDIDATE: for my $candidate (@candidates) {
     );
     my $candidates = decode_json $candidatesReq;
 
-    # A API do TSE só pode estar de brinks: o campo 'cnpjcampanha' nesta ultima request não é populado, sempre vem
-    # null. Serei obrigado a entrar na página de cada candidato para confrontar o CNPJ.
+    # O campo 'cnpjcampanha' não vem populado nesta ultima request. Sempre vem null. Sendo assim é necessário
+    # a entrar na página de cada candidato para confrontar o CNPJ.
     for (@{ $candidates->{candidatos} }) {
         # Ao menos temos uma informação interessante: o partido. Se o candidato não for do mesmo partido o qual estou
         # buscando, já nem procuro o CNPJ dele.
@@ -123,9 +123,8 @@ CANDIDATE: for my $candidate (@candidates) {
 
             my $receitas = decode_json $receitasReq;
 
-            # Probleminha surpresa com o TSE: editaram a espécie de uma doação de "Em espécie" para
-            # "Transferência eletrônica", o que confundiu o crawler. Como não são tantos dados assim, vou dar
-            # um delete em tudo e depois reinserir.
+            # Fix: o TSE editou a espécie de uma doação de "Em espécie" para "Transferência eletrônica", o que
+            # confundiu o crawler. Como não são tantos dados assim, vou dar um delete em tudo e depois reinserir.
             my $guard = $schema->txn_scope_guard;
 
             $candidate->donations->search({
@@ -139,9 +138,7 @@ CANDIDATE: for my $candidate (@candidates) {
 
                 next if !test_cpf($cpfCnpjDoador) && !test_cnpj($cpfCnpjDoador);
 
-                # Mais uma surpresa. Os candidatos estão lançando as doações realizadas pelo VotoLegal no sistema
-                # do TSE. Diferente do que eu esperava, o campo "dtReceita" difere do nosso "captured_at" da doação.
-                # A única maneira segura do crawler não duplicar esses dados é checar a duplicidade pelo cpf do
+                # A única maneira segura do crawler não duplicar as doações é checar a duplicidade pelo cpf do
                 # doador e o valor da doação.
                 if ($receita->{especieRecurso} eq "Cartão de crédito") {
                     my $repeatedDonation = $candidate->donations->search({

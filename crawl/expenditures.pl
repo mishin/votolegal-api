@@ -69,8 +69,8 @@ CANDIDATE: for my $candidate (@candidates) {
     );
     my $candidates = decode_json $candidatesReq;
 
-    # A API do TSE só pode estar de brinks: o campo 'cnpjcampanha' nesta ultima request não é populado, sempre vem
-    # null. Serei obrigado a entrar na página de cada candidato para confrontar o CNPJ.
+    # O campo 'cnpjcampanha' não vem populado nesta ultima request. Sempre vem null. Sendo assim é necessário
+    # a entrar na página de cada candidato para confrontar o CNPJ.
     for (@{ $candidates->{candidatos} }) {
         # Ao menos temos uma informação interessante: o partido. Se o candidato não for do mesmo partido o qual estou
         # buscando, já nem procuro o CNPJ dele.
