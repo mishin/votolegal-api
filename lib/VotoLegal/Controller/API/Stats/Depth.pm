@@ -57,7 +57,8 @@ sub depth_GET {
         ),
         total_electronic_transfer => (
             $c->model('DB::Donation')->search({
-                species => "Transferência eletrônica",
+                species          => "Transferência eletrônica",
+                donation_type_id => 1,
             })->get_column("amount")->sum || 0,
         ),
         donations_up_to_hundred => (
