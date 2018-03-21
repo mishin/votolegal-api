@@ -5,6 +5,7 @@ use Moose;
 with 'VotoLegal::Worker';
 
 use WebService::Slack::IncomingWebHook;
+use VotoLegal::Utils;
 
 has timer => (
     is      => "rw",
@@ -78,7 +79,7 @@ sub exec_item {
     $self->slack->{channel} = $item->channel;
 
     eval {
-        $self->slack->post(text => $item->message);
+        $self->slack->post(text => $item->message) unless is_test();
     };
 
     if (!$@) {
