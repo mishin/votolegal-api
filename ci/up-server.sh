@@ -23,9 +23,9 @@ up_server (){
     WORKERS="$3"
 
     PREFIX=$( echo $SQITCH_DEPLOY | tr '[:upper:]' '[:lower:]' )
-    ERROR_LOG="/tmp/mandato-aberto.$PREFIX.error.log"
-    STATUS="/tmp/mandato-aberto.$PREFIX.start_server.status"
-    PIDFILE="/tmp/mandato-aberto.$PREFIX.start_server.pid"
+    ERROR_LOG="/tmp/votolegal.$PREFIX.error.log"
+    STATUS="/tmp/votolegal.$PREFIX.start_server.status"
+    PIDFILE="/tmp/votolegal.$PREFIX.start_server.pid"
 
     touch $ERROR_LOG
     touch $PIDFILE
@@ -60,16 +60,11 @@ export DBIC_TRACE=0
 
 echo STDERR "Restaring server...";
 set +e
-up_server "mandatoaberto.psgi" $API_PORT $API_WORKERS
+up_server "votolegal.psgi" $API_PORT $API_WORKERS
 
 line
 
 # Daemons.
 ./script/daemon/Emailsd restart
 ./script/daemon/Emailsd status
-
-./script/daemon/Segmenterd restart
-./script/daemon/Segmenterd status
-#./script/daemon/DirectMessagesd restart
-#./script/daemon/DirectMessagesd status
 
