@@ -6,3 +6,4 @@ deploy/envs.sh
 Makefile
 votolegal.conf
 MYMETA*
+envfile.sh
