@@ -20,7 +20,7 @@ sub contact : Chained('base') : Args(0) : PathPart('') {
 
     my $email = VotoLegal::Mailer::Template->new(
         to       => 'dev@votolegal.org.br',
-        from     => $c->config->{sendmail}->{default_from},
+        from     => $ENV{EMAIL_DEFAULT_FROM},
         subject  => "VotoLegal - Troubleshoot",
         template => get_data_section('troubleshoot.tt'),
         vars     => {

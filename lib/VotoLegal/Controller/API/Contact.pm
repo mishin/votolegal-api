@@ -5,7 +5,13 @@ use namespace::autoclean;
 
 use Data::Section::Simple qw(get_data_section);
 
-BEGIN { extends 'CatalystX::Eta::Controller::REST' }
+BEGIN {
+    extends 'CatalystX::Eta::Controller::REST';
+
+    for (qw/ EMAIL_DEFAULT_FROM EMAIL_CONTACT_TO /) {
+        defined($ENV{$_}) or die "missing env '$_'\n";
+    }
+}
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 
@@ -21,8 +27,8 @@ sub contact : Chained('base') : Args(0) : PathPart('') {
     $c->req->params->{is_candidate} = $c->req->params->{is_candidate} ? "Sim" : "Não";
 
     my $email = VotoLegal::Mailer::Template->new(
-        to       => $c->config->{sendmail}->{contact_to},
-        from     => $c->config->{sendmail}->{default_from},
+        to       => $ENV{EMAIL_CONTACT_TO},
+        from     => $ENV{EMAIL_DEFAULT_FROM},
         subject  => "VotoLegal - Contato",
         template => get_data_section('contact.tt'),
         vars     => {

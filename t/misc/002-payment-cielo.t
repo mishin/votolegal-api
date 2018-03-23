@@ -10,8 +10,9 @@ use Digest::MD5 qw(md5_hex);
 use_ok 'VotoLegal::Payment::Cielo';
 
 my $cielo = new_ok ('VotoLegal::Payment::Cielo', => [
-    %{ VotoLegal->config->{cielo}->{sandbox} },
-    sandbox => 1,
+    merchant_id  => $ENV{VOTOLEGAL_CIELO_MERCHANT_ID},
+    merchant_key => $ENV{VOTOLEGAL_CIELO_MERCHANT_KEY},
+    sandbox      => 1,
 ]);
 
 ok ($cielo->does('VotoLegal::Payment'), 'does VotoLegal::Payment');

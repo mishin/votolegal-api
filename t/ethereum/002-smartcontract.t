@@ -5,6 +5,7 @@ use lib "$Bin/../lib";
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
+plan skip_all => 'no blockchain yet';
 plan skip_all => "geth disabled." if exists $ENV{VOTOLEGAL_NO_GETH} && $ENV{VOTOLEGAL_NO_GETH};
 
 use VotoLegal::Utils;
