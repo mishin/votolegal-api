@@ -8,23 +8,37 @@ use Net::Amazon::S3;
 use Digest::HMAC_SHA1;
 use MIME::Base64 qw(encode_base64);
 
+use VotoLegal::Utils;
+
+BEGIN {
+    for (qw/ AMAZON_S3_ACCESS_KEY AMAZON_S3_SECRET_KEY AMAZON_S3_MEDIA_BUCKET /) {
+        defined($ENV{$_}) or die "missing env '$_'\n";
+    }
+}
+
 has access_key => (
-    is => "rw",
+    is  => 'rw',
+    isa => 'Str',
+    default => $ENV{AMAZON_S3_ACCESS_KEY},
 );
 
 has secret_key => (
-    is => "rw",
+    is  => "rw",
+    isa => 'Str',
+    default => $ENV{AMAZON_S3_SECRET_KEY},
 );
 
 has media_bucket => (
-    is => "rw",
+    is  => "rw",
+    isa => 'Str',
+    default => $ENV{AMAZON_S3_MEDIA_BUCKET},
 );
 
 has _s3 => (
     is         => "ro",
     isa        => "Net::Amazon::S3",
     lazy_build => 1,
-    handles    => [qw(err errstr)],
+    handles    => [ qw/ err errstr / ],
 );
 
 sub _build__s3 {
@@ -48,6 +62,12 @@ sub upload {
 
     # Required args.
     defined $args->{$_} or die "missing '$_'" for qw(file path type);
+
+    if (is_test()) {
+        return URI->new(
+            'https://f24-user-media-dev.s3.amazonaws.com/votolegal/picture/CiN/1521813860//tmp/0ky1vQLNr1.jpg'
+        );
+    }
 
     my $bucket = $self->_s3->bucket($self->media_bucket);
 
