@@ -74,7 +74,7 @@ sub upload {
     $bucket->add_key_filename($args->{path}, $args->{file}, { content_type => $args->{type} });
 
     if ($self->err) {
-        die "$self->err: '$self->errstr'";
+        die $self->err. ': ' . $self->errstr;
     }
 
     my $sign_url = $self->_generate_auth_uri($args->{path}, 2056022152);
