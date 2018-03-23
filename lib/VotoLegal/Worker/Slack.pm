@@ -58,7 +58,7 @@ sub run_once {
         $item = $self->schema->resultset('SlackQueue')->search(
             undef,
             {
-                order_by => "created_at",
+                order_by => [ 'created_at' ],
                 rows     => 1,
             },
         )->next;
@@ -81,19 +81,22 @@ sub exec_item {
     eval {
         $self->slack->post(text => $item->message) unless is_test();
     };
+    return 0 if $@;
 
-    if (!$@) {
-        $item->delete();
-        return 1;
-    }
+    $item->delete();
 
-    return 0;
+    return 1;
 }
 
 sub _build_slack {
     my $self = shift;
 
-    return WebService::Slack::IncomingWebHook->new(%{ $self->config->{slack} });
+    return WebService::Slack::IncomingWebHook->new(
+        webhook_url => $ENV{SLACK_WEBHOOK_URL},
+        channel     => $ENV{SLACK_CHANNEL},
+        username    => $ENV{SLACK_USERNAME},
+        icon_emoji  => $ENV{SLACK_ICON_EMOJI},
+    );
 }
 
 __PACKAGE__->meta->make_immutable;
