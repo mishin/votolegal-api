@@ -24,8 +24,8 @@ db_transaction {
         params => {
             cnpj                => format_cnpj(random_cnpj()),
             payment_gateway_id  => 2,
-            merchant_id         => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
-            merchant_key        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
+            merchant_id         => fake_email->(),
+            merchant_key        => random_string(32),
             bank_code           => "001",
             bank_agency         => "0000",
             bank_agency_dv      => "9",

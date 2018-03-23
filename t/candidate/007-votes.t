@@ -26,9 +26,9 @@ db_transaction {
     rest_put "/api/candidate/$candidate_id",
         name   => 'edit candidate',
         params => {
+            merchant_id        => fake_email->(),
+            merchant_key       => random_string(32),
             payment_gateway_id => 2,
-            merchant_id        => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_id},
-            merchant_key       => VotoLegal->config->{pagseguro}->{sandbox}->{merchant_key},
         },
     ;
 

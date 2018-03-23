@@ -54,8 +54,8 @@ db_transaction {
         name   => 'edit candidate',
         params => {
             payment_gateway_id => 1,
-            merchant_id        => VotoLegal->config->{cielo}->{sandbox}->{merchant_id},
-            merchant_key       => VotoLegal->config->{cielo}->{sandbox}->{merchant_key},
+            merchant_id        => fake_email->(),
+            merchant_key       => random_string(32),
         },
     ;
 
