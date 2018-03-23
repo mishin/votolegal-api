@@ -1,27 +1,44 @@
 package VotoLegal::SchemaConnected;
-use common::sense;
+use strict;
+use warnings;
+use utf8;
 use FindBin qw($RealBin);
-use Config::General;
+
+use VotoLegal::Schema;
+use VotoLegal::Utils;
+
+BEGIN {
+    for (qw/ POSTGRESQL_HOST POSTGRESQL_PORT POSTGRESQL_DBNAME POSTGRESQL_USER POSTGRESQL_PASSWORD /) {
+        defined($ENV{$_}) or die "missing env '$_'\n";
+    }
+};
 
 require Exporter;
 
 our @ISA    = qw(Exporter);
-our @EXPORT = qw(get_schema);
+our @EXPORT = qw(get_schema get_connection_info);
+
+sub get_connection_info {
+    my $host     = $ENV{POSTGRESQL_HOST};
+    my $port     = $ENV{POSTGRESQL_PORT} || 5432;
+    my $user     = $ENV{POSTGRESQL_USER};
+    my $password = $ENV{POSTGRESQL_PASSWORD};
+    my $dbname   = $ENV{POSTGRESQL_DBNAME};
+
+    return {
+        dsn            => "dbi:Pg:dbname=$dbname;host=$host;port=$port",
+        user           => $user,
+        password       => $password,
+        AutoCommit     => 1,
+        quote_char     => "\"",
+        name_sep       => ".",
+        auto_savepoint => 1,
+        pg_enable_utf8 => 1,
+    };
+}
 
 sub get_schema {
-    require VotoLegal::Schema;
-
-    my $conf =
-         eval { new Config::General("$RealBin/../../votolegal.conf") }
-      || eval { new Config::General("$RealBin/../votolegal.conf") };
-    my %config = $conf->getall;
-
-    my $db_config = $config{model}->{DB}->{connect_info};
-    if ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ ) {
-        $db_config = $config{model}->{DB}->{connect_info_test};
-    }
-
-    return VotoLegal::Schema->connect($db_config);
+    return VotoLegal::Schema->connect(get_connect_info());
 }
 
 1;
