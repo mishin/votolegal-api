@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 source ~/perl5/perlbrew/etc/bashrc
 DIR=$(git rev-parse --show-toplevel)
 cd $DIR
