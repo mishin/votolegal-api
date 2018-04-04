@@ -5,6 +5,8 @@ use lib "$Bin/../lib";
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
+plan skip_all => 'skip external service test';
+
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
