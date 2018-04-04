@@ -7,7 +7,7 @@ use VotoLegal::Geth;
 use VotoLegal::Test::Further;
 
 my $geth = VotoLegal::Geth->new();
-if (!$geth->isTestnet()) {
+if ( $ENV{VOTOLEGAL_NO_GETH} || !$geth->isTestnet()) {
     plan skip_all => "geth isn't running on testnet.";
 }
 
