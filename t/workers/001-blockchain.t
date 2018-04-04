@@ -6,8 +6,10 @@ use Digest::MD5 qw(md5_hex);
 use VotoLegal::Geth;
 use VotoLegal::Test::Further;
 
+plan skip_all => "no geth" if $ENV{VOTOLEGAL_NO_GETH};
+
 my $geth = VotoLegal::Geth->new();
-if ( $ENV{VOTOLEGAL_NO_GETH} || !$geth->isTestnet()) {
+if ( !$geth->isTestnet() ) {
     plan skip_all => "geth isn't running on testnet.";
 }
 
