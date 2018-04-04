@@ -37,7 +37,6 @@ my %WriteMakefileArgs = (
     "CatalystX::Eta::Controller::REST" => 0,
     "CatalystX::Eta::Controller::Search" => 0,
     "CatalystX::Eta::Controller::TypesValidation" => 0,
-    "Config::General" => 0,
     "Crypt::PRNG" => 0,
     "DBD::Pg" => 0,
     "DBIx::Class::Core" => 0,
@@ -119,6 +118,7 @@ my %WriteMakefileArgs = (
   "TEST_REQUIRES" => {
     "Catalyst::Test" => 0,
     "CatalystX::Eta::Test::REST" => 0,
+    "Config::General" => 0,
     "Data::Fake" => 0,
     "File::Spec" => 0,
     "IO::Handle" => 0,
@@ -130,7 +130,7 @@ my %WriteMakefileArgs = (
     "blib" => "1.01",
     "lib" => 0
   },
-  "VERSION" => 20180320,
+  "VERSION" => 20180404,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
