@@ -1,9 +1,7 @@
 blib/*
 inc/*
 log/*
-deploy/envs.sh
 .build/*
 Makefile
-votolegal.conf
 MYMETA*
 envfile.sh
