@@ -33,3 +33,6 @@ export SLACK_CHANNEL=""
 export SLACK_USERNAME=""
 export SLACK_ICON_EMOJI=""
 
+export RECAPTCHA_PUBKEY=""
+export RECAPTCHA_PRIVKEY=""
+

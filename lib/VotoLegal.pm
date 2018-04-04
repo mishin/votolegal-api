@@ -12,6 +12,8 @@ use Catalyst qw/
     Authorization::Roles
 /;
 
+BEGIN { $ENV{$_} or die "missing env '$_'." for qw/ RECAPTCHA_PUBKEY RECAPTCHA_PRIVKEY / }
+
 extends 'Catalyst';
 
 our $VERSION = '0.01';
@@ -23,6 +25,11 @@ __PACKAGE__->config(
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header                      => 0, # Send X-Catalyst header
+
+    recaptcha => {
+        pub_key  => $ENV{RECAPTCHA_PUBKEY},
+        priv_key => $ENV{RECAPTCHA_PRIVKEY},
+    },
 );
 
 # Start the application
