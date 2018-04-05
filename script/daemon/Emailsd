@@ -19,7 +19,7 @@ newdaemon(
     options => {
         'verbose!' => \$verbose,
     },
-    pidfile => "/tmp/$Script.pid",
+    pidfile => "/tmp/Votolegal_$Script.pid",
 );
 
 sub gd_preconfig {
@@ -44,7 +44,7 @@ sub gd_preconfig {
         $l4p[0]->{layout} = '%m%n';
         $l4p[0]->{level}  = $INFO;
         push @l4p, {
-            file   => ">>$RealBin/../../log/$Script.log",
+            file   => ">>$RealBin/../../log/Votolegal_$Script.log",
             layout => '[%d] %m%n',
             level  => $verbose ? $DEBUG : $INFO,
             utf8   => 1,
@@ -76,3 +76,4 @@ sub gd_run {
 }
 
 1;
+
