@@ -3,11 +3,11 @@ package VotoLegal::Model::DB;
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
-use VotoLegal::SchemaConnected qw(get_connection_info);
+use VotoLegal::SchemaConnected qw(get_connect_info);
 
 __PACKAGE__->config(
     schema_class => 'VotoLegal::Schema',
-    connect_info => get_connection_info(),
+    connect_info => get_connect_info(),
 );
 
 =head1 NAME

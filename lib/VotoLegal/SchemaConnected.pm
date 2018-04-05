@@ -16,9 +16,9 @@ BEGIN {
 require Exporter;
 
 our @ISA    = qw(Exporter);
-our @EXPORT = qw(get_schema get_connection_info);
+our @EXPORT = qw(get_schema get_connect_info);
 
-sub get_connection_info {
+sub get_connect_info {
     my $host     = $ENV{POSTGRESQL_HOST};
     my $port     = $ENV{POSTGRESQL_PORT} || 5432;
     my $user     = $ENV{POSTGRESQL_USER};
