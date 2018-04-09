@@ -2,7 +2,6 @@ use common::sense;
 use FindBin qw($Bin);
 use lib "$Bin/../lib";
 
-use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
@@ -10,13 +9,6 @@ my $schema = VotoLegal->model('DB');
 db_transaction {
     create_candidate;
     my $candidate_id = stash 'candidate.id';
-
-    # Aprovando o candidato.
-    api_auth_as user_id => 1;
-    rest_put "/api/admin/candidate/$candidate_id/activate",
-        name  => 'activate candidate',
-        code  => 200,
-    ;
 
     api_auth_as candidate_id => $candidate_id;
 
