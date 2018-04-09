@@ -7,6 +7,8 @@ use VotoLegal::Utils;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
+with "CatalystX::Eta::Controller::TypesValidation";
+
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('contract_signature') : CaptureArgs(0) {
