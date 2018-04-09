@@ -132,6 +132,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 contract_signatures
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::ContractSignature>
+
+=cut
+
+__PACKAGE__->has_many(
+  "contract_signatures",
+  "VotoLegal::Schema::Result::ContractSignature",
+  { "foreign.user_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 user_forgot_passwords
 
 Type: has_many
@@ -188,8 +203,8 @@ Composing rels: L</user_roles> -> role
 __PACKAGE__->many_to_many("roles", "user_roles", "role");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-28 09:49:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ok0m6p3fVlFPmGdyCeQPig
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-09 15:34:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Sy42cirwMDs+Z5Vfjq4RQw
 
 use Crypt::PRNG qw(random_string);
 use Data::Section::Simple qw(get_data_section);
@@ -264,6 +279,12 @@ sub send_email_forgot_password {
     return $self->result_source->schema->resultset('EmailQueue')->create({
         body => $email->as_string,
     });
+}
+
+sub has_signed_contract {
+    my ($self) = @_;
+
+    return $self->contract_signatures->count;
 }
 
 __PACKAGE__->meta->make_immutable;
