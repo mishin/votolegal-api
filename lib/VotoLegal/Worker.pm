@@ -23,7 +23,7 @@ has config => (
     default => sub { {} },
 );
 
-around [ qw/ listen_queue run_once / ] => sub {
+around [ qw/ listen_queue run_once exec_item / ] => sub {
     my $orig = shift;
     my $self = shift;
 
