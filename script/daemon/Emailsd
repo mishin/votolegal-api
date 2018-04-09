@@ -26,8 +26,8 @@ sub gd_preconfig {
     my $self = shift;
 
     # Config.
-    # my $config = new Config::General("$RealBin/../../votolegal.conf");
-    # %config    = $config->getall;
+    my $config = new Config::General("$RealBin/../../votolegal.conf");
+    %config    = $config->getall;
 
     $0 = "VotoLegal::Daemon::Emailsd";
     $|++;
@@ -63,7 +63,7 @@ sub gd_run {
     my $worker = VotoLegal::Worker::Email->new(
         schema => get_schema(),
         logger => get_logger(),
-        #config => \%config,
+        config => \%config,
     );
 
     my $w = AnyEvent->timer(
