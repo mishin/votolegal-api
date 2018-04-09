@@ -11,7 +11,7 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('troubleshoot') : CaptureArgs(0) { }
 
-sub contact : Chained('base') : Args(0) : PathPart('') {
+sub contact : Private : Chained('base') : Args(0) : PathPart('') {
     my ($self, $c) = @_;
 
     for (qw(route error)) {

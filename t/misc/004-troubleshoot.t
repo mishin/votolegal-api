@@ -4,6 +4,8 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
+plan skip_all => 'skip troubleshoot';
+
 my $schema = VotoLegal->model('DB');
 
 db_transaction {

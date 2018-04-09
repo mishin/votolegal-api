@@ -23,5 +23,17 @@ has config => (
     default => sub { {} },
 );
 
-1;
+around [ qw/ listen_queue run_once / ] => sub {
+    my $orig = shift;
+    my $self = shift;
 
+    my $ret = eval { $self->$orig(@_) };
+    if ($@) {
+        $self->logger->logdie($@) if ref $self->logger;
+        die $@;
+    }
+
+    return $ret;
+};
+
+1;
