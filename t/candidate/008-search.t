@@ -83,7 +83,7 @@ db_transaction {
         stash  => 'state',
         code   => 200,
         params => {
-            address_state => "São Paulo",
+            address_state => "SP",
         },
     ;
 

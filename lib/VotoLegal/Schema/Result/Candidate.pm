@@ -702,7 +702,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $state = $r->get_value('address_state');
-                        $self->resultset('State')->search({ name => $state })->count;
+                        $self->resultset('State')->search({ code => $state })->count;
                     },
                 },
                 address_city => {
