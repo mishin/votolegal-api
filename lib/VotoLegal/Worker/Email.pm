@@ -6,11 +6,11 @@ with 'VotoLegal::Worker';
 
 use VotoLegal::Mailer;
 
-# BEGIN {
-#     for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
-#         defined($ENV{$_}) or die "missing env '$_'\n";
-#     }
-# };
+BEGIN {
+    for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
+        defined($ENV{$_}) or die "missing env '$_'\n";
+    }
+};
 
 has timer => (
     is      => "rw",
