@@ -40,6 +40,8 @@ sub login_POST {
         # Barrando o login de candidatos que foram desaprovados.
         if (my $candidate = $c->user->candidates->next) {
             if ($candidate->status ne "deactivated") {
+                $session->{signed_contract} = $c->user->has_signed_contract();
+
                 return $self->status_ok($c, entity => $session);
             }
         }
