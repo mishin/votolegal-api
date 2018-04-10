@@ -35,4 +35,3 @@ export SLACK_ICON_EMOJI=""
 
 export RECAPTCHA_PUBKEY=""
 export RECAPTCHA_PRIVKEY=""
-

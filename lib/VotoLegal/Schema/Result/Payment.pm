@@ -113,5 +113,128 @@ __PACKAGE__->belongs_to(
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
+
+use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
+
+has _pagseguro => (
+    is         => "ro",
+    isa        => "VotoLegal::Payment::PagSeguro",
+    lazy_build => 1,
+);
+
+sub send_pagseguro_transaction {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+
+    # Verifico se o candidato tem todos os dados necessários
+    # para realizar o pagamento
+    $candidate->validate_required_information_for_payment();
+
+    my $sender       = $self->build_sender_object();
+    my $item         = $self->build_item_object();
+    my $shipping     = $self->build_shipping_object();
+    my $callback_url = $self->build_callback_url();
+
+    my %payment_args = (
+        method          => $self->method,
+        sender          => $sender,
+        items           => $item,
+        shipping        => $shipping,
+        reference       => $candidate->id,
+        extraAmount     => "0.00",
+        notificationURL => $callback_url,
+
+        $self->method eq 'creditCard' ?
+            creditCard =>
+            : ()
+    );
+
+    my $payment = __pagseguro->transaction(
+
+    );
+
+    return $payment;
+}
+
+sub build_callback_url {
+    my ($self) = @_;
+
+    my $candidate    = $self->candidate;
+    my $candidate_id = $self->candidate_id;
+
+    my $callback_url = $ENV{PAGSEGURO_CALLBACK_URL};
+    $callback_url   .= "/" unless $callback_url =~ m{\/$};
+    $callback_url   .= "api/candidate/$candidate_id/payment/callback";
+
+    return $callback_url;
+}
+
+sub build_sender_object {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+
+    # No pré-cadastro colhemos apenas
+    # o CPF, logo não é necessário
+    # criar uma lógica que verifique
+    # o document que o candidato possui
+    # e seu respectivo type
+    my $document = {
+        document => {
+            type  => 'CPF',
+            value => $candidate->document
+        }
+    };
+
+    return {
+        hash      => $self->sender_hash,
+        name      => $candidate->name,
+        phone     => $candidate->get_phone_number_and_area_code(),
+        email     => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $candidate->user->email),
+        documents => [ $document ]
+    }
+}
+
+sub build_item_object {
+    my ($self) = @_;
+
+    my $item = [
+        {
+            item => {
+                id          => 1,
+                description => 'Pagamento Voto Legal',
+                amount      => '495.00',
+                quantity    => 1
+            }
+        }
+    ];
+
+    return $item;
+}
+
+sub build_shipping_object {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+
+    return {
+        address => $candidate->get_address_data()
+    }
+}
+
+sub _build__pagseguro {
+    my ($self) = @_;
+
+    VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
+        merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
+        callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
+        sandbox      => is_test(),
+        logger       => $c->log,
+    );
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

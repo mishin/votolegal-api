@@ -95,6 +95,21 @@ sub transaction {
         }
     );
 
+    my $req = $self->ua->post(
+        $self->endpoint . "transactions/",
+        [],
+        {
+            %args,
+            email                  => $self->merchant_id,
+            token                  => $self->merchant_key,
+            mode            => "default",
+            receiverEmail          => $self->merchant_id,
+            currency               => "BRL",
+            shippingAddressCountry => "BRA",
+            billingAddressCountry  => "BRA",
+        }
+    );
+
     $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
