@@ -51,7 +51,7 @@ sub build_email {
     );
 
     my $email = MIME::Lite->new(
-        To       => Encode::encode("MIME-Header", $self->to),
+        To       => $self->to,
         Subject  => Encode::encode("MIME-Header", $self->subject),
         From     => $self->from,
         Type     => "text/html",
