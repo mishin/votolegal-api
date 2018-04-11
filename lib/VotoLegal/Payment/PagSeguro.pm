@@ -85,13 +85,7 @@ sub transaction {
         [],
         {
             %args,
-            email                  => $self->merchant_id,
-            token                  => $self->merchant_key,
-            paymentMode            => "default",
-            receiverEmail          => $self->merchant_id,
-            currency               => "BRL",
-            shippingAddressCountry => "BRA",
-            billingAddressCountry  => "BRA",
+            mode => "default",
         }
     );
 

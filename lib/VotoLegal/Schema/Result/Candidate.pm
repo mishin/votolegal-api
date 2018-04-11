@@ -1089,6 +1089,55 @@ sub send_email_disapproval {
     });
 }
 
+sub validate_required_information_for_payment {
+    my ($self) = @_;
+
+    my @required = qw(
+        name address_zipcode address_city address_state address_street address_house_number
+    );
+
+    for (@required) {
+        if (!defined($self->$_)) {
+            die \[$_, "missing"];
+        }
+    }
+}
+
+sub get_phone_number_and_area_code {
+    my ($self) = @_;
+
+    my $phone     = $self->phone;
+    my $area_code = substr($phone, 0, 2);
+    my $number    = substr($phone, 2);
+
+    # Retornando em camel case
+    # por ser um param que vai direto
+    # para o gateway (por agora PagSeguro).
+    return {
+        areaCode => $area_code,
+        number   => $number,
+    }
+}
+
+sub get_address_data {
+    my ($self) = @_;
+
+    # Retornando em camel case
+    # por ser um param que vai direto
+    # para o gateway (por agora PagSeguro).
+
+    # Atualmente (10/04/2018) a API do PagSeguro pede o
+    # estado como sigla.
+    return {
+        state      => $self->address_state,
+        city       => $self->address_city,
+        postalCode => $self->address_zipcode,
+        street     => $self->address_street,
+        number     => $self->address_house_number,
+        complement => $self->address_complement,
+    }
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
