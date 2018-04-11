@@ -43,11 +43,16 @@ has logger => (
 );
 
 sub endpoint {
-    my ($self) = @_;
+    my ($self, $action) = @_;
 
+    die \['action', 'invalid'] unless $action =~ m{^(transaction|notification|session)$};
+
+    # A API do PagSeguro atualmente (11/04/2018)
+    # possui seu endpoint de transação e sessão
+    # na v2 e o endpoint de consulta de notificação no v3
     my $endpoint = $self->sandbox
-        ? "https://ws.sandbox.pagseguro.uol.com.br/v2/"
-        : "https://ws.pagseguro.uol.com.br/v2/";
+        ? ( $action eq 'transaction' || $action eq 'session' ? "https://ws.sandbox.pagseguro.uol.com.br/v2/" : "https://ws.sandbox.pagseguro.uol.com.br/v3/")
+        : ( $action eq 'transaction' || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/"         : "https://ws.pagseguro.uol.com.br/v2/" );
 
     return $endpoint;
 }
@@ -55,8 +60,10 @@ sub endpoint {
 sub createSession {
     my ($self) = @_;
 
+    my $action = 'session';
+
     my $req = $self->ua->post(
-        $self->endpoint . "sessions",
+        $self->endpoint($action) . "sessions",
         [],
         {
             email => $self->merchant_id,
@@ -80,8 +87,10 @@ sub createSession {
 sub transaction {
     my ($self, %args) = @_;
 
+    my $action = 'transaction';
+
     my $req = $self->ua->post(
-        $self->endpoint . "transactions/",
+        $self->endpoint($action) . "transactions/",
         [],
         {
             %args,
@@ -101,10 +110,12 @@ sub transaction {
 sub notification {
     my ($self, $notificationCode) = @_;
 
+    my $action = 'transaction';
+
     defined $notificationCode or die "missing 'notification code'.";
 
     my $req = $self->ua->get(
-        $self->endpoint
+        $self->endpoint($action)
         . "transactions/notifications/"
         . $notificationCode
         . "?email="
