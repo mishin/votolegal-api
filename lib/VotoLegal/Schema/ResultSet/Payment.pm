@@ -23,7 +23,7 @@ sub verifiers_specs {
                         my $candidate_id = $_[0]->get_value('candidate_id');
 
                         die \['candidate_id', "can't find candidate with that id"]
-                            unless $self->result_source->resultset('Candidate')->search( { id => $candidate_id } );
+                            unless $self->result_source->schema->resultset('Candidate')->search( { id => $candidate_id } );
 
                         return 1;
                     }

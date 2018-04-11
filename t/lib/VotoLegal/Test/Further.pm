@@ -175,4 +175,15 @@ sub get_config {
     return \%config;
 }
 
+sub create_candidate_contract_signature {
+    my ($candidate_id) = @_;
+
+    return $obj->rest_post(
+        "/api/candidate/$candidate_id/contract_signature",
+        name                => 'add candidate contract signature',
+        stash               => 'contract_signature',
+        automatic_load_item => 0
+    );
+}
+
 1;

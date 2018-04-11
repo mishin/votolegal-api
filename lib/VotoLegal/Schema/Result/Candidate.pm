@@ -1093,8 +1093,7 @@ sub validate_required_information_for_payment {
     my ($self) = @_;
 
     my @required = qw(
-        name cnpj phone address_zipcode address_city address_state address_street address_house_number
-        address_district
+        name address_zipcode address_city address_state address_street address_house_number
     );
 
     for (@required) {

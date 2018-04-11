@@ -78,3 +78,5 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0072-donation-payment-gateway-id [0071-donation-canceled] 2016-09-20T17:44:07Z Junior Moraes,,, <junior@junior-eokoe> # nation-payment-gateway-id
 0073-update-office-party [0072-donation-payment-gateway-id] 2018-04-03T14:52:42Z Junior Moraes <juniorfvox@gmail.com> # update-office-party
 0074-contract-signature [0073-update-office-party] 2018-04-09T18:55:10Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'contract_signature' table.
+0075-payment-method [0074-contract-signature] 2018-04-11T13:14:04Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Droping the 'boleto_url' column and adding the 'method' column on the 'payment' table.
+0076-payment-dropping-code-not-null [0075-payment-method] 2018-04-11T14:20:42Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Droping the 'not null' constraint of the 'code' column on the 'payment' table. 
