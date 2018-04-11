@@ -21,7 +21,7 @@ sub session_GET {
         merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
         merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
         callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
-        sandbox      => is_test(),
+        sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
         logger       => $c->log,
     );
 

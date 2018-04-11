@@ -52,7 +52,7 @@ sub endpoint {
     # na v2 e o endpoint de consulta de notificação no v3
     my $endpoint = $self->sandbox
         ? ( $action eq 'transaction' || $action eq 'session' ? "https://ws.sandbox.pagseguro.uol.com.br/v2/" : "https://ws.sandbox.pagseguro.uol.com.br/v3/")
-        : ( $action eq 'transaction' || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/"         : "https://ws.pagseguro.uol.com.br/v2/" );
+        : ( $action eq 'transaction' || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/"         : "https://ws.pagseguro.uol.com.br/v3/" );
 
     return $endpoint;
 }
