@@ -4,6 +4,7 @@ use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -16,7 +17,15 @@ sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub session_GET {
     my ($self, $c) = @_;
 
-    my $session = $c->stash->{pagseguro}->createSession();
+    my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
+        merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
+        callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
+        sandbox      => is_test(),
+        logger       => $c->log,
+    );
+
+    my $session = $pagseguro->createSession();
 
     if (!$session) {
         $self->status_bad_request($c, message => 'Invalid gateway response');
