@@ -17,7 +17,7 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
 
     my $candidate = $c->stash->{candidate};
 
-    if (!$candidate->user->has_signed_contract) {
+    if ($candidate->user->has_signed_contract == 0) {
         $self->status_bad_request($c, message => 'user did not sign contract');
         $c->detach();
     }
