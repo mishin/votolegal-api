@@ -122,6 +122,60 @@ db_transaction {
     # logo não conseguimos testar a resposta da API do pagseguro para
     # transactions e notifications
 
+    subtest 'payment methods to retrieve information' => sub {
+        use DDP;
+        ok(
+            my $payment = $schema->resultset("Payment")->create(
+                {
+                    candidate_id => $candidate_id,
+                    sender_hash  => 'foobar',
+                    method       => 'creditCard'
+                }
+            )
+            , 'payment creation'
+        );
+        p my $p = $payment->send_pagseguro_transaction();
+        is_deeply(
+            $payment->build_sender_object(),
+            {
+                hash      => 'foobar',
+                email     => 'fvox@sandbox.pagseguro.com.br',
+                name      => $name,
+                documents => [
+                    {
+                        type  => 'CPF',
+                        value => $cpf
+                    }
+                ]
+            },
+            'sender object'
+        );
+
+        # is_deeply(
+        #     $payment->build_item_object(),
+        #     {
+
+        #     },
+        #     'item object'
+        # );
+
+        is_deeply(
+            $payment->build_sender_object(),
+            {
+                hash      => 'foobar',
+                email     => 'fvox@sandbox.pagseguro.com.br',
+                name      => $name,
+                documents => [
+                    {
+                        type  => 'CPF',
+                        value => $cpf
+                    }
+                ]
+            },
+            'sender object'
+        );
+    };
+
     is ($candidate->payment_status, 'unpaid', 'candidate status is unpaid');
 
     api_auth_as 'nobody';

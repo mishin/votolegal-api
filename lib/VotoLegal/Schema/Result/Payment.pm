@@ -116,7 +116,7 @@ __PACKAGE__->belongs_to(
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
-
+use JSON::MaybeXS;
 sub send_pagseguro_transaction {
     my ($self, $credit_card_token, $log) = @_;
 
@@ -133,7 +133,6 @@ sub send_pagseguro_transaction {
     # Verifico se o candidato tem todos os dados necessários
     # para realizar o pagamento
     $candidate->validate_required_information_for_payment();
-
     my $sender       = $self->build_sender_object();
     my $item         = $self->build_item_object();
     my $shipping     = $self->build_shipping_object();
@@ -149,6 +148,17 @@ sub send_pagseguro_transaction {
         notificationURL => $callback_url,
         creditCard      => $creditCard ? $creditCard : ()
     );
+    my $pinto = encode_json({
+            method          => $self->method,
+            sender          => $sender,
+            items           => $item,
+            shipping        => $shipping,
+            reference       => $candidate->id,
+            extraAmount     => "0.00",
+            notificationURL => $callback_url,
+            creditCard      => $creditCard ? $creditCard : ()
+        });
+    use DDP; p $pinto;
 
     my $payment = $pagseguro->transaction(%payment_args);
 
@@ -179,10 +189,8 @@ sub build_sender_object {
     # o document que o candidato possui
     # e seu respectivo type
     my $document = {
-        document => {
-            type  => 'CPF',
-            value => $candidate->cpf
-        }
+        type  => 'CPF',
+        value => $candidate->cpf
     };
 
     return {

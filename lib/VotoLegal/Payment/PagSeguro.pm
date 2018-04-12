@@ -95,7 +95,8 @@ sub transaction {
         [],
         {
             %args,
-            mode => "default",
+            mode     => "default",
+            currency => 'BRL'
         }
     );
 
