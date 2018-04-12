@@ -55,7 +55,7 @@ sub payment_POST {
         }
     );
 
-    my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token);
+    my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token, $c->log);
 
     if (!$payment_execution && !$payment_execution->{paymentLink}) {
         $self->status_bad_request($c, message => 'Invalid gateway response');

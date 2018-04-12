@@ -118,14 +118,14 @@ use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 
 sub send_pagseguro_transaction {
-    my ($self, $credit_card_token) = @_;
+    my ($self, $credit_card_token, $log) = @_;
 
     my $pagseguro = VotoLegal::Payment::PagSeguro->new(
         merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
         merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
         callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
         sandbox      => is_test(),
-        # logger       => $c->log,
+        logger       => $log,
     );
 
     my $candidate = $self->candidate;
