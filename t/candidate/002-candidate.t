@@ -33,7 +33,12 @@ db_transaction {
     stash_test 'get_logged_in' => sub {
         my ($res) = @_;
 
-        ok (defined($res->{candidate}->{cpf}),  'cpf');
+        my $candidate = $res->{candidate};
+
+        ok (defined($candidate->{cpf}),  'cpf');
+        is ($candidate->{signed_contract}, 0, 'user did not sign contract');
+        is ($candidate->{paid},            0, 'user did not pay');
+
         $username = $res->{candidate}->{username};
     };
 
