@@ -21,16 +21,24 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $self->status_bad_request($c, message => 'user did not sign contract');
         $c->detach();
     }
+
+    $c->stash->{pagseguro} = my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
+        merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
+        callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
+        sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
+        logger       => $c->log,
+    );
 }
 
-sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) { }
+sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) {}
 
 sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub payment_POST {
     my ($self, $c) = @_;
 
-    my $method            = $c->req->params->{method};
+    my $method = $c->req->params->{method};
     die \['method', 'missing'] unless $method;
 
     my $credit_card_token = $c->req->params->{credit_card_token};

@@ -8,7 +8,7 @@ use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
+sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) {}
 
 sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }
 

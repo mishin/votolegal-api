@@ -41,6 +41,7 @@ sub login_POST {
         if (my $candidate = $c->user->candidates->next) {
             if ($candidate->status ne "deactivated") {
                 $session->{signed_contract} = $c->user->has_signed_contract();
+                $session->{paid}            = $candidate->candidate_has_paid();
 
                 return $self->status_ok($c, entity => $session);
             }

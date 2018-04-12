@@ -10,41 +10,33 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) {
-}
+sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    $c->stash->{collection} = $c->model('DB::PaymentNotification');
 }
 
-sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
-}
+sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub callback_POST {
     my ( $self, $c ) = @_;
 
-    $self->validate_request_params(
+    my $notification_code = $c->req->params->{notificationCode};
+    die \['notificationCode', 'missing'] unless $notification_code;
+
+    my $notify = $c->stash->{collection}->execute(
         $c,
-        notificationCode => {
-            type     => "Str",
-            required => 1,
-        },
+        for  => "upsert",
+        with => { notification_code => $notification_code }
     );
 
-    my $notificationCode        = $c->req->params->{notificationCode};
-    my $payment_notification_rs = $c->model('DB::PaymentNotification');
-
-    # Buscando uma notificação com esse id.
-    my $notify = $payment_notification_rs->search( { notification_code => $notificationCode, } )->next;
-
-    # Se não encontrar, criamos esse registro no banco.
-    if ( !$notify ) {
-        $notify = $payment_notification_rs->create( { notification_code => $notificationCode, } );
-    }
-
-    if ( my $req = $c->stash->{pagseguro}->notification($notificationCode) ) {
+    if ( my $req = $c->stash->{pagseguro}->notification($notification_code) ) {
         my $status = $req->{status};
 
         if ($status == 3 || $status == 4) {
+
             $c->stash->{candidate}->update( { payment_status => "paid" } );
 
             my $config = $c->config;

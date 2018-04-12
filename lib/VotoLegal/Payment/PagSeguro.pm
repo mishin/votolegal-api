@@ -50,6 +50,7 @@ sub endpoint {
     # A API do PagSeguro atualmente (11/04/2018)
     # possui seu endpoint de transação e sessão
     # na v2 e o endpoint de consulta de notificação no v3
+
     my $endpoint = $self->sandbox
         ? ( $action eq 'transaction' || $action eq 'session' ? "https://ws.sandbox.pagseguro.uol.com.br/v2/" : "https://ws.sandbox.pagseguro.uol.com.br/v3/")
         : ( $action eq 'transaction' || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/"         : "https://ws.pagseguro.uol.com.br/v3/" );

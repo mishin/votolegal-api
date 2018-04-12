@@ -1138,6 +1138,12 @@ sub get_address_data {
     }
 }
 
+sub candidate_has_paid {
+    my ($self) = @_;
+
+    return $self->payment_status eq 'paid' ? 1 : 0;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
