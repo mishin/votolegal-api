@@ -96,6 +96,7 @@ sub candidate_GET {
     $candidate->{total_donated_by_votolegal}  = $c->stash->{candidate}->total_donated_by_votolegal();
     $candidate->{people_donated}              = $c->stash->{candidate}->people_donated();
     $candidate->{signed_contract}             = $c->stash->{candidate}->user->has_signed_contract();
+    $candidate->{paid}                        = $c->stash->{candidate}->candidate_has_paid();
 
     return $self->status_ok($c, entity => {
         candidate => $candidate,
