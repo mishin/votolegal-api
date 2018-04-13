@@ -116,7 +116,7 @@ __PACKAGE__->belongs_to(
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
-
+use JSON::MaybeXS;
 sub send_pagseguro_transaction {
     my ($self, $credit_card_token, $log) = @_;
 
@@ -133,7 +133,6 @@ sub send_pagseguro_transaction {
     # Verifico se o candidato tem todos os dados necessários
     # para realizar o pagamento
     $candidate->validate_required_information_for_payment();
-
     my $sender       = $self->build_sender_object();
     my $item         = $self->build_item_object();
     my $shipping     = $self->build_shipping_object();
