@@ -94,9 +94,11 @@ sub transaction {
         $self->endpoint($action) . "transactions/",
         [],
         {
-            %args,
-            mode     => "default",
-            currency => 'BRL'
+            payment => {
+                %args,
+                mode     => "default",
+                currency => 'BRL'
+            }
         }
     );
 

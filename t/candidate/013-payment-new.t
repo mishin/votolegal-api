@@ -134,7 +134,7 @@ db_transaction {
             )
             , 'payment creation'
         );
-        p my $p = $payment->send_pagseguro_transaction();
+
         is_deeply(
             $payment->build_sender_object(),
             {
@@ -143,8 +143,10 @@ db_transaction {
                 name      => $name,
                 documents => [
                     {
-                        type  => 'CPF',
-                        value => $cpf
+                        document => {
+                            type  => 'CPF',
+                            value => $cpf
+                        }
                     }
                 ]
             },
@@ -167,8 +169,10 @@ db_transaction {
                 name      => $name,
                 documents => [
                     {
-                        type  => 'CPF',
-                        value => $cpf
+                        document => {
+                            type  => 'CPF',
+                            value => $cpf
+                        }
                     }
                 ]
             },
