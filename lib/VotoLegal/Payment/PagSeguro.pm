@@ -7,6 +7,7 @@ with 'VotoLegal::Payment';
 use Carp;
 use Furl;
 use XML::Simple;
+use XML::Hash::XS qw/ hash2xml /;
 use IO::Socket::SSL;
 
 has merchant_id => (
@@ -86,20 +87,17 @@ sub createSession {
 }
 
 sub transaction {
-    my ($self, %args) = @_;
+    my ($self, $args) = @_;
+
+    my $merchant_id  = $self->merchant_id;
+    my $merchant_key = $self->merchant_key;
 
     my $action = 'transaction';
 
     my $req = $self->ua->post(
-        $self->endpoint($action) . "transactions/",
-        [],
-        {
-            payment => {
-                %args,
-                mode     => "default",
-                currency => 'BRL'
-            }
-        }
+        $self->endpoint($action) . "transactions/?email=$merchant_key&token=$merchant_key",
+        [ 'Content-Type', 'application/xml' ],
+        $args
     );
 
     $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;

@@ -117,12 +117,19 @@ __PACKAGE__->belongs_to(
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 use JSON::MaybeXS;
+use XML::Hash::XS qw/ hash2xml /;
+
 sub send_pagseguro_transaction {
     my ($self, $credit_card_token, $log) = @_;
 
+    my $xs = XML::Hash::XS->new(utf8 => 0, encoding => 'utf-8');
+
+    my $merchant_id  = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID};
+    my $merchant_key = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY};
+
     my $pagseguro = VotoLegal::Payment::PagSeguro->new(
-        merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
-        merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
+        merchant_id  => $merchant_id,
+        merchant_key => $merchant_key,
         callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
         sandbox      => is_test(),
         logger       => $log,
@@ -138,7 +145,9 @@ sub send_pagseguro_transaction {
     my $shipping     = $self->build_shipping_object();
     my $creditCard   = $self->build_credit_card_object($credit_card_token);
     my $callback_url = $self->build_callback_url();
-    my %payment_args = (
+    my $payment_args = {
+        mode            => "default",
+        currency        => 'BRL',
         method          => $self->method,
         sender          => $sender,
         items           => $item,
@@ -147,9 +156,11 @@ sub send_pagseguro_transaction {
         extraAmount     => "0.00",
         notificationURL => $callback_url,
         creditCard      => $creditCard ? $creditCard : ()
-    );
+    };
 
-    my $payment = $pagseguro->transaction(%payment_args);
+    $payment_args = $xs->hash2xml($payment_args, root => 'payment');
+
+    my $payment = $pagseguro->transaction($payment_args);
 
     return $payment;
 }
