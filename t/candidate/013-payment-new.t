@@ -153,30 +153,34 @@ db_transaction {
             'sender object'
         );
 
-        # is_deeply(
-        #     $payment->build_item_object(),
-        #     {
-
-        #     },
-        #     'item object'
-        # );
+        is_deeply(
+            $payment->build_item_object(),
+            [
+                {
+                    item => {
+                        id          => 1,
+                        quantity    => 1,
+                        description => 'Pagamento Voto Legal',
+                        amount      => '495.00'
+                    }
+                }
+            ],
+            'item object'
+        );
 
         is_deeply(
-            $payment->build_sender_object(),
+            $payment->build_shipping_object(),
             {
-                hash      => 'foobar',
-                email     => 'fvox@sandbox.pagseguro.com.br',
-                name      => $name,
-                documents => [
-                    {
-                        document => {
-                            type  => 'CPF',
-                            value => $cpf
-                        }
-                    }
-                ]
+                address => {
+                    state      => $address_state,
+                    city       => $address_city,
+                    postalCode => $address_zipcode,
+                    street     => $address_street,
+                    number     => $address_house_number,
+                    complement => ''
+                }
             },
-            'sender object'
+            'shipping object'
         );
     };
 

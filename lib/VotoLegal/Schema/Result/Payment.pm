@@ -236,7 +236,7 @@ sub build_credit_card_object {
     my $candidate = $self->candidate;
 
     my $credit_card = {
-        token => $credit_card_token,
+        token  => $credit_card_token,
         holder => {
             name      => $candidate->name,
             documents => [
