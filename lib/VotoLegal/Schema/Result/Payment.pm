@@ -45,7 +45,7 @@ __PACKAGE__->table("payment");
 =head2 code
 
   data_type: 'text'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 candidate_id
 
@@ -70,11 +70,66 @@ __PACKAGE__->table("payment");
   data_type: 'text'
   is_nullable: 1
 
+=head2 name
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 email
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_state
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_city
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_zipcode
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_district
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_street
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_complement
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 address_house_number
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 cpf
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 phone
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
   "code",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "candidate_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "sender_hash",
@@ -87,6 +142,28 @@ __PACKAGE__->add_columns(
     original      => { default_value => \"now()" },
   },
   "method",
+  { data_type => "text", is_nullable => 1 },
+  "name",
+  { data_type => "text", is_nullable => 1 },
+  "email",
+  { data_type => "text", is_nullable => 1 },
+  "address_state",
+  { data_type => "text", is_nullable => 1 },
+  "address_city",
+  { data_type => "text", is_nullable => 1 },
+  "address_zipcode",
+  { data_type => "text", is_nullable => 1 },
+  "address_district",
+  { data_type => "text", is_nullable => 1 },
+  "address_street",
+  { data_type => "text", is_nullable => 1 },
+  "address_complement",
+  { data_type => "text", is_nullable => 1 },
+  "address_house_number",
+  { data_type => "integer", is_nullable => 1 },
+  "cpf",
+  { data_type => "text", is_nullable => 1 },
+  "phone",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -108,8 +185,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-11 10:15:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0dy5N/ffFrOZUj0bjLLR2w
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-16 16:32:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BCqIr5DvCH+cgVR5dmZGUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -137,9 +214,6 @@ sub send_pagseguro_transaction {
 
     my $candidate = $self->candidate;
 
-    # Verifico se o candidato tem todos os dados necessários
-    # para realizar o pagamento
-    $candidate->validate_required_information_for_payment();
     my $sender       = $self->build_sender_object();
     my $item         = $self->build_item_object();
     my $shipping     = $self->build_shipping_object();
@@ -181,8 +255,6 @@ sub build_callback_url {
 sub build_sender_object {
     my ($self) = @_;
 
-    my $candidate = $self->candidate;
-
     # No pré-cadastro colhemos apenas
     # o CPF, logo não é necessário
     # criar uma lógica que verifique
@@ -191,14 +263,15 @@ sub build_sender_object {
     my $document = {
         document => {
             type  => 'CPF',
-            value => $candidate->cpf
+            value => $self->cpf
         }
     };
 
     return {
         hash      => $self->sender_hash,
-        name      => $candidate->name,
-        email     => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $candidate->user->email),
+        name      => $self->name,
+        phone     => $self->build_phone_object(),
+        email     => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
         documents => [ $document ]
     }
 }
@@ -223,33 +296,70 @@ sub build_item_object {
 sub build_shipping_object {
     my ($self) = @_;
 
-    my $candidate = $self->candidate;
-
     return {
-        address => $candidate->get_address_data()
+        address => $self->get_address_data()
     }
 }
 
 sub build_credit_card_object {
     my ($self, $credit_card_token) = @_;
 
-    my $candidate = $self->candidate;
+    my $address_data = $self->get_address_data();
 
     my $credit_card = {
-        token  => $credit_card_token,
-        holder => {
-            name      => $candidate->name,
+        token       => $credit_card_token,
+        installment => {
+            quantity => 1,
+            value    => '495.00'
+        },
+        holder      => {
+            name      => $self->name,
             documents => [
-                document => {
-                    type  => 'CPF',
-                    value => $candidate->cpf
+                {
+                    document => {
+                        type  => 'CPF',
+                        value => $self->cpf
+                    }
                 }
             ],
-            address  => $candidate->get_address_data()
-        }
+            address  => $address_data
+        },
+        billingAddress => $address_data
     };
 
     return $credit_card;
+}
+
+sub get_address_data {
+    my ($self) = @_;
+
+    return {
+        country    => 'BRA',
+        state      => $self->address_state,
+        city       => $self->address_city,
+        postalCode => $self->address_zipcode,
+        street     => $self->address_street,
+        district   => $self->address_district,
+        number     => $self->address_house_number,
+        complement => $self->address_complement,
+    }
+}
+
+sub build_phone_object {
+    my ($self) = @_;
+
+    my $phone = $self->phone;
+
+    # Removendo '+55'
+    $phone = substr($phone, 3);
+
+    my $area_code = substr($phone, 0, 2);
+    my $number    = substr($phone, 2);
+
+    return {
+        areaCode => $area_code,
+        number   => $number
+    }
 }
 
 sub update_code {

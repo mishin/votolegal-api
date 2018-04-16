@@ -15,7 +15,9 @@ db_transaction {
     my $address_city         = 'São Paulo';
     my $address_zipcode      = '01310-100';
     my $address_street       = 'Av. Paulista';
+    my $address_district     = 'Paraíso',
     my $address_house_number = 1 + int(rand(2000));
+    my $phone                = fake_digits("+551198#######")->();
 
     create_candidate(
         password             => 'foo',
@@ -32,23 +34,6 @@ db_transaction {
     my $candidate_id = stash "candidate.id";
     my $candidate    = $schema->resultset("Candidate")->find($candidate_id);
 
-    subtest 'candidate information objects' => sub {
-
-        is_deeply(
-            $candidate->get_address_data(),
-            {
-                state      => $address_state,
-                city       => $address_city,
-                postalCode => $address_zipcode,
-                street     => $address_street,
-                number     => $address_house_number,
-                complement => ''
-            },
-            'candidate address data for PagSeguro'
-        );
-
-    };
-
     api_auth_as candidate_id => $candidate_id;
 
     rest_post "/api/candidate/$candidate_id/payment",
@@ -59,10 +44,10 @@ db_transaction {
 
     create_candidate_contract_signature($candidate_id);
 
-    rest_get "/api/candidate/$candidate_id/payment/session",
-        name    => "get session when not activated",
-        stash   => 's1'
-    ;
+    # rest_get "/api/candidate/$candidate_id/payment/session",
+    #     name    => "get session when not activated",
+    #     stash   => 's1'
+    # ;
 
     my $fake_sender_hash       = '52578d5d3336ec7a43ff1dae4794d0c5625feddcc8fbc0e80bcb0cb46c9947d4';
     my $fake_credit_card_token = '1e358d39e26448dc8a28d0f1815f08c5';
@@ -72,8 +57,16 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            sender_hash       => $fake_sender_hash,
-            credit_card_token => $fake_credit_card_token
+            sender_hash          => $fake_sender_hash,
+            credit_card_token    => $fake_credit_card_token,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone
         ]
     ;
 
@@ -82,8 +75,17 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            method            => 'creditCard',
-            credit_card_token => $fake_credit_card_token
+            method               => 'creditCard',
+            credit_card_token    => $fake_credit_card_token,
+            credit_card_token    => $fake_credit_card_token,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone
         ]
     ;
 
@@ -92,8 +94,17 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            method      => 'foobar',
-            sender_hash => $fake_sender_hash,
+            method               => 'foobar',
+            sender_hash          => $fake_sender_hash,
+            credit_card_token    => $fake_credit_card_token,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone
         ]
     ;
 
@@ -102,9 +113,17 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            method            => 'boleto',
-            sender_hash       => $fake_sender_hash,
-            credit_card_token => $fake_credit_card_token
+            method               => 'boleto',
+            sender_hash          => $fake_sender_hash,
+            credit_card_token    => $fake_credit_card_token,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone
         ]
     ;
 
@@ -113,76 +132,44 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            method            => 'creditCard',
-            sender_hash       => $fake_sender_hash,
+            method               => 'creditCard',
+            sender_hash          => $fake_sender_hash,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone
+        ]
+    ;
+
+    rest_post "/api/candidate/$candidate_id/payment",
+        name    => 'payment with creditCard method but without credit_card_token',
+        is_fail => 1,
+        code    => 400,
+        [
+            method               => 'creditCard',
+            sender_hash          => $fake_sender_hash,
+            credit_card_token    => $fake_credit_card_token,
+            credit_card_token    => $fake_credit_card_token,
+            cpf                  => $cpf,
+            address_state        => $address_state,
+            address_city         => $address_city,
+            address_zipcode      => $address_zipcode,
+            address_street       => $address_street,
+            address_district     => $address_district,
+            address_house_number => $address_house_number,
+            phone                => $phone,
+            name                 => $name,
+            email                => $email
         ]
     ;
 
     # Não tem como gerar uma sender hash pelo backend apenas no front.
     # logo não conseguimos testar a resposta da API do pagseguro para
     # transactions e notifications
-
-    subtest 'payment methods to retrieve information' => sub {
-        use DDP;
-        ok(
-            my $payment = $schema->resultset("Payment")->create(
-                {
-                    candidate_id => $candidate_id,
-                    sender_hash  => 'foobar',
-                    method       => 'creditCard'
-                }
-            )
-            , 'payment creation'
-        );
-
-        is_deeply(
-            $payment->build_sender_object(),
-            {
-                hash      => 'foobar',
-                email     => 'fvox@sandbox.pagseguro.com.br',
-                name      => $name,
-                documents => [
-                    {
-                        document => {
-                            type  => 'CPF',
-                            value => $cpf
-                        }
-                    }
-                ]
-            },
-            'sender object'
-        );
-
-        is_deeply(
-            $payment->build_item_object(),
-            [
-                {
-                    item => {
-                        id          => 1,
-                        quantity    => 1,
-                        description => 'Pagamento Voto Legal',
-                        amount      => '495.00'
-                    }
-                }
-            ],
-            'item object'
-        );
-
-        is_deeply(
-            $payment->build_shipping_object(),
-            {
-                address => {
-                    state      => $address_state,
-                    city       => $address_city,
-                    postalCode => $address_zipcode,
-                    street     => $address_street,
-                    number     => $address_house_number,
-                    complement => ''
-                }
-            },
-            'shipping object'
-        );
-    };
 
     is ($candidate->payment_status, 'unpaid', 'candidate status is unpaid');
 

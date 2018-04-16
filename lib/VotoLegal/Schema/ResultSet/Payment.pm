@@ -7,6 +7,9 @@ extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
 
+use Business::BR::CEP qw(test_cep);
+use VotoLegal::Types qw(CPF EmailAddress PhoneNumber);
+
 use Data::Verifier;
 
 sub verifiers_specs {
@@ -42,6 +45,69 @@ sub verifiers_specs {
                 sender_hash => {
                     required => 1,
                     type     => "Str"
+                },
+                name => {
+                    required => 1,
+                    type     => "Str"
+                },
+                email => {
+                    required => 1,
+                    type     => EmailAddress
+                },
+                address_state => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $state = $r->get_value('address_state');
+                        $self->result_source->schema->resultset('State')->search({ code => $state })->count;
+                    },
+                },
+                address_city => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $city = $r->get_value('address_city');
+                        $self->result_source->schema->resultset('City')->search({ name => $city })->count;
+                    },
+                },
+                address_zipcode => {
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $r = shift;
+
+                        my $cep = $r->get_value('address_zipcode');
+
+                        return test_cep($cep);
+                    },
+                },
+                address_street => {
+                    required   => 1,
+                    type       => 'Str',
+                },
+                address_house_number => {
+                    required   => 1,
+                    type       => 'Int',
+                },
+                address_district => {
+                    required => 1,
+                    type     => "Str"
+                },
+                address_complement => {
+                    required   => 0,
+                    type       => 'Str',
+                },
+                cpf => {
+                    required => 1,
+                    type     => CPF
+                },
+                phone => {
+                    required => 1,
+                    type     => PhoneNumber
                 }
             },
         ),

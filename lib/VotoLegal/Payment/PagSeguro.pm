@@ -95,7 +95,7 @@ sub transaction {
     my $action = 'transaction';
 
     my $req = $self->ua->post(
-        $self->endpoint($action) . "transactions/?email=$merchant_key&token=$merchant_key",
+        $self->endpoint($action) . "transactions/?email=$merchant_id&token=$merchant_key",
         [ 'Content-Type', 'application/xml' ],
         $args
     );

@@ -1129,10 +1129,12 @@ sub get_address_data {
     # Atualmente (10/04/2018) a API do PagSeguro pede o
     # estado como sigla.
     return {
+        country    => 'BRA',
         state      => $self->address_state,
         city       => $self->address_city,
         postalCode => $self->address_zipcode,
         street     => $self->address_street,
+        district   => $self->address_district,
         number     => $self->address_house_number,
         complement => $self->address_complement,
     }

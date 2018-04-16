@@ -5,7 +5,7 @@ use MooseX::Types -declare => [
   qw(
     NotTooBigString Int CEP
     CPF CNPJ PositiveInt
-    EmailAddress
+    EmailAddress PhoneNumber
   )
 ];
 
@@ -60,6 +60,18 @@ subtype EmailAddress,
     as Str,
     where { Email::Valid->address( -address => $_ ) eq $_ },
     message { 'Must be a valid email address' }
+;
+
+my $is_mobile_number = sub {
+    my $num = shift;
+
+    return $num =~ /^\+\d{12,13}$/ ? 1 : 0 if $num =~ /\+55/;
+    return $num =~ /^\+\d{10,16}$/ ? 1 : 0;
+};
+
+subtype PhoneNumber, as Str,
+  where   { $is_mobile_number->($_) },
+  message { "$_ phone number invalido" }
 ;
 
 1;
