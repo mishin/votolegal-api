@@ -124,6 +124,9 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
+            # Retirando chars não númericos no cpf
+            $values{cpf} =~ s/\D+//g;
+
             my $payment = $self->create(\%values);
 
             return $payment;

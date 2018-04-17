@@ -153,7 +153,6 @@ db_transaction {
             method               => 'creditCard',
             sender_hash          => $fake_sender_hash,
             credit_card_token    => $fake_credit_card_token,
-            credit_card_token    => $fake_credit_card_token,
             cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
