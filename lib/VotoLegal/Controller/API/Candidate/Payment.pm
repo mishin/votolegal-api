@@ -67,8 +67,8 @@ sub payment_POST {
     my $ret;
     if ($method eq 'boleto') {
         $ret = {
-            url  => $payment->{paymentLink},
-            code => $payment->{code}
+            url  => $payment_execution->{paymentLink},
+            code => $payment_execution->{code}
         }
     } else {
         $ret = { code => $payment->{code} }
