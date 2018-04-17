@@ -125,6 +125,13 @@ __PACKAGE__->table("payment");
   data_type: 'text'
   is_nullable: 1
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+  sequence: 'payment_id_seq'
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -165,7 +172,26 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "phone",
   { data_type => "text", is_nullable => 1 },
+  "id",
+  {
+    data_type         => "integer",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+    sequence          => "payment_id_seq",
+  },
 );
+
+=head1 PRIMARY KEY
+
+=over 4
+
+=item * L</id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
@@ -185,8 +211,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-16 16:32:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BCqIr5DvCH+cgVR5dmZGUw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-17 16:53:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:K+34vgiukMdCKZ6lKnRtUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -208,7 +234,7 @@ sub send_pagseguro_transaction {
         merchant_id  => $merchant_id,
         merchant_key => $merchant_key,
         callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
-        sandbox      => is_test(),
+        sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
         logger       => $log,
     );
 

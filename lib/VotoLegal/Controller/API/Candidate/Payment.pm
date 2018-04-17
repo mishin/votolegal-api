@@ -62,7 +62,7 @@ sub payment_POST {
         $c->detach();
     }
 
-    $payment->update_code($payment_execution->{code});
+    $payment->update( { code => $payment_execution->{code} } );
 
     my $ret;
     if ($method eq 'boleto') {
