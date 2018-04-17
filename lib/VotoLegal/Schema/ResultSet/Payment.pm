@@ -8,7 +8,7 @@ extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Role::Verification';
 
 use Business::BR::CEP qw(test_cep);
-use VotoLegal::Types qw(CPF EmailAddress PhoneNumber);
+use VotoLegal::Types qw(CPF EmailAddress);
 
 use Data::Verifier;
 
@@ -107,7 +107,7 @@ sub verifiers_specs {
                 },
                 phone => {
                     required => 1,
-                    type     => PhoneNumber
+                    type     => 'Str'
                 }
             },
         ),

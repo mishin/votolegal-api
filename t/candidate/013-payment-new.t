@@ -17,7 +17,7 @@ db_transaction {
     my $address_street       = 'Av. Paulista';
     my $address_district     = 'Paraíso',
     my $address_house_number = 1 + int(rand(2000));
-    my $phone                = fake_digits("+551198#######")->();
+    my $phone                = '(42)23423-4234';
 
     create_candidate(
         password             => 'foo',

@@ -350,12 +350,10 @@ sub build_phone_object {
 
     my $phone = $self->phone;
 
-    # Removendo '+55'
-    $phone = substr($phone, 3);
+    $phone =~ s/\D+//g;
 
     my $area_code = substr($phone, 0, 2);
     my $number    = substr($phone, 2);
-
     return {
         areaCode => $area_code,
         number   => $number
