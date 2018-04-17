@@ -99,7 +99,7 @@ sub transaction {
         [ 'Content-Type', 'application/xml' ],
         $args
     );
-
+    $self->logger->info($req) if $self->logger;
     $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
