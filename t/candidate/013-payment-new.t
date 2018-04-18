@@ -150,9 +150,8 @@ db_transaction {
         is_fail => 1,
         code    => 400,
         [
-            method               => 'creditCard',
-            sender_hash          => $fake_sender_hash,
-            credit_card_token    => $fake_credit_card_token,
+            method               => 'boleto',
+            sender_hash          => 'c1ec88b704a7275e28bd86199cb44ee186375b603f21c118756811f39eeb2560',
             cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
