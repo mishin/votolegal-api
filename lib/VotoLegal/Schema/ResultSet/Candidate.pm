@@ -136,7 +136,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $state = $r->get_value('address_state');
-                        $self->result_source->schema->resultset('State')->search({ name => $state })->count;
+                        $self->result_source->schema->resultset('State')->search({ code => $state })->count;
                     },
                 },
                 address_city => {
