@@ -133,7 +133,7 @@ sub create_candidate {
         popular_name         => fake_surname()->(),
         email                => fake_email()->(),
         cpf                  => random_cpf(),
-        address_state        => 'São Paulo',
+        address_state        => 'SP',
         address_city         => 'Iguape',
         address_zipcode      => '11920-000',
         address_street       => "Rua Tiradentes",
