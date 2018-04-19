@@ -89,6 +89,12 @@ sub donate_GET {
     );
 }
 
+sub donate_POST {
+    my ($self, $c) = @_;
+
+
+}
+
 sub deactivated_donate_POST {
     my ($self, $c) = @_;
 
