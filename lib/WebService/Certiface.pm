@@ -7,12 +7,6 @@ use Furl;
 use Try::Tiny::Retry;
 use VotoLegal::Utils;
 
-BEGIN {
-    for (qw/ CERTIFACE_API_URL CERTIFACE_LOGIN CERTIFACE_PASSWORD /) {
-        defined($ENV{$_}) or die "missing env '$_'\n";
-    }
-}
-
 has 'furl' => ( is => 'rw', lazy => 1, builder => '_build_furl' );
 
 sub _build_furl { Furl->new }
