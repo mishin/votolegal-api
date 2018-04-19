@@ -4,11 +4,19 @@ use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::Types qw(CPF EmailAddress);
 use VotoLegal::SmartContract;
+use WebService::Certiface;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with "CatalystX::Eta::Controller::TypesValidation";
+
+has _certiface => (
+    is         => "ro",
+    isa        => "WebService::Certiface",
+    lazy_build => 1,
+);
 
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
@@ -85,6 +93,82 @@ sub donate_GET {
         $c,
         entity => {
             donations => \@donations,
+        }
+    );
+}
+
+sub donate_POST {
+    my ($self, $c) = @_;
+
+    $self->validate_request_params(
+        $c,
+        method => {
+            required => 1,
+            type     => "Str",
+        },
+        name => {
+            required => 1,
+            type     => "Str"
+        },
+        cpf => {
+            required => 1,
+            type     => "Str",
+        },
+        phone => {
+            required => 1,
+            type     => "Str",
+        },
+        birthdate => {
+            required => 1,
+            type     => "Str",
+        },
+    );
+
+    # Mockando params por agora
+    $c->req->params->{address_state}        = 'SP';
+    $c->req->params->{address_city}         = 'São Paulo';
+    $c->req->params->{address_street}       = 'Rua Desembargador Eliseu Guilherme';
+    $c->req->params->{address_district}     = 'Paraíso';
+    $c->req->params->{address_zipcode}      = '04003-000';
+    $c->req->params->{address_house_number} = '53';
+    $c->req->params->{amount}               = 10000;
+    $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
+
+    my $method = delete $c->req->params->{method};
+
+    $c->req->params->{phone} =~ s/\D+//g;
+
+    my $opts = {
+        cpf        => $c->req->params->{cpf},
+        nome       => $c->req->params->{name},
+        nascimento => $c->req->params->{birthdate},
+        telefone   => $c->req->params->{phone}
+    };
+
+    my $certiface_token_rs      = $c->model("DB::CertifaceToken");
+    my $certiface_token_and_url = $self->_certiface->generate_token( $opts );
+
+    my $certiface_token = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+
+    my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+
+    my $donation = $c->stash->{collection}->execute(
+        $c,
+        for  => "create",
+        with => {
+            %{ $c->req->params },
+            candidate_id       => $c->stash->{candidate}->id,
+            ip_address         => $ipAddr,
+            certiface_token_id => $certiface_token->id,
+            payment_gateway_id => 2,
+        },
+    );
+
+    return $self->status_ok(
+        $c,
+        entity => {
+            %{$certiface_token_and_url},
+            boleto_url => 'https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/ea2cb234-7c37-4999-ba37-faeecfbb359c/Boleto__8_.pdf'
         }
     );
 }
@@ -208,6 +292,8 @@ sub deactivated_donate_POST {
 
     return $self->status_ok($c, entity => { id => $donation->id });
 }
+
+sub _build__certiface { WebService::Certiface->instance }
 
 =encoding utf8
 
