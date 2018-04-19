@@ -101,40 +101,34 @@ sub verifiers_specs {
                     },
                 },
                 credit_card_name => {
-                    required => 1,
+                    required => 0,
                     type     => "Str",
                 },
                 birthdate => {
                     required   => 1,
                     type       => "Str",
-                    post_check => sub {
-                        my $birthdate = $_[0]->get_value("birthdate");
-
-                        my @date = $birthdate =~ /^(\d{4})-(\d{2})-(\d{2})$/;
-                        check_date(@date);
-                    },
                 },
                 billing_address_street => {
-                    required => 1,
+                    required => 0,
                     type     => "Str",
                 },
                 billing_address_house_number => {
-                    required => 1,
+                    required => 0,
                     type     => "Int",
                 },
                 billing_address_district => {
-                    required => 1,
+                    required => 0,
                     type     => "Str",
                 },
                 billing_address_zipcode => {
-                    required   => 1,
+                    required   => 0,
                     type       => "Str",
                     post_check => sub {
                         test_cep($_[0]->get_value('billing_address_zipcode'));
                     },
                 },
                 billing_address_city => {
-                    required   => 1,
+                    required   => 0,
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('billing_address_city');
@@ -142,7 +136,7 @@ sub verifiers_specs {
                     },
                 },
                 billing_address_state => {
-                    required   => 1,
+                    required   => 0,
                     type       => 'Str',
                     post_check => sub {
                         my $state = $_[0]->get_value('billing_address_state');
@@ -173,6 +167,15 @@ sub verifiers_specs {
                         $self->resultset('PaymentGateway')->find($payment_gateway_id);
                     },
                 },
+                certiface_token_id => {
+                    required   => 1,
+                    type       => "Int",
+                    post_check => sub {
+                        my $certiface_token_id = $_[0]->get_value('certiface_token_id');
+
+                        $self->resultset("CertifaceToken")->search( { id => $certiface_token_id } )->count;
+                    }
+                }
             },
         ),
     };

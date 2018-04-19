@@ -44,15 +44,6 @@ sub left_padding_whitespaces {
     return sprintf("%0${pos}s", $string);
 }
 
-sub get_certiface_api_url_for {
-    my $args = shift;
-
-    my $ret.
-    if ($args eq 'login') {
-
-    }
-}
-
 =head1 AUTHOR
 
 Junior Moraes L<juniorfvox@gmail.com|mailto:juniorfvox@gmail.com>.

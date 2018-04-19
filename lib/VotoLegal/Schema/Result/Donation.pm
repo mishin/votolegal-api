@@ -210,6 +210,12 @@ __PACKAGE__->table("donation");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 certiface_token_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -286,6 +292,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "payment_gateway_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "certiface_token_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -315,6 +323,26 @@ __PACKAGE__->belongs_to(
   "VotoLegal::Schema::Result::Candidate",
   { id => "candidate_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
+=head2 certiface_token
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::CertifaceToken>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "certiface_token",
+  "VotoLegal::Schema::Result::CertifaceToken",
+  { id => "certiface_token_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
 =head2 donation_type
@@ -363,8 +391,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-09-20 14:44:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ntbVBztd9wrXA+DkMPO/7Q
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-19 17:56:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9OnN1y8EoKrbuHv+xdu4Ag
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

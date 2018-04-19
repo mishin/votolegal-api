@@ -10,7 +10,7 @@ db_transaction {
     my $name                 = fake_name()->();
     my $popular_name         = fake_name()->();
     my $email                = fake_email()->();
-    my $cpf                  = random_cpf(),
+    my $cpf                  = random_cpf();
     my $address_state        = 'SP';
     my $address_city         = 'São Paulo';
     my $address_zipcode      = '01310-100';

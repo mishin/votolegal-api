@@ -40,62 +40,53 @@ sub login {
     };
     die $@ if $@;
 
-    return decode_json( $res->decoded_content );
+    return $res->decoded_content;
 }
 
 sub generate_token {
-    my ( $self, %opts ) = @_;
+    my ( $self, $opts ) = @_;
 
-    if (is_test()) {
-        return 1;
-    }
-    else {
-        my $bearer_token = $self->login();
+    my $bearer_token = $self->login();
 
-        my $res;
-        eval {
-            retry {
-                $res = $self->furl->post(
-                    $ENV{CERTIFACE_API_URL} . '/api/v1/protected/genToken',
-                    [ 'Content-Type', 'application/json', 'Authorization', "$bearer_token" ],
-                    encode_json(%opts)
-                );
+    my $res;
+    eval {
+        retry {
+            $res = $self->furl->post(
+                $ENV{CERTIFACE_API_URL} . '/api/v1/protected/genToken',
+                [ 'Content-Type', 'application/json', 'Authorization', "$bearer_token" ],
+                encode_json($opts)
+            );
 
-                die $res->decoded_content unless $res->is_success;
-            }
-            retry_if { shift() < 3 } catch { die $_; };
-        };
-        die $@ if $@;
+            die $res->decoded_content unless $res->is_success;
+        }
+        retry_if { shift() < 3 } catch { die $_; };
+    };
+    die $@ if $@;
 
-        return decode_json( $res->decoded_content );
-    }
+    return decode_json( $res->decoded_content );
+
 }
 
 sub get_token_information {
     my ( $self, $token_uuid ) = @_;
 
-    if (is_test()) {
-        return 1;
-    }
-    else {
-        my $bearer_token = $self->login();
+    my $bearer_token = $self->login();
 
-        my $res;
-        eval {
-            retry {
-                $res = $self->furl->get(
-                    $ENV{CERTIFACE_API_URL} . '/api/v1/protected/token' . "/$token_uuid",
-                    [ 'Authorization', "$bearer_token" ]
-                );
+    my $res;
+    eval {
+        retry {
+            $res = $self->furl->get(
+                $ENV{CERTIFACE_API_URL} . '/api/v1/protected/token' . "/$token_uuid",
+                [ 'Authorization', "$bearer_token" ]
+            );
 
-                die $res->decoded_content unless $res->is_success;
-            }
-            retry_if { shift() < 3 } catch { die $_; };
-        };
-        die $@ if $@;
+            die $res->decoded_content unless $res->is_success;
+        }
+        retry_if { shift() < 3 } catch { die $_; };
+    };
+    die $@ if $@;
 
-        return decode_json( $res->decoded_content );
-    }
+    return decode_json( $res->decoded_content );
 }
 
 1;
