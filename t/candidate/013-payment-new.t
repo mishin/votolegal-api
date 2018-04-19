@@ -169,37 +169,37 @@ db_transaction {
     # logo não conseguimos testar a resposta da API do pagseguro para
     # transactions e notifications
 
-    is ($candidate->payment_status, 'unpaid', 'candidate status is unpaid');
+    # is ($candidate->payment_status, 'unpaid', 'candidate status is unpaid');
 
-    api_auth_as 'nobody';
-    rest_post "/api/candidate/$candidate_id/payment/callback",
-        name   => "callback",
-        stash  => 'c1',
-        code   => 200,
-        params => {
-            notificationCode => "35F7C2-C6D3F0D3F088-7664F32FBBA4-5F32FE",
-            notificationType => "transaction",
-        },
-    ;
+    # api_auth_as 'nobody';
+    # rest_post "/api/candidate/$candidate_id/payment/callback",
+    #     name   => "callback",
+    #     stash  => 'c1',
+    #     code   => 200,
+    #     params => {
+    #         notificationCode => "35F7C2-C6D3F0D3F088-7664F32FBBA4-5F32FE",
+    #         notificationType => "transaction",
+    #     },
+    # ;
 
-    is ($candidate->discard_changes->payment_status, 'paid', 'candidate status is paid');
+    # is ($candidate->discard_changes->payment_status, 'paid', 'candidate status is paid');
 
-    rest_post "/api/login",
-        name  => 'login to check booleans',
-        stash => 'l1',
-        code  => 200,
-        [
-            email    => $email,
-            password => 'foo'
-        ]
-    ;
+    # rest_post "/api/login",
+    #     name  => 'login to check booleans',
+    #     stash => 'l1',
+    #     code  => 200,
+    #     [
+    #         email    => $email,
+    #         password => 'foo'
+    #     ]
+    # ;
 
-    stash_test "l1" => sub {
-        my $res = shift;
+    # stash_test "l1" => sub {
+    #     my $res = shift;
 
-        is ($res->{signed_contract}, 1, 'candidate has signed contract');
-        is ($res->{paid},            1, 'candidate has paid');
-    }
+    #     is ($res->{signed_contract}, 1, 'candidate has signed contract');
+    #     is ($res->{paid},            1, 'candidate has paid');
+    # }
 
 };
 
