@@ -75,7 +75,8 @@ sub list_POST {
     return $self->status_ok(
         $c,
         entity => {
-            token_uuid => $token_uuid
+            token_uuid => $token_uuid,
+            boleto_url => 'https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/ea2cb234-7c37-4999-ba37-faeecfbb359c/Boleto__8_.pdf'
         }
     );
 }
