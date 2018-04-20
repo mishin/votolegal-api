@@ -29,9 +29,9 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
         $c->detach();
     }
 
-    for (qw(merchant_id merchant_key payment_gateway_id)) {
-        defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
-    }
+    # for (qw(merchant_id merchant_key payment_gateway_id)) {
+    #     defined $c->stash->{candidate}->$_ or die \[$_, "o candidato não configurou os dados do pagamento."];
+    # }
 
     $c->stash->{collection} = $c->model('DB::Donation');
 }
