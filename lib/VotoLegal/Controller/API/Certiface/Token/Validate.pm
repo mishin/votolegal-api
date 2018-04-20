@@ -25,6 +25,34 @@ sub base : Chained('root') : PathPart('validate') : CaptureArgs(0) {
 
 sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
+# A API do Certiface está utilizando GET
+sub list_GET {
+    my ($self, $c) = @_;
+    use DDP; p $c->req;
+
+    my $token_uuid = $c->req->data->{token};
+    die \['token', 'missing'] unless $token_uuid;
+
+    my $token = $c->stash->{collection}->search( { uuid => $token_uuid } )->next;
+    die \['token', 'could not find token with that uuid'] unless $token;
+
+    my $token_information = $self->_certiface->get_token_information($token_uuid);
+
+    if ($token_information->{status} == 1) {
+        $token->update_token_status()
+    }
+    else {
+        die \['token', 'certiface token validation did not succeeded']
+    }
+
+    return $self->status_ok(
+        $c,
+        entity => {
+            token_uuid => $token_uuid
+        }
+    );
+}
+
 sub list_POST {
     my ($self, $c) = @_;
     use DDP; p $c->req;
