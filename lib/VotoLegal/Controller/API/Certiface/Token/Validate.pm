@@ -57,7 +57,7 @@ sub list_POST {
     my ($self, $c) = @_;
     use DDP; p $c->req;
 
-    my $token_uuid = $c->req->data->{token};
+    my $token_uuid = $c->req->data->{token} || $c->req->params->{token};
     die \['token', 'missing'] unless $token_uuid;
 
     my $token = $c->stash->{collection}->search( { uuid => $token_uuid } )->next;
