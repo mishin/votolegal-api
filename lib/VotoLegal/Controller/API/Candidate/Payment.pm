@@ -71,7 +71,7 @@ sub payment_POST {
             code => $payment_execution->{code}
         }
     } else {
-        $ret = { code => $payment->{code} }
+        $ret = { code => $payment_execution->{code} }
     }
 
     return $self->status_ok(
