@@ -64,19 +64,12 @@ sub payment_POST {
 
     $payment->update( { code => $payment_execution->{code} } );
 
-    my $ret;
-    if ($method eq 'boleto') {
-        $ret = {
-            url  => $payment_execution->{paymentLink},
-            code => $payment_execution->{code}
-        }
-    } else {
-        $ret = { code => $payment_execution->{code} }
-    }
-
     return $self->status_ok(
         $c,
-        entity => $ret,
+        entity => {
+            url  => $payment_execution->{paymentLink},
+            code => $payment_execution->{code}
+        },
     );
 }
 
