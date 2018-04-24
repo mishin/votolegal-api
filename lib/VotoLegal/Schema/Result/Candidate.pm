@@ -1146,6 +1146,12 @@ sub candidate_has_paid {
     return $self->payment_status eq 'paid' ? 1 : 0;
 }
 
+sub candidate_has_payment_created {
+    my ($self) = @_;
+
+    return $self->payments->count > 0 ? 1 : 0;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
