@@ -11,6 +11,8 @@ db_transaction {
 
     my $candidate = $schema->resultset('Candidate')->find(stash 'candidate.id');
 
+    ok ($candidate->update( { status => 'activated' } ), 'candidate approved');
+
     # Vou chamar o forgot_password três vezes. Teoricamente ele criou três tokens, mas esses três tokens não podem
     # ficar válidos simultaneamente por segurança.
     rest_post "/api/login/forgot_password",

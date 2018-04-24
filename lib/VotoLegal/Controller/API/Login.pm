@@ -38,8 +38,10 @@ sub login_POST {
         );
 
         # Barrando o login de candidatos que foram desaprovados.
+        # Por enquanto essas aprovações serão feitas na mão
+        # TODO remover validação de status, todos poderão acessar mediante a login
         if (my $candidate = $c->user->candidates->next) {
-            if ($candidate->status ne "deactivated") {
+            if ($candidate->status !~ /^(deactivated|pending)$/) {
                 $session->{signed_contract} = $c->user->has_signed_contract();
                 $session->{paid}            = $candidate->candidate_has_paid();
 

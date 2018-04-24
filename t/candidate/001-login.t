@@ -29,6 +29,20 @@ db_transaction {
         ],
     ;
 
+    # Candidato não foi aprovado
+    ok ($candidate->status eq 'pending', 'candidate status is pending');
+    rest_post '/api/login',
+        name    => 'candidate login --fail',
+        is_fail => 1,
+        [
+            email     => $candidate->user->email,
+            password => 'foobarquux1',
+        ],
+    ;
+
+    # Aprovando candidato
+    ok ($candidate->update( { status => 'activated' } ), 'candidate approved');
+
     # Senha correta.
     rest_post '/api/login',
         name  => 'candidate login',
