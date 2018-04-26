@@ -83,3 +83,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0077-payment-data [0076-payment-dropping-code-not-null] 2018-04-16T20:06:26Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding more data to the 'payment' table
 0078-add-id-to-payment [0077-payment-data] 2018-04-17T19:51:23Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'id' column to the 'payment' table and creating the 'payment_history' table.
 0079-adding-certiface [0078-add-id-to-payment] 2018-04-19T21:01:16Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'certiface_token' table
+0080-add-payment_gateway [0079-adding-certiface] 2018-04-25T17:59:43Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding one entry to the 'payment_gateway' table

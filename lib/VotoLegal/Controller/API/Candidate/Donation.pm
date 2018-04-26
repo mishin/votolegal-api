@@ -124,31 +124,27 @@ sub donate_POST {
         },
     );
 
-    # Mockando params por agora
-    $c->req->params->{address_state}        = 'SP';
-    $c->req->params->{address_city}         = 'São Paulo';
-    $c->req->params->{address_street}       = 'Rua Desembargador Eliseu Guilherme';
-    $c->req->params->{address_district}     = 'Paraíso';
-    $c->req->params->{address_zipcode}      = '04003-000';
-    $c->req->params->{address_house_number} = '53';
-    $c->req->params->{amount}               = 10000;
-    $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
-
     my $method = delete $c->req->params->{method};
+
+    my $certiface_token;
 
     $c->req->params->{phone} =~ s/\D+//g;
 
-    my $opts = {
-        cpf        => $c->req->params->{cpf},
-        nome       => $c->req->params->{name},
-        nascimento => $c->req->params->{birthdate},
-        telefone   => $c->req->params->{phone}
-    };
+    if ($method eq 'boleto') {
+        # Gerando token do Certiface
+        # para prova de vida
+        my $opts = {
+            cpf        => $c->req->params->{cpf},
+            nome       => $c->req->params->{name},
+            nascimento => $c->req->params->{birthdate},
+            telefone   => $c->req->params->{phone}
+        };
 
-    my $certiface_token_rs      = $c->model("DB::CertifaceToken");
-    my $certiface_token_and_url = $self->_certiface->generate_token( $opts );
+        my $certiface_token_rs      = $c->model("DB::CertifaceToken");
+        my $certiface_token_and_url = $self->_certiface->generate_token( $opts );
 
-    my $certiface_token = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+        $certiface_token = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+    }
 
     my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
@@ -160,13 +156,24 @@ sub donate_POST {
             candidate_id       => $c->stash->{candidate}->id,
             ip_address         => $ipAddr,
             certiface_token_id => $certiface_token->id,
-            payment_gateway_id => 2,
+            payment_gateway_id => 3,
         },
     );
 
+    my $ret;
+    if ( $method eq 'boleto' ) {
+        $ret = { %{$certiface_token_and_url} };
+    }
+    else {
+        $ret = {
+            id     => $donation->id,
+            status => $donation->status,
+        }
+    }
+
     return $self->status_ok(
         $c,
-        entity => { %{$certiface_token_and_url} }
+        entity => $ret
     );
 }
 

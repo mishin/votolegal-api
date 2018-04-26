@@ -524,8 +524,8 @@ sub authorize {
 sub capture {
     my ($self) = @_;
 
-    if ($self->payment_gateway_id == 1) {
-        # Cielo.
+    if ($self->payment_gateway_id == 1 || $self->payment_gateway == 2) {
+        # Cielo ou Iugu.
         if ($self->driver->do_capture()) {
             $self->update({
                 payment_gateway_code => $self->driver->payment_gateway_code,

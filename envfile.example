@@ -40,3 +40,7 @@ export RECAPTCHA_PRIVKEY=""
 export CERTIFACE_API_URL=""
 export CERTIFACE_LOGIN=""
 export CERTIFACE_PASSWORD=""
+
+export IUGU_API_URL=""
+export IUGU_ACCOUNT_ID=""
+export IUGU_API_KEY=""

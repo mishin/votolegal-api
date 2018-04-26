@@ -23,6 +23,10 @@ stash_test 'p1' => sub {
                 id   => 2,
                 name => 'PagSeguro',
             },
+            {
+                id   => 3,
+                name => 'Iugu'
+            }
         ],
         'payment gateway'
     );
