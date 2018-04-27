@@ -126,7 +126,7 @@ sub donate_POST {
 
     my $method = delete $c->req->params->{method};
 
-    my $certiface_token;
+    my $certiface_token_and_url;
 
     $c->req->params->{phone} =~ s/\D+//g;
 
@@ -141,9 +141,9 @@ sub donate_POST {
         };
 
         my $certiface_token_rs      = $c->model("DB::CertifaceToken");
-        my $certiface_token_and_url = $self->_certiface->generate_token( $opts );
+        $certiface_token_and_url    = $self->_certiface->generate_token( $opts );
 
-        $certiface_token = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+        $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
     }
 
     my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
@@ -155,13 +155,27 @@ sub donate_POST {
             %{ $c->req->params },
             candidate_id       => $c->stash->{candidate}->id,
             ip_address         => $ipAddr,
-            certiface_token_id => $certiface_token->id,
+            certiface_token_id => $certiface_token_and_url->{uuid},
             payment_gateway_id => 3,
         },
     );
 
+    if ($method eq 'credit_card') {
+        $donation->logger($c->log);
+        $donation->credit_card_token( $c->req->params->{credit_card_token} );
+
+        my $authorize = $donation->authorize();
+        my $capture   = $donation->capture();
+
+        if (!$authorize || !$capture) {
+            $self->status_bad_request($c, message => "Invalid gateway response.");
+            $c->detach();
+        }
+    }
+
     my $ret;
     if ( $method eq 'boleto' ) {
+        # No caso do boleto antes de ocorrer a doação deve ser feita a verificação do Certiface
         $ret = { %{$certiface_token_and_url} };
     }
     else {

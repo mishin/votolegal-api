@@ -2,6 +2,8 @@ package VotoLegal::Payment::Iugu;
 use common::sense;
 use Moose;
 
+with 'VotoLegal::Payment';
+
 use Furl;
 use URI;
 use MIME::Base64 qw(encode_base64);
@@ -19,7 +21,7 @@ sub _build_ua {
   Furl->new(
     timeout => 90,
     headers =>
-      [Authorization => 'Basic ' . encode_base64($self->api_token . ':')]
+      [Authorization => 'Basic ' . encode_base64($ENV{IUGU_API_KEY} . ':')]
   );
 
 }
@@ -159,7 +161,7 @@ sub do_authorization {
   # checando se credit_card.two_step_transaction está habilitado
   {
     my $res = $self->ua->get(
-      $self->uri_for('accounts', $self->account_id),
+      $self->uri_for('accounts', $ENV{IUGU_ACCOUNT_ID}),
       ['Content-Type' => "application/json",]
     );
 
@@ -173,19 +175,20 @@ sub do_authorization {
   }
 
   my $data = {
-    'email'      => $opts{customer}->id . '@no-email.com',
+    email        => $opts{email},
+    payer        => $opts{payer},
     due_date     => DateTime->now->date,
-    payable_with => 'credit_card',
+    payable_with => 'all',
     items        => [
       {
-        description => $opts{soft_descriptor} || 'Pagamento',
+        description => $opts{soft_descriptor} || 'Doação',
         quantity    => 1,
         price_cents => $opts{amount},
       }
     ],
   };
   my $body = encode_json($data);
-
+  use DDP; p $body; p $data;
   # criando invoice
   my $res = $self->ua->post($self->uri_for('invoices'),
     ['Content-Type' => "application/json",], $body);

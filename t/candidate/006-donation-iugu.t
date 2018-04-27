@@ -62,13 +62,11 @@ db_transaction {
     api_auth_as 'nobody';
 
     my $fake_donation = fake_hash({
+        method                       => 'credit_card',
         name                         => fake_name(),
         cpf                          => sub { random_cpf() },
         email                        => fake_email(),
-        credit_card_name             => fake_name(),
-        credit_card_validity         => fake_future_datetime("%Y%m"),
-        credit_card_brand            => "visa",
-        credit_card_cvv              => fake_int(100, 999),
+        credit_card_token            => 'foobar',
         amount                       => fake_int(1000, 106400),
         address_district             => "Centro",
         birthdate                    => fake_past_datetime("%Y-%m-%d"),
@@ -85,6 +83,15 @@ db_transaction {
         address_house_number         => fake_int(1, 1000)->(),
         phone                        => fake_digits("##########")->(),
     });
+
+    # rest_post "/api/candidate/$candidate_id/donate",
+    #     name    => "not authorized",
+    #     is_fail => 1,
+    #     params  => {
+    #         %{ $fake_donation->() },
+    #         credit_card_number => "0000000000000002",
+    #     },
+    # ;
 };
 
 done_testing();
