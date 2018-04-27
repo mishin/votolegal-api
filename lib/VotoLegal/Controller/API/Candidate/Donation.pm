@@ -56,7 +56,7 @@ sub donate_GET {
     my @donations = $c->stash->{collection}->search(
         {
             candidate_id     => $c->stash->{candidate}->id,
-            status           => "captured",
+            # status           => "captured",
             donation_type_id => 1,
             (
                 $c->stash->{is_me} || !$c->stash->{candidate}->crawlable
