@@ -38,7 +38,7 @@ db_transaction {
         ok (defined($candidate->{cpf}),  'cpf');
         is ($candidate->{signed_contract}, 0, 'user did not sign contract');
         is ($candidate->{paid},            0, 'user did not pay');
-        is ($candidate->{color},           'green', 'default candidate color');
+        is ($candidate->{color},           'default', 'default candidate color');
 
         $username = $res->{candidate}->{username};
     };
