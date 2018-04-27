@@ -127,6 +127,9 @@ sub candidate_PUT {
         }
     }
 
+    # Por enquanto o único gateway será a Iugu
+    my $payment_gateway_id = 3;
+
     my $candidate = $c->stash->{candidate}->execute(
         $c,
         for => 'update',
@@ -134,6 +137,7 @@ sub candidate_PUT {
             %{ $c->req->params },
             picture              => $picture,
             spending_spreadsheet => $spending_spreadsheet,
+            payment_gateway_id   => $payment_gateway_id,
             roles                => [ $c->user->roles ],
         }
     );
