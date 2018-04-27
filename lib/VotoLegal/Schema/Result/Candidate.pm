@@ -450,6 +450,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 candidate_mandato_aberto_integrations
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration>
+
+=cut
+
+__PACKAGE__->has_many(
+  "candidate_mandato_aberto_integrations",
+  "VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 donations
 
 Type: has_many
@@ -590,8 +605,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 17:43:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3ZcyJeTZr9HCYMwJPSox5g
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 18:22:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qe6AzjZdvFP2wjjC+gF1rw
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -1173,6 +1188,12 @@ sub candidate_has_payment_created {
     my ($self) = @_;
 
     return $self->payments->count > 0 ? 1 : 0;
+}
+
+sub has_mandatoaberto_integration {
+    my ($self) = @_;
+
+    return $self->candidate_mandato_aberto_integrations->count > 0 ? 1 : 0;
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -91,12 +91,13 @@ sub candidate_GET {
         };
     }
 
-    $candidate->{party_fund}                  = $c->stash->{candidate}->party_fund();
-    $candidate->{total_donated}               = $c->stash->{candidate}->total_donated();
-    $candidate->{total_donated_by_votolegal}  = $c->stash->{candidate}->total_donated_by_votolegal();
-    $candidate->{people_donated}              = $c->stash->{candidate}->people_donated();
-    $candidate->{signed_contract}             = $c->stash->{candidate}->user->has_signed_contract();
-    $candidate->{paid}                        = $c->stash->{candidate}->candidate_has_paid();
+    $candidate->{party_fund}                    = $c->stash->{candidate}->party_fund();
+    $candidate->{total_donated}                 = $c->stash->{candidate}->total_donated();
+    $candidate->{total_donated_by_votolegal}    = $c->stash->{candidate}->total_donated_by_votolegal();
+    $candidate->{people_donated}                = $c->stash->{candidate}->people_donated();
+    $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
+    $candidate->{paid}                          = $c->stash->{candidate}->candidate_has_paid();
+    $candidate->{has_mandatoaberto_integration} = $c->stash->{candidate}->has_mandatoaberto_integration();
 
     return $self->status_ok($c, entity => {
         candidate => $candidate,

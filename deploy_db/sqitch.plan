@@ -86,3 +86,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0080-add-payment_gateway [0079-adding-certiface] 2018-04-25T17:59:43Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding one entry to the 'payment_gateway' table
 0081-donation_log [0080-add-payment_gateway] 2018-04-27T17:16:45Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the donation_log table
 0082-adding-candidate-color [0081-donation_log] 2018-04-27T20:34:24Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'color' column on the 'candidate' table
+0083-candidate-mandatoaberto-integration [0082-adding-candidate-color] 2018-04-27T22:14:48Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'candidate_mandato_aberto_integration' table
