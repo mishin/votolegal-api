@@ -19,7 +19,6 @@ db_transaction {
     stash_test 'get_logged_out' => sub {
         my ($res) = @_;
 
-        ok (!defined($res->{candidate}->{cpf}),  'no cpf');
         ok (!defined($res->{candidate}->{cnpj}), 'no cnpj');
     };
 
