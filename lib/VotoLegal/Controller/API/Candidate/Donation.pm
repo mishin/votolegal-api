@@ -158,15 +158,20 @@ sub donate_POST {
 
     my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
+    my %attr = (
+        ip_address         => $ipAddr,
+        candidate_id       => $c->stash->{candidate}->id,
+        payment_gateway_id => 3,
+
+        $certiface_token_and_url ? ( certiface_token_id => $certiface_token_and_url->{uuid} ) : ()
+    );
+
     my $donation = $c->stash->{collection}->execute(
         $c,
         for  => "create",
         with => {
             %{ $c->req->params },
-            candidate_id       => $c->stash->{candidate}->id,
-            ip_address         => $ipAddr,
-            certiface_token_id => $certiface_token_and_url->{uuid},
-            payment_gateway_id => 3,
+            %attr
         },
     );
 
