@@ -130,6 +130,16 @@ sub donate_POST {
 
     $c->req->params->{phone} =~ s/\D+//g;
 
+    # Mockando params por agora
+    $c->req->params->{address_state}        = 'SP';
+    $c->req->params->{address_city}         = 'São Paulo';
+    $c->req->params->{address_street}       = 'Rua Desembargador Eliseu Guilherme';
+    $c->req->params->{address_district}     = 'Paraíso';
+    $c->req->params->{address_zipcode}      = '04003-000';
+    $c->req->params->{address_house_number} = '53';
+    $c->req->params->{amount}               = 10000;
+    $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
+
     if ($method eq 'boleto') {
         # Gerando token do Certiface
         # para prova de vida
