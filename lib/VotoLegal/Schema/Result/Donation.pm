@@ -345,6 +345,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 donation_logs
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::DonationLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "donation_logs",
+  "VotoLegal::Schema::Result::DonationLog",
+  { "foreign.donation_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 donation_type
 
 Type: belongs_to
@@ -391,8 +406,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-19 17:56:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9OnN1y8EoKrbuHv+xdu4Ag
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 12:03:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GK9wwjTQxkf9moJJda7I+w
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);
@@ -401,6 +416,7 @@ use Data::Section::Simple qw(get_data_section);
 use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
 use VotoLegal::Payment::PagSeguro;
+use VotoLegal::Payment::Iugu;
 
 # Pagseguro.
 has sender_hash => (
@@ -442,6 +458,12 @@ has credit_card_brand => (
 has credit_card_cvv => (
     is  => "rw",
     isa => "Str",
+);
+
+# Iugu
+has credit_card_token => (
+    is  => "rw",
+    isa => "Str"
 );
 
 has _driver => (
@@ -517,6 +539,14 @@ sub authorize {
         # PagSeguro.
         return 1;
     }
+    elsif ($self->payment_gateway_id == 3) {
+        # Iugu
+        my $opts = $self->build_iugu_invoice_data();
+        if ( $self->driver->do_authorization( %{$opts} ) ) {
+            $self->update( { status => "authorized" } );
+            return 1;
+        }
+    }
 
     return 0;
 }
@@ -524,8 +554,8 @@ sub authorize {
 sub capture {
     my ($self) = @_;
 
-    if ($self->payment_gateway_id == 1) {
-        # Cielo.
+    if ($self->payment_gateway_id == 1 || $self->payment_gateway_id == 3) {
+        # Cielo ou Iugu.
         if ($self->driver->do_capture()) {
             $self->update({
                 payment_gateway_code => $self->driver->payment_gateway_code,
@@ -678,6 +708,28 @@ sub send_email_canceled {
     return $self->result_source->schema->resultset('EmailQueue')->create({
         body => $email->as_string,
     });
+}
+
+sub build_iugu_invoice_data {
+    my ($self) = @_;
+
+    return {
+        token  => $self->credit_card_token,
+        amount => $self->amount,
+        email  => $self->email,
+        payer  => {
+            cpf_cnpj => $self->cpf,
+            name     => $self->name,
+            address  => {
+                state    => $self->address_state,
+                city     => $self->address_city,
+                district => $self->address_district,
+                zip_code => $self->address_zipcode,
+                street   => $self->address_street,
+                number   => $self->address_house_number,
+            }
+        }
+    }
 }
 
 __PACKAGE__->meta->make_immutable;

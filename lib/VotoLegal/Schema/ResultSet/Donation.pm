@@ -168,7 +168,7 @@ sub verifiers_specs {
                     },
                 },
                 certiface_token_id => {
-                    required   => 1,
+                    required   => 0,
                     type       => "Int",
                     post_check => sub {
                         my $certiface_token_id = $_[0]->get_value('certiface_token_id');

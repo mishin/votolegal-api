@@ -83,21 +83,21 @@ db_transaction {
         ]
     ;
 
-    rest_post "/api/candidate/$candidate_id/donate",
-        name                => "Creating donation",
-        stash               => 'd1',
-        code                => 200,
-        automatic_load_item => 0,
-        [
-            method     => 'boleto',
-            cpf        => $cpf,
-            name       => $name,
-            birthdate => $birthdate,
-            phone      => $phone
-        ]
-    ;
+    # rest_post "/api/candidate/$candidate_id/donate",
+    #     name                => "Creating donation",
+    #     stash               => 'd1',
+    #     code                => 200,
+    #     automatic_load_item => 0,
+    #     [
+    #         method     => 'boleto',
+    #         cpf        => $cpf,
+    #         name       => $name,
+    #         birthdate => $birthdate,
+    #         phone      => $phone
+    #     ]
+    # ;
 
-    my $res = stash "d1";
+    # my $res = stash "d1";
 };
 
 done_testing();

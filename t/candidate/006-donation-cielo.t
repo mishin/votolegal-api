@@ -40,6 +40,10 @@ db_transaction {
                     id   => 2,
                     name => "PagSeguro",
                 },
+                {
+                    id   => 3,
+                    name => "Iugu"
+                }
             ],
             'list payment gateways',
         );

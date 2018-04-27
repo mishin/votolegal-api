@@ -124,31 +124,27 @@ sub donate_POST {
         },
     );
 
-    # Mockando params por agora
-    $c->req->params->{address_state}        = 'SP';
-    $c->req->params->{address_city}         = 'São Paulo';
-    $c->req->params->{address_street}       = 'Rua Desembargador Eliseu Guilherme';
-    $c->req->params->{address_district}     = 'Paraíso';
-    $c->req->params->{address_zipcode}      = '04003-000';
-    $c->req->params->{address_house_number} = '53';
-    $c->req->params->{amount}               = 10000;
-    $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
-
     my $method = delete $c->req->params->{method};
+
+    my $certiface_token_and_url;
 
     $c->req->params->{phone} =~ s/\D+//g;
 
-    my $opts = {
-        cpf        => $c->req->params->{cpf},
-        nome       => $c->req->params->{name},
-        nascimento => $c->req->params->{birthdate},
-        telefone   => $c->req->params->{phone}
-    };
+    if ($method eq 'boleto') {
+        # Gerando token do Certiface
+        # para prova de vida
+        my $opts = {
+            cpf        => $c->req->params->{cpf},
+            nome       => $c->req->params->{name},
+            nascimento => $c->req->params->{birthdate},
+            telefone   => $c->req->params->{phone}
+        };
 
-    my $certiface_token_rs      = $c->model("DB::CertifaceToken");
-    my $certiface_token_and_url = $self->_certiface->generate_token( $opts );
+        my $certiface_token_rs      = $c->model("DB::CertifaceToken");
+        $certiface_token_and_url    = $self->_certiface->generate_token( $opts );
 
-    my $certiface_token = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+        $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+    }
 
     my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
 
@@ -159,14 +155,39 @@ sub donate_POST {
             %{ $c->req->params },
             candidate_id       => $c->stash->{candidate}->id,
             ip_address         => $ipAddr,
-            certiface_token_id => $certiface_token->id,
-            payment_gateway_id => 2,
+            certiface_token_id => $certiface_token_and_url->{uuid},
+            payment_gateway_id => 3,
         },
     );
 
+    if ($method eq 'credit_card') {
+        $donation->logger($c->log);
+        $donation->credit_card_token( $c->req->params->{credit_card_token} );
+
+        my $authorize = $donation->authorize();
+        my $capture   = $donation->capture();
+
+        if (!$authorize || !$capture) {
+            $self->status_bad_request($c, message => "Invalid gateway response.");
+            $c->detach();
+        }
+    }
+
+    my $ret;
+    if ( $method eq 'boleto' ) {
+        # No caso do boleto antes de ocorrer a doação deve ser feita a verificação do Certiface
+        $ret = { %{$certiface_token_and_url} };
+    }
+    else {
+        $ret = {
+            id     => $donation->id,
+            status => $donation->status,
+        }
+    }
+
     return $self->status_ok(
         $c,
-        entity => { %{$certiface_token_and_url} }
+        entity => $ret
     );
 }
 
