@@ -88,3 +88,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0082-adding-candidate-color [0081-donation_log] 2018-04-27T20:34:24Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'color' column on the 'candidate' table
 0083-candidate-mandatoaberto-integration [0082-adding-candidate-color] 2018-04-27T22:14:48Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'candidate_mandato_aberto_integration' table
 0084-default-color [0083-candidate-mandatoaberto-integration] 2018-04-27T23:45:52Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Updating the default color
+0085-fsm-for-table-donation [0084-default-color] 2018-04-27T23:47:27Z renato,,, <renato@notebook> # donation fsm
