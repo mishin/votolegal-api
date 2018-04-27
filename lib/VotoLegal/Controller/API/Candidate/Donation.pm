@@ -127,8 +127,7 @@ sub donate_POST {
     my $method = delete $c->req->params->{method};
 
     my $certiface_token_and_url;
-
-    $c->req->params->{phone} =~ s/\D+//g;
+    my $certiface_token_id;
 
     # Mockando params por agora
     $c->req->params->{address_state}        = 'SP';
@@ -139,6 +138,8 @@ sub donate_POST {
     $c->req->params->{address_house_number} = '53';
     $c->req->params->{amount}               = 10000;
     $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
+
+    $c->req->params->{phone} =~ s/\D+//g;
 
     if ($method eq 'boleto') {
         # Gerando token do Certiface
@@ -153,25 +154,20 @@ sub donate_POST {
         my $certiface_token_rs      = $c->model("DB::CertifaceToken");
         $certiface_token_and_url    = $self->_certiface->generate_token( $opts );
 
-        $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } );
+        $certiface_token_id = $certiface_token_rs->create( { uuid => $certiface_token_and_url->{uuid} } )->id;
     }
 
     my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
-
-    my %attr = (
-        ip_address         => $ipAddr,
-        candidate_id       => $c->stash->{candidate}->id,
-        payment_gateway_id => 3,
-
-        $certiface_token_and_url ? ( certiface_token_id => $certiface_token_and_url->{uuid} ) : ()
-    );
 
     my $donation = $c->stash->{collection}->execute(
         $c,
         for  => "create",
         with => {
             %{ $c->req->params },
-            %attr
+            candidate_id       => $c->stash->{candidate}->id,
+            ip_address         => $ipAddr,
+            certiface_token_id => $certiface_token_id,
+            payment_gateway_id => 3,
         },
     );
 
