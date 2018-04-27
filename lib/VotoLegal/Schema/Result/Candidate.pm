@@ -957,6 +957,17 @@ sub action_specs {
         },
 
         publish => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+            not defined $values{$_} and delete $values{$_} for keys %values;
+
+            for (keys %values) {
+                if ($values{$_} eq "_SET_NULL_") {
+                    $values{$_} = undef;
+                }
+            }
+
             # Não é possível publicar um candidato que não foi aprovado.
             if ($self->status ne "activated") {
                 die \['status', "candidate is not activated."];
