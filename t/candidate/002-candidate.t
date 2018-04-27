@@ -23,6 +23,7 @@ db_transaction {
     };
 
     api_auth_as candidate_id => $candidate_id;
+
     rest_get "/api/candidate/${candidate_id}",
         name  => 'get candidate',
         stash => 'get_logged_in',
@@ -37,6 +38,7 @@ db_transaction {
         ok (defined($candidate->{cpf}),  'cpf');
         is ($candidate->{signed_contract}, 0, 'user did not sign contract');
         is ($candidate->{paid},            0, 'user did not pay');
+        is ($candidate->{color},           'green', 'default candidate color');
 
         $username = $res->{candidate}->{username};
     };
@@ -154,6 +156,7 @@ db_transaction {
             bank_agency         => "0120",
             bank_account_number => "1234",
             bank_account_dv     => "5",
+            color               => 'yellow'
         },
     ;
 
@@ -178,6 +181,7 @@ db_transaction {
     is ($candidate->bank_account_number, 1234, 'bank account number');
     is ($candidate->bank_account_dv, 5, 'bank account dv');
     is ($candidate->payment_gateway_id, 3, 'expected payment gateway id');
+    ok ($candidate->color eq 'yellow', 'updated color');
 
     # Quando envio um campo em branco no PUT, deve setar NULL.
     rest_put "/api/candidate/${candidate_id}",

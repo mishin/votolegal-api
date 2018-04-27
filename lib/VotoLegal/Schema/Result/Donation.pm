@@ -345,21 +345,6 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 donation_logs
-
-Type: has_many
-
-Related object: L<VotoLegal::Schema::Result::DonationLog>
-
-=cut
-
-__PACKAGE__->has_many(
-  "donation_logs",
-  "VotoLegal::Schema::Result::DonationLog",
-  { "foreign.donation_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 donation_type
 
 Type: belongs_to
@@ -406,8 +391,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 12:03:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GK9wwjTQxkf9moJJda7I+w
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 17:43:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t0MHLfHGG58h9P0AvCBMmw
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

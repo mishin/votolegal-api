@@ -271,6 +271,12 @@ __PACKAGE__->table("candidate");
   default_value: true
   is_nullable: 0
 
+=head2 color
+
+  data_type: 'text'
+  default_value: 'green'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -365,6 +371,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 2 },
   "crawlable",
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "color",
+  { data_type => "text", default_value => "green", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -582,8 +590,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-09 15:34:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cH1ce4YkiAyYMKiCFTSnqA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 17:43:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3ZcyJeTZr9HCYMwJPSox5g
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -914,6 +922,10 @@ sub verifiers_specs {
                         $crawlable eq "true" || $crawlable eq "false";
                     },
                 },
+                color => {
+                    required => 0,
+                    type     => "Str"
+                }
             },
         ),
 

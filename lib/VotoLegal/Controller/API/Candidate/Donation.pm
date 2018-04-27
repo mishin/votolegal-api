@@ -56,6 +56,7 @@ sub donate_GET {
     my @donations = $c->stash->{collection}->search(
         {
             candidate_id     => $c->stash->{candidate}->id,
+            # TODO reativar essa condicional após testes
             # status           => "captured",
             donation_type_id => 1,
             (
