@@ -1212,6 +1212,22 @@ sub send_payment_in_analysis_email {
     });
 }
 
+sub send_payment_approved_email {
+    my ($self) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->user->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Pagamento aprovado",
+        template => get_data_section('payment_approved.tt'),
+        vars     => { name => $self->name },
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
@@ -1526,9 +1542,9 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
     <p><span><b>Olá [% name %], </b><br>
       <br></span></p>
-    <p>Recebemos seu pedido de compra e contratação da plataforma Voto Legal, para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
-    <p>Aguardamos a confirmação de pagamento de sua operadora financeira.</p>
-    <p>Assim que confirmado, será enviado um novo email.</p>
+    <p>Enviamos este e-mail para informar que seu pré-cadastro no Voto Legal <strong>não foi aprovado</strong>. </p>
+    <p>Consulte as <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
+    <p>Entre em contato conosco para obter mais informações <a href="#" target="_blank" style="color:#4ab957">clicando aqui</a>. </p>
     <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
   </td>
 </tr>
@@ -1568,3 +1584,176 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 </html>
 
 @@ payment_analysis.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %], </b><br>
+      <br></span></p>
+    <p>Recebemos seu pedido de compra e contratação da plataforma Voto Legal, para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
+    <p>Aguardamos a confirmação de pagamento de sua operadora financeira.</p>
+    <p>Assim que confirmado, será enviado um novo email.</p>
+    <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+
+</body>
+</html>
+
+@@ payment_approved.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %], </b><br>
+      <br></span></p>
+    <p>Seu pedido de compra e contratação da plataforma Voto Legal foi aprovado!</p>
+    <p>Inicie sua pré campanha para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
+    <p>Acesse <a href="https://www.votolegal.com.br" target="_blank" style="color:#4ab957">a plataforma</a> e inicie a configuração de seu perfil no Voto Legal.</p>
+    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione “esqueci a senha”.</p>
+    <p><b>Agilize a configuração de seu perfil, tenha estes conteúdos em mãos:</b>
+         <ul>
+            <li>
+                Texto apresentação pré-candidato até 1000 caracteres;
+            </li>
+                <p></p>
+            <li>
+                Lista com 4 propósitos prioritários da pré campanha;
+            </li>
+                <p></p>
+            <li>
+                Texto até 500 caracteres sobre cada um dos propósitos prioritários;
+            </li>
+                <p></p>
+            <li>
+                Defina a meta da pré- campanha de arrecadação financeira;
+            </li>
+                <p></p>
+            <li>
+                Vídeo de apresentação da pré- campanha de arrecadação;
+            </li>
+            <p></p>
+            <li>
+                Link para redes sociais do pré-candidato;
+            </li>
+            <p></p>
+            <li>
+                Foto do pré-candidato.
+            </li>
+        </ul></p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+<p><b>Boa pré-campanha!</b></p>
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+
+</body>
+</html>
