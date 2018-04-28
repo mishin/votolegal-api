@@ -5,9 +5,8 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
 use Catalyst qw/
-    -Debug
     ConfigLoader
-    Static::Simple
+
     Authentication
     Authorization::Roles
 /;
