@@ -40,13 +40,14 @@ my $obj = CatalystX::Eta::Test::REST->new(
         my $req = shift;
 
         eval 'do{my $x = $req->as_string; p $x}' if exists $ENV{TRACE} && $ENV{TRACE};
-        my ($res, $c) = ctx_request($req);
+        my ( $res, $c ) = ctx_request($req);
         eval 'do{my $x = $res->as_string; p $x}' if exists $ENV{TRACE} && $ENV{TRACE};
         return $res;
     },
     decode_response => sub {
         my $res = shift;
-        return decode_json($res->content);
+        return undef unless $res->content;
+        return decode_json( $res->content );
     }
 );
 
@@ -85,30 +86,30 @@ my $auth_user = {};
 sub api_auth_as {
     my (%conf) = @_;
 
-    if (!exists($conf{user_id}) && !exists($conf{candidate_id}) && !exists($conf{nobody})) {
+    if ( !exists( $conf{user_id} ) && !exists( $conf{candidate_id} ) && !exists( $conf{nobody} ) ) {
         croak "api_auth_as: missing 'user_id', 'candidate_id' or 'nobody'.";
     }
 
-    if (exists($conf{nobody})) {
-        $obj->fixed_headers([]);
-        return ;
+    if ( exists( $conf{nobody} ) ) {
+        $obj->fixed_headers( [] );
+        return;
     }
 
     my $user_id      = $conf{user_id};
     my $candidate_id = $conf{candidate_id};
 
-    my $schema = VotoLegal->model(defined($conf{model}) ? $conf{model} : 'DB');
+    my $schema = VotoLegal->model( defined( $conf{model} ) ? $conf{model} : 'DB' );
 
-    if (defined($candidate_id)) {
+    if ( defined($candidate_id) ) {
         $user_id = $schema->resultset('Candidate')->find($candidate_id)->user_id;
     }
 
-    if ($auth_user->{id} != $user_id) {
+    if ( $auth_user->{id} != $user_id ) {
         my $user = $schema->resultset('User')->find($user_id);
 
         croak 'api_auth_as: user not found' unless $user;
 
-        my $session = $user->new_session(ip => "127.0.0.1");
+        my $session = $user->new_session( ip => "127.0.0.1" );
 
         $auth_user = {
             id      => $user_id,
@@ -116,13 +117,13 @@ sub api_auth_as {
         };
     }
 
-    $obj->fixed_headers([ 'x-api-key' => $auth_user->{api_key} ]);
+    $obj->fixed_headers( [ 'x-api-key' => $auth_user->{api_key} ] );
 }
 
 sub create_candidate {
     my (%opts) = @_;
 
-    my $name = fake_name()->();
+    my $name     = fake_name()->();
     my $username = lc $name;
     $username =~ s/\s+/_/g;
 
@@ -137,10 +138,10 @@ sub create_candidate {
         address_city         => 'Iguape',
         address_zipcode      => '11920-000',
         address_street       => "Rua Tiradentes",
-        address_house_number => 1 + int(rand(2000)),
-        office_id            => fake_int(1, 3)->(),
-        party_id             => fake_int(1, 35)->(),
-        reelection           => fake_int(0, 1)->(),
+        address_house_number => 1 + int( rand(2000) ),
+        office_id            => fake_int( 1, 3 )->(),
+        party_id             => fake_int( 1, 35 )->(),
+        reelection           => fake_int( 0, 1 )->(),
         %opts,
     );
 
@@ -148,7 +149,7 @@ sub create_candidate {
         '/api/register',
         name  => 'add candidate',
         stash => 'candidate',
-        [ %params ],
+        [%params],
     );
 }
 
@@ -157,7 +158,7 @@ sub lorem_words {
 
     my $lorem = Text::Lorem->new();
 
-    return $lorem->words($words || 5);
+    return $lorem->words( $words || 5 );
 }
 
 sub lorem_paragraphs {
@@ -165,11 +166,11 @@ sub lorem_paragraphs {
 
     my $lorem = Text::Lorem->new();
 
-    return $lorem->paragraphs($n || 3);
+    return $lorem->paragraphs( $n || 3 );
 }
 
 sub get_config {
-    my $conf = new Config::General("$RealBin/../../votolegal.conf");
+    my $conf   = new Config::General("$RealBin/../../votolegal.conf");
     my %config = $conf->getall;
 
     return \%config;
@@ -186,4 +187,19 @@ sub create_candidate_contract_signature {
     );
 }
 
+sub generate_device_token {
+    my $res = $obj->rest_post(
+        "/api2/device-authentication",
+        name    => 'generate_device_token',
+        code    => 200,
+        headers => [
+            'User-Agent' =>
+              'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/'
+              . rand,
+        ],
+    );
+
+    $obj->{stash}{auth_token} = $res->{auth_token};
+
+}
 1;

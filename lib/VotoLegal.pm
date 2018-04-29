@@ -5,11 +5,11 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 
 use Catalyst qw/
-    ConfigLoader
+  ConfigLoader
 
-    Authentication
-    Authorization::Roles
-/;
+  Authentication
+  Authorization::Roles
+  /;
 
 BEGIN { $ENV{$_} or die "missing env '$_'." for qw/ RECAPTCHA_PUBKEY RECAPTCHA_PRIVKEY / }
 
@@ -21,9 +21,11 @@ __PACKAGE__->config(
     name     => 'VotoLegal',
     encoding => 'UTF-8',
 
+    using_frontend_proxy => 1,
+
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
-    enable_catalyst_header                      => 0, # Send X-Catalyst header
+    enable_catalyst_header                      => 0,    # Send X-Catalyst header
 
     recaptcha => {
         pub_key  => $ENV{RECAPTCHA_PUBKEY},

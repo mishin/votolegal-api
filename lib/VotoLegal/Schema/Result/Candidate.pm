@@ -274,7 +274,7 @@ __PACKAGE__->table("candidate");
 =head2 color
 
   data_type: 'text'
-  default_value: 'green'
+  default_value: 'default'
   is_nullable: 0
 
 =cut
@@ -372,7 +372,7 @@ __PACKAGE__->add_columns(
   "crawlable",
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "color",
-  { data_type => "text", default_value => "green", is_nullable => 0 },
+  { data_type => "text", default_value => "default", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -433,6 +433,21 @@ __PACKAGE__->belongs_to(
     on_delete     => "NO ACTION",
     on_update     => "NO ACTION",
   },
+);
+
+=head2 candidate_campaign_config
+
+Type: might_have
+
+Related object: L<VotoLegal::Schema::Result::CandidateCampaignConfig>
+
+=cut
+
+__PACKAGE__->might_have(
+  "candidate_campaign_config",
+  "VotoLegal::Schema::Result::CandidateCampaignConfig",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_issue_priorities
@@ -590,6 +605,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 votolegal_donations
+
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
+
+=cut
+
+__PACKAGE__->has_many(
+  "votolegal_donations",
+  "VotoLegal::Schema::Result::VotolegalDonation",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 issue_priorities
 
 Type: many_to_many
@@ -605,8 +635,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-27 18:22:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qe6AzjZdvFP2wjjC+gF1rw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zohLpTuYfw/Brt1QN1pksQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;

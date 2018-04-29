@@ -12,7 +12,7 @@ VotoLegal::Utils
 use vars qw(@ISA @EXPORT);
 
 @ISA    = (qw(Exporter));
-@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces);
+@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with);
 
 =head1 METHODS
 
@@ -42,6 +42,10 @@ sub left_padding_whitespaces {
     my ($string, $pos) = @_;
 
     return sprintf("%0${pos}s", $string);
+}
+
+sub die_with {
+    die { message => shift, error_code => 400};
 }
 
 =head1 AUTHOR
