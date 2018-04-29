@@ -36,43 +36,23 @@ db_transaction {
     my $cpf = '46223869762';
     generate_device_token;
 
-    my $fake_donation = fake_hash(
-        {
-            auth_token                   => stash 'auth_token',
-            cpf                          => $cpf,
-            payment_method                       => 'credit_card',
-            amount                       => fake_int( 1000, 106400 ),
+    rest_post "/api2/donations",
+      name   => "add donation",
+      stash => 'donation',
+      code   => 200,
+      params => {
+        generate_rand_donator_data(),
 
-            name                         => fake_name(),
-            email                        => fake_email(),
-            birthdate                    => fake_past_datetime("%Y-%m-%d"),
-            address_district             => "Centro",
-            address_state                => fake_pick(qw(SP RJ MG RS PR)),
-            address_city                 => "Iguape",
-            billing_address_house_number => fake_int( 1, 1000 )->(),
-            billing_address_district     => "Centro",
-            address_street               => "Rua Tiradentes",
-            billing_address_city         => "Iguape",
-            billing_address_state        => "SP",
-            address_zipcode              => "11920-000",
-            billing_address_street       => "Rua Tiradentes",
-            billing_address_zipcode      => "11920-000",
-            address_house_number         => fake_int( 1, 1000 )->(),
-            phone                        => fake_digits("##########")->(),
-        }
-    );
+        candidate_id   => stash 'candidate.id',
+        device_authorization_token_id     => stash 'test_auth',
+        payment_method => 'credit_card',
+        cpf            => $cpf,
+        amount         => 3000,
+      };
 
-=pod
-     rest_post "/api/candidate/$candidate_id/donate",
-         name    => "not authorized",
-         is_fail => 1,
-         params  => {
-             %{ $fake_donation->() },
-             credit_card_number => "0000000000000002",
-         },
-     ;
 
-=cut
+
+
 
 };
 

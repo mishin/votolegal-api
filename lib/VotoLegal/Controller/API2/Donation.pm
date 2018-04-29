@@ -5,7 +5,7 @@ use VotoLegal::Utils qw/die_with/;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-sub base : Chained('/api2/base') : PathPart('donation') : CaptureArgs(0) { }
+sub base : Chained('/api2/base') : PathPart('donations') : CaptureArgs(0) { }
 
 sub donation : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
     my ( $self, $c ) = @_;
@@ -21,9 +21,9 @@ sub donation_POST {
         with => $c->stash->{params}
     );
 
-    $self->status_ok( $c, entity => $donation->interface );
-
+    $self->status_ok( $c, entity => $donation->as_row() );
 }
+
 
 __PACKAGE__->meta->make_immutable;
 

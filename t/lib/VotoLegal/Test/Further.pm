@@ -199,7 +199,33 @@ sub generate_device_token {
         ],
     );
 
-    $obj->{stash}{auth_token} = $res->{auth_token};
+    $obj->{stash}{test_auth} = $res->{device_authorization_token_id};
 
 }
+
+sub generate_rand_donator_data {
+    my $info = fake_hash(
+        {
+            name                         => fake_name(),
+            email                        => fake_email(),
+            birthdate                    => fake_past_datetime("%Y-%m-%d"),
+            address_district             => "Centro",
+            address_state                => fake_pick(qw(SP RJ MG RS PR)),
+            address_city                 => "Iguape",
+            billing_address_house_number => fake_int( 1, 1000 )->(),
+            billing_address_district     => "Centro",
+            address_street               => "Rua Tiradentes",
+            billing_address_city         => "Iguape",
+            billing_address_state        => "SP",
+            address_zipcode              => "11920-000",
+            billing_address_street       => "Rua Tiradentes",
+            billing_address_zipcode      => "11920-000",
+            address_house_number         => fake_int( 1, 1000 )->(),
+            phone                        => fake_digits("##########")->(),
+        }
+    )->();
+
+    return wantarray ? %$info : $info;
+}
+
 1;
