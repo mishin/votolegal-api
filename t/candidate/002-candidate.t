@@ -182,6 +182,7 @@ db_transaction {
     is ($candidate->bank_account_dv, 5, 'bank account dv');
     is ($candidate->payment_gateway_id, 3, 'expected payment gateway id');
     ok ($candidate->color eq 'yellow', 'updated color');
+    is ($candidate->publish, 0, 'not published');
 
     # Quando envio um campo em branco no PUT, deve setar NULL.
     rest_put "/api/candidate/${candidate_id}",
