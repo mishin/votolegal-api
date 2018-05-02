@@ -1,5 +1,6 @@
 
 BEGIN;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE OR REPLACE FUNCTION replaceable_now() RETURNS timestamp with time zone
     LANGUAGE sql
