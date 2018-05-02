@@ -46,8 +46,8 @@ sub list_POST {
     return $self->status_ok(
         $c,
         entity => {
-            id          => $candidate->id,
-            website_url => $candidate->website_url
+            id       => $candidate->id,
+            username => $candidate->username
         }
     )
 }

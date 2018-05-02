@@ -21,7 +21,7 @@ db_transaction {
     my $candidate      = $schema->resultset("Candidate")->find($candidate_id);
     my $candidate_user = $candidate->user;
 
-    $candidate->update( { website_url => 'teste.votolegal.com.br' } );
+    $candidate->update( { username => 'teste.votolegal' } );
 
     api_auth_as => 'nobody';
 
@@ -103,7 +103,7 @@ db_transaction {
     stash_test "i1" => sub {
         my $res = shift;
 
-        is ($res->{website_url}, 'teste.votolegal.com.br', 'url');
+        is ($res->{username}, 'teste.votolegal', 'username');
     };
 
     rest_get "/api/candidate/$candidate_id",
