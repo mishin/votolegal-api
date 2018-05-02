@@ -3,6 +3,8 @@
 
 BEGIN;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE fsm_state (
     fsm_class text NOT NULL,
     "name" text NOT NULL,
