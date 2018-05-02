@@ -1038,7 +1038,6 @@ sub action_specs {
             # Validando se o candidato preencheu todos os campos necessários para publicar sua página.
             my @required = qw(
                 cnpj video_url summary biography raising_goal public_email picture
-                spending_spreadsheet merchant_id merchant_key
             );
 
             for (@required) {
