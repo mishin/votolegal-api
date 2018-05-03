@@ -39,6 +39,15 @@ sub callback_POST {
 
             $c->stash->{candidate}->update( { payment_status => "paid" } );
 
+            # Criando entrada no log
+            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+            $c->model("DB::PaymentLog")->create(
+                {
+                    payment_id => $payment->id,
+                    status     => 'captured'
+                }
+            );
+
             my $config = $c->config;
             if (!is_test() && $config->{cloudflare}->{enabled}) {
                 eval {

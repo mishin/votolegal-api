@@ -101,10 +101,6 @@ sub verifiers_specs {
                     required   => 0,
                     type       => 'Str',
                 },
-                cpf => {
-                    required => 1,
-                    type     => CPF
-                },
                 phone => {
                     required => 1,
                     type     => 'Str'
@@ -124,10 +120,15 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            # Retirando chars não númericos no cpf
-            $values{cpf} =~ s/\D+//g;
-
             my $payment = $self->create(\%values);
+
+            # Criando entrada no log
+            $self->result_source->schema->resultset("PaymentLog")->create(
+                {
+                    payment_id => $payment->id,
+                    status     => 'created'
+                }
+            );
 
             return $payment;
         },

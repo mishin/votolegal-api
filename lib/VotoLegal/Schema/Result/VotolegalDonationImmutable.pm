@@ -68,7 +68,7 @@ __PACKAGE__->table("votolegal_donation_immutable");
 =head2 donor_email
 
   data_type: 'text'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 donor_cpf
 
@@ -174,7 +174,7 @@ __PACKAGE__->add_columns(
   "donor_name",
   { data_type => "text", is_nullable => 0 },
   "donor_email",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "donor_cpf",
   {
     data_type      => "text",
@@ -278,8 +278,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eQuF8a8HLSQftJyqCr8FGg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-03 10:45:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jjgQ0tXFVWZIAtJREdut+g
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

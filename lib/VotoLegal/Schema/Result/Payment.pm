@@ -115,11 +115,6 @@ __PACKAGE__->table("payment");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 cpf
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 phone
 
   data_type: 'text'
@@ -168,8 +163,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "address_house_number",
   { data_type => "integer", is_nullable => 1 },
-  "cpf",
-  { data_type => "text", is_nullable => 1 },
   "phone",
   { data_type => "text", is_nullable => 1 },
   "id",
@@ -210,9 +203,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 payment_logs
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-04-17 16:53:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:K+34vgiukMdCKZ6lKnRtUw
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::PaymentLog>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payment_logs",
+  "VotoLegal::Schema::Result::PaymentLog",
+  { "foreign.payment_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-03 10:50:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rDGaBxqj/GTfMbaIvh4iow
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
@@ -260,6 +268,14 @@ sub send_pagseguro_transaction {
 
     $payment_args = $xs->hash2xml($payment_args, root => 'payment');
 
+    # Criando entrada no log
+    $self->result_source->schema->resultset("PaymentLog")->create(
+        {
+            payment_id => $self->id,
+            status     => 'sent'
+        }
+    );
+
     my $payment = $pagseguro->transaction($payment_args);
 
     return $payment;
@@ -289,7 +305,7 @@ sub build_sender_object {
     my $document = {
         document => {
             type  => 'CPF',
-            value => $self->cpf
+            value => $self->candidate->cpf
         }
     };
 
@@ -344,7 +360,7 @@ sub build_credit_card_object {
                 {
                     document => {
                         type  => 'CPF',
-                        value => $self->cpf
+                        value => $self->candidate->cpf
                     }
                 }
             ],

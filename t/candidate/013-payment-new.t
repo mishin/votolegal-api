@@ -59,7 +59,6 @@ db_transaction {
         [
             sender_hash          => $fake_sender_hash,
             credit_card_token    => $fake_credit_card_token,
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -78,7 +77,6 @@ db_transaction {
             method               => 'creditCard',
             credit_card_token    => $fake_credit_card_token,
             credit_card_token    => $fake_credit_card_token,
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -97,7 +95,6 @@ db_transaction {
             method               => 'foobar',
             sender_hash          => $fake_sender_hash,
             credit_card_token    => $fake_credit_card_token,
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -116,7 +113,6 @@ db_transaction {
             method               => 'boleto',
             sender_hash          => $fake_sender_hash,
             credit_card_token    => $fake_credit_card_token,
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -134,7 +130,6 @@ db_transaction {
         [
             method               => 'creditCard',
             sender_hash          => $fake_sender_hash,
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -145,14 +140,14 @@ db_transaction {
         ]
     ;
 
+
     rest_post "/api/candidate/$candidate_id/payment",
-        name    => 'payment with creditCard method but without credit_card_token',
+        name    => 'payment with boleto method but with credit_card_token',
         is_fail => 1,
         code    => 400,
         [
             method               => 'boleto',
             sender_hash          => 'c1ec88b704a7275e28bd86199cb44ee186375b603f21c118756811f39eeb2560',
-            cpf                  => $cpf,
             address_state        => $address_state,
             address_city         => $address_city,
             address_zipcode      => $address_zipcode,
@@ -164,6 +159,13 @@ db_transaction {
             email                => $email
         ]
     ;
+
+    ok ( my $payment_log_rs = $schema->resultset("PaymentLog"), 'payment log rs' );
+
+    is ($payment_log_rs->search( { status => 'created' } )->count, 1, '1 "created" log entries');
+    is ($payment_log_rs->search( { status => 'sent' } )->count, 1, '1 "sent" log entries');
+    is ($payment_log_rs->search( { status => 'failed' } )->count, 1, '1 "failed" log entries');
+
 
     # Não tem como gerar uma sender hash pelo backend apenas no front.
     # logo não conseguimos testar a resposta da API do pagseguro para

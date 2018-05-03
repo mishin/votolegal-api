@@ -59,6 +59,15 @@ sub payment_POST {
 
     if (!$payment_execution && !$payment_execution->{paymentLink}) {
         $self->status_bad_request($c, message => 'Invalid gateway response');
+
+        # Criando entrada no log
+        $c->model("DB::PaymentLog")->create(
+            {
+                payment_id => $payment->id,
+                status     => 'failed'
+            }
+        );
+
         $c->detach();
     }
 
