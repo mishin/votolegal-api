@@ -1702,12 +1702,12 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Olá [% name %], </b><br>
+    <p><span><b>Olá [% name %],</b><br>
       <br></span></p>
     <p>Seu pedido de compra e contratação da plataforma Voto Legal foi aprovado!</p>
     <p>Inicie sua pré campanha para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
     <p>Acesse <a href="https://www.votolegal.com.br" target="_blank" style="color:#4ab957">a plataforma</a> e inicie a configuração de seu perfil no Voto Legal.</p>
-    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione “esqueci a senha”.</p>
+    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
     <p><b>Agilize a configuração de seu perfil, tenha estes conteúdos em mãos:</b>
          <ul>
             <li>
@@ -1727,7 +1727,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
             </li>
                 <p></p>
             <li>
-                Vídeo de apresentação da pré- campanha de arrecadação;
+                Vídeo de apresentação da pré-campanha de arrecadação;
             </li>
             <p></p>
             <li>
