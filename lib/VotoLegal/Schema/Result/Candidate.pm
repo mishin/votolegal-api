@@ -1225,6 +1225,38 @@ sub has_mandatoaberto_integration {
     return $self->candidate_mandato_aberto_integrations->count > 0 ? 1 : 0;
 }
 
+sub send_payment_in_analysis_email {
+    my ($self) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->user->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Pagamento em análise",
+        template => get_data_section('payment_analysis.tt'),
+        vars     => { name => $self->name },
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
+sub send_payment_approved_email {
+    my ($self) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->user->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Pagamento aprovado",
+        template => get_data_section('payment_approved.tt'),
+        vars     => { name => $self->name },
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
@@ -1233,7 +1265,6 @@ __PACKAGE__->meta->make_immutable;
 __DATA__
 
 @@ candidate_registration.tt
-
 <!doctype html>
 <html>
    <head>
@@ -1262,43 +1293,96 @@ __DATA__
                                              <p align="center">
                                                 <span>
                                                 <b>
-                                                Parabéns [% name %], recebemos o seu pré-cadastro com sucesso.
+                                                Bem-vindo ao Voto Legal.
                                                 </b>
                                                 <br>
                                                 <br>
                                                 </span>
                                              </p>
                                              <p>
-                                                <font color="green">PRÓXIMO PASSO</font>
+                                                Seu pré-cadastro foi realizado com sucesso.
                                              </p>
                                              <p>
-                                                Você já pode acessar o menu <strong>Login do Candidato</strong>, preencher com o seu <strong>e-mail</strong> e <strong>senha</strong> e completar o cadastro completo.
+                                             Faltam poucos passos para contratar o Voto Legal,  para  arrecadação financeira  e construção de campanhas eleitorais transparentes.
                                              </p>
-                                             <p><font color="green">IMPORTANTE</font></p>
-                                             <p> O perfil será liberado para publicação e aberto para doações a partir do dia 16.08.16, se o candidato tiver:</p>
+                                             <p>
+                                             Receba doações de valores e serviços por uma plataforma que já operou e funcionou em eleições de acordo com a legislação do TSE. Ative o Voto Legal em seu site de campanha e aumente as formas de integração com seu público.
+                                             </p>
+                                             <p>
+                                             <b>Importante:</b> Todos os dados para contratação devem ser do pré-candidato, estando vedada a contratação em nome de terceiros. Se houver divergências ou inconformidades das informações, os valores arrecadados poderão ser devolvidos aos doadores e/ou tesouro nacional.
+                                             </p>
                                           </td>
                                        </tr>
                                        <tr>
                                           <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+                                          <b>Funcionalidades da Plataforma</b>
                                              <ul>
                                                 <li>
-                                                   A candidatura aprovada pelo TSE;
+                                                   Estrutura para receber doações financeiras e de serviços  para a sua campanha;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    A sua conta bancária aberta;
+                                                    Receba doações via cartão de crédito e boleto bancário;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Contrato com a processadora de cartão de crédito;
+                                                    Geração de contrato de serviços em conformidade ao TSE;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Realizado o pagamento do boleto;
+                                                    Transparência em tempo real em seu site de campanha;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Preenchido os campos obrigatórios do cadastro completo.
+                                                    Emissão de recibos de acordo com a legislação;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Integração com o SPCE (sistema de prestação de contas do TSE);
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Suporte com especialistas;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Cursos relacionados às estratégias eleitorais na Internet;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Painel de controle para acompanhamento das doações em tempo real;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Plataforma Integrada com diversas operadoras financeiras;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Uso dos melhores protocolos de segurança da informação;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Transparência de dados em formatos abertos;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Suporte para milhares de acessos simultâneos;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Instruções legais e detalhadas para doadores;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Orientação para declaração de imposto de renda e prestação de contas para doadores;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Blockchain (DECRED) para comprovar autenticidade;
+                                                </li>
+                                                <p></p>
+                                                <li>
+                                                    Tecnologia contra lavagem de dinheiro com reconhecimento facial para combater fraudes;
                                                 </li>
                                              </ul>
                                           </td>
@@ -1306,13 +1390,26 @@ __DATA__
                                        <tr>
                                           <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
                                              <p>
-                                                <font color="green">ATENÇÃO</font>
+                                                <b>Custos da Plataforma</b>
                                              </p>
                                              <p>
-                                                O software é livre e gratuito, qualquer candidato pode utilizá-lo em sua própria infraestrutura sem nenhum custo, o código esta disponível em: <a href="https://github.com/appcivico">https://github.com/appcivico</a>
+                                                O valores para contratação da infraestrutura do Voto Legal são:
                                              </p>
                                              <p>
-                                                De maneira opcional, será disponibilizado o boleto para pagamento da taxa única no <strong><font color="green">valor de R$ 99,00</font></strong> (noventa e nove) reais pelo serviço de infraestrutura do Voto Legal que é necessária para doações de cartão de crédito via internet. Esta taxa deve ser informada na prestação de contas ao TSE.
+                                                <b>Pré-campanha (15/05/2018 a 15/08/2018)</b>
+                                             </p>
+                                             <p>
+                                                Parcela única de R$ 495,00 (quatrocentos e noventa e cinco reais) pago no momento da contratação.
+                                             </p>
+                                             <p>
+                                                <b>Campanha (a partir de 15/08/2018)</b>
+                                             </p>
+                                             <p>
+                                                Para os candidatos que <b>não utilizaram</b> o Voto Legal durante a pré-campanha, o valor de contratação na campanha será de R$ 495,00 (quatrocentos e noventa e cinco reais) assim que for emitido o CNPJ da campanha e indicação de conta bancária oficial da candidatura.
+Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o valor de contratação na campanha será é de R$ 99,00 (noventa e nove reais),  que deverão ser pagos em parcela única no momento que for emitido o CNPJ da campanha e indicação de conta bancária oficial da candidatura.
+                                             </p>
+                                             <p>
+                                             <b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.
                                              </p>
                                           </td>
                                        </tr>
@@ -1323,7 +1420,7 @@ __DATA__
                                           <td align="center" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px">
                                              <strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
                                                 <p>
-                                                  <strong>Mais informações sobre o Voto Legal: Assista o <a href="https://www.youtube.com/watch?v=SiWl8uE-rAE" style="color:green">Video</a> com as explicações e esclarecimentos do Luciano Santos, Diretor do MCCE.</strong>
+                                                  <strong>Para finalizar sua contratação <a href="https://www.votolegal.com.br" style="color:#4ab957"><b>clique aqui</b></a>.</strong>
                                                 </p>
                                                 <strong>
                                                 <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
@@ -1357,15 +1454,12 @@ __DATA__
          </table>
       </div>
       </div></div>
-
 @@ candidate_approval.tt
-
 <!doctype html>
 <html>
 <head>
 <meta charset="UTF-8">
 </head>
-
 <body>
 <div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
@@ -1439,7 +1533,6 @@ __DATA__
 </table>
 </div>
 </div></div>
-
 </body>
 </html>
 
@@ -1450,7 +1543,6 @@ __DATA__
 <head>
 <meta charset="UTF-8">
 </head>
-
 <body>
 <div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
@@ -1476,6 +1568,7 @@ __DATA__
     <p>Enviamos este e-mail para informar que seu pré-cadastro no Voto Legal <strong>não foi aprovado</strong>. </p>
     <p>Consulte as <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
     <p>Entre em contato conosco para obter mais informações <a href="#" target="_blank" style="color:#4ab957">clicando aqui</a>. </p>
+    <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
   </td>
 </tr>
 <tr>
@@ -1509,7 +1602,176 @@ __DATA__
 </table>
 </div>
 </div></div>
-
 </body>
 </html>
 
+@@ payment_analysis.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %], </b><br>
+      <br></span></p>
+    <p>Recebemos seu pedido de compra e contratação da plataforma Voto Legal, para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
+    <p>Aguardamos a confirmação de pagamento de sua operadora financeira.</p>
+    <p>Assim que confirmado, será enviado um novo email.</p>
+    <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</body>
+</html>
+
+@@ payment_approved.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %], </b><br>
+      <br></span></p>
+    <p>Seu pedido de compra e contratação da plataforma Voto Legal foi aprovado!</p>
+    <p>Inicie sua pré campanha para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
+    <p>Acesse <a href="https://www.votolegal.com.br" target="_blank" style="color:#4ab957">a plataforma</a> e inicie a configuração de seu perfil no Voto Legal.</p>
+    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione “esqueci a senha”.</p>
+    <p><b>Agilize a configuração de seu perfil, tenha estes conteúdos em mãos:</b>
+         <ul>
+            <li>
+                Texto apresentação pré-candidato até 1000 caracteres;
+            </li>
+                <p></p>
+            <li>
+                Lista com 4 propósitos prioritários da pré campanha;
+            </li>
+                <p></p>
+            <li>
+                Texto até 500 caracteres sobre cada um dos propósitos prioritários;
+            </li>
+                <p></p>
+            <li>
+                Defina a meta da pré- campanha de arrecadação financeira;
+            </li>
+                <p></p>
+            <li>
+                Vídeo de apresentação da pré- campanha de arrecadação;
+            </li>
+            <p></p>
+            <li>
+                Link para redes sociais do pré-candidato;
+            </li>
+            <p></p>
+            <li>
+                Foto do pré-candidato.
+            </li>
+        </ul></p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+<p><b>Boa pré-campanha!</b></p>
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</body>
+</html>

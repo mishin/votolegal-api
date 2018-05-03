@@ -38,6 +38,7 @@ sub callback_POST {
         if ($status == 3 || $status == 4) {
 
             $c->stash->{candidate}->update( { payment_status => "paid" } );
+            $c->stash->{candidate}->send_payment_approved_email();
 
             # Criando entrada no log
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;

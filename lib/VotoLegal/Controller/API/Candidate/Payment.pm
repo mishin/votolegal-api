@@ -38,6 +38,8 @@ sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub payment_POST {
     my ($self, $c) = @_;
 
+    my $candidate = $c->stash->{candidate};
+
     my $method = $c->req->params->{method};
     die \['method', 'missing'] unless $method;
 
@@ -56,6 +58,8 @@ sub payment_POST {
     );
 
     my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token, $c->log);
+
+    $candidate->send_payment_in_analysis_email();
 
     if (!$payment_execution && !$payment_execution->{paymentLink}) {
         $self->status_bad_request($c, message => 'Invalid gateway response');
