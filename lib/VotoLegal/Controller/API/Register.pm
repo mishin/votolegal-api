@@ -62,7 +62,14 @@ sub register_POST {
     $self->status_created(
         $c,
         location => $c->uri_for($c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ]),
-        entity   => { id => $candidate->id }
+        entity   => {
+            id                   => $candidate->id,
+            address_state        => $candidate->address_state,
+            address_city         => $candidate->address_city,
+            address_zipcode      => $candidate->address_zipcode,
+            address_street       => $candidate->address_street,
+            address_house_number => $candidate->address_house_number,
+        }
     );
 }
 
