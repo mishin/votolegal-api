@@ -130,9 +130,10 @@ my %WriteMakefileArgs = (
     "POSIX" => 0,
     "Test::More" => 0,
     "Text::Lorem" => 0,
+    "blib" => "1.01",
     "lib" => 0
   },
-  "VERSION" => 20180503,
+  "VERSION" => 20180504,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -245,6 +246,7 @@ my %FallbackPrereqs = (
   "XML::Hash::XS" => 0,
   "XML::Simple" => 0,
   "base" => 0,
+  "blib" => "1.01",
   "common::sense" => 0,
   "lib" => 0,
   "namespace::autoclean" => 0,
