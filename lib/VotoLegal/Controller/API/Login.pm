@@ -48,6 +48,9 @@ sub login_POST {
                 $session->{address_zipcode}      = $candidate->address_zipcode,
                 $session->{address_street}       = $candidate->address_street,
                 $session->{address_house_number} = $candidate->address_house_number,
+                $session->{name}                 = $candidate->name,
+                $session->{phone}                = $candidate->phone,
+                $session->{email}                = $candidate->user->email,
 
                 return $self->status_ok($c, entity => $session);
             }

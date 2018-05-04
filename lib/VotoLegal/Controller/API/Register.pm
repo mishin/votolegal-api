@@ -69,6 +69,9 @@ sub register_POST {
             address_zipcode      => $candidate->address_zipcode,
             address_street       => $candidate->address_street,
             address_house_number => $candidate->address_house_number,
+            name                 => $candidate->name,
+            phone                => $candidate->phone,
+            email                => $candidate->user->email,
         }
     );
 }
