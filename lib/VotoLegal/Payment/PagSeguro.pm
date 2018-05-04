@@ -73,6 +73,7 @@ sub createSession {
         }
     );
 
+    $self->logger->info($req->request->as_http_request->as_string) if $self->logger;
     $self->logger->info("PagSeguro session: " . $req->content) if $self->logger;
 
     if ($req->is_success()) {
