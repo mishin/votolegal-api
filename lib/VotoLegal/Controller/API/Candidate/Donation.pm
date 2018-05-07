@@ -125,6 +125,16 @@ sub donate_POST {
         },
     );
 
+    # Mockando params por agora
+    $c->req->params->{address_state}        = 'SP';
+    $c->req->params->{address_city}         = 'São Paulo';
+    $c->req->params->{address_street}       = 'Rua Desembargador Eliseu Guilherme';
+    $c->req->params->{address_district}     = 'Paraíso';
+    $c->req->params->{address_zipcode}      = '04003-000';
+    $c->req->params->{address_house_number} = '53';
+    $c->req->params->{amount}               = 10000;
+    $c->req->params->{email}                = 'fvox@sandbox.pagseguro.com.br';
+
     my $method = delete $c->req->params->{method};
 
     my $certiface_token_and_url;
