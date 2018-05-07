@@ -348,7 +348,7 @@ __DATA__
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
   <p>Caso você não tenha solicitado esta alteração de senha, por favor desconsidere esta mensagem, nenhuma alteração foi feita na sua conta.</p>
-  <p>Dúvidas? Acesse <a href="https://www.votolegal.org.br/faq" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  <p>Dúvidas? Acesse <a href="https://votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
   Equipe Voto Legal</strong><a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
