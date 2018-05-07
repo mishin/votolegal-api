@@ -59,8 +59,6 @@ sub payment_POST {
 
     my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token, $c->log);
 
-    $candidate->send_payment_in_analysis_email();
-
     if (!$payment_execution && !$payment_execution->{paymentLink}) {
         $self->status_bad_request($c, message => 'Invalid gateway response');
 
@@ -74,6 +72,8 @@ sub payment_POST {
 
         $c->detach();
     }
+
+    $candidate->send_payment_in_analysis_email();
 
     $payment->update( { code => $payment_execution->{code} } );
 
