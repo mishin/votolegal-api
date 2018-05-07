@@ -352,7 +352,7 @@ sub build_credit_card_object {
         token       => $credit_card_token,
         installment => {
             quantity => 1,
-            value    => '495.00'
+            value    => '1.00'
         },
         holder      => {
             name      => $self->name,
