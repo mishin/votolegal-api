@@ -92,3 +92,6 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0086-device-auth [0085-fsm-for-table-donation] 2018-04-28T01:28:54Z renato,,, <renato@notebook> # device-auth
 0087-payment-log [0086-device-auth] 2018-05-03T13:40:53Z Lucas Ansei,,, <lucas@lucas-G750JX> # Adding the 'payment_log' table and dropping the 'payment_history' table
 0088-payment-cpf [0087-payment-log] 2018-05-03T13:49:55Z Lucas Ansei,,, <lucas@lucas-G750JX> # Removing the 'cpf' col on the 'payment' table
+0089-add-political_movement-table [0088-payment-cpf] 2018-05-07T21:05:06Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'political_movement' table and adding the 'political_movement_id' on the 'candidate' table.
+0090-deleting-offices [0089-add-political_movement-table] 2018-05-07T21:09:41Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Deleting the ('Prefeito', 'Vereador', 'Vice-prefeito') offices.
+0091-adding-candidate-birth_date [0090-deleting-offices] 2018-05-07T21:37:08Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'birth_date' col on the 'candidate' table

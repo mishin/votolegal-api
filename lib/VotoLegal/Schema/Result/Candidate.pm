@@ -277,6 +277,17 @@ __PACKAGE__->table("candidate");
   default_value: 'default'
   is_nullable: 0
 
+=head2 political_movement_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 birth_date
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -373,6 +384,10 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "color",
   { data_type => "text", default_value => "default", is_nullable => 0 },
+  "political_movement_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "birth_date",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -575,6 +590,26 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 political_movement
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::PoliticalMovement>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "political_movement",
+  "VotoLegal::Schema::Result::PoliticalMovement",
+  { id => "political_movement_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
+
 =head2 projects
 
 Type: has_many
@@ -635,8 +670,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zohLpTuYfw/Brt1QN1pksQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-07 18:37:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DkFfL9lC+w0+EDfSnCXA5Q
 
 use File::Temp q(:seekable);
 use Data::Verifier;

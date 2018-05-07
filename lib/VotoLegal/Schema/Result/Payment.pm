@@ -356,6 +356,8 @@ sub build_credit_card_object {
         },
         holder      => {
             name      => $self->name,
+            phone     => $self->build_phone_object(),
+            birthDate => $self->candidate->birth_date,
             documents => [
                 {
                     document => {

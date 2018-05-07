@@ -34,9 +34,10 @@ db_transaction {
             address_zipcode      => '11920-000',
             address_street       => "Rua Tiradentes",
             address_house_number => fake_int(1, 3000)->(),
-            office_id            => 2,
+            office_id            => 4,
             party_id             => 5,
             reelection           => 1,
+            birth_date           => '11/05/1998'
         },
     ;
 
