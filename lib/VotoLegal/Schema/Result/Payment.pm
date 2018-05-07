@@ -326,7 +326,7 @@ sub build_item_object {
             item => {
                 id          => 1,
                 description => 'Pagamento Voto Legal',
-                amount      => '495.00',
+                amount      => '1.00',
                 quantity    => 1
             }
         }
