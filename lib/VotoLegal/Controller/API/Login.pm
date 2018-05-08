@@ -56,6 +56,17 @@ sub login_POST {
                     $session->{payment_method} = $payment->method;
                 }
 
+                # Forçando retorno do valor
+                my $value;
+                if ( $candidate->party_id == 33 || ($candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5)$/) ) {
+                    $value = '396.00';
+                }
+                else {
+                    $value = '1.00';
+                }
+
+                $session->{amount} = $value;
+
                 return $self->status_ok($c, entity => $session);
             }
         }
