@@ -173,8 +173,15 @@ sub verifiers_specs {
                     type       => 'Str',
                 },
                 birth_date => {
-                    required => 1,
-                    type     => 'Str'
+                    required   => 1,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $birth_date = $_[0]->get_value('birth_date');
+
+                        die \['birth_date', 'invalid format, must be "dd/mm/aaaa"'] unless $birth_date =~ /^(\d{2}\/){2}\d{4}$/;
+
+                        return 1;
+                    }
                 }
             },
         ),
