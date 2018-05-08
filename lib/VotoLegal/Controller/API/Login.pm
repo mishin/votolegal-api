@@ -43,14 +43,18 @@ sub login_POST {
                 $session->{signed_contract}      = $c->user->has_signed_contract();
                 $session->{paid}                 = $candidate->candidate_has_paid();
                 $session->{payment_created}      = $candidate->candidate_has_payment_created();
-                $session->{address_state}        = $candidate->address_state,
-                $session->{address_city}         = $candidate->address_city,
-                $session->{address_zipcode}      = $candidate->address_zipcode,
-                $session->{address_street}       = $candidate->address_street,
-                $session->{address_house_number} = $candidate->address_house_number,
-                $session->{name}                 = $candidate->name,
-                $session->{phone}                = $candidate->phone,
-                $session->{email}                = $candidate->user->email,
+                $session->{address_state}        = $candidate->address_state;
+                $session->{address_city}         = $candidate->address_city;
+                $session->{address_zipcode}      = $candidate->address_zipcode;
+                $session->{address_street}       = $candidate->address_street;
+                $session->{address_house_number} = $candidate->address_house_number;
+                $session->{name}                 = $candidate->name;
+                $session->{phone}                = $candidate->phone;
+                $session->{email}                = $candidate->user->email;
+
+                if ( my $payment = $candidate->payments->search(undef, { max => 'created_at' } )->next ) {
+                    $session->{payment_method} = $payment->method;
+                }
 
                 return $self->status_ok($c, entity => $session);
             }
