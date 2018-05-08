@@ -118,9 +118,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 payment_discounts
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-06-16 10:57:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TNTKSXU3Ei5x8d5nmdZxNw
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::PaymentDiscount>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payment_discounts",
+  "VotoLegal::Schema::Result::PaymentDiscount",
+  { "foreign.party_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-08 16:02:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B3lfI05xOncRBEsREqY+1A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

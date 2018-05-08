@@ -326,7 +326,7 @@ sub build_item_object {
             item => {
                 id          => 1,
                 description => 'Pagamento Voto Legal',
-                amount      => '1.00',
+                amount      => $self->get_value(),
                 quantity    => 1
             }
         }
@@ -352,7 +352,7 @@ sub build_credit_card_object {
         token       => $credit_card_token,
         installment => {
             quantity => 1,
-            value    => '1.00'
+            value    => $self->get_value()
         },
         holder      => {
             name      => $self->name,
@@ -408,6 +408,22 @@ sub update_code {
     my ($self, $code) = @_;
 
     return $self->update( { code => $code } );
+}
+
+sub get_value {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+
+    my $value;
+    if ( $candidate->party_id == 33 || $candidate->political_movement_id =~ /^(1|2)$/ ) {
+        $value = '396.00';
+    }
+    else {
+        $value = '1.00';
+    }
+
+    return $value;
 }
 
 __PACKAGE__->meta->make_immutable;
