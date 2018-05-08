@@ -81,7 +81,7 @@ sub register_POST {
             name                 => $candidate->name,
             phone                => $candidate->phone,
             email                => $candidate->user->email,
-            value                => $value
+            amount               => $value
         }
     );
 }
