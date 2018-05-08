@@ -1,4 +1,4 @@
-package VotoLegal::Controller::API::PoliticialMovement;
+package VotoLegal::Controller::API::PoliticalMovement;
 use Moose;
 use namespace::autoclean;
 

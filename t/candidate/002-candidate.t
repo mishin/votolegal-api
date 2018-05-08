@@ -131,6 +131,12 @@ db_transaction {
     ;
 
     rest_put "/api/candidate/${candidate_id}",
+        name    => "can't set invalid political movement",
+        is_fail => 1,
+        [ political_movement_id => fake_int( 100, 200 )->() ],
+    ;
+
+    rest_put "/api/candidate/${candidate_id}",
         name  => 'edit myself',
         files => {
             picture              => "$Bin/picture.jpg",

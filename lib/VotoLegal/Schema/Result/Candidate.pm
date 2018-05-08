@@ -1005,6 +1005,17 @@ sub verifiers_specs {
                 color => {
                     required => 0,
                     type     => "Str"
+                },
+                political_movement_id => {
+                    required   => 0,
+                    type       => "Int",
+                    post_check => sub {
+                        my $political_movement_id = $_[0]->get_value('political_movement_id');
+
+                        my $political_movement = $self->result_source->schema->resultset('PoliticalMovement')->search( { id => $political_movement_id } )->next;
+
+                        die \['political_movement_id', 'could not find political movement with that id'] unless $political_movement;
+                    }
                 }
             },
         ),
