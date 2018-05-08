@@ -3,6 +3,7 @@
 
 BEGIN;
 
+UPDATE candidate SET office_id = 4;
 DELETE FROM office WHERE name IN ('Prefeito', 'Vereador', 'Vice-prefeito');
 
 COMMIT;
