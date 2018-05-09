@@ -80,11 +80,12 @@ sub createSession {
         my $xml = XMLin($req->content);
 
         if (ref $xml) {
+
             return $xml;
         }
     }
 
-    return ;
+    return $req->content;
 }
 
 sub transaction {
@@ -108,7 +109,7 @@ sub transaction {
         return XMLin($req->content);
     }
 
-    return ;
+    return $req->content;
 }
 
 sub notification {

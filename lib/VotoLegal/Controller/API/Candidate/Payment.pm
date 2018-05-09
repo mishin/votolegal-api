@@ -6,6 +6,8 @@ use namespace::autoclean;
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 
+use XML::Hash::XS qw/ hash2xml xml2hash /;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
@@ -59,8 +61,9 @@ sub payment_POST {
 
     my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token, $c->log);
 
-    if (!$payment_execution && !$payment_execution->{paymentLink}) {
-        $self->status_bad_request($c, message => 'Invalid gateway response');
+    if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
+
+        my $error = xml2hash($payment_execution);
 
         # Criando entrada no log
         $c->model("DB::PaymentLog")->create(
@@ -70,7 +73,7 @@ sub payment_POST {
             }
         );
 
-        $c->detach();
+        die \['Pagseguro: ', $error->{error}->{message} ];
     }
 
     $candidate->send_payment_in_analysis_email();
