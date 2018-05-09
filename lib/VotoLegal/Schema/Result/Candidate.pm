@@ -1273,14 +1273,7 @@ sub candidate_has_payment_created {
         } $p->payment_logs->all()
     } $self->payments->all;
 
-    my $ret;
-    if ($current_payment_in_analysis) {
-        $ret = 1;
-    } else {
-        $ret = 0
-    }
-
-    return $ret;
+    return $current_payment_in_analysis ? \1 : \0;
 }
 
 sub has_mandatoaberto_integration {
