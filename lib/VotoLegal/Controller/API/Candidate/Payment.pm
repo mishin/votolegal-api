@@ -63,8 +63,6 @@ sub payment_POST {
 
     if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
 
-        my $error = xml2hash($payment_execution);
-
         # Criando entrada no log
         $c->model("DB::PaymentLog")->create(
             {
@@ -73,7 +71,7 @@ sub payment_POST {
             }
         );
 
-        die \['Pagseguro: ', $error->{error}->{message} ];
+        die \['Pagseguro: ', $payment_execution ];
     }
 
     $candidate->send_payment_in_analysis_email();
