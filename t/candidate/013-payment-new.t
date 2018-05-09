@@ -30,6 +30,8 @@ db_transaction {
         address_zipcode      => $address_zipcode,
         address_street       => $address_street,
         address_house_number => $address_house_number,
+        party_id             => 34
+
     );
     my $candidate_id = stash "candidate.id";
     my $candidate    = $schema->resultset("Candidate")->find($candidate_id);
@@ -44,10 +46,10 @@ db_transaction {
 
     create_candidate_contract_signature($candidate_id);
 
-    # rest_get "/api/candidate/$candidate_id/payment/session",
-    #     name    => "get session when not activated",
-    #     stash   => 's1'
-    # ;
+    rest_get "/api/candidate/$candidate_id/payment/session",
+        name    => "get session when not activated",
+        stash   => 's1'
+    ;
 
     my $fake_sender_hash       = '52578d5d3336ec7a43ff1dae4794d0c5625feddcc8fbc0e80bcb0cb46c9947d4';
     my $fake_credit_card_token = '1e358d39e26448dc8a28d0f1815f08c5';
@@ -141,38 +143,33 @@ db_transaction {
     ;
 
 
-    rest_post "/api/candidate/$candidate_id/payment",
-        name    => 'payment with boleto method but with credit_card_token',
-        is_fail => 1,
-        code    => 400,
-        [
-            method               => 'boleto',
-            sender_hash          => 'c1ec88b704a7275e28bd86199cb44ee186375b603f21c118756811f39eeb2560',
-            address_state        => $address_state,
-            address_city         => $address_city,
-            address_zipcode      => $address_zipcode,
-            address_street       => $address_street,
-            address_district     => $address_district,
-            address_house_number => $address_house_number,
-            phone                => $phone,
-            name                 => $name,
-            email                => $email
-        ]
-    ;
+    # TODO testar com sender hash
+    #rest_post "/api/candidate/$candidate_id/payment",
+    #    name    => 'payment with boleto method but with credit_card_token',
+    #    is_fail => 1,
+    #    code    => 400,
+    #    [
+    #        method               => 'boleto',
+    #        sender_hash          => 'c1ec88b704a7275e28bd86199cb44ee186375b603f21c118756811f39eeb2560',
+    #        address_state        => $address_state,
+    #        address_city         => $address_city,
+    #        address_zipcode      => $address_zipcode,
+    #        address_street       => $address_street,
+    #        address_district     => $address_district,
+    #        address_house_number => $address_house_number,
+    #        phone                => $phone,
+    #        name                 => $name,
+    #        email                => 'foobar@email.com'
+    #    ]
+    #;
+#
+#    #ok ( my $email_queue_rs = $schema->resultset("EmailQueue"), 'email queue rs');
+#    #ok ( my $payment_log_rs = $schema->resultset("PaymentLog"), 'payment log rs' );
+#
+#    #is ($payment_log_rs->search( { status => 'created' } )->count, 1, '1 "created" log entries');
+#    #is ($payment_log_rs->search( { status => 'sent' } )->count, 1, '1 "sent" log entries');
+    #is ($payment_log_rs->search( { status => 'failed' } )->count, 1, '1 "failed" log entries');
 
-    ok ( my $email_queue_rs = $schema->resultset("EmailQueue"), 'email queue rs');
-    ok ( my $payment_log_rs = $schema->resultset("PaymentLog"), 'payment log rs' );
-
-    is ($payment_log_rs->search( { status => 'created' } )->count, 1, '1 "created" log entries');
-    is ($payment_log_rs->search( { status => 'sent' } )->count, 1, '1 "sent" log entries');
-    is ($payment_log_rs->search( { status => 'failed' } )->count, 1, '1 "failed" log entries');
-    rest_post "/api/login",
-        code => 200,
-        [
-            email => $email,
-            password => 'foo'
-        ]
-    ;
     # Não tem como gerar uma sender hash pelo backend apenas no front.
     # logo não conseguimos testar a resposta da API do pagseguro para
     # transactions e notifications
