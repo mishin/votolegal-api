@@ -1270,7 +1270,13 @@ sub candidate_has_payment_created {
     if ($last_payment) {
         my $log = $last_payment->payment_logs->search(undef, { max => 'created_at' } )->next;
 
-        $log->status eq 'failed' ? $ret = 0 : $ret = 1;
+        if ($log->status eq 'failed' || $log->status eq 'sent') {
+            $ret = 0;
+        }
+        elsif ($log->status eq 'analysis') {
+            $ret = 1;
+        }
+
     } else {
         $ret = 0
     }

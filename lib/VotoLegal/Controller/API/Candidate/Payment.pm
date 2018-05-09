@@ -75,6 +75,13 @@ sub payment_POST {
 
     $candidate->send_payment_in_analysis_email();
 
+    $c->model("DB::PaymentLog")->create(
+        {
+            payment_id => $payment->id,
+            status     => 'analysis'
+        }
+    );
+
     $payment->update( { code => $payment_execution->{code} } );
 
     return $self->status_ok(
