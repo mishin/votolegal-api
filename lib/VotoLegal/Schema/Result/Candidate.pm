@@ -1262,9 +1262,6 @@ sub candidate_has_paid {
 sub candidate_has_payment_created {
     my ($self) = @_;
 
-    my $payment_rs     = $self->result_source->schema->resultset("Payment");
-    my $payment_log_rs = $self->result_source->schema->resultset("PaymentLog");
-
     my $current_payment_in_analysis = map {
         my $p = $_;
 
@@ -1273,7 +1270,13 @@ sub candidate_has_payment_created {
         } $p->payment_logs->all()
     } $self->payments->all;
 
-    return $current_payment_in_analysis ? \1 : \0;
+    my $ret = 0;
+
+    if ($current_payment_in_analysis) {
+        $ret = 1;
+    }
+
+    return $ret;
 }
 
 sub has_mandatoaberto_integration {
