@@ -1262,18 +1262,18 @@ sub candidate_has_paid {
 sub candidate_has_payment_created {
     my ($self) = @_;
 
-    my $current_payment_in_analysis = map {
-        my $p = $_;
-
-        map {
-            return $p if $_->status eq 'analysis'
-        } $p->payment_logs->all()
-    } $self->payments->all;
+    my @payments = $self->payments->all();
 
     my $ret = 0;
 
-    if ($current_payment_in_analysis) {
-        $ret = 1;
+    for my $payment ( @payments ) {
+        my @logs = $payment->payment_logs->all();
+
+        for my $log ( @logs ) {
+            if ($log->status eq 'analysis') {
+                $ret = 1;
+            }
+        }
     }
 
     return $ret;
