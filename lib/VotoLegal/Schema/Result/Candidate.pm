@@ -1262,7 +1262,21 @@ sub candidate_has_paid {
 sub candidate_has_payment_created {
     my ($self) = @_;
 
-    return $self->payments->count > 0 ? 1 : 0;
+    my $payment_rs     = $self->result_source->schema->resultset("Payment");
+
+    my $last_payment = $self->payments->search(undef, { max => 'created_at' } )->next;
+
+    my $ret;
+    if ($last_payment) {
+        my $log = $last_payment->payment_logs->search(undef, { max => 'created_at' } )->next;
+
+        $log->status eq 'failed' ? $ret = 0 : $ret = 1;
+    } else {
+        $ret = 0
+    }
+
+
+    return $ret;
 }
 
 sub has_mandatoaberto_integration {
