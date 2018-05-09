@@ -310,11 +310,11 @@ sub build_sender_object {
     };
 
     return {
-        hash      => $self->sender_hash,
-        name      => $self->name,
-        phone     => $self->build_phone_object(),
-        email     => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
-        documents => [ $document ]
+        senderHash => $self->sender_hash,
+        name       => $self->name,
+        phone      => $self->build_phone_object(),
+        email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
+        documents  => [ $document ]
     }
 }
 
