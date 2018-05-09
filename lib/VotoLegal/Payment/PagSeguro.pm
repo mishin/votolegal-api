@@ -85,7 +85,7 @@ sub createSession {
         }
     }
 
-    return $req->content;
+    return ;
 }
 
 sub transaction {
