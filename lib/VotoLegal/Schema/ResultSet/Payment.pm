@@ -120,6 +120,19 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
+            # Procuro se já há um pagamento em aberto
+            my $payment_in_analysis = map {
+                my $p = $_;
+
+                map {
+                    return $p if $_->status eq 'analysis'
+                } $p->payment_logs->all()
+            } $self->search( { candidate_id => $values{candidate_id} } )->all;
+
+            if ($payment_in_analysis) {
+                return $payment_in_analysis;
+            }
+
             my $payment = $self->create(\%values);
 
             # Criando entrada no log

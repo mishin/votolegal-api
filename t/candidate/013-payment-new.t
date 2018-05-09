@@ -166,7 +166,13 @@ db_transaction {
     is ($payment_log_rs->search( { status => 'created' } )->count, 1, '1 "created" log entries');
     is ($payment_log_rs->search( { status => 'sent' } )->count, 1, '1 "sent" log entries');
     is ($payment_log_rs->search( { status => 'failed' } )->count, 1, '1 "failed" log entries');
-
+    rest_post "/api/login",
+        code => 200,
+        [
+            email => $email,
+            password => 'foo'
+        ]
+    ;
     # Não tem como gerar uma sender hash pelo backend apenas no front.
     # logo não conseguimos testar a resposta da API do pagseguro para
     # transactions e notifications

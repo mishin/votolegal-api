@@ -73,6 +73,15 @@ sub callback_POST {
                 $c->log->error("Cloudflare error: $@") if $@;
             }
         }
+        else {
+            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+            $c->model("DB::PaymentLog")->create(
+                {
+                    payment_id => $payment->id,
+                    status     => 'captured'
+                }
+            );
+        }
     }
 
     return $self->status_ok( $c, entity => { success => 1 } );

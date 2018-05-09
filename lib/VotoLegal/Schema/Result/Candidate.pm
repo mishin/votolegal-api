@@ -1263,6 +1263,17 @@ sub candidate_has_payment_created {
     my ($self) = @_;
 
     my $payment_rs     = $self->result_source->schema->resultset("Payment");
+    my $payment_log_rs = $self->result_source->schema->resultset("PaymentLog");
+
+        use DDP;
+
+    my $current_payment_in_analysis = map {
+        my $p = $_;
+
+        map {
+            return $p if $_->status eq 'analysis'
+        } $p->payment_logs->all()
+    } $self->payments->all;
 
     my $last_payment = $self->payments->search(undef, { max => 'created_at' } )->next;
 
