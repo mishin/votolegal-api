@@ -1265,8 +1265,6 @@ sub candidate_has_payment_created {
     my $payment_rs     = $self->result_source->schema->resultset("Payment");
     my $payment_log_rs = $self->result_source->schema->resultset("PaymentLog");
 
-        use DDP;
-
     my $current_payment_in_analysis = map {
         my $p = $_;
 
@@ -1275,23 +1273,12 @@ sub candidate_has_payment_created {
         } $p->payment_logs->all()
     } $self->payments->all;
 
-    my $last_payment = $self->payments->search(undef, { max => 'created_at' } )->next;
-
     my $ret;
-    if ($last_payment) {
-        my $log = $last_payment->payment_logs->search(undef, { max => 'created_at' } )->next;
-
-        if ($log->status eq 'analysis') {
-            $ret = 1;
-        }
-        else {
-            $ret = 0;
-        }
-
+    if ($current_payment_in_analysis) {
+        $ret = 1;
     } else {
         $ret = 0
     }
-
 
     return $ret;
 }
