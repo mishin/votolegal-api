@@ -416,7 +416,7 @@ sub get_value {
     my $candidate = $self->candidate;
 
     my $value;
-    if ( $candidate->party_id == 33 || $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ ) {
+    if ( $candidate->party_id == 34 || $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ ) {
         $value = '2.00';
     }
     else {
