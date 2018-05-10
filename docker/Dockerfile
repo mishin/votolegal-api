@@ -19,6 +19,7 @@ USER root
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     postgresql-client \
+    libfile-mimeinfo-perl \
 && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 USER app
