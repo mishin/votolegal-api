@@ -71,6 +71,8 @@ sub payment_POST {
             }
         );
 
+        $c->stash->{candidate}->send_payment_not_approved_email();
+
         die \['Pagseguro: ', $payment_execution ];
     }
 
