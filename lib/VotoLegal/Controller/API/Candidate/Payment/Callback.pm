@@ -16,6 +16,7 @@ sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
     $c->stash->{collection} = $c->model('DB::PaymentNotification');
+    $c->response->headers->header( 'Lucas' => 'Lindo' );
 }
 
 sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
