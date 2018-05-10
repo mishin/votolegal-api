@@ -50,7 +50,7 @@ sub callback_POST {
             );
 
         }
-        else {
+        elsif ($status && ($status != 3 || $status != 4 ) ) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
             $c->model("DB::PaymentLog")->create(
                 {
@@ -58,6 +58,8 @@ sub callback_POST {
                     status     => 'failed'
                 }
             );
+            $c->stash->{candidate}->send_payment_not_approved_email();
+
         }
     }
 
