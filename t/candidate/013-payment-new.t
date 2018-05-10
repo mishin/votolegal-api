@@ -46,10 +46,10 @@ db_transaction {
 
     create_candidate_contract_signature($candidate_id);
 
-    rest_get "/api/candidate/$candidate_id/payment/session",
-        name    => "get session when not activated",
-        stash   => 's1'
-    ;
+    #rest_get "/api/candidate/$candidate_id/payment/session",
+    #    name    => "get session when not activated",
+    #    stash   => 's1'
+    #;
 
     my $fake_sender_hash       = '52578d5d3336ec7a43ff1dae4794d0c5625feddcc8fbc0e80bcb0cb46c9947d4';
     my $fake_credit_card_token = '1e358d39e26448dc8a28d0f1815f08c5';
