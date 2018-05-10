@@ -114,7 +114,11 @@ sub candidate_PUT {
 
     my $picture ;
     if (my $upload = $c->req->upload("picture")) {
-        $c->log->info($upload);
+
+        $c->log->info($upload->type);
+        $c->log->info($upload->size);
+        $c->log->info($upload->headers->as_string);
+
         $picture = $self->_upload_picture($upload, $c);
     }
 
