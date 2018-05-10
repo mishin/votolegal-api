@@ -1344,7 +1344,7 @@ __DATA__
                               <td height="50"></td>
                            </tr>
                            <tr>
-                              <td colspan="2"><a href="https://www.votolegal.org.br/" target="_blank"><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/fec4013c-fb33-4220-9a25-f0adfd89f971.png" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+                              <td colspan="2"><a href="https://www.votolegal.com.br/" target="_blank"><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/fec4013c-fb33-4220-9a25-f0adfd89f971.png" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
                            </tr>
                            <tr>
                               <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
@@ -1404,19 +1404,7 @@ __DATA__
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Suporte com especialistas;
-                                                </li>
-                                                <p></p>
-                                                <li>
-                                                    Cursos relacionados às estratégias eleitorais na Internet;
-                                                </li>
-                                                <p></p>
-                                                <li>
                                                     Painel de controle para acompanhamento das doações em tempo real;
-                                                </li>
-                                                <p></p>
-                                                <li>
-                                                    Plataforma Integrada com diversas operadoras financeiras;
                                                 </li>
                                                 <p></p>
                                                 <li>
@@ -1485,7 +1473,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
                                                   <strong>Para finalizar sua contratação <a href="https://www.votolegal.com.br" style="color:#4ab957"><b>clique aqui</b></a>.</strong>
                                                 </p>
                                                 <strong>
-                                                <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.org.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+                                                <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
                                                 </strong>
                                                 Equipe Voto Legal
                                              </strong>
@@ -1568,8 +1556,8 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Já se preparou para o cadastro completo? <a href="https://www.votolegal.org.br/documentos-para-cadastro" target="_blank" style="color:#4ab957">Acesse aqui</a> e visualize os itens necessários para realizar seu cadastro. Lembrando que você tem até o dia 14.08.2016 para deixar seu perfil completo, após essa data, o perfil ficará ativo e as doações começarão e não será possível alterar seu perfil.</p>
-  <p>Dúvidas? Acesse <a href="https://www.votolegal.org.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  <p>Já se preparou para o cadastro completo? <a href="https://www.votolegal.com.br/documentos-para-cadastro" target="_blank" style="color:#4ab957">Acesse aqui</a> e visualize os itens necessários para realizar seu cadastro. Lembrando que você tem até o dia 14.08.2016 para deixar seu perfil completo, após essa data, o perfil ficará ativo e as doações começarão e não será possível alterar seu perfil.</p>
+  <p>Dúvidas? Acesse <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
   Equipe Voto Legal</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
@@ -1617,7 +1605,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 <td height="50"></td>
 </tr>
 <tr>
-<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.org.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://www.votolegal.com.br/email/header.jpg" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
 </tr>
 <tr>
 <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
@@ -1628,7 +1616,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
     <p><span><b>Olá [% name %], </b><br>
       <br></span></p>
     <p>Enviamos este e-mail para informar que seu pré-cadastro no Voto Legal <strong>não foi aprovado</strong>. </p>
-    <p>Consulte as <a href="https://www.votolegal.org.br/perguntas-frequentes" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
+    <p>Consulte as <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">perguntas frequentes</a> para conhecer alguns dos motivos para um pré-cadastro não ser aprovado.      </p>
     <p>Entre em contato conosco para obter mais informações <a href="#" target="_blank" style="color:#4ab957">clicando aqui</a>. </p>
     <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
   </td>
@@ -1707,7 +1695,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
@@ -1808,7 +1796,7 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
 <p><b>Boa pré-campanha!</b></p>
-  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.org.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
