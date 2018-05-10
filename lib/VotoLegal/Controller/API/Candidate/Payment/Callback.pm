@@ -3,7 +3,6 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
-use Mojo::Cloudflare;
 use VotoLegal::Utils;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
@@ -50,29 +49,6 @@ sub callback_POST {
                 }
             );
 
-            my $config = $c->config;
-            if (!is_test() && $config->{cloudflare}->{enabled}) {
-                eval {
-                    my $cf = Mojo::Cloudflare->new(
-                        email => $config->{cloudflare}->{username},
-                        key   => $config->{cloudflare}->{apikey},
-                        zone  => $config->{cloudflare}->{zoneurl}
-                    );
-
-                    my $domain = $config->{cloudflare}->{zoneurl};
-                    my $test   = $cf->record(
-                        {
-                            content => $config->{cloudflare}->{dns_value},
-                            name    => $c->stash->{candidate}->username . '.' . $config->{cloudflare}->{zoneurl},
-                            type    => $config->{cloudflare}->{dns_type},
-                        }
-                    )->save;
-
-                    $test->service_mode(1);
-                    $test->save;
-                };
-                $c->log->error("Cloudflare error: $@") if $@;
-            }
         }
         else {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
