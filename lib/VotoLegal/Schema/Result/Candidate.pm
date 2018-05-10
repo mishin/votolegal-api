@@ -1869,9 +1869,9 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
     <p><span><b>Olá [% name %],</b><br>
       <br></span></p>
-    <p>Seu pedido de compra e contratação da plataforma Voto Legal, infelizmente, foi recusado.</p>
-    <p>Por favor, certifique-se de que não ouve nenhum débito no seu cartão de crédito e tente realizar o pagamento da plataforma novamente.</p>
-    <p>Para tal, basta logar-se novamente e repetir o processo de contratação.</p>
+    <p>Seu pedido de compra da plataforma Voto Legal não foi concluído.</p>
+    <p>Por favor, verifique-se com sua instituição financeira e tente realizar o pagamento da plataforma novamente.</p>
+    <p>Para reiniciar a contratação, basta logar-se novamente.</p>
     <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
   </td>
 </tr>
