@@ -46,3 +46,5 @@ export IUGU_ACCOUNT_ID="Filling"
 export IUGU_API_KEY="Filling"
 
 export MANDATOABERTO_SECURITY_TOKEN="Filling"
+
+export VOTOLEGAL_NO_GETH="1"
