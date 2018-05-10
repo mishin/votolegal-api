@@ -1266,19 +1266,17 @@ sub candidate_has_payment_created {
 
     my @payments = $self->payments->all();
 
-    my $ret = 0;
+    my $most_recent_payment = $self->payments->search(undef, { order_by => { '-desc' => 'created_at' } } )->first;
+    return 0 unless $most_recent_payment;
 
-    for my $payment ( @payments ) {
-        my @logs = $payment->payment_logs->all();
+    my $most_recent_payment_log = $most_recent_payment->payment_logs->search(undef, { order_by => { '-desc' => 'created_at' } } )->first;
 
-        for my $log ( @logs ) {
-            if ($log->status eq 'analysis') {
-                $ret = 1;
-            }
-        }
+    if ($most_recent_payment_log->status eq 'analysis') {
+        return 1;
     }
-
-    return $ret;
+    else {
+        return 0;
+    }
 }
 
 sub has_mandatoaberto_integration {
@@ -1311,6 +1309,22 @@ sub send_payment_approved_email {
         from     => 'no-reply@votolegal.org',
         subject  => "VotoLegal - Pagamento aprovado",
         template => get_data_section('payment_approved.tt'),
+        vars     => { name => $self->name },
+    )->build_email();
+
+    return $self->resultset('EmailQueue')->create({
+        body => $email->as_string,
+    });
+}
+
+sub send_payment_not_approved_email {
+    my ($self) = @_;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->user->email,
+        from     => 'no-reply@votolegal.org',
+        subject  => "VotoLegal - Pagamento aprovado",
+        template => get_data_section('payment_not_approved.tt'),
         vars     => { name => $self->name },
     )->build_email();
 
@@ -1796,6 +1810,76 @@ Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
 <p><b>Boa pré-campanha!</b></p>
+  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Equipe Voto Legal</p>
+</strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div>
+</body>
+</html>
+
+@@ payment_not_approved.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://votolegal.org.br/"><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/fec4013c-fb33-4220-9a25-f0adfd89f971.png" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Olá [% name %],</b><br>
+      <br></span></p>
+    <p>Seu pedido de compra e contratação da plataforma Voto Legal, infelizmente, foi recusado.</p>
+    <p>Por favor, certifique-se de que não ouve nenhum débito no seu cartão de crédito e tente realizar o pagamento da plataforma novamente.</p>
+    <p>Para tal, basta logar-se novamente e repetir o processo de contratação.</p>
+    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
+  </td>
+</tr>
+<tr>
+  <td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
   <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
