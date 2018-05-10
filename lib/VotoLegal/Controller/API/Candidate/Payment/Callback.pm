@@ -79,13 +79,24 @@ sub callback_POST {
             $c->model("DB::PaymentLog")->create(
                 {
                     payment_id => $payment->id,
-                    status     => 'captured'
+                    status     => 'failed'
                 }
             );
         }
     }
 
     return $self->status_ok( $c, entity => { success => 1 } );
+}
+
+sub callback_GET {
+    my ($self, $c) = @_;
+
+    return $self->status_ok(
+        $c,
+        entity => {
+            success => 1
+        }
+    );
 }
 
 =encoding utf8
