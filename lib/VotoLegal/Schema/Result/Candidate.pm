@@ -1082,8 +1082,10 @@ sub action_specs {
             }
 
             # Validando se o candidato preencheu todos os campos necessários para publicar sua página.
+
+            # TODO adicionar cnpj
             my @required = qw(
-                cnpj video_url summary biography raising_goal public_email picture
+                video_url summary biography raising_goal public_email picture
             );
 
             for (@required) {
