@@ -114,12 +114,7 @@ sub candidate_PUT {
 
     my $picture ;
     if (my $upload = $c->req->upload("picture")) {
-
-        $c->log->info($upload->type);
-        $c->log->info($upload->size);
-        $c->log->info($upload->headers->as_string);
-
-        $picture = $self->_upload_picture($upload, $c);
+        $picture = $self->_upload_picture($upload);
     }
 
     my $spending_spreadsheet ;
@@ -153,10 +148,10 @@ sub candidate_PUT {
 }
 
 sub _upload_picture {
-    my ($self, $upload, $c) = @_;
+    my ($self, $upload) = @_;
 
     my $mimetype = mimetype($upload->tempname);
-    $c->log->info($mimetype);
+
     die \['picture', 'empty file']    unless $upload->size > 0;
     die \['picture', 'invalid image'] unless $mimetype =~ m{^image\/};
 
