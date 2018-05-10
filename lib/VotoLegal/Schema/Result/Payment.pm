@@ -309,13 +309,31 @@ sub build_sender_object {
         }
     };
 
-    return {
-        senderHash => $self->sender_hash,
-        name       => $self->name,
-        phone      => $self->build_phone_object(),
-        email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
-        documents  => [ $document ]
+    # A API do Pagseguro, por algum motivo, requer em sandbox
+    # que o xml tenha o formato '<sender><senderHash></senderHash></sender>'
+    # e em prod '<sender><senderHash></senderHash></sender>'
+    my $ret;
+
+    if ($ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX}) {
+        $ret = {
+            senderHash => $self->sender_hash,
+            name       => $self->name,
+            phone      => $self->build_phone_object(),
+            email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
+            documents  => [ $document ]
+        }
     }
+    else {
+        $ret = {
+            hash       => $self->sender_hash,
+            name       => $self->name,
+            phone      => $self->build_phone_object(),
+            email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
+            documents  => [ $document ]
+        }
+    }
+
+    return $ret;
 }
 
 sub build_item_object {
