@@ -96,3 +96,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0090-deleting-offices [0089-add-political_movement-table] 2018-05-07T21:09:41Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Deleting the ('Prefeito', 'Vereador', 'Vice-prefeito') offices.
 0091-adding-candidate-birth_date [0090-deleting-offices] 2018-05-07T21:37:08Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'birth_date' col on the 'candidate' table
 0092-add-new-political-movements [0091-adding-candidate-birth_date] 2018-05-08T20:13:16Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding new political_movements
+0093-fix-refund-logic [0092-add-new-political-movements] 2018-05-11T05:24:43Z renato,,, <renato@notebook> # refund can happen anytime

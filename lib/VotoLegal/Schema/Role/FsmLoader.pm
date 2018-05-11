@@ -142,9 +142,9 @@ digraph $graph_name {
         style="filled,solid"
     ];
 
-    { rank=same not_authorized boleto_expired }
+    { rank=same refunded error_manual_check }
 
-    { rank=same capture_cc validate_payment}
+    { rank=same capture_cc validate_payment not_authorized boleto_expired}
     { rank=same boleto_authentication create_invoice}
     { rank=same register_capture }
 
