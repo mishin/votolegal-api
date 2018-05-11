@@ -435,13 +435,13 @@ sub get_value {
 
     my $value;
     if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ ) {
-        $value = '1.00';
+        $value = '395.00';
     }
     elsif ( $candidate->party_id == 34 ) {
-        $value = '1.00'
+        $value = '395.00'
     }
     else {
-        $value = '1.10';
+        $value = '494.00';
     }
 
     return $value;
