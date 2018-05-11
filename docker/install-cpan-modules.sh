@@ -17,6 +17,7 @@ cpanm -n App::Sqitch \
  Catalyst::Plugin::Authentication \
  Catalyst::Plugin::Authorization::Roles \
  Catalyst::Plugin::ConfigLoader \
+ Catalyst::Plugin::I18N \
  Catalyst::Plugin::Static::Simple \
  Catalyst::Runtime \
  Catalyst::Test \
