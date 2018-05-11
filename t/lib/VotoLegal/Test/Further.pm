@@ -178,6 +178,13 @@ sub get_config {
     return \%config;
 }
 
+sub error_is ($$) {
+    my ( $stash_name, $error_exp ) = @_;
+
+    is $obj->stash->{ $stash_name }{error}, $error_exp, "$stash_name is $error_exp";
+
+}
+
 sub create_candidate_contract_signature {
     my ($candidate_id) = @_;
 

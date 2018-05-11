@@ -8,6 +8,8 @@ use Catalyst qw/
   ConfigLoader
   Authentication
   Authorization::Roles
+  I18N
+
   /;
 
 BEGIN { $ENV{$_} or die "missing env '$_'." for qw/ RECAPTCHA_PUBKEY RECAPTCHA_PRIVKEY / }
@@ -19,6 +21,12 @@ our $VERSION = '0.01';
 __PACKAGE__->config(
     name     => 'VotoLegal',
     encoding => 'UTF-8',
+    'Plugin::I18N' => {
+        maketext_options => {
+            Path   => __PACKAGE__->path_to('lib/VotoLegal/I18N'),
+            Decode => 1,
+        }
+    },
 
     using_frontend_proxy => 1,
 

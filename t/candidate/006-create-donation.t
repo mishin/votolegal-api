@@ -5,6 +5,7 @@ use lib "$Bin/../lib";
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
+my $cpf    = '46223869762';
 
 db_transaction {
     create_candidate;
@@ -33,26 +34,49 @@ db_transaction {
 
     api_auth_as 'nobody';
 
-    my $cpf = '46223869762';
     generate_device_token;
 
     rest_post "/api2/donations",
       name   => "add donation",
-      stash => 'donation',
+      stash  => 'donation',
       params => {
         generate_rand_donator_data(),
 
-        candidate_id   => stash 'candidate.id',
-        device_authorization_token_id     => stash 'test_auth',
-        payment_method => 'credit_card',
-        cpf            => $cpf,
-        amount         => 3000,
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'credit_card',
+        cpf                           => $cpf,
+        amount                        => 3000,
       };
 
-
-
-
+    &test_dup_value;
 
 };
 
 done_testing();
+
+exit;
+
+sub test_dup_value {
+
+    db_transaction {
+        rest_post "/api2/donations",
+          name    => "add donation with same value",
+          code    => 400,
+          is_fail => 1,
+          stash   => 'donation.duplicated',
+          params  => {
+            generate_rand_donator_data(),
+
+            candidate_id                  => stash 'candidate.id',
+            device_authorization_token_id => stash 'test_auth',
+            payment_method                => 'credit_card',
+            cpf                           => $cpf,
+            amount                        => 3000,
+          };
+
+        error_is 'donation.duplicated', 'donation-repeated';
+
+    };
+
+}
