@@ -50,7 +50,7 @@ sub callback_POST {
             );
 
         }
-        elsif ($status && ($status != 3 || $status != 4 ) ) {
+        elsif ($status == 6 || $status == 7) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
             $c->model("DB::PaymentLog")->create(
                 {
@@ -60,6 +60,15 @@ sub callback_POST {
             );
             $c->stash->{candidate}->send_payment_not_approved_email();
 
+        }
+        elsif ($status == 2) {
+            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+            $c->model("DB::PaymentLog")->create(
+                {
+                    payment_id => $payment->id,
+                    status     => 'analysis'
+                }
+            );
         }
     }
 
