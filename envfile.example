@@ -44,6 +44,7 @@ export CERTIFACE_PASSWORD="Filling"
 export IUGU_API_URL="Filling"
 export IUGU_ACCOUNT_ID="Filling"
 export IUGU_API_KEY="Filling"
+export IUGU_API_TEST_MODE="1"
 
 export MANDATOABERTO_SECURITY_TOKEN="Filling"
 

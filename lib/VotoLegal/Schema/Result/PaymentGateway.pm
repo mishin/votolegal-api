@@ -54,6 +54,12 @@ __PACKAGE__->table("payment_gateway");
   data_type: 'text'
   is_nullable: 0
 
+=head2 class
+
+  data_type: 'text'
+  is_nullable: 1
+  original: {data_type => "varchar"}
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -66,6 +72,12 @@ __PACKAGE__->add_columns(
   },
   "name",
   { data_type => "text", is_nullable => 0 },
+  "class",
+  {
+    data_type   => "text",
+    is_nullable => 1,
+    original    => { data_type => "varchar" },
+  },
 );
 
 =head1 PRIMARY KEY
@@ -128,9 +140,25 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L0x4iEX1tRP0QpoLrD/Cqg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-11 16:45:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GuI0cZmWZ5eTkPqMlRIXMA
 
+use Carp;
+
+sub create_invoice {
+    my ($self ) = @_;
+
+    croak 'class not supported' unless $self->class eq 'IUGU';
+
+
+    return {
+        payment_info => {
+            todo => 1,
+        },
+        gateway_tid => 1,
+    };
+
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

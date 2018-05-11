@@ -12,3 +12,14 @@ msgstr "Já existe uma doação com valor mesmo valor com o seu CPF, tente novam
 
 msgid "invalid-user-agent"
 msgstr "Utilize outro navegador."
+
+msgid "msg_internal_we_are_in_loop"
+msgstr "Erro interno, em loop"
+
+msgid "msg_internal_error_try_again"
+msgstr "Erro interno, tente novamente mais tarde"
+
+msgid "msg_sorry"
+msgstr "Lamentamos pelo inconveniente"
+
+

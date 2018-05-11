@@ -98,3 +98,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0092-add-new-political-movements [0091-adding-candidate-birth_date] 2018-05-08T20:13:16Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding new political_movements
 0093-fix-refund-logic [0092-add-new-political-movements] 2018-05-11T05:24:43Z renato,,, <renato@notebook> # refund can happen anytime
 0094-adding-more-options-movement [0093-fix-refund-logic] 2018-05-11T13:55:43Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding 2 more options to the 'political_movement'
+0095-autocp [0094-adding-more-options-movement] 2018-05-11T17:48:28Z renato,,, <renato@renato-MS-7A34> # autocp

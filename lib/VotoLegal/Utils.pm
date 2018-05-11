@@ -23,29 +23,30 @@ Retorna 1 caso esteja rodando em uma suíte de testes.
 =cut
 
 sub is_test {
-    if ($ENV{HARNESS_ACTIVE} || $0 =~ m{forkprove}) {
+    if ( $ENV{HARNESS_ACTIVE} || $0 =~ m{forkprove} ) {
         return 1;
     }
     return 0;
 }
 
 sub left_padding_zeros {
-    my ($string, $pos) = @_;
+    my ( $string, $pos ) = @_;
 
-    my $padded = sprintf("%0${pos}s", $string);
+    my $padded = sprintf( "%0${pos}s", $string );
     $padded =~ tr/ /0/;
 
     return $padded;
 }
 
 sub left_padding_whitespaces {
-    my ($string, $pos) = @_;
+    my ( $string, $pos ) = @_;
 
-    return sprintf("%0${pos}s", $string);
+    return sprintf( "%0${pos}s", $string );
 }
 
 sub die_with {
-    die { message => shift, error_code => 400};
+    my $msg = shift;
+    die { message => $msg, error_code => 400, msg => $msg };
 }
 
 =head1 AUTHOR

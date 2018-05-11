@@ -33,14 +33,23 @@ sub donation_POST {
         with => $c->stash->{params}
     );
 
+    my $interface = $c->model('DB')->resultset('FsmState')->interface(
+        class => 'payment',
+        loc   => sub {
+            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+        },
+        donation => $donation,
+
+        supports => $self->_supports($c),
+    );
+
     $self->status_created(
         $c,
+        entity   => $interface,
         location => $c->uri_for_action(
             $c->action, $c->req->captures,
             $donation->id, { device_authorization_token_id => $donation->device_authorization_token_id }
-          )->as_string,
-
-        entity => $donation->as_row()
+        )->as_string
     );
 }
 
@@ -52,15 +61,42 @@ sub result : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {
 sub result_GET {
     my ( $self, $c ) = @_;
 
-    $self->status_ok( $c, entity => $c->stash->{donation}->as_row() );
+    my $interface = $c->model('DB')->resultset('FsmState')->interface(
+        class => 'payment',
+        loc   => sub {
+            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+        },
+        donation => $c->stash->{donation},
+
+        supports => $self->_supports($c),
+    );
+
+    $self->status_ok( $c, entity => $interface );
+
 }
 
 sub result_POST {
     my ( $self, $c ) = @_;
 
-    $c->stash->{donation}->apply( $c->stash->{params} );
+    my $interface = $c->model('DB')->resultset('FsmState')->apply_interface(
+        class => 'payment',
+        loc   => sub {
+            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+        },
+        donation  => $c->stash->{donation},
+        params    => $c->stash->{params},
 
-    $self->status_ok( $c, entity => $c->stash->{donation}->as_row() );
+        supports => $self->_supports($c),
+
+    );
+
+    $self->status_ok( $c, entity => $interface );
+
+}
+
+# nao temos nada ainda pelo navegador..
+sub _supports {
+    {};
 }
 
 __PACKAGE__->meta->make_immutable;

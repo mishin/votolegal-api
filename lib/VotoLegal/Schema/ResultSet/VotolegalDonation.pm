@@ -298,6 +298,8 @@ sub _create_donation {
         }
     );
 
+    $donation->discard_changes;
+
     return $donation;
 }
 

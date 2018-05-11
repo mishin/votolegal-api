@@ -32,7 +32,7 @@ sub _get_fms_simple {
             $machine->add_state(
                 name => $state_name,
                 sub  => sub {
-                    return SFC::Schema::ResultSet::FsmState::_process_state( $state_name, $loc, @_ );
+                    return VotoLegal::Schema::ResultSet::FsmState::_process_state( $state_name, $loc, @_ );
                 }
             );
         }
@@ -145,7 +145,7 @@ digraph $graph_name {
     { rank=same refunded error_manual_check }
 
     { rank=same capture_cc validate_payment not_authorized boleto_expired}
-    { rank=same boleto_authentication create_invoice}
+    { rank=same boleto_authentication credit_card_form}
     { rank=same register_capture }
 
     { rank=same created wait_for_compensation  }
