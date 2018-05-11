@@ -39,7 +39,6 @@ db_transaction {
     rest_post "/api2/donations",
       name   => "add donation",
       stash => 'donation',
-      code   => 200,
       params => {
         generate_rand_donator_data(),
 

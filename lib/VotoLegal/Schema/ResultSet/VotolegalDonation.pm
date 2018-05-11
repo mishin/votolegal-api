@@ -12,6 +12,8 @@ use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Utils;
 
+use UUID::Tiny qw/is_uuid_string/;
+
 sub resultset {
     my $self = shift;
 
@@ -22,6 +24,26 @@ sub verifiers_specs {
     my $self = shift;
 
     return {
+        search => Data::Verifier->new(
+            filters => [qw(trim)],
+            profile => {
+                device_authorization_token_id => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        my $v = $_[0]->get_value('device_authorization_token_id');
+                        return is_uuid_string($v);
+                    },
+                },
+                donation_id => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        return is_uuid_string( $_[0]->get_value('donation_id') );
+                    },
+                },
+            }
+        ),
         create => Data::Verifier->new(
             filters => [qw(trim)],
             profile => {
@@ -193,6 +215,21 @@ sub action_specs {
             my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 
             my $donation = $self->_create_donation( config => $config, values => \%values );
+
+            return $donation;
+        },
+        search => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+
+            my $donation = $self->search(
+                {
+                    id                            => $values{donation_id},
+                    device_authorization_token_id => $values{device_authorization_token_id},
+                }
+            )->next;
+            die_with 'donation-not-found' unless $donation;
 
             return $donation;
         },
