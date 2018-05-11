@@ -114,11 +114,44 @@ sub _draw_machine {
 digraph $graph_name {
     rankdir=LR;
     size="$size";
-    node [shape = circle]; is_account_loaded;
-    node [color = "#FF00FF"]; is_account_loaded;
+    node [shape = doublecircle]; created;
     node [shape = circle];
     node [color = "#000000"];
-$transitions
+
+    $transitions
+
+    not_authorized, boleto_expired [
+        color="black",
+        fillcolor="#ffbfc6",
+        style="filled,solid"
+    ];
+    register_capture [
+        color="black",
+        fillcolor="#68ffa7",
+        style="filled,solid"
+    ];
+
+    capture_cc, validate_payment [
+        color="black",
+        fillcolor="#60afff",
+        style="filled,solid"
+    ];
+    refunded, error_manual_check [
+        color="black",
+        fillcolor="#ffd6bf",
+        style="filled,solid"
+    ];
+
+    { rank=same not_authorized boleto_expired }
+
+    { rank=same capture_cc validate_payment}
+    { rank=same boleto_authentication create_invoice}
+    { rank=same register_capture }
+
+    { rank=same created wait_for_compensation  }
+
+    { rank=same register_refund pending_refund_register}
+
 }
     |;
 
@@ -130,9 +163,9 @@ $transitions
     open my $fx, '>:raw', '/tmp/fsm';
     print $fx $x;
     close $fx;
-    my $name = "/tmp/votolegal-payment.png";
+    my $name = "/tmp/votolegal-payment.svg";
 
-    `cat /tmp/fsm | dot -Tpng > $name`;
+    `cat /tmp/fsm | dot -Tsvg > $name`;
 
     return $name;
 }
