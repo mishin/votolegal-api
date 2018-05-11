@@ -109,6 +109,7 @@ my %WriteMakefileArgs = (
     "Try::Tiny::Retry" => 0,
     "URI" => 0,
     "URI::Escape" => 0,
+    "UUID::Tiny" => "1.04",
     "Unix::Whereis" => 0,
     "WebService::Slack::IncomingWebHook" => 0,
     "XML::Hash::XS" => 0,
@@ -136,7 +137,7 @@ my %WriteMakefileArgs = (
     "blib" => "1.01",
     "lib" => 0
   },
-  "VERSION" => 20180510,
+  "VERSION" => 20180511,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/ethereum/*.t t/misc/*.t t/workers/*.t"
   }
@@ -246,6 +247,7 @@ my %FallbackPrereqs = (
   "Try::Tiny::Retry" => 0,
   "URI" => 0,
   "URI::Escape" => 0,
+  "UUID::Tiny" => "1.04",
   "Unix::Whereis" => 0,
   "WebService::Slack::IncomingWebHook" => 0,
   "XML::Hash::XS" => 0,
