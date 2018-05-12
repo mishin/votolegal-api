@@ -240,8 +240,15 @@ sub _process_start_cc_payment {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
     my $info = $donation->payment_info_parsed;
-
     $stash->{value} = $info->{_charge_response_}{'LR'} eq '00' ? 'cc_authorized' : 'cc_not_authorized';
+
+    $stash->{messages} = [
+        {
+            type => 'msg',
+            text => $loc->( 'msg_' . $stash->{value} ),
+        }
+    ];
+
 }
 
 sub _process_capture_cc {
@@ -249,11 +256,19 @@ sub _process_capture_cc {
 
     eval { $donation->capture_cc };
     my $err = $@;
-    if ( $err ) {
+    if ($err) {
         $stash->{capture_error_message} = $err;
     }
 
     $stash->{value} = $err ? 'error' : 'captured';
+
+
+    $stash->{messages} = [
+        {
+            type => 'msg',
+            text => $loc->( 'msg_capture_cc_for_' . $stash->{value} ),
+        }
+    ];
 
 }
 
