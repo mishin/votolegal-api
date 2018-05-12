@@ -147,8 +147,6 @@ with 'VotoLegal::Schema::Role::ResultsetFind';
 
 sub create_invoice {
     my ( $self, %opts ) = @_;
-    use DDP;
-    p \%opts;
 
     croak 'class not supported' unless $self->class eq 'IUGU';
 

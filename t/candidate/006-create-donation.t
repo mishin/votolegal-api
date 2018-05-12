@@ -73,7 +73,7 @@ db_transaction {
         credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95'
       };
 
-    assert_current_step('start_cc_payment');
+    assert_current_step('register_capture');
     use DDP;
     p $response;
 

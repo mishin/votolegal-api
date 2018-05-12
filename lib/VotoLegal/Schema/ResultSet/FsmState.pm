@@ -160,7 +160,8 @@ sub on_state_enter {
 
         $donation->_create_invoice();
 
-    }else{
+    }
+    else {
         return undef;
     }
 
@@ -223,8 +224,37 @@ sub _process_state {
         &_process_credit_card_form(@params);
 
     }
+    elsif ( $state eq 'start_cc_payment' ) {
+        &_process_start_cc_payment(@params);
+
+    }
+    elsif ( $state eq 'capture_cc' ) {
+        &_process_capture_cc(@params);
+
+    }
 
     return $stash;
+}
+
+sub _process_start_cc_payment {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    my $info = $donation->payment_info_parsed;
+
+    $stash->{value} = $info->{_charge_response_}{'LR'} eq '00' ? 'cc_authorized' : 'cc_not_authorized';
+}
+
+sub _process_capture_cc {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    eval { $donation->capture_cc };
+    my $err = $@;
+    if ( $err ) {
+        $stash->{capture_error_message} = $err;
+    }
+
+    $stash->{value} = $err ? 'error' : 'captured';
+
 }
 
 sub _process_credit_card_form {
@@ -321,7 +351,6 @@ sub apply_interface {
 
     $interface_ui->{messages} = [ @{ $apply->{prepend_messages} }, @{ $interface_ui->{messages} } ]
       if exists $apply->{prepend_messages} && defined $apply->{prepend_messages};
-
 
     $interface->{donation} = $opts{donation}->as_row();
     return $interface;
