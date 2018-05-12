@@ -367,7 +367,6 @@ sub stash_parsed {
 
 sub set_new_state {
     my ( $self, $new_state, $new_stash ) = @_;
-
     $self->update(
         {
             state => $new_state,
@@ -386,15 +385,33 @@ sub payment_info_parsed {
 sub _create_invoice {
     my ($self) = @_;
 
+    my $stash = $self->stash_parsed;
+
     my $gateway = $self->payment_gateway;
     my $immu    = $self->votolegal_donation_immutable;
 
     my $invoice = $gateway->create_invoice(
-        {
+        credit_card_token => $stash->{credit_card_token},
+        is_boleto         => $self->is_boleto,
 
-            amount => $immu->amount,
+        amount       => $immu->amount,
+        candidate_id => $self->candidate_id,
 
-        }
+        donation_id => $self->id(),
+
+        payer => {
+            cpf_cnpj => $immu->get_column('donor_cpf'),
+            name     => $immu->donor_name,
+            address  => {
+                state    => $immu->billing_address_state,
+                city     => $immu->billing_address_city,
+                district => $immu->billing_address_district,
+                zip_code => $immu->billing_address_zipcode,
+                street   => $immu->billing_address_street,
+                number   => $immu->billing_address_house_number,
+            }
+          }
+
     );
 
     my $payment_info = $self->payment_info_parsed;

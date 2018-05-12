@@ -16,6 +16,7 @@ use Business::BR::CPF qw(random_cpf);
 use Business::BR::CNPJ qw(random_cnpj format_cnpj);
 use Data::Fake qw(Core Company Dates Internet Names Text);
 
+our $iugu_invoice_response;
 # ugly hack
 sub import {
     strict->import;
@@ -181,7 +182,7 @@ sub get_config {
 sub error_is ($$) {
     my ( $stash_name, $error_exp ) = @_;
 
-    is $obj->stash->{ $stash_name }{error}, $error_exp, "$stash_name is $error_exp";
+    is $obj->stash->{$stash_name}{error}, $error_exp, "$stash_name is $error_exp";
 
 }
 
@@ -238,6 +239,7 @@ sub generate_rand_donator_data {
 }
 
 our $sessionkey;
+
 sub set_current_dev_auth {
     $sessionkey = shift;
 }
@@ -261,9 +263,8 @@ sub messages2str ($) {
 sub form2str ($) {
     my ($where) = @_;
 
-    ( join ' ', map { $_->{ref} } grep { $_->{type} =~  /form/ } @{ $where->{ui}{messages} || [] } );
+    ( join ' ', map { $_->{ref} } grep { $_->{type} =~ /form/ } @{ $where->{ui}{messages} || [] } );
 }
-
 
 sub assert_current_step ($) {
     my ($stepname) = @_;
@@ -279,4 +280,142 @@ sub assert_current_step ($) {
     }
 }
 
+sub setup_sucess_mock_iugu {
+
+    $iugu_invoice_response = {
+        advance_fee       => undef,
+        advance_fee_cents => undef,
+        bank_slip         => undef,
+        cc_emails         => undef,
+        _charge_response_ => {
+            errors         => {},
+            identification => undef,
+            invoice_id     => "688E8415E2D744C0BA819F6BC1D2092C",
+            LR             => "00",
+            message        => "Autorizado",
+            pdf            => "https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb.pdf",
+            success        => \1,
+            url            => "https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb"
+        },
+        commission                    => "R\$ 0,00",
+        commission_cents              => undef,
+        created_at                    => "12/05, 14:36 h",
+        created_at_iso                => "2018-05-12T14:36:14-03:00",
+        currency                      => "BRL",
+        customer_id                   => undef,
+        customer_name                 => undef,
+        customer_ref                  => undef,
+        custom_variables              => [],
+        discount                      => undef,
+        discount_cents                => undef,
+        due_date                      => "2018-05-17",
+        early_payment_discount        => \0,
+        early_payment_discounts       => [],
+        email                         => "1b7f9734-f24c-4c52-935e-c7fe4af78386\@no-email.com",
+        financial_return_date         => undef,
+        financial_return_dates        => undef,
+        fines_on_occurrence_day       => undef,
+        fines_on_occurrence_day_cents => undef,
+        id                            => "688E8415E2D744C0BA819F6BC1D2092C",
+        ignore_canceled_email         => undef,
+        ignore_due_email              => undef,
+        installments                  => undef,
+        interest                      => undef,
+        items                         => [
+            {
+                created_at  => "2018-05-12T14:36:14-03:00",
+                description => "Doação para pre-campanha Conley CPF 25991717923",
+                id          => "E16AEC8787B844469C56F20C0C5144E8",
+                price       => "R\$ 30,00",
+                price_cents => 3000,
+                quantity    => 1,
+                updated_at  => "2018-05-12T14:36:14-03:00"
+            }
+        ],
+        items_total_cents => 3000,
+        logs              => [
+            {
+                created_at  => "12/05, 14:36 h",
+                description => "Email de Lembrete enviado!",
+                id          => "FB5AB9BB478F4DAA996DCF7891522AA4",
+                notes       => "Lembrete enviado com sucesso para: 1b7f9734-f24c-4c52-935e-c7fe4af78386\@no-email.com"
+            }
+        ],
+        notification_url              => undef,
+        occurrence_date               => undef,
+        overpaid_cents                => undef,
+        paid                          => "R\$ 0,00",
+        paid_at                       => undef,
+        paid_cents                    => undef,
+        payable_with                  => "credit_card",
+        payment_method                => undef,
+        refundable                    => undef,
+        return_url                    => undef,
+        secure_id                     => "688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb",
+        secure_url                    => "https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb",
+        status                        => "pending",
+        tax_cents                     => undef,
+        taxes_paid                    => "R\$ 0,00",
+        taxes_paid_cents              => undef,
+        total                         => "R\$ 30,00",
+        total_cents                   => 3000,
+        total_on_occurrence_day       => undef,
+        total_on_occurrence_day_cents => undef,
+        total_overpaid                => "R\$ 0,00",
+        total_paid                    => "R\$ 0,00",
+        total_paid_cents              => 0,
+        transaction_number            => 1111,
+        updated_at                    => "2018-05-12T14:36:14-03:00",
+        updated_at_iso                => "2018-05-12T14:36:14-03:00",
+        user_id                       => undef,
+        variables                     => [
+            {
+                id       => "B883534D6E2C43C4802EB56AEE442F78",
+                value    => "Iguape",
+                variable => "payer.address.city"
+            },
+            {
+                id       => "F313AB046939443996099499245DE18F",
+                value    => "Centro",
+                variable => "payer.address.district"
+            },
+            {
+                id       => "887E691DC9C64B32815BE03B403477BD",
+                value    => 419,
+                variable => "payer.address.number"
+            },
+            {
+                id       => "CE862B059E6F4692981DF694D6A3CABD",
+                value    => "SP",
+                variable => "payer.address.state"
+            },
+            {
+                id       => "E3A8874151B64325B5C269887A6073E8",
+                value    => "Rua Tiradentes",
+                variable => "payer.address.street"
+            },
+            {
+                id       => "C459FF174A794C338D41A8590E8DD083",
+                value    => "11920-000",
+                variable => "payer.address.zip_code"
+            },
+            {
+                id       => "951AB9DE8E104F35AFCE88270EA8F302",
+                value    => 46223869762,
+                variable => "payer.cpf_cnpj"
+            },
+            {
+                id       => "288E352ADD3F439F95F13DA9EF283F90",
+                value    => "Ashlynn Destinee Sullivan",
+                variable => "payer.name"
+            },
+            {
+                id       => "7EC745F3EA194132974AB2B9240A918B",
+                value    => 1111,
+                variable => "payment_data.transaction_number"
+            }
+        ]
+    }
+
+}
 1;

@@ -110,6 +110,8 @@ sub _apply {
             my $new_stash = $fms_simple->{states}{$current_state}{sub_to_run}( $donation, $params );
             my $result = delete $new_stash->{value};
 
+            use DDP;
+            p $new_stash;
             $force_messages   = delete $new_stash->{messages};
             $prepend_messages = delete $new_stash->{prepend_messages};
 
@@ -122,11 +124,19 @@ sub _apply {
 
                 $current_state = $fms_simple->{states}{$current_state}{transitions}{$result};
 
+                # atualiza a stash antes de ir chamar o on_state_enter
+                $donation->set_new_state( $current_state, $new_stash );
+
                 $new_stash = &on_state_enter( $donation, $new_stash, $current_state, $params );
 
-            }
+                # salva a stash novamente se mudou algo
+                $donation->set_new_state( $current_state, $new_stash ) if $new_stash;
 
-            $donation->set_new_state( $current_state, $new_stash );
+            }
+            else {
+
+                $donation->set_new_state( $current_state, $new_stash );
+            }
         }
     );
 
@@ -138,15 +148,20 @@ sub on_state_enter {
 
     if ( $entering_state eq 'waiting_boleto_authention' ) {
 
+        $donation->_create_invoice();
 
-            $donation->_create_invoice();
-
-
-    }elsif($entering_state eq 'credit_card_form' ){
-
+    }
+    elsif ( $entering_state eq 'credit_card_form' ) {
 
         $donation->_generate_payment_credit_card();
 
+    }
+    elsif ( $entering_state eq 'start_cc_payment' ) {
+
+        $donation->_create_invoice();
+
+    }else{
+        return undef;
     }
 
     return $new_stash;
@@ -177,14 +192,13 @@ sub _messages_of_state {
                 text => $loc->('msg_add_credit_card'),
             },
             {
-                ref     => 'credit_card_token',
-                type    => 'credit_card_form/iugu',
+                ref        => 'credit_card_token',
+                type       => 'credit_card_form/iugu',
                 account_id => $info->{account_id},
                 is_testing => $info->{is_testing},
 
             }
         );
-
 
     }
 
@@ -201,22 +215,49 @@ sub _process_state {
 
     if ( $state eq 'created' ) {
 
-        if ( $donation->is_boleto && $ENV{BOLETO_NEED_AUTHROIZATION} ) {
-            $stash->{value} = 'BoletoWithAuth';
-        }
-        elsif ( $donation->is_boleto ) {
-            $stash->{value} = 'BoletoWithoutAuth';
-        }
-        else {
-            $stash->{value} = 'CreditCard';
-        }
+        &_process_created(@params);
+
+    }
+    elsif ( $state eq 'credit_card_form' ) {
+
+        &_process_credit_card_form(@params);
 
     }
 
-    use DDP;
-    p $stash;
-
     return $stash;
+}
+
+sub _process_credit_card_form {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    if ( !$params->{credit_card_token} ) {
+
+        $stash->{prepend_messages} = [
+            {
+                type  => 'msg',
+                style => 'error',
+                text  => $loc->('msg_invalid_cc_token'),
+            }
+        ];
+        return;
+    }
+
+    $stash->{credit_card_token} = $params->{credit_card_token};
+    $stash->{value}             = 'credit_card_added';
+}
+
+sub _process_created {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    if ( $donation->is_boleto && $ENV{BOLETO_NEED_AUTHROIZATION} ) {
+        $stash->{value} = 'BoletoWithAuth';
+    }
+    elsif ( $donation->is_boleto ) {
+        $stash->{value} = 'BoletoWithoutAuth';
+    }
+    else {
+        $stash->{value} = 'CreditCard';
+    }
 }
 
 sub shift_until_input {
@@ -281,6 +322,8 @@ sub apply_interface {
     $interface_ui->{messages} = [ @{ $apply->{prepend_messages} }, @{ $interface_ui->{messages} } ]
       if exists $apply->{prepend_messages} && defined $apply->{prepend_messages};
 
+
+    $interface->{donation} = $opts{donation}->as_row();
     return $interface;
 }
 1;

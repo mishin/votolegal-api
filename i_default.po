@@ -25,5 +25,9 @@ msgstr "Lamentamos pelo inconveniente"
 msgid "msg_add_credit_card"
 msgstr "Por favor, informe seu cartão de crédito"
 
+msgid "msg_invalid_cc_token"
+msgstr "Token não recebido ou inválido"
+
+
 
 

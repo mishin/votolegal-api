@@ -23,7 +23,7 @@ db_transaction {
 
     $candidate->update( { username => 'teste.votolegal' } );
 
-    api_auth_as => 'nobody';
+    api_auth_as 'nobody';
 
     rest_post "/api/candidate/mandatoaberto_integration",
         name    => 'integration without email',

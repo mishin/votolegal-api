@@ -4,7 +4,7 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
-my $response;
+my ( $response, $donation_url );
 my $schema = VotoLegal->model('DB');
 my $cpf    = '46223869762';
 
@@ -53,9 +53,32 @@ db_transaction {
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
     is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
+
+    $donation_url = "/api2/donations/" . $response->{donation}{id};
     &test_dup_value;
 
+    $response = rest_post $donation_url,
+      code   => 200,
+      name   => 'tenta dar post sem enviar dados',
+      params => { device_authorization_token_id => stash 'test_auth', };
+    assert_current_step('credit_card_form');
+    is messages2str $response, 'msg_invalid_cc_token msg_add_credit_card', 'error msg included';
 
+    setup_sucess_mock_iugu;
+
+    $response = rest_post $donation_url,
+      code   => 200,
+      params => {
+        device_authorization_token_id => stash 'test_auth',
+        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95'
+      };
+
+    assert_current_step('start_cc_payment');
+    use DDP;
+    p $response;
+
+    #is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
+    #is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
 
 };
 
