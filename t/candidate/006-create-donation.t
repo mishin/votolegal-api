@@ -4,6 +4,7 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
+my $response;
 my $schema = VotoLegal->model('DB');
 my $cpf    = '46223869762';
 
@@ -35,10 +36,10 @@ db_transaction {
     api_auth_as 'nobody';
 
     generate_device_token;
+    set_current_dev_auth( stash 'test_auth' );
 
-    rest_post "/api2/donations",
+    $response = rest_post "/api2/donations",
       name   => "add donation",
-      stash  => 'donation',
       params => {
         generate_rand_donator_data(),
 
@@ -49,7 +50,12 @@ db_transaction {
         amount                        => 3000,
       };
 
+    assert_current_step('credit_card_form');
+    is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
+    is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
     &test_dup_value;
+
+
 
 };
 

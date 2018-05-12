@@ -321,7 +321,6 @@ use JSON qw/to_json from_json/;
 
 sub resultset { shift->result_source->resultset }
 
-=pod
 sub as_row {
     my ($self) = @_;
 
@@ -349,7 +348,6 @@ sub as_row {
     return $ret;
 
 }
-=cut
 
 sub obtain_lock {
     my ($self) = @_;
@@ -380,6 +378,11 @@ sub set_new_state {
     return 1;
 }
 
+sub payment_info_parsed {
+    my ($self) = @_;
+    return $self->payment_info ? from_json( $self->payment_info ) : {};
+}
+
 sub _create_invoice {
     my ($self) = @_;
 
@@ -394,14 +397,34 @@ sub _create_invoice {
         }
     );
 
+    my $payment_info = $self->payment_info_parsed;
+    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
     $self->update(
         {
             gateway_tid  => $invoice->{gateway_tid},
-            payment_info => to_json( $invoice->{payment_info} ),
-
+            payment_info => to_json($payment_info),
         }
     );
 
+}
+
+sub _generate_payment_credit_card {
+
+    my ($self) = @_;
+
+    my $gateway = $self->payment_gateway;
+
+    my $invoice = $gateway->data_for_credit_card_generation();
+
+    my $payment_info = $self->payment_info_parsed;
+    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
+    $self->update(
+        {
+            payment_info => to_json($payment_info),
+        }
+    );
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

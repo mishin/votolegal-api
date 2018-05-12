@@ -1,7 +1,7 @@
 package VotoLegal::Controller::API2::Donation;
 use Moose;
 use namespace::autoclean;
-use VotoLegal::Utils qw/die_with/;
+use VotoLegal::Utils qw/die_with is_test/;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -36,7 +36,7 @@ sub donation_POST {
     my $interface = $c->model('DB')->resultset('FsmState')->interface(
         class => 'payment',
         loc   => sub {
-            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+            return is_test() ? join( '', @_ ) : $c->loc(@_);
         },
         donation => $donation,
 
@@ -64,7 +64,7 @@ sub result_GET {
     my $interface = $c->model('DB')->resultset('FsmState')->interface(
         class => 'payment',
         loc   => sub {
-            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+            return is_test() ? join( '', @_ ) : $c->loc(@_);
         },
         donation => $c->stash->{donation},
 
@@ -81,7 +81,7 @@ sub result_POST {
     my $interface = $c->model('DB')->resultset('FsmState')->apply_interface(
         class => 'payment',
         loc   => sub {
-            return IS_TEST() ? join( '', @_ ) : $c->loc(@_);
+            return is_test() ? join( '', @_ ) : $c->loc(@_);
         },
         donation  => $c->stash->{donation},
         params    => $c->stash->{params},

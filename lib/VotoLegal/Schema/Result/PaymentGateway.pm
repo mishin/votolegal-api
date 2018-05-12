@@ -160,6 +160,21 @@ sub create_invoice {
 
 }
 
+sub data_for_credit_card_generation {
+    my ($self ) = @_;
+
+    croak 'class not supported' unless $self->class eq 'IUGU';
+
+    return {
+        payment_info => {
+            is_testing => $ENV{IUGU_API_IS_TEST} ? 1 : 0,
+            account_id => $ENV{IUGU_ACCOUNT_ID},
+        },
+
+    };
+
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

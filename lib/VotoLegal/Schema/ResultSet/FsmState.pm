@@ -29,6 +29,7 @@ sub interface {
     my $max_auto_continues = 10;
     my $state_config       = $config->{ $opts{donation}->state() };
 
+    my $last_change = '';
     if ($state_config) {
         my @messages = $self->_messages_of_state(%opts);
       REPEAT:
@@ -38,6 +39,7 @@ sub interface {
 
             push @messages, @{ $apply->{force_messages} || [] };
 
+            $last_change  = $opts{donation}->state();
             $state_config = $config->{ $opts{donation}->state() };
 
             push @messages, $self->_messages_of_state(%opts);
@@ -49,6 +51,19 @@ sub interface {
         }
 
         $interface->{messages} = \@messages;
+
+        # esse aqui precisa verificar a cada GET
+        # uma coisa que precisa de lock
+        if ( $opts{donation}->state() eq 'boleto_authentication' && $last_change ne 'boleto_authentication' ) {
+            my $apply = $self->_apply(%opts);
+            $opts{donation} = $apply->{newer_donation};
+
+            push @messages, @{ $apply->{force_messages} || [] };
+
+            $state_config = $config->{ $opts{donation}->state() };
+
+            push @messages, $self->_messages_of_state(%opts);
+        }
 
     }
 
@@ -69,6 +84,8 @@ sub interface {
         ];
 
     }
+
+    $other{donation} = $opts{donation}->as_row();
 
     return { ui => $interface, %other };
 }
@@ -119,11 +136,16 @@ sub _apply {
 sub on_state_enter {
     my ( $donation, $new_stash, $entering_state, $params ) = @_;
 
-    if ( $entering_state eq 'create_invoice' ) {
+    if ( $entering_state eq 'waiting_boleto_authention' ) {
 
-        if ( $donation->is_boleto ) {
+
             $donation->_create_invoice();
-        }
+
+
+    }elsif($entering_state eq 'credit_card_form' ){
+
+
+        $donation->_generate_payment_credit_card();
 
     }
 
@@ -141,28 +163,28 @@ sub _messages_of_state {
     my $state = $opts{donation}->state();
     my $state_config = $config->{$state} || croak "_messages_of_state called for bugous state '$state'";
 
-    if ( $state eq 'create_invoice' ) {
+    if ( $state eq 'credit_card_form' ) {
 
         my $donation = $opts{donation};
 
+        my $info = $donation->payment_info_parsed;
         use DDP;
         p $donation;
 
-        if ( $donation->is_boleto ) {
+        @messages = (
+            {
+                type => 'msg',
+                text => $loc->('msg_add_credit_card'),
+            },
+            {
+                ref     => 'credit_card_token',
+                type    => 'credit_card_form/iugu',
+                account_id => $info->{account_id},
+                is_testing => $info->{is_testing},
 
-            @messages = (
-                {
-                    type => 'msg',
-                    text => $loc->('msg_'),
-                },
-                {
-                    ref     => 'action_id',
-                    type    => 'selection/single',
-                    options => [ { id => 'lets_go', text => $loc->('btn_lets_go') } ],
-                }
-            );
+            }
+        );
 
-        }
 
     }
 

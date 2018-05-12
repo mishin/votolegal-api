@@ -237,4 +237,46 @@ sub generate_rand_donator_data {
     return wantarray ? %$info : $info;
 }
 
+our $sessionkey;
+sub set_current_dev_auth {
+    $sessionkey = shift;
+}
+
+sub get_current_stash () {
+    my $schema = VotoLegal->model('DB');
+
+    my $row = $schema->resultset('DeviceSession')->search( { device_authorization_token_id => $sessionkey } )->next;
+    if ($row) {
+        return decode_json( $row->stash );
+    }
+    return undef;
+}
+
+sub messages2str ($) {
+    my ($where) = @_;
+
+    ( join ' ', map { $_->{text} } grep { $_->{type} eq 'msg' } @{ $where->{ui}{messages} || [] } );
+}
+
+sub form2str ($) {
+    my ($where) = @_;
+
+    ( join ' ', map { $_->{ref} } grep { $_->{type} =~  /form/ } @{ $where->{ui}{messages} || [] } );
+}
+
+
+sub assert_current_step ($) {
+    my ($stepname) = @_;
+    my $schema = VotoLegal->model('DB');
+
+    my $row = $schema->resultset('VotolegalDonation')->search( { device_authorization_token_id => $sessionkey } )->next;
+    if ($row) {
+        unless ( is( $row->state, $stepname, "current state is $stepname" ) ) {
+            my $str = 'Real fail is on' . ( join " - ", caller() ) . "\n\n";
+            print STDERR $str;
+            exit(1);
+        }
+    }
+}
+
 1;

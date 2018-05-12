@@ -22,4 +22,8 @@ msgstr "Erro interno, tente novamente mais tarde"
 msgid "msg_sorry"
 msgstr "Lamentamos pelo inconveniente"
 
+msgid "msg_add_credit_card"
+msgstr "Por favor, informe seu cartão de crédito"
+
+
 
