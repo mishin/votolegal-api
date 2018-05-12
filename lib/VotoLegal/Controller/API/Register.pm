@@ -62,10 +62,10 @@ sub register_POST {
     # Forçando retorno do valor
     my $value;
     if ( $candidate->party_id == 34 || ($candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5)$/) ) {
-        $value = '1.00';
+        $value = '396.00';
     }
     else {
-        $value = '1.10';
+        $value = '495.00';
     }
 
     $self->status_created(
