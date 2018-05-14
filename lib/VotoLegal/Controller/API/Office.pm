@@ -32,7 +32,7 @@ sub office_GET {
     return $self->status_ok($c, entity => {
         office => [
             map { { id => $_->id, name => $_->name } }
-              $c->stash->{collection}->all()
+              $c->stash->{collection}->search( undef, { order_by => 'name' } )->all()
         ]
     });
 }

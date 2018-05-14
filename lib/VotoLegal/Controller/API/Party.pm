@@ -35,7 +35,7 @@ sub party_GET {
             name    => $_->name,
             acronym => $_->acronym,
         }
-    } $c->stash->{collection}->all;
+    } $c->stash->{collection}->search( undef, { order_by => 'acronym' } )->all();
 
     return $self->status_ok($c, entity => { party => \@all });
 }

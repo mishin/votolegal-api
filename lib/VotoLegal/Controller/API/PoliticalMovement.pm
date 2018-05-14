@@ -20,7 +20,7 @@ sub list_GET {
     return $self->status_ok($c, entity => {
         political_movement => [
             map { { id => $_->id, name => $_->name } }
-              $c->stash->{collection}->all()
+              $c->stash->{collection}->search( undef, { order_by => 'name' } )->all()
         ]
     });
 }
