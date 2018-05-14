@@ -7,8 +7,12 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
+    my $email_queue_rs = $schema->resultset("EmailQueue");
+
     create_candidate;
     my $candidate_id = stash 'candidate.id';
+
+    is ($email_queue_rs->count, 1, 'Registration email');
 
     api_auth_as candidate_id => $candidate_id;
 
@@ -34,6 +38,8 @@ db_transaction {
         automatic_load_item => 0,
         stash               => 'c1'
     ;
+
+    is ($email_queue_rs->count, 2, 'Registration and contract signature email');
 
     is( $candidate_user->has_signed_contract, 1, "candidate signed contract" );
 

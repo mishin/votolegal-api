@@ -46,7 +46,11 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            return $self->create(\%values);
+            my $contract_signature = $self->create(\%values);
+
+            $contract_signature->user->send_email_contract_signed();
+
+            return $contract_signature;
         },
     };
 }

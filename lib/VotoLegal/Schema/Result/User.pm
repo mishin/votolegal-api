@@ -282,6 +282,28 @@ sub send_email_forgot_password {
     });
 }
 
+sub send_email_contract_signed {
+    my ($self, $token) = @_;
+
+    my $candidate = $self->candidates->next;
+    my $name      = $candidate->name;
+
+    my $email = VotoLegal::Mailer::Template->new(
+        to       => $self->email,
+        from     => 'no-reply@votolegal.org.br',
+        subject  => "VotoLegal - Assinatura do Contrato",
+        template => get_data_section('contract_signed.tt'),
+        vars     => {
+            name  => $name,
+        },
+    )->build_email();
+
+    return $self->result_source->schema->resultset('EmailQueue')->create({
+        body => $email->as_string,
+        bcc  => ['contato@votolegal.org.br']
+    });
+}
+
 sub has_signed_contract {
     my ($self) = @_;
 
@@ -322,10 +344,10 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Olá [% name %], </b><br>
+    <p><span><b>Ol&#225; [% name %], </b><br>
       <br></span></p>
-    <p> <strong> </strong>Recebemos a sua solicitação para uma nova senha de acesso ao Voto Legal.
-É muito simples, clique no botão abaixo para trocar sua senha.</p>
+    <p> <strong> </strong>Recebemos a sua solicita&#231;&#227;o para uma nova senha de acesso ao Voto Legal.
+&#201; muito simples, clique no bot&#227;o abaixo para trocar sua senha.</p>
   </td>
 </tr>
 <tr>
@@ -347,8 +369,8 @@ __DATA__
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Caso você não tenha solicitado esta alteração de senha, por favor desconsidere esta mensagem, nenhuma alteração foi feita na sua conta.</p>
-  <p>Dúvidas? Acesse <a href="https://votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  <p>Caso voc&#234; n&#227;o tenha solicitado esta altera&#231;&#227;o de senha, por favor desconsidere esta mensagem, nenhuma altera&#231;&#227;o foi feita na sua conta.</p>
+  <p>D&#250;vidas? Acesse <a href="https://votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
   Equipe Voto Legal</strong><a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
 <tr>
@@ -364,7 +386,7 @@ __DATA__
   <tbody>
 <tr>
 <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+<span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span></td>
 </tr>
 </tbody>
 </table>
@@ -380,3 +402,87 @@ __DATA__
 </body>
 </html>
 
+@@ contract_signed.tt
+
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div leftmargin="0" marginheight="0" marginwidth="0" topmargin="0" style="background-color:#f5f5f5; font-family:'Montserrat',Arial,sans-serif; margin:0; padding:0; width:100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="600" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td height="50"></td>
+</tr>
+<tr>
+<td colspan="2"><a href="https://www.votolegal.org.br/"><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/fec4013c-fb33-4220-9a25-f0adfd89f971.png" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
+<tbody>
+<tr>
+  <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
+    <p><span><b>Ol&#225; [% name %], </b><br>
+      <br></span></p>
+    <p>Recebemos com sucesso a sua assinatura do contrato de adesão ao Voto Legal!</p>
+    <p>Você pode baixar o contrato apertando no botão abaixo</p>
+  </td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+<tr>
+<td align="center" bgcolor="#ffffff" valign="top" style="padding-top:20px">
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
+<tbody>
+<tr>
+<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/1f4c7280-fe7c-4a02-98ea-b9f68f8a4fcb/Cópia_de_Contrato_Digital_Voto_Legal_Pré_Campanha.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td height="40"></td>
+</tr>
+<tr>
+<td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
+  <p>D&#250;vidas? Acesse <a href="https://votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+  Equipe Voto Legal</strong><a href="mailto:contato@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
+</tr>
+<tr>
+<td height="30"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="x_deviceWidth" width="540" style="border-collapse:collapse">
+  <tbody>
+<tr>
+<td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
+<span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div></div>
+
+</body>
+</html>
