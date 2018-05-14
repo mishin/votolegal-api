@@ -1453,26 +1453,6 @@ __DATA__
                                        </tr>
                                        <tr>
                                           <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-                                             <p>
-                                                <b>Custos da Plataforma</b>
-                                             </p>
-                                             <p>
-                                                O valores para contratação da infraestrutura do Voto Legal são:
-                                             </p>
-                                             <p>
-                                                <b>Pré-campanha (15/05/2018 a 15/08/2018)</b>
-                                             </p>
-                                             <p>
-                                                Parcela única de R$ 495,00 (quatrocentos e noventa e cinco reais) pago no momento da contratação.
-                                             </p>
-                                             <p>
-                                                <b>Campanha (a partir de 15/08/2018)</b>
-                                             </p>
-                                             <p>
-                                                Para os candidatos que <b>não utilizaram</b> o Voto Legal durante a pré-campanha, o valor de contratação na campanha será de R$ 495,00 (quatrocentos e noventa e cinco reais) assim que for emitido o CNPJ da campanha e indicação de conta bancária oficial da candidatura.
-Para os candidatos que <b>utilizaram</b> o Voto Legal durante a pré-campanha, o valor de contratação na campanha será é de R$ 99,00 (noventa e nove reais),  que deverão ser pagos em parcela única no momento que for emitido o CNPJ da campanha e indicação de conta bancária oficial da candidatura.
-                                             </p>
-                                             <p>
                                              <b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.
                                              </p>
                                           </td>

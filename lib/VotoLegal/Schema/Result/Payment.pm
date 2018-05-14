@@ -434,14 +434,17 @@ sub get_value {
     my $candidate = $self->candidate;
 
     my $value;
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ ) {
+    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ && $self->method eq 'boleto' ) {
         $value = '395.00';
     }
-    elsif ( $candidate->party_id == 34 ) {
+    elsif ( $candidate->party_id == 34 && $self->method eq 'boleto' ) {
         $value = '395.00'
     }
-    else {
-        $value = '494.00';
+    elsif ( $self->method eq 'creditCard' ) {
+        $value = '495.00';
+    }
+    elsif ( $self->method eq 'boleto' ) {
+        $value = '494.00'
     }
 
     return $value;
