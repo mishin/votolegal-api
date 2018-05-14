@@ -288,6 +288,11 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 0
 
+=head2 google_analytics
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -388,6 +393,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "birth_date",
   { data_type => "text", is_nullable => 0 },
+  "google_analytics",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -670,8 +677,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-07 18:37:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DkFfL9lC+w0+EDfSnCXA5Q
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-14 13:29:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JIXj6W149pEcoNkoXU49LA
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -1015,6 +1022,17 @@ sub verifiers_specs {
                         my $political_movement = $self->result_source->schema->resultset('PoliticalMovement')->search( { id => $political_movement_id } )->next;
 
                         die \['political_movement_id', 'could not find political movement with that id'] unless $political_movement;
+                    }
+                },
+                google_analytics => {
+                    required   => 0,
+                    type       => "Str",
+                    post_check => sub {
+                        my $google_analytics = $_[0]->get_value('google_analytics');
+
+                        die \['google_analytics', 'invalid id'] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
+
+                        return 1;
                     }
                 }
             },

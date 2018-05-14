@@ -213,6 +213,25 @@ db_transaction {
     is ($candidate->phone, undef, 'clear phone');
     is ($candidate->bank_agency, undef, 'clear bank_agency');
 
+    # Adicionando google analytics
+    rest_put "/api/candidate/$candidate_id",
+        name    => 'invalid google analytics id',
+        is_fail => 1,
+        [
+            google_analytics => 'foobar'
+        ]
+    ;
+
+    rest_put "/api/candidate/$candidate_id",
+        name    => 'Google analytics id',
+        [
+            google_analytics => 'UA-11111-5'
+        ]
+    ;
+
+    ok ($candidate->discard_changes, 'discard changes');
+    is ($candidate->google_analytics, 'UA-11111-5', 'google analytics');
+
     # Tentando editar outro candidato.
     create_candidate;
     rest_put "/api/candidate/" . stash 'candidate.id',
