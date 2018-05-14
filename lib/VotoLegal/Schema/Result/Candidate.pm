@@ -1696,7 +1696,7 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Ol&#225; [% name %], </b><br>
+    <p><span><b>Ol&#225;, [% name %]. </b><br>
       <br></span></p>
     <p>Recebemos seu pedido de compra e contrata&#231;&#227;o da plataforma Voto Legal, para  arrecada&#231;&#227;o financeira  e constru&#231;&#227;o de campanhas eleitorais transparentes.</p>
     <p>Aguardamos a confirma&#231;&#227;o de pagamento de sua operadora financeira.</p>
@@ -1766,7 +1766,7 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Ol&#225; [% name %],</b><br>
+    <p><span><b>Ol&#225;, [% name %].</b><br>
       <br></span></p>
     <p>Seu pedido de compra e contrata&#231;&#227;o da plataforma Voto Legal foi aprovado!</p>
     <p>Inicie sua pr&#233; campanha para  arrecada&#231;&#227;o financeira  e constru&#231;&#227;o de campanhas eleitorais transparentes.</p>
@@ -1867,7 +1867,7 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Ol&#225; [% name %],</b><br>
+    <p><span><b>Ol&#225;, [% name %].</b><br>
       <br></span></p>
     <p>Seu pedido de compra da plataforma Voto Legal n&#227;o foi conclu&#237;do.</p>
     <p>Por favor, verifique-se com sua institui&#231;&#227;o financeira e tente realizar o pagamento da plataforma novamente.</p>

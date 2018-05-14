@@ -344,7 +344,7 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Ol&#225; [% name %], </b><br>
+    <p><span><b>Ol&#225;, [% name %].</b><br>
       <br></span></p>
     <p> <strong> </strong>Recebemos a sua solicita&#231;&#227;o para uma nova senha de acesso ao Voto Legal.
 &#201; muito simples, clique no bot&#227;o abaixo para trocar sua senha.</p>
@@ -430,7 +430,7 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Ol&#225; [% name %], </b><br>
+    <p><span><b>Ol&#225;, [% name %]. </b><br>
       <br></span></p>
     <p>Recebemos com sucesso a sua assinatura do contrato de adesão ao Voto Legal!</p>
     <p>Você pode baixar o contrato apertando no botão abaixo</p>
