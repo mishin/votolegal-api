@@ -131,6 +131,7 @@ sub test_boleto {
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
+    assert_current_step('register_capture');
 
     setup_sucess_mock_iugu_boleto_success;
 
@@ -139,5 +140,7 @@ sub test_boleto {
       params => { device_authorization_token_id => stash 'test_auth', };
 
     is messages2str $response, 'msg_boleto_paid_message', 'msg_boleto_paid_message';
+
+    assert_current_step('register_capture');
 
 }
