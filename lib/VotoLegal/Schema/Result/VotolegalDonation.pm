@@ -335,14 +335,13 @@ sub as_row {
 
     my $immu = $donation->votolegal_donation_immutable;
     my $ret  = {
-        ( map { $_ => $donation->$_ } qw/id state/ ),
+        ( map { $_ => $donation->$_ } qw/id/ ),
         donor => {
-
             name => $immu->donor_name,
             cpf  => $immu->get_column('donor_cpf'),
         },
+        captured_at => $donation->captured_at ? $donation->captured_at->datetime : undef,
         amount => $immu->amount,
-
     };
 
     return $ret;
@@ -481,15 +480,15 @@ sub sync_gateway_status {
 }
 
 sub set_boleto_paid {
-     my ($self) = @_;
+    my ($self) = @_;
 
-     die 'cannot set_boleto_paid' unless $self->is_boleto;
-     die 'cannot set_boleto_paid' unless !$self->captured_at;
+    die 'cannot set_boleto_paid' unless $self->is_boleto;
+    die 'cannot set_boleto_paid' unless !$self->captured_at;
 
     my $payment_info = $self->payment_info_parsed;
     $self->update(
         {
-            captured_at  => $payment_info->{paid_at},
+            captured_at => $payment_info->{paid_at},
         }
     );
 }
