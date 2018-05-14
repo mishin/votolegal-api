@@ -74,7 +74,15 @@ db_transaction {
       };
 
     assert_current_step('register_capture');
-    is messages2str $response, 'msg_cc_authorized msg_capture_cc_for_captured', 'msg add credit card';
+    is messages2str $response, 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos';
+
+    $response = rest_get $donation_url,
+      code   => 200,
+      params => {
+        device_authorization_token_id => stash 'test_auth',
+        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95'
+      };
+    is messages2str $response, 'msg_cc_paid_message', 'apenas msg final';
 
     &test_boleto;
 
@@ -124,9 +132,12 @@ sub test_boleto {
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
 
+    setup_sucess_mock_iugu_boleto_success;
+
     $response = rest_get $donation_url,
       name   => "get donation boleto",
       params => { device_authorization_token_id => stash 'test_auth', };
-    is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
+
+    is messages2str $response, 'msg_boleto_paid_message', 'msg_boleto_paid_message';
 
 }

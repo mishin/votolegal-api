@@ -29,5 +29,11 @@ msgid "msg_invalid_cc_token"
 msgstr "Token não recebido ou inválido"
 
 
+msgid "msg_boleto_paid_message"
+msgstr "Doação efeutada com Boleto efetuada com sucesso!"
+
+msgid "msg_cc_paid_message"
+msgstr "Doação efeutada com cartão de cŕedito efetuada com sucesso!"
+
 
 

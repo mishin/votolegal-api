@@ -63,7 +63,13 @@ sub interface {
 
             $state_config = $config->{ $opts{donation}->state() };
 
-            push @messages, $self->_messages_of_state(%opts);
+            if ( $state_config->{auto_continue} ) {
+                goto REPEAT;
+            }
+            else {
+
+                push @messages, $self->_messages_of_state(%opts);
+            }
         }
 
     }
@@ -177,12 +183,12 @@ sub _messages_of_state {
 
     my $config = $self->state_configuration( $opts{class} );
 
-    my $state = $opts{donation}->state();
+    my $state        = $opts{donation}->state();
     my $state_config = $config->{$state} || croak "_messages_of_state called for bugous state '$state'";
+    my $donation     = $opts{donation};
+    $donation->discard_changes;
 
     if ( $state eq 'credit_card_form' ) {
-
-        my $donation = $opts{donation};
 
         my $info = $donation->payment_info_parsed;
 
@@ -199,10 +205,8 @@ sub _messages_of_state {
 
             }
         );
-
-    }elsif ( $state eq 'waiting_boleto_payment' ) {
-
-        my $donation = $opts{donation};
+    }
+    elsif ( $state eq 'waiting_boleto_payment' ) {
 
         my $info = $donation->payment_info_parsed;
 
@@ -212,17 +216,27 @@ sub _messages_of_state {
                 text => $loc->('msg_boleto_message'),
             },
             {
-                type       => 'link',
+                type => 'link',
                 text => $loc->('msg_boleto_link'),
                 href => $info->{secure_url},
             }
         );
 
+    }
+    elsif ( $donation->captured_at ) {
+
+        my $info = $donation->payment_info_parsed;
+
+        @messages = (
+            {
+                type => 'msg',
+                text => $donation->is_boleto ? $loc->('msg_boleto_paid_message') : $loc->('msg_cc_paid_message'),
+            },
+        );
 
     }
 
     return @messages;
-
 }
 
 sub _process_state {
@@ -250,8 +264,46 @@ sub _process_state {
         &_process_capture_cc(@params);
 
     }
+    elsif ( $state eq 'waiting_boleto_payment' ) {
+        &_process_waiting_boleto_payment(@params);
+
+    }
+    elsif ( $state eq 'validate_payment' ) {
+        &_process_validate_payment(@params);
+
+    }
 
     return $stash;
+}
+
+sub _process_waiting_boleto_payment {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    $donation = $donation->sync_gateway_status();
+
+    my $info = $donation->payment_info_parsed;
+
+    if ( $info->{status} eq 'paid' ) {
+        $stash->{value} = 'boleto_paid';
+    }
+
+}
+
+sub _process_validate_payment {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    my $info = $donation->payment_info_parsed;
+
+    if ( $info->{total_paid_cents} == $donation->votolegal_donation_immutable->amount ) {
+
+        $donation->set_boleto_paid;
+
+        $stash->{value} = 'paid_amount_ok';
+
+    }
+    else {
+        $stash->{value} = 'not_acceptable';
+    }
 }
 
 sub _process_start_cc_payment {
@@ -279,15 +331,6 @@ sub _process_capture_cc {
     }
 
     $stash->{value} = $err ? 'error' : 'captured';
-
-
-    $stash->{messages} = [
-        {
-            type => 'msg',
-            text => $loc->( 'msg_capture_cc_for_' . $stash->{value} ),
-        }
-    ];
-
 }
 
 sub _process_credit_card_form {

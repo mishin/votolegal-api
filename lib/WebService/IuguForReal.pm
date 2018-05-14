@@ -192,3 +192,40 @@ sub capture_invoice {
     return $invoice;
 }
 
+sub get_invoice {
+    my ( $self, %opts ) = @_;
+    my $logger = get_logger;
+
+    defined $opts{$_} or croak "missing $_" for qw/
+      id
+      donation_id
+      /;
+
+    my ( $data, $body, $post_url );
+    Log::Log4perl::NDC->remove();
+
+    Log::Log4perl::NDC->push( "get_invoice donation_id=" . $opts{donation_id} . '  ' );
+
+    $post_url = $self->uri_for('invoices') . '/' . $opts{id};
+    $logger->info(" GET $post_url");
+
+    # criando invoice
+    my $invoice;
+    if ( $ENV{IUGU_MOCK} ) {
+        $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
+    }
+    else {
+        my $res = $self->ua->get( $post_url );
+        $logger->info( "Iugu response: " . $res->decoded_content );
+
+        croak 'get_invoice failed' unless $res->code == 200;
+
+        $invoice = decode_json( $res->decoded_content )
+          or croak 'get_invoice parse json failed';
+    }
+
+    return $invoice;
+}
+
+
+

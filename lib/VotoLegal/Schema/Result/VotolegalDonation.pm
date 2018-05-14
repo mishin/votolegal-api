@@ -457,6 +457,39 @@ sub capture_cc {
     $self->update(
         {
             payment_info => to_json($payment_info),
+            captured_at  => $payment_info->{paid_at},
+        }
+    );
+}
+
+sub sync_gateway_status {
+    my ($self) = @_;
+    my $gateway = $self->payment_gateway;
+
+    my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
+
+    my $payment_info = $self->payment_info_parsed;
+    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
+    $self->update(
+        {
+            payment_info => to_json($payment_info),
+        }
+    );
+
+    return $self;
+}
+
+sub set_boleto_paid {
+     my ($self) = @_;
+
+     die 'cannot set_boleto_paid' unless $self->is_boleto;
+     die 'cannot set_boleto_paid' unless !$self->captured_at;
+
+    my $payment_info = $self->payment_info_parsed;
+    $self->update(
+        {
+            captured_at  => $payment_info->{paid_at},
         }
     );
 }

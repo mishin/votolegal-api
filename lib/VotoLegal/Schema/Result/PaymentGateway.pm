@@ -213,6 +213,24 @@ sub data_for_credit_card_generation {
 
 }
 
+
+sub get_invoice {
+    my ( $self, %opts ) = @_;
+
+    defined $opts{$_} or croak "missing $_" for qw/
+      donation_id
+      id
+      /;
+    croak 'class not supported' unless $self->class eq 'IUGU';
+
+    my $ws = WebService::IuguForReal->instance;
+
+    my $invoice = $ws->get_invoice(%opts);
+
+    return { payment_info => $invoice, };
+}
+
+
 sub capture_invoice {
     my ( $self, %opts ) = @_;
 

@@ -603,6 +603,7 @@ sub setup_sucess_mock_iugu {
 
 sub setup_sucess_mock_iugu_boleto_success {
 
+
     $iugu_invoice_response = {
         'occurrence_date'               => '2018-05-14',
         'total_paid'                    => '35.00 BRL',
