@@ -1394,16 +1394,16 @@ __DATA__
                                                 </span>
                                              </p>
                                              <p>
-                                                Seu pré-cadastro foi realizado com sucesso.
+                                                Seu pr&#233;-cadastro foi realizado com sucesso.
                                              </p>
                                              <p>
-                                             Faltam poucos passos para contratar o Voto Legal,  para  arrecadação financeira  e construção de campanhas eleitorais transparentes.
+                                             Faltam poucos passos para contratar o Voto Legal,  para  arrecada&#231;&#227;o financeira  e constru&#231;&#227;o de campanhas eleitorais transparentes.
                                              </p>
                                              <p>
-                                             Receba doações de valores e serviços por uma plataforma que já operou e funcionou em eleições de acordo com a legislação do TSE. Ative o Voto Legal em seu site de campanha e aumente as formas de integração com seu público.
+                                             Receba doa&#231;&#245;es de valores e servi&#231;os por uma plataforma que j&#225; operou e funcionou em elei&#231;&#245;es de acordo com a legisla&#231;&#227;o do TSE. Ative o Voto Legal em seu site de campanha e aumente as formas de integra&#231;&#227;o com seu p&#250;blico.
                                              </p>
                                              <p>
-                                             <b>Importante:</b> Todos os dados para contratação devem ser do pré-candidato, estando vedada a contratação em nome de terceiros. Se houver divergências ou inconformidades das informações, os valores arrecadados poderão ser devolvidos aos doadores e/ou tesouro nacional.
+                                             <b>Importante:</b> Todos os dados para contrata&#231;&#227;o devem ser do pr&#233;-candidato, estando vedada a contrata&#231;&#227;o em nome de terceiros. Se houver diverg&#234;ncias ou inconformidades das informa&#231;&#245;es, os valores arrecadados poder&#227;o ser devolvidos aos doadores e/ou tesouro nacional.
                                              </p>
                                           </td>
                                        </tr>
@@ -1412,51 +1412,51 @@ __DATA__
                                           <b>Funcionalidades da Plataforma</b>
                                              <ul>
                                                 <li>
-                                                   Estrutura para receber doações financeiras e de serviços  para a sua campanha;
+                                                   Estrutura para receber doa&#231;&#245;es financeiras e de servi&#231;os  para a sua campanha;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Receba doações via cartão de crédito e boleto bancário;
+                                                    Receba doa&#231;&#245;es via cart&#227;o de cr&#233;dito e boleto banc&#225;rio;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Geração de contrato de serviços em conformidade ao TSE;
+                                                    Gera&#231;&#227;o de contrato de servi&#231;os em conformidade ao TSE;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Transparência em tempo real em seu site de campanha;
+                                                    Transpar&#234;ncia em tempo real em seu site de campanha;
                                                 </li>
                                                     <p></p>
                                                 <li>
-                                                    Emissão de recibos de acordo com a legislação;
+                                                    Emiss&#227;o de recibos de acordo com a legisla&#231;&#227;o;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Integração com o SPCE (sistema de prestação de contas do TSE);
+                                                    Integra&#231;&#227;o com o SPCE (sistema de presta&#231;&#227;o de contas do TSE);
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Painel de controle para acompanhamento das doações em tempo real;
+                                                    Painel de controle para acompanhamento das doa&#231;&#245;es em tempo real;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Uso dos melhores protocolos de segurança da informação;
+                                                    Uso dos melhores protocolos de seguran&#231;a da informa&#231;&#227;o;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Transparência de dados em formatos abertos;
+                                                    Transpar&#234;ncia de dados em formatos abertos;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Suporte para milhares de acessos simultâneos;
+                                                    Suporte para milhares de acessos simult&#226;neos;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Instruções legais e detalhadas para doadores;
+                                                    Instru&#231;&#245;es legais e detalhadas para doadores;
                                                 </li>
                                                 <p></p>
                                                 <li>
-                                                    Orientação para declaração de imposto de renda e prestação de contas para doadores;
+                                                    Orienta&#231;&#227;o para declara&#231;&#227;o de imposto de renda e presta&#231;&#227;o de contas para doadores;
                                                 </li>
                                                 <p></p>
                                                 <li>
@@ -1471,7 +1471,7 @@ __DATA__
                                        </tr>
                                        <tr>
                                           <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-                                             <b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.
+                                             <b>Importante:</b> Somente ap&#243;s a confirma&#231;&#227;o do recebimento desta parcela, atrav&#233;s dos meios de pagamento digitais, a plataforma ir&#225; liberar o perfil para configura&#231;&#227;o.
                                              </p>
                                           </td>
                                        </tr>
@@ -1482,10 +1482,10 @@ __DATA__
                                           <td align="center" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px">
                                              <strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
                                                 <p>
-                                                  <strong>Para finalizar sua contratação <a href="https://www.votolegal.com.br" style="color:#4ab957"><b>clique aqui</b></a>.</strong>
+                                                  <strong>Para finalizar sua contrata&#231;&#227;o <a href="https://www.votolegal.com.br" style="color:#4ab957"><b>clique aqui</b></a>.</strong>
                                                 </p>
                                                 <strong>
-                                                <p dir="ltr">Dúvidas? Acesse <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
+                                                <p dir="ltr">D&#250;vidas? Acesse <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">Perguntas frequentes</a>.</p>
                                                 </strong>
                                                 Equipe Voto Legal
                                              </strong>
@@ -1505,7 +1505,7 @@ __DATA__
                         <tbody>
                            <tr>
                               <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-                                 <span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span>
+                                 <span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span>
                               </td>
                            </tr>
                         </tbody>
@@ -1516,6 +1516,7 @@ __DATA__
          </table>
       </div>
       </div></div>
+
 @@ candidate_approval.tt
 <!doctype html>
 <html>
