@@ -77,6 +77,8 @@ db_transaction {
     use DDP;
     p $response;
 
+    &test_boleto;
+
     #is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
     #is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
 
@@ -107,5 +109,29 @@ sub test_dup_value {
         error_is 'donation.duplicated', 'donation-repeated';
 
     };
+
+}
+
+sub test_boleto {
+
+    $response = rest_post "/api2/donations",
+      name   => "add donation with boleto",
+      params => {
+        generate_rand_donator_data(),
+
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'boleto',
+        cpf                           => $cpf,
+        amount                        => 3500,
+      };
+    $donation_url = "/api2/donations/" . $response->{donation}{id};
+
+    $response = rest_get $donation_url,
+      name   => "get donation boleto",
+      params => { device_authorization_token_id => stash 'test_auth', };
+
+    use DDP;
+    p $response;
 
 }

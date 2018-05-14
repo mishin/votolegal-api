@@ -158,7 +158,7 @@ sub create_invoice {
       payer
       /;
 
-    croak 'missing credit_card_token' unless $opts{credit_card_token} && !$opts{is_boleto};
+    croak 'missing credit_card_token' if !$opts{credit_card_token} && !$opts{is_boleto};
     croak 'missing payer' unless ref $opts{payer} eq 'HASH';
     croak 'missing payer.cpf_cnpj' if $opts{payer}{cpf_cnpj} !~ /^[0-9]+$/;
     defined $opts{payer}{address}{$_} or croak "missing payer.address.$_" for qw/city district state street zip_code/;

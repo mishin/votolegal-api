@@ -70,18 +70,20 @@ sub create_invoice {
 
     Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
 
-    # checando se credit_card.two_step_transaction está habilitado
     if ( !$ENV{IUGU_MOCK} ) {
-        $logger->info("validating two_step_transaction...");
-        my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ),
-            [ 'Content-Type' => "application/json", ] );
+        # checando se credit_card.two_step_transaction está habilitado
+        if ( !$opts{is_boleto} ) {
+            $logger->info("validating two_step_transaction...");
+            my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ),
+                [ 'Content-Type' => "application/json", ] );
 
-        my $json = decode_json( $res->decoded_content )
-          or croak 'create_invoice failed';
+            my $json = decode_json( $res->decoded_content )
+              or croak 'create_invoice failed';
 
-        die 'credit_card.two_step_transaction precisa estar habilitada na Iugu'
-          unless $json->{configuration}
-          && $json->{configuration}->{credit_card}->{two_step_transaction};
+            die 'credit_card.two_step_transaction precisa estar habilitada na Iugu'
+              unless $json->{configuration}
+              && $json->{configuration}->{credit_card}->{two_step_transaction};
+        }
 
     }
 
@@ -123,9 +125,9 @@ sub create_invoice {
 
     if ( !$opts{is_boleto} ) {
         $data = {
-            token => $opts{credit_card_token},
-            restrict_payment_method    => \1,
-            invoice_id                 => $invoice->{id},
+            token                   => $opts{credit_card_token},
+            restrict_payment_method => \1,
+            invoice_id              => $invoice->{id},
         };
         $body = encode_json($data);
 
@@ -142,7 +144,7 @@ sub create_invoice {
             $logger->info( "Iugu response: " . $res->decoded_content );
 
             my $json = decode_json( $res->decoded_content ) or croak "$post_url decode failed";
-            croak "cannot create charge right now" unless @{$json->{errors}};
+            croak "cannot create charge right now" unless @{ $json->{errors} };
 
             $invoice->{_charge_response_} = $json;
         }

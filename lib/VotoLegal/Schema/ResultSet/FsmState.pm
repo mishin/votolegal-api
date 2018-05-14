@@ -54,7 +54,8 @@ sub interface {
 
         # esse aqui precisa verificar a cada GET
         # uma coisa que precisa de lock
-        if ( $opts{donation}->state() eq 'boleto_authentication' && $last_change ne 'boleto_authentication' ) {
+        if ( $opts{donation}->state() eq 'waiting_boleto_payment' && $last_change ne 'waiting_boleto_payment' ) {
+            undef @messages;
             my $apply = $self->_apply(%opts);
             $opts{donation} = $apply->{newer_donation};
 
@@ -148,7 +149,7 @@ sub _apply {
 sub on_state_enter {
     my ( $donation, $new_stash, $entering_state, $params ) = @_;
 
-    if ( $entering_state eq 'waiting_boleto_authention' ) {
+    if ( $entering_state eq 'waiting_boleto_payment' ) {
 
         $donation->_create_invoice();
 
@@ -202,6 +203,25 @@ sub _messages_of_state {
 
             }
         );
+
+    }elsif ( $state eq 'waiting_boleto_payment' ) {
+
+        my $donation = $opts{donation};
+
+        my $info = $donation->payment_info_parsed;
+
+        @messages = (
+            {
+                type => 'msg',
+                text => $loc->('msg_boleto_message'),
+            },
+            {
+                type       => 'link',
+                text => $loc->('msg_boleto_link'),
+                href => $info->{secure_url},
+            }
+        );
+
 
     }
 
