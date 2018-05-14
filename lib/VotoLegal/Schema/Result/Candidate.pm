@@ -1518,6 +1518,7 @@ __DATA__
       </div></div>
 
 @@ candidate_approval.tt
+
 <!doctype html>
 <html>
 <head>
@@ -1695,12 +1696,12 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Olá [% name %], </b><br>
+    <p><span><b>Ol&#225; [% name %], </b><br>
       <br></span></p>
-    <p>Recebemos seu pedido de compra e contratação da plataforma Voto Legal, para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
-    <p>Aguardamos a confirmação de pagamento de sua operadora financeira.</p>
-    <p>Assim que confirmado, será enviado um novo email.</p>
-    <p><b>Importante:</b> Somente após a confirmação do recebimento desta parcela, através dos meios de pagamento digitais, a plataforma irá liberar o perfil para configuração.</p>
+    <p>Recebemos seu pedido de compra e contrata&#231;&#227;o da plataforma Voto Legal, para  arrecada&#231;&#227;o financeira  e constru&#231;&#227;o de campanhas eleitorais transparentes.</p>
+    <p>Aguardamos a confirma&#231;&#227;o de pagamento de sua operadora financeira.</p>
+    <p>Assim que confirmado, ser&#225; enviado um novo email.</p>
+    <p><b>Importante:</b> Somente ap&#243;s a confirma&#231;&#227;o do recebimento desta parcela, atrav&#233;s dos meios de pagamento digitais, a plataforma ir&#225; liberar o perfil para configura&#231;&#227;o.</p>
   </td>
 </tr>
 <tr>
@@ -1708,7 +1709,7 @@ __DATA__
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Perguntas ou d&#250;vidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
@@ -1725,7 +1726,7 @@ __DATA__
   <tbody>
 <tr>
 <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+<span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span></td>
 </tr>
 </tbody>
 </table>
@@ -1765,40 +1766,40 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Olá [% name %],</b><br>
+    <p><span><b>Ol&#225; [% name %],</b><br>
       <br></span></p>
-    <p>Seu pedido de compra e contratação da plataforma Voto Legal foi aprovado!</p>
-    <p>Inicie sua pré campanha para  arrecadação financeira  e construção de campanhas eleitorais transparentes.</p>
-    <p>Acesse <a href="https://www.votolegal.com.br" target="_blank" style="color:#4ab957">a plataforma</a> e inicie a configuração de seu perfil no Voto Legal.</p>
-    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
-    <p><b>Agilize a configuração de seu perfil, tenha estes conteúdos em mãos:</b>
+    <p>Seu pedido de compra e contrata&#231;&#227;o da plataforma Voto Legal foi aprovado!</p>
+    <p>Inicie sua pr&#233; campanha para  arrecada&#231;&#227;o financeira  e constru&#231;&#227;o de campanhas eleitorais transparentes.</p>
+    <p>Acesse <a href="https://www.votolegal.com.br" target="_blank" style="color:#4ab957">a plataforma</a> e inicie a configura&#231;&#227;o de seu perfil no Voto Legal.</p>
+    <p><b>Importante:</b> Necess&#225;rio login e senha que foi registrado no pr&#233;-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
+    <p><b>Agilize a configura&#231;&#227;o de seu perfil, tenha estes conte&#250;dos em m&#227;os:</b>
          <ul>
             <li>
-                Texto apresentação pré-candidato até 1000 caracteres;
+                Texto apresenta&#231;&#227;o pr&#233;-candidato at&#233; 1000 caracteres;
             </li>
                 <p></p>
             <li>
-                Lista com 4 propósitos prioritários da pré campanha;
+                Lista com 4 prop&#243;sitos priorit&#225;rios da pr&#233; campanha;
             </li>
                 <p></p>
             <li>
-                Texto até 500 caracteres sobre cada um dos propósitos prioritários;
+                Texto at&#233; 500 caracteres sobre cada um dos prop&#243;sitos priorit&#225;rios;
             </li>
                 <p></p>
             <li>
-                Defina a meta da pré- campanha de arrecadação financeira;
+                Defina a meta da pr&#233;- campanha de arrecada&#231;&#227;o financeira;
             </li>
                 <p></p>
             <li>
-                Vídeo de apresentação da pré-campanha de arrecadação;
+                V&#237;deo de apresenta&#231;&#227;o da pr&#233;-campanha de arrecada&#231;&#227;o;
             </li>
             <p></p>
             <li>
-                Link para redes sociais do pré-candidato;
+                Link para redes sociais do pr&#233;-candidato;
             </li>
             <p></p>
             <li>
-                Foto do pré-candidato.
+                Foto do pr&#233;-candidato.
             </li>
         </ul></p>
   </td>
@@ -1808,8 +1809,8 @@ __DATA__
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-<p><b>Boa pré-campanha!</b></p>
-  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+<p><b>Boa pr&#233;-campanha!</b></p>
+  <p>Perguntas ou d&#250;vidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
@@ -1826,7 +1827,7 @@ __DATA__
   <tbody>
 <tr>
 <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+<span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span></td>
 </tr>
 </tbody>
 </table>
@@ -1866,12 +1867,12 @@ __DATA__
 <tbody>
 <tr>
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-    <p><span><b>Olá [% name %],</b><br>
+    <p><span><b>Ol&#225; [% name %],</b><br>
       <br></span></p>
-    <p>Seu pedido de compra da plataforma Voto Legal não foi concluído.</p>
-    <p>Por favor, verifique-se com sua instituição financeira e tente realizar o pagamento da plataforma novamente.</p>
-    <p>Para reiniciar a contratação, basta logar-se novamente.</p>
-    <p><b>Importante:</b> Necessário login e senha que foi registrado no pré-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
+    <p>Seu pedido de compra da plataforma Voto Legal n&#227;o foi conclu&#237;do.</p>
+    <p>Por favor, verifique-se com sua institui&#231;&#227;o financeira e tente realizar o pagamento da plataforma novamente.</p>
+    <p>Para reiniciar a contrata&#231;&#227;o, basta logar-se novamente.</p>
+    <p><b>Importante:</b> Necess&#225;rio login e senha que foi registrado no pr&#233;-cadastro. Casos tenha esquecido, digite o email de login e selecione "esqueci a senha".</p>
   </td>
 </tr>
 <tr>
@@ -1879,7 +1880,7 @@ __DATA__
 </tr>
 <tr>
 <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px"><strong id="docs-internal-guid-d5013b4e-a1b5-bf39-f677-7dd0712c841b">
-  <p>Perguntas ou dúvidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
+  <p>Perguntas ou d&#250;vidas? Consulte nosso <a href="https://www.votolegal.com.br/perguntas-frequentes" target="_blank" style="color:#4ab957">FAQ</a> ou envie um email para <a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957">contato@votolegal.com</a></p>
   <p>Equipe Voto Legal</p>
 </strong><a href="mailto:suporte@votolegal.org.br" target="_blank" style="color:#4ab957"></a></td>
 </tr>
@@ -1896,7 +1897,7 @@ __DATA__
   <tbody>
 <tr>
 <td align="center" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:11px; font-weight:300; line-height:16px; margin:0; padding:30px 0px">
-<span><strong>Voto Legal</strong>- Eleições limpas e transparentes. </span></td>
+<span><strong>Voto Legal</strong>- Elei&#231;&#245;es limpas e transparentes. </span></td>
 </tr>
 </tbody>
 </table>
