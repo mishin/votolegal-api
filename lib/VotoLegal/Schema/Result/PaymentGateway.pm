@@ -193,7 +193,7 @@ sub create_invoice {
 
     return {
         payment_info => $invoice,
-        gateway_tid => $invoice->{id},
+        gateway_tid  => $invoice->{id},
     };
 
 }
@@ -211,6 +211,22 @@ sub data_for_credit_card_generation {
 
     };
 
+}
+
+sub capture_invoice {
+    my ( $self, %opts ) = @_;
+
+    defined $opts{$_} or croak "missing $_" for qw/
+      donation_id
+      id
+      /;
+    croak 'class not supported' unless $self->class eq 'IUGU';
+
+    my $ws = WebService::IuguForReal->instance;
+
+    my $invoice = $ws->capture_invoice(%opts);
+
+    return { payment_info => $invoice, };
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -71,6 +71,7 @@ sub create_invoice {
     Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
 
     if ( !$ENV{IUGU_MOCK} ) {
+
         # checando se credit_card.two_step_transaction está habilitado
         if ( !$opts{is_boleto} ) {
             $logger->info("validating two_step_transaction...");
@@ -132,7 +133,7 @@ sub create_invoice {
         $body = encode_json($data);
 
         $post_url = $self->uri_for('charge');
-        $logger->info("create_invoice: POST $post_url\n$body");
+        $logger->info("POST $post_url\n$body");
 
         if ( $ENV{IUGU_MOCK} ) {
 
@@ -149,6 +150,44 @@ sub create_invoice {
             $invoice->{_charge_response_} = $json;
         }
     }
+
+    return $invoice;
+}
+
+sub capture_invoice {
+    my ( $self, %opts ) = @_;
+    my $logger = get_logger;
+
+    defined $opts{$_} or croak "missing $_" for qw/
+      id
+      donation_id
+      /;
+
+    my ( $data, $body, $post_url );
+    Log::Log4perl::NDC->remove();
+
+    Log::Log4perl::NDC->push( "capture_invoice donation_id=" . $opts{donation_id} . '  ' );
+
+    $post_url = $self->uri_for('invoices') . '/' . $opts{id} . '/capture';
+    $data     = {};
+    $body     = encode_json($data);
+    $logger->info(" POST $post_url\n$body");
+
+    # criando invoice
+    my $invoice;
+    if ( $ENV{IUGU_MOCK} ) {
+
+        $invoice = $VotoLegal::Test::Further::iugu_invoice_response_capture;
+    }
+    else {
+        my $res = $self->ua->post( $post_url, [ 'Content-Type' => "application/json", ], $body );
+        $logger->info( "Iugu response: " . $res->decoded_content );
+
+        $invoice = decode_json( $res->decoded_content )
+          or croak 'capture_invoice parse json failed';
+    }
+
+    croak "capture error " . encode_json($invoice) unless $invoice->{status} eq 'paid';
 
     return $invoice;
 }

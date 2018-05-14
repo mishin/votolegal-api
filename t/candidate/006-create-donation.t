@@ -74,13 +74,9 @@ db_transaction {
       };
 
     assert_current_step('register_capture');
-    use DDP;
-    p $response;
+    is messages2str $response, 'msg_cc_authorized msg_capture_cc_for_captured', 'msg add credit card';
 
     &test_boleto;
-
-    #is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
-    #is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
 
 };
 
@@ -126,12 +122,11 @@ sub test_boleto {
         amount                        => 3500,
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
+    is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
 
     $response = rest_get $donation_url,
       name   => "get donation boleto",
       params => { device_authorization_token_id => stash 'test_auth', };
-
-    use DDP;
-    p $response;
+    is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
 
 }

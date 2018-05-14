@@ -113,8 +113,6 @@ sub _apply {
             my $new_stash = $fms_simple->{states}{$current_state}{sub_to_run}( $donation, $params );
             my $result = delete $new_stash->{value};
 
-            use DDP;
-            p $new_stash;
             $force_messages   = delete $new_stash->{messages};
             $prepend_messages = delete $new_stash->{prepend_messages};
 
@@ -187,8 +185,6 @@ sub _messages_of_state {
         my $donation = $opts{donation};
 
         my $info = $donation->payment_info_parsed;
-        use DDP;
-        p $donation;
 
         @messages = (
             {

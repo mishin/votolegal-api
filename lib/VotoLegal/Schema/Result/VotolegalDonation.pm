@@ -445,8 +445,20 @@ sub _generate_payment_credit_card {
 }
 
 sub capture_cc {
+    my ($self) = @_;
 
+    my $gateway = $self->payment_gateway;
 
+    my $invoice = $gateway->capture_invoice( donation_id => $self->id, id => $self->gateway_tid );
+
+    my $payment_info = $self->payment_info_parsed;
+    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
+    $self->update(
+        {
+            payment_info => to_json($payment_info),
+        }
+    );
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
