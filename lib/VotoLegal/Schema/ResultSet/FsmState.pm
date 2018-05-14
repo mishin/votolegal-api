@@ -7,7 +7,7 @@ use Moose;
 
 use JSON qw/from_json/;
 use Carp;
-
+use VotoLegal::Utils qw/is_test/;
 extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Schema::Role::ResultsetFind';
 with 'VotoLegal::Schema::Role::FsmLoader';
@@ -98,6 +98,8 @@ sub _apply {
     my $donation;
     my $force_messages;
     my $prepend_messages;
+
+    die 'transaction_depth is wrong' if !is_test && $self->result_source->storage->transaction_depth > 0;
 
     $self->result_source->schema->txn_do(
         sub {

@@ -239,7 +239,7 @@ sub action_specs {
 sub _create_donation {
     my ( $self, %opts ) = @_;
 
-    die 'transaction_depth is wrong' unless $self->result_source->storage->transaction_depth == is_test ? 1 : 0;
+    die 'transaction_depth is wrong' if !is_test && $self->result_source->storage->transaction_depth > 0;
 
     my %values    = %{ $opts{values} };
     my $config    = $opts{config};
