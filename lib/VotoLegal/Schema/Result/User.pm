@@ -432,8 +432,8 @@ __DATA__
   <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
     <p><span><b>Ol&#225;, [% name %]. </b><br>
       <br></span></p>
-    <p>Recebemos com sucesso a sua assinatura do contrato de adesão ao Voto Legal!</p>
-    <p>Você pode baixar o contrato apertando no botão abaixo</p>
+    <p>Recebemos com sucesso a sua assinatura do contrato de ades&#227;o ao Voto Legal!</p>
+    <p>Voc&#234; pode baixar o contrato apertando no bot&#227;o abaixo</p>
   </td>
 </tr>
 <tr>
@@ -444,7 +444,7 @@ __DATA__
 <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
 <tbody>
 <tr>
-<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/1f4c7280-fe7c-4a02-98ea-b9f68f8a4fcb/Cópia_de_Contrato_Digital_Voto_Legal_Pré_Campanha.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
+<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/1f4c7280-fe7c-4a02-98ea-b9f68f8a4fcb/C&#243;pia_de_Contrato_Digital_Voto_Legal_Pr&#233;_Campanha.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
 </tr>
 </tbody>
 </table>
