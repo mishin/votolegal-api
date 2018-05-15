@@ -444,7 +444,7 @@ __DATA__
 <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
 <tbody>
 <tr>
-<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/1f4c7280-fe7c-4a02-98ea-b9f68f8a4fcb/C&#243;pia_de_Contrato_Digital_Voto_Legal_Pr&#233;_Campanha.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
+<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/1f4c7280-fe7c-4a02-98ea-b9f68f8a4fcb/Cópia_de_Contrato_Digital_Voto_Legal_Pré_Campanha.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
 </tr>
 </tbody>
 </table>
