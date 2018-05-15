@@ -293,6 +293,18 @@ __PACKAGE__->table("candidate");
   data_type: 'text'
   is_nullable: 1
 
+=head2 collect_donor_address
+
+  data_type: 'boolean'
+  default_value: true
+  is_nullable: 0
+
+=head2 collect_donor_phone
+
+  data_type: 'boolean'
+  default_value: true
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -395,6 +407,10 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "google_analytics",
   { data_type => "text", is_nullable => 1 },
+  "collect_donor_address",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "collect_donor_phone",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -677,8 +693,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-14 13:29:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JIXj6W149pEcoNkoXU49LA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-15 10:18:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zWT/ci8DcguXEQhiWRwXFQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;
