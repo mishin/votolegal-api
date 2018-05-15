@@ -229,6 +229,14 @@ db_transaction {
         ]
     ;
 
+    rest_put "/api/candidate/$candidate_id",
+        name    => 'Google analytics id',
+        [
+            collect_donor_address => 1,
+            collect_donor_phone   => 0
+        ]
+    ;
+
     ok ($candidate->discard_changes, 'discard changes');
     is ($candidate->google_analytics, 'UA-11111-5', 'google analytics');
 
