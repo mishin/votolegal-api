@@ -1050,7 +1050,15 @@ sub verifiers_specs {
 
                         return 1;
                     }
-                }
+                },
+                collect_donor_address => {
+                    required => 0,
+                    type     => "Bool"
+                },
+                collect_donor_phone => {
+                    required => 0,
+                    type     => "Bool"
+                },
             },
         ),
 
