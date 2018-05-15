@@ -14,7 +14,7 @@ BEGIN {
     use VotoLegal::Utils qw/is_test/;
 
     if ( !is_test() || $ENV{TEST_IUGU} ) {
-        die "Missing IUGU_API_IS_TEST" unless $ENV{IUGU_API_IS_TEST};
+        die "Missing IUGU_API_IS_TEST" unless defined $ENV{IUGU_API_IS_TEST};
         die "Missing IUGU_API_KEY"     unless $ENV{IUGU_API_KEY};
         die "Missing IUGU_ACCOUNT_ID"  unless $ENV{IUGU_ACCOUNT_ID};
         die "Missing IUGU_API_URL"     unless $ENV{IUGU_API_URL};
