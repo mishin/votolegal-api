@@ -433,18 +433,20 @@ sub get_value {
 
     my $candidate = $self->candidate;
 
+    my $method = $self->method;
+
+    my $has_promotion;
     my $value;
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ && $self->method eq 'boleto' ) {
-        $value = '395.00';
+
+    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ || $candidate->party_id == 34 ) {
+        $has_promotion = 1;
     }
-    elsif ( $candidate->party_id == 34 && $self->method eq 'boleto' ) {
-        $value = '395.00'
+
+    if ($has_promotion) {
+        $value = $method eq 'boleto' ? '395.00' : '396.00';
     }
-    elsif ( $self->method eq 'creditCard' ) {
-        $value = '495.00';
-    }
-    elsif ( $self->method eq 'boleto' ) {
-        $value = '494.00'
+    else {
+        $value = $method eq 'boleto' ? '494.00' : '495.00';
     }
 
     return $value;
