@@ -663,6 +663,7 @@ sub send_email {
             donation_date    => $self->captured_at->strftime("%d/%m/%Y"),
             candidate_name   => $self->candidate->name,
             candidate_cnpj   => $self->candidate->cnpj,
+            candidate_cpf    => $self->candidate->cpf,
             total_donations  => $total_msg,
             transaction_hash => $self->transaction_hash,
         }
@@ -741,34 +742,38 @@ __DATA__
                               </td>
                            </tr>
                            <tr>
+                            <td colspan="2"><a href="https://www.votolegal.com.br/" target="_blank"><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/fec4013c-fb33-4220-9a25-f0adfd89f971.png" class="x_deviceWidth" style="border-radius:7px 7px 0 0; float:left"></a></td>
+                           </tr>
+                           <tr>
                               <td bgcolor="#ffffff" colspan="2" style="background-color:rgb(255,255,255); border-radius:0 0 7px 7px; font-family:'Montserrat',Arial,sans-serif; font-size:13px; font-weight:normal; line-height:24px; padding:30px 0; text-align:center; vertical-align:top">
                                  <table align="center" border="0" cellpadding="0" cellspacing="0" width="84%" style="border-collapse:collapse">
                                     <tbody>
                                        <tr>
                                           <td align="justify" style="color:#666666; font-family:'Montserrat',Arial,sans-serif; font-size:16px; font-weight:300; line-height:23px; margin:0">
-                                             <p><span><b>Olá [% donation_name %], sua doação foi confirmada! </b><br>
+                                             <p><span><b>Ol&#225;, [% donation_name %]. Sua doa&#231;&#227;o foi confirmada! </b><br>
                                                 <br></span>
                                              </p>
-                                             <p> <strong> </strong>Sua doação para o candidato [% candidate_name %] foi confirmado com sucesso. Até o momento você [% total_donations %] para o candidato.</p>
-                                             <p>Você já pode observar sua doação na Blockchain! Para fazer isso acesse esse <a href="http://etherscan.io/tx/[% transaction_hash %]" target="_blank" style="color:#4ab957">link</a>.</p>
+                                             <p> <strong> </strong>Sua doa&#231;&#227;o para o candidato [% candidate_name %] foi confirmado com sucesso!</p>
+                                             <p>At&#233; o momento voc&#234; [% total_donations %] para o candidato.</p>
+                                             <p>Voc&#234; j&#225; pode observar sua doa&#231;&#227;o na Blockchain! Para fazer isso acesse esse <a href="http://etherscan.io/tx/[% transaction_hash %]" target="_blank" style="color:#4ab957">link</a>.</p>
                                           </td>
                                        </tr>
                                        <tr>
                                           <td align="justify" style="color:#999999; font-size:13px; font-style:normal; font-weight:normal; line-height:16px">
-                                             <p><strong>Dados da sua doação:</strong> </p>
+                                             <p><strong>Dados da sua doa&#231;&#227;o:</strong> </p>
                                              <p>Nome do doador: [% donation_name %]
                                                 <br>
                                                 CPF do doador: [% donation_cpf %]
                                                 <br>
-                                                Data da confirmação da doação: [% donation_date %]
+                                                Data da confirma&#231;&#227;o da doa&#231;&#227;o: [% donation_date %]
                                                 <br>
-                                                Valor da contribuição: [R$ [% donation_amount %]]
+                                                Valor da contribui&#231;&#227;o: [R$ [% donation_amount %]]
                                                 <br>
                                                 Nome do candidato: [% candidate_name %]
                                                 <br>
-                                                CNPJ do candidato: [% candidate_cnpj %]
+                                                CPF do candidato: [% candidate_cpf %]
                                              </p>
-                                             <p>É obrigatório declarar no imposto de renda a doação. Existe uma seção específica chamada: Doações para Partidos Políticos, Comitês Financeiros e Candidatos a Cargos Eletivos. Basta informar o nome e o CNPJ do candidato.</p>
+                                             <p>&#201; obrigat&#243;rio declarar no imposto de renda a doa&#231;&#227;o. Existe uma se&#231;&#227;o espec&#237;fica chamada: Doa&#231;&#245;es para Partidos Pol&#237;ticos, Comit&#234;s Financeiros e Candidatos a Cargos Eletivos. Basta informar o nome e o CNPJ do candidato.</p>
                                           </td>
                                        </tr>
                                        <tr>
@@ -797,6 +802,7 @@ __DATA__
       </div></div>
    </body>
 </html>
+
 
 @@ canceled.tt
 
