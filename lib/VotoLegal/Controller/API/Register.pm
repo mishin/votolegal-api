@@ -65,7 +65,7 @@ sub register_POST {
         $value = '396.00';
     }
     elsif ( $candidate->political_movement_id == 1 ) {
-        $value = '247.50'
+        $value = '198.00'
     }
     else {
         $value = '495.00';
