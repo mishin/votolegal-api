@@ -433,7 +433,7 @@ sub get_value {
 
     my $candidate = $self->candidate;
 
-    my $method = $self->method;
+    my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
 
     my $has_promotion;
     my $value;
@@ -443,10 +443,12 @@ sub get_value {
     }
 
     if ($has_promotion) {
-        $value = $method eq 'boleto' ? '395.00' : '396.00';
+        $value = $is_boleto ?
+            ( $candidate->political_movement_id == 1 ? '197,00' : '395.00' ) :
+            ( $candidate->political_movement_id == 1 ? '198,00' : '396.00' );
     }
     else {
-        $value = $method eq 'boleto' ? '494.00' : '495.00';
+        $value = $is_boleto ? '494.00' : '495.00';
     }
 
     return $value;

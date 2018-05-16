@@ -58,8 +58,11 @@ sub login_POST {
 
                 # Forçando retorno do valor
                 my $value;
-                if ( $candidate->party_id == 34 || ($candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5)$/) ) {
+                if ( $candidate->party_id == 34 || ($candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5)$/) ) {
                     $value = '396.00';
+                }
+                elsif ( $candidate->political_movement_id == 1 ) {
+                    $value = '247.50'
                 }
                 else {
                     $value = '495.00';
