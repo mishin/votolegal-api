@@ -444,8 +444,8 @@ sub get_value {
 
     if ($has_promotion) {
         $value = $is_boleto ?
-            ( $candidate->political_movement_id == 1 ? '197.00' : '395.00' ) :
-            ( $candidate->political_movement_id == 1 ? '198.00' : '396.00' );
+            ( $candidate->political_movement_id == 1 ? '246.50' : '395.00' ) :
+            ( $candidate->political_movement_id == 1 ? '257.50' : '396.00' );
     }
     else {
         $value = $is_boleto ? '494.00' : '495.00';
