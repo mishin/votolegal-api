@@ -35,6 +35,7 @@ sub callback_POST {
     if ( my $req = $c->stash->{pagseguro}->notification($notification_code) ) {
         my $status = $req->{status};
 
+
         if ($status == 3 || $status == 4) {
 
             $c->stash->{candidate}->update( { payment_status => "paid" } );
@@ -42,6 +43,9 @@ sub callback_POST {
 
             # Criando entrada no log
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+
+            $notify->update( { payment_id => $payment->id } );
+
             $c->model("DB::PaymentLog")->create(
                 {
                     payment_id => $payment->id,

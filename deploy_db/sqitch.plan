@@ -103,3 +103,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0097-boleto-auto-cp [0096-add-auto-cp] 2018-05-14T16:13:24Z renato,,, <renato@renato-MS-7A34> # auto cp
 0098-candidate-google-analytics [0097-boleto-auto-cp] 2018-05-14T16:26:28Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'google_analytics' column on the 'candidate' table
 0099-add-collect-donor-data [0098-candidate-google-analytics] 2018-05-15T13:17:56Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding donor data collection related booleans
+0100-add-payment_id-on-notification [0099-add-collect-donor-data] 2018-05-16T14:31:13Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'payment_id' on the 'payment_notification' table
