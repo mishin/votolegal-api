@@ -19,6 +19,10 @@ use Data::Fake qw(Core Company Dates Internet Names Text);
 our $iugu_invoice_response;
 our $iugu_invoice_response_capture;
 
+our $generate_token;
+our $new_session;
+our $get_token_information;
+
 # ugly hack
 sub import {
     strict->import;
