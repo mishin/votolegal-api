@@ -401,7 +401,6 @@ use Data::Section::Simple qw(get_data_section);
 use VotoLegal::Utils;
 use VotoLegal::Payment::Cielo;
 use VotoLegal::Payment::PagSeguro;
-use VotoLegal::Payment::Iugu;
 
 # Pagseguro.
 has sender_hash => (
