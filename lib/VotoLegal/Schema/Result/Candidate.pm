@@ -1365,7 +1365,7 @@ sub send_payment_not_approved_email {
     my $email = VotoLegal::Mailer::Template->new(
         to       => $self->user->email,
         from     => 'no-reply@votolegal.org',
-        subject  => "VotoLegal - Pagamento aprovado",
+        subject  => "VotoLegal - Pagamento reprovado",
         template => get_data_section('payment_not_approved.tt'),
         vars     => { name => $self->name },
     )->build_email();
