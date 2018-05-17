@@ -43,24 +43,6 @@ db_transaction {
 
     create_candidate_contract_signature($candidate_id);
 
-    #rest_post "/api/candidate/$candidate_id/payment",
-    #    name => 'payment with boleto method but with credit_card_token',
-    #    code => 200,
-    #    [
-    #        method               => 'boleto',
-    #        sender_hash          => 'c1ec88b704a7275e28bd86199cb44ee186375b603f21c118756811f39eeb2560',
-    #        address_state        => $address_state,
-    #        address_city         => $address_city,
-    #        address_zipcode      => $address_zipcode,
-    #        address_street       => $address_street,
-    #        address_district     => $address_district,
-    #        address_house_number => $address_house_number,
-    #        phone                => $phone,
-    #        name                 => $name,
-    #        email                => 'foobar@email.com'
-    #    ]
-    #;
-
     api_auth_as user_id => 1;
 
     rest_get "/api/admin/candidate-with-related-data",

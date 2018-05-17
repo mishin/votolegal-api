@@ -55,6 +55,10 @@ sub list_GET {
             my $payment_pagseguro_data = $payment->get_pagseguro_data();
 
             if ( $payment_pagseguro_data ) {
+                $payment_pagseguro_data->{grossAmount} =~ s/\./,/g;
+                $payment_pagseguro_data->{feeAmount}   =~ s/\./,/g;
+                $payment_pagseguro_data->{netAmount}   =~ s/\./,/g;
+
                 $ret->[$i]->{'valor bruto'}   = $payment_pagseguro_data->{grossAmount};
                 $ret->[$i]->{'taxa'}          = $payment_pagseguro_data->{feeAmount};
                 $ret->[$i]->{'valor liquido'} = $payment_pagseguro_data->{netAmount};
