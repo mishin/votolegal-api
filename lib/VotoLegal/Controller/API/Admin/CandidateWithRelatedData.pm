@@ -36,7 +36,7 @@ sub list_GET {
         $ret->[$i]->{'email'}             = $candidate->user->email;
         $ret->[$i]->{'cargo'}             = $candidate->office->name;
         $ret->[$i]->{'partido'}           = $candidate->party->name;
-        $ret->[$i]->{'movimento'}         = $candidate->political_movement_id ? $candidate->political_movement->name : ();
+        $ret->[$i]->{'movimento'}         = $candidate->political_movement_id ? $candidate->political_movement->name : 0;
         $ret->[$i]->{'nome do pagamento'} = $payment ? $payment->name  : 0;
         $ret->[$i]->{'telefone'}          = $payment ? $payment->phone : 0;
         $ret->[$i]->{'estado'}            = $candidate->address_state;

@@ -1390,25 +1390,23 @@ sub get_account_payment_status {
     if ( $payment_status eq 'unpaid' ) {
 
         if ( my $payment = $self->get_most_recent_payment() ) {
-            my $log = $payment->get_most_recent_log();
+            my $log = $payment->payment_logs->search(undef, { max => 'created_at' } )->next;
 
-            if ( $log && $log->status eq 'analysis' ) {
+            if ( $log && ( $log->status eq 'analysis' || $log->status eq 'created' ) ) {
                 $ret = 'pagamento em análise';
             }
-            elsif ( $self->payment_status eq 'paid' ) {
-                $ret = 'pagamento aprovado';
-            }
-            else {
+            elsif ( $log && $log->status eq 'failed' ) {
                 $ret = 'pagamento recusado';
             }
 
         }
         else {
-
-            $ret = 'não criou pagamento';
-
+            $ret = 'não criou pagamento'
         }
-
+    }
+    else {
+        use DDP; p "ta aqui";
+        $ret = 'pagamento aprovado'
     }
 
     return $ret;
