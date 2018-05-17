@@ -10,7 +10,7 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     my ($self, $c) = @_;
 
-    $c->stash->{collection} = $c->model('DB::Candidate')->search({ status => "activated" });
+    $c->stash->{collection} = $c->model('DB::Candidate')->search({ status => "activated" }, { order_by => 'me.name'});
 }
 
 sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }
