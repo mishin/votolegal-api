@@ -218,24 +218,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 payment_notifications
 
-Type: has_many
-
-Related object: L<VotoLegal::Schema::Result::PaymentNotification>
-
-=cut
-
-__PACKAGE__->has_many(
-  "payment_notifications",
-  "VotoLegal::Schema::Result::PaymentNotification",
-  { "foreign.payment_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 11:29:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vTWp2Q+0A/i39BMBeeOGPg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 09:55:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QKOmsjlIqbRm5OU4fi5qRQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

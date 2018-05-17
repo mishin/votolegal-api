@@ -54,12 +54,6 @@ __PACKAGE__->table("payment_notification");
   is_nullable: 0
   original: {default_value => \"now()"}
 
-=head2 payment_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -72,35 +66,11 @@ __PACKAGE__->add_columns(
     is_nullable   => 0,
     original      => { default_value => \"now()" },
   },
-  "payment_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-);
-
-=head1 RELATIONS
-
-=head2 payment
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::Payment>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "payment",
-  "VotoLegal::Schema::Result::Payment",
-  { id => "payment_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 11:29:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cc8buixz7Lng4Y06EqP2CA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 09:55:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Kgo1o4iq9ku/h2vOYMPXxg
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 

@@ -33,6 +33,7 @@ sub list_GET {
         $ret->[$i]->{'data de pagamento'} = $payment ? $payment->created_at : 0;
         $ret->[$i]->{'método'}            = $payment ? $payment->get_human_like_method() : 0;
         $ret->[$i]->{'nome'}              = $candidate->name;
+        $ret->[$i]->{'email'}             = $candidate->user->email;
         $ret->[$i]->{'cargo'}             = $candidate->office->name;
         $ret->[$i]->{'partido'}           = $candidate->party->name;
         $ret->[$i]->{'movimento'}         = $candidate->political_movement_id ? $candidate->political_movement->name : ();
