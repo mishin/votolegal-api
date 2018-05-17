@@ -73,7 +73,6 @@ __PACKAGE__->table("votolegal_donation_immutable");
 =head2 donor_cpf
 
   data_type: 'text'
-  is_foreign_key: 1
   is_nullable: 0
   original: {data_type => "varchar"}
 
@@ -177,10 +176,9 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "donor_cpf",
   {
-    data_type      => "text",
-    is_foreign_key => 1,
-    is_nullable    => 0,
-    original       => { data_type => "varchar" },
+    data_type   => "text",
+    is_nullable => 0,
+    original    => { data_type => "varchar" },
   },
   "donor_phone",
   { data_type => "text", is_nullable => 1 },
@@ -247,21 +245,6 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-=head2 donor_cpf
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::CpfLock>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "donor_cpf",
-  "VotoLegal::Schema::Result::CpfLock",
-  { cpf => "donor_cpf" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
-);
-
 =head2 votolegal_donation
 
 Type: belongs_to
@@ -278,8 +261,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-03 10:45:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jjgQ0tXFVWZIAtJREdut+g
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 00:02:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2nnzTfORkm3cOJUsE2sN3w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

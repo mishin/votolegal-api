@@ -36,4 +36,16 @@ msgid "msg_cc_paid_message"
 msgstr "Doação efeutada com cartão de cŕedito efetuada com sucesso!"
 
 
+msgid "msg_link_certiface"
+msgstr "vamos lá"
+
+msgid "msg_text_certiface"
+msgstr "<p>Para continuar com a emissão do boleto, você precisa verificar seu rosto.</p><p>Você precisa usar aparelho com web-cam</p>"
+
+msgid "btn_pay_with_cc"
+msgstr "Pagar com cartão"
+
+msgid "msg_certificate_refused"
+msgstr "Não conseguimos validar"
+
 

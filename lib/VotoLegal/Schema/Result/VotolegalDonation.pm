@@ -138,12 +138,6 @@ __PACKAGE__->table("votolegal_donation");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 certiface_token_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 1
-
 =head2 device_authorization_token_id
 
   data_type: 'uuid'
@@ -213,8 +207,6 @@ __PACKAGE__->add_columns(
     },
     "payment_gateway_id",
     { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-    "certiface_token_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
     "device_authorization_token_id",
     { data_type => "uuid", is_foreign_key => 1, is_nullable => 0, size => 16 },
     "stash",
@@ -250,24 +242,19 @@ __PACKAGE__->belongs_to(
     { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
-=head2 certiface_token
+=head2 certiface_tokens
 
-Type: belongs_to
+Type: has_many
 
 Related object: L<VotoLegal::Schema::Result::CertifaceToken>
 
 =cut
 
-__PACKAGE__->belongs_to(
-    "certiface_token",
+__PACKAGE__->has_many(
+    "certiface_tokens",
     "VotoLegal::Schema::Result::CertifaceToken",
-    { id => "certiface_token_id" },
-    {
-        is_deferrable => 0,
-        join_type     => "LEFT",
-        on_delete     => "NO ACTION",
-        on_update     => "NO ACTION",
-    },
+    { "foreign.votolegal_donation_id" => "self.id" },
+    { cascade_copy                    => 0, cascade_delete => 0 },
 );
 
 =head2 device_authorization_token
@@ -313,11 +300,13 @@ __PACKAGE__->might_have(
     { "foreign.votolegal_donation_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-11 16:45:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rA/GuXZ+XUvfl8xlud7Kcw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 23:59:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:EbGyG/uJhIYzP57UtEPE2Q
 
+use Carp;
 use JSON::XS;
 use JSON qw/to_json from_json/;
+use WebService::Certiface;
 
 sub resultset { shift->result_source->resultset }
 
@@ -491,6 +480,53 @@ sub set_boleto_paid {
             captured_at => $payment_info->{paid_at},
         }
     );
+}
+
+sub generate_certiface_link {
+    my ($self) = @_;
+
+    die 'cannot generate_certiface_link after boleto_authentication' unless $self->state eq 'boleto_authentication';
+
+    my $payment_info = $self->payment_info_parsed;
+
+    my $ws = WebService::Certiface->instance;
+
+    my $immu = $self->votolegal_donation_immutable;
+
+    my $certiface = $ws->generate_token(
+        {
+            cpf        => $immu->donor_cpf,
+            telefone   => $immu->donor_phone,
+            nome       => $immu->donor_name,
+            nascimento => $immu->donor_birthdate->dmy('/'),
+        }
+    );
+
+    $payment_info->{certiface_id} = $certiface->{id};
+
+    $self->certiface_tokens->create(
+        {
+            id               => $certiface->{id},
+            verification_url => $certiface->{url},
+        }
+    );
+
+    $self->update(
+        {
+            payment_info => to_json($payment_info),
+        }
+    );
+}
+
+sub current_certiface {
+    my ($self) = @_;
+
+    my $payment_info = $self->payment_info_parsed;
+
+    $payment_info->{certiface_id} or croak 'no certiface_id found';
+
+    return $self->certiface_tokens->search( { id => $payment_info->{certiface_id} } )->next;
+
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

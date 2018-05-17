@@ -33,8 +33,7 @@ sub verifiers_specs {
                     required   => 1,
                     type       => "Str",
                     post_check => sub {
-                        my $v = $_[0]->get_value('device_authorization_token_id');
-                        return is_uuid_string($v);
+                        return is_uuid_string( $_[0]->get_value('device_authorization_token_id') );
                     },
                 },
                 donation_id => {
@@ -42,6 +41,25 @@ sub verifiers_specs {
                     type       => "Str",
                     post_check => sub {
                         return is_uuid_string( $_[0]->get_value('donation_id') );
+                    },
+                },
+            }
+        ),
+        search_by_certiface => Data::Verifier->new(
+            filters => [qw(trim)],
+            profile => {
+                certiface_token => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        return is_uuid_string( $_[0]->get_value('certiface_token') );
+                    },
+                },
+                device_authorization_token_id => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        return is_uuid_string( $_[0]->get_value('device_authorization_token_id') );
                     },
                 },
             }
@@ -265,6 +283,26 @@ sub action_specs {
             my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 
             my $donation = $self->_create_donation( config => $config, values => \%values );
+
+            return $donation;
+        },
+
+        search_by_certiface => sub {
+            my $r = shift;
+
+            my %values = $r->valid_values;
+
+            my $donation = $self->search(
+                {
+                    'certiface_tokens.id' => $values{certiface_token},
+                    device_authorization_token_id => $values{device_authorization_token_id},
+                },
+                {
+                    join => 'certiface_tokens',
+                    columns => ['me.id']
+                }
+            )->next;
+            die_with 'donation-not-found' unless $donation;
 
             return $donation;
         },

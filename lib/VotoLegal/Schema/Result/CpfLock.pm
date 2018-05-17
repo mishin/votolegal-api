@@ -71,26 +71,9 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("cpf");
 
-=head1 RELATIONS
 
-=head2 votolegal_donation_immutables
-
-Type: has_many
-
-Related object: L<VotoLegal::Schema::Result::VotolegalDonationImmutable>
-
-=cut
-
-__PACKAGE__->has_many(
-  "votolegal_donation_immutables",
-  "VotoLegal::Schema::Result::VotolegalDonationImmutable",
-  { "foreign.donor_cpf" => "self.cpf" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UbVvFyvkK1pG3EOPVTQoYQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 00:02:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NxKbcSwvPYPm6DJgreQvQQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

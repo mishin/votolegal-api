@@ -6,7 +6,21 @@ use JSON::MaybeXS;
 use Furl;
 use Carp;
 
-use VotoLegal::Utils;
+BEGIN {
+    use VotoLegal::Utils qw/is_test/;
+
+    if ( $ENV{CERTIFICATE_ENABLED} && ( !is_test() || $ENV{TEST_CERTIFACE} ) ) {
+        die "Missing CERTIFACE_LOGIN"    unless $ENV{CERTIFACE_LOGIN};
+        die "Missing CERTIFACE_PASSWORD" unless $ENV{CERTIFACE_PASSWORD};
+        die "Missing CERTIFACE_API_URL"  unless $ENV{CERTIFACE_API_URL};
+
+        $ENV{CERTIFACE_TEST} = 0;
+    }
+    else {
+        $ENV{CERTIFACE_TEST} = 1;
+
+    }
+}
 
 has 'furl' => ( is => 'rw', lazy => 1, builder => '_build_furl' );
 
@@ -16,12 +30,13 @@ sub _build_furl { Furl->new( timeout => 15 ) }
 
 sub new_session {
     my ($self) = @_;
+    croak 'You should turn on CERTIFICATE_ENABLED to use WebService::Certiface' unless $ENV{CERTIFICATE_ENABLED};
 
     my $token;
 
     if ( $ENV{CERTIFACE_TEST} ) {
 
-        $token = $VotoLegal::Test::Further::new_session;
+        $token = 'fake';
 
     }
     else {
@@ -65,7 +80,7 @@ sub generate_token {
 
     if ( $ENV{CERTIFACE_TEST} ) {
 
-        $res = $VotoLegal::Test::Further::generate_token;
+        $res = $VotoLegal::Test::Further::certiface_generate_token;
 
     }
     else {
@@ -106,7 +121,7 @@ sub get_token_information {
     my $res;
 
     if ( $ENV{CERTIFACE_TEST} ) {
-        $res = $VotoLegal::Test::Further::get_token_information;
+        $res = $VotoLegal::Test::Further::certiface_get_token_information;
     }
     else {
 

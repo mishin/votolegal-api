@@ -71,6 +71,12 @@ __PACKAGE__->table("device_authorization_token");
   data_type: 'timestamp with time zone'
   is_nullable: 0
 
+=head2 can_create_boleto_without_certiface
+
+  data_type: 'boolean'
+  default_value: false
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -89,6 +95,8 @@ __PACKAGE__->add_columns(
   { data_type => "inet", is_nullable => 0 },
   "created_at",
   { data_type => "timestamp with time zone", is_nullable => 0 },
+  "can_create_boleto_without_certiface",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -141,8 +149,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SzxhbtC3LB1mOyX1YAjhOg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 23:31:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WXvyQMGP+LRl/Apl0sKiDw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

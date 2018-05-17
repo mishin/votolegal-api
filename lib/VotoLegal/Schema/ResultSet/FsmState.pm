@@ -29,7 +29,7 @@ sub interface {
     my $max_auto_continues = 10;
     my $state_config       = $config->{ $opts{donation}->state() };
 
-    my $last_change = '';
+    my $last_applied_state = '';
     if ($state_config) {
         my @messages = $self->_messages_of_state(%opts);
       REPEAT:
@@ -39,8 +39,8 @@ sub interface {
 
             push @messages, @{ $apply->{force_messages} || [] };
 
-            $last_change  = $opts{donation}->state();
-            $state_config = $config->{ $opts{donation}->state() };
+            $last_applied_state = $opts{donation}->state();
+            $state_config       = $config->{ $opts{donation}->state() };
 
             push @messages, $self->_messages_of_state(%opts);
 
@@ -52,23 +52,29 @@ sub interface {
 
         $interface->{messages} = \@messages;
 
-        # esse aqui precisa verificar a cada GET
-        # uma coisa que precisa de lock
-        if ( $opts{donation}->state() eq 'waiting_boleto_payment' && $last_change ne 'waiting_boleto_payment' ) {
-            undef @messages;
-            my $apply = $self->_apply(%opts);
-            $opts{donation} = $apply->{newer_donation};
+        # em alguns estados, precisa escrever no banco durante um GET
+        # entao precisa chamar o _apply
+        for my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment/) {
 
-            push @messages, @{ $apply->{force_messages} || [] };
+            if ( $opts{donation}->state() eq $apply_on_get_state && $last_applied_state ne $apply_on_get_state ) {
+                undef @messages;
+                my $apply = $self->_apply(%opts);
+                $opts{donation} = $apply->{newer_donation};
 
-            $state_config = $config->{ $opts{donation}->state() };
+                push @messages, @{ $apply->{force_messages} || [] };
 
-            if ( $state_config->{auto_continue} ) {
-                goto REPEAT;
-            }
-            else {
+                $state_config = $config->{ $opts{donation}->state() };
 
-                push @messages, $self->_messages_of_state(%opts);
+                if ( $state_config->{auto_continue} ) {
+                    goto REPEAT;
+                }
+                else {
+
+                    push @messages, $self->_messages_of_state(%opts);
+                }
+
+                # se aplicou, vai embora, pois só tem como ter um state por vez
+                last;
             }
         }
 
@@ -168,6 +174,11 @@ sub on_state_enter {
         $donation->_create_invoice();
 
     }
+    elsif ( $entering_state eq 'boleto_authentication' ) {
+
+        $donation->generate_certiface_link();
+    }
+
     else {
         return undef;
     }
@@ -223,6 +234,36 @@ sub _messages_of_state {
         );
 
     }
+    elsif ( $state eq 'boleto_authentication' ) {
+
+        @messages = (
+            {
+                type => 'msg',
+                text => $loc->('msg_text_certiface'),
+            },
+            {
+                type => 'link',
+                text => $loc->('msg_link_certiface'),
+                href => $donation->current_certiface->verification_url,
+            }
+        );
+
+    }
+    elsif ( $state eq 'certificate_refused' ) {
+
+        @messages = (
+            {
+                type => 'msg',
+                text => $loc->('msg_certificate_refused'),
+            },
+            {
+                type  => 'button',
+                text  => $loc->('btn_pay_with_cc'),
+                value => 'pay_with_cc'
+            }
+        );
+
+    }
     elsif ( $donation->captured_at ) {
 
         my $info = $donation->payment_info_parsed;
@@ -272,8 +313,55 @@ sub _process_state {
         &_process_validate_payment(@params);
 
     }
+    elsif ( $state eq 'boleto_authentication' ) {
+        &_process_boleto_authentication(@params);
+
+    }
+    elsif ( $state eq 'certificate_refused' ) {
+        &_process_certificate_refused(@params);
+
+    }
 
     return $stash;
+}
+
+sub _process_certificate_refused {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    if ( exists $params->{action_id} && $params->{action_id} eq 'pay_with_cc' ) {
+        $stash->{value} = 'pay_with_cc';
+        return;
+    }
+
+}
+
+sub _process_boleto_authentication {
+
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+    my $certiface = $donation->current_certiface();
+
+    if ( $certiface->process_response_and_validate() == 0 ) {
+
+        # se o link expirou ou deu 404 no get
+        # atualiza o link
+
+        $donation->generate_certiface_link();
+
+    }
+    else {
+
+        if ( $certiface->validated ) {
+
+            $stash->{value} = 'human_verified';
+
+        }
+        else {
+
+            $stash->{value} = 'not_human';
+
+        }
+    }
+
 }
 
 sub _process_waiting_boleto_payment {
@@ -355,8 +443,16 @@ sub _process_credit_card_form {
 sub _process_created {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
-    if ( $donation->is_boleto && $ENV{BOLETO_NEED_AUTHROIZATION} ) {
-        $stash->{value} = 'BoletoWithAuth';
+    if ( $donation->is_boleto && $ENV{CERTIFICATE_ENABLED} ) {
+
+        if ( $donation->device_authorization_token->can_create_boleto_without_certiface ) {
+
+            $stash->{value} = 'BoletoWithoutAuth';
+
+        }
+        else {
+            $stash->{value} = 'BoletoWithAuth';
+        }
     }
     elsif ( $donation->is_boleto ) {
         $stash->{value} = 'BoletoWithoutAuth';

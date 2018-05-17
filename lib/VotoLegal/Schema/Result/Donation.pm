@@ -213,7 +213,6 @@ __PACKAGE__->table("donation");
 =head2 certiface_token_id
 
   data_type: 'integer'
-  is_foreign_key: 1
   is_nullable: 1
 
 =cut
@@ -293,7 +292,7 @@ __PACKAGE__->add_columns(
   "payment_gateway_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "certiface_token_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -323,26 +322,6 @@ __PACKAGE__->belongs_to(
   "VotoLegal::Schema::Result::Candidate",
   { id => "candidate_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
-);
-
-=head2 certiface_token
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::CertifaceToken>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "certiface_token",
-  "VotoLegal::Schema::Result::CertifaceToken",
-  { id => "certiface_token_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
 );
 
 =head2 donation_type
@@ -391,8 +370,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-04-29 10:50:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pGGW/fr48aiOi03674/1JQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 23:59:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RxI6BJf2zMyB0twcyhbxWA
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

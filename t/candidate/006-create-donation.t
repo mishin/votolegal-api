@@ -80,7 +80,6 @@ db_transaction {
       code   => 200,
       params => {
         device_authorization_token_id => stash 'test_auth',
-        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95'
       };
     is messages2str $response, 'msg_cc_paid_message', 'apenas msg final';
 
@@ -131,6 +130,7 @@ sub test_boleto {
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
+    is links2str $response, 'msg_boleto_link', 'there is a link';
     assert_current_step('register_capture');
 
     setup_sucess_mock_iugu_boleto_success;

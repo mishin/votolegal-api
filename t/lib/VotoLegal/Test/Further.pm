@@ -19,9 +19,8 @@ use Data::Fake qw(Core Company Dates Internet Names Text);
 our $iugu_invoice_response;
 our $iugu_invoice_response_capture;
 
-our $generate_token;
-our $new_session;
-our $get_token_information;
+our $certiface_generate_token;
+our $certiface_get_token_information;
 
 # ugly hack
 sub import {
@@ -222,8 +221,9 @@ sub generate_device_token {
 sub generate_rand_donator_data {
     my $info = fake_hash(
         {
-            name                         => fake_name(),
-            email                        => fake_email(),
+            name  => fake_name(),
+            email => fake_email(),
+
             #birthdate                    => fake_past_datetime("%Y-%m-%d"),
 
             birthdate                    => '2000-01-01',
@@ -268,6 +268,18 @@ sub messages2str ($) {
     ( join ' ', map { $_->{text} } grep { $_->{type} eq 'msg' } @{ $where->{ui}{messages} || [] } );
 }
 
+sub buttons2str ($) {
+    my ($where) = @_;
+
+    ( join ' ', map { $_->{text}.'-'.$_->{value} } grep { $_->{type} eq 'button' } @{ $where->{ui}{messages} || [] } );
+}
+
+sub links2str ($) {
+    my ($where) = @_;
+
+    ( join ' ', map { $_->{text} } grep { $_->{type} eq 'link' } @{ $where->{ui}{messages} || [] } );
+}
+
 sub form2str ($) {
     my ($where) = @_;
 
@@ -286,6 +298,82 @@ sub assert_current_step ($) {
             exit(1);
         }
     }
+}
+
+sub setup_mock_certiface {
+    $certiface_generate_token = {
+        url => 'https://site.domain.br/certifacetoken/dd24700e-2855-4e0c-81db-53ddc14a44ec',
+        id  => 'dd24700e-2855-4e0c-81db-53ddc14a44ec'
+    };
+
+    $certiface_get_token_information = {
+        "token"         => "dd24700e-2855-4e0c-81db-53ddc14a44ec",
+        "cpf"           => 15859607059,
+        "nome"          => "Delilah Yaritza Flowers",
+        "nascimento"    => "1999-12-31",
+        "telefone"      => "3633784957",
+        "status"        => 0,
+        "resultado"     => 0,
+        "dataExpiracao" => "2018-05-17 05:02:55",
+        "resultados"    => undef
+    };
+}
+
+sub setup_mock_certiface_success {
+
+    $certiface_get_token_information = {
+        "token"         => "dd24700e-2855-4e0c-81db-53ddc14a44ec",
+        "cpf"           => 15859607059,
+        "nome"          => "Delilah Yaritza Flowers",
+        "nascimento"    => "1999-12-31",
+        "telefone"      => "3633784957",
+        "status"        => 1,
+        "resultado"     => 1,
+        "dataExpiracao" => "2018-05-17 05:02:55",
+        "resultados"    => [
+            {
+                "protocolo" => "201800012443",
+                "cause"     => "BIOMETRIA",
+                "valid"     => 0
+            },
+            {
+                "protocolo" => "201800012437",
+                "cause"     => undef,
+                "valid"     => 1
+            }
+        ]
+    };
+}
+
+sub setup_mock_certiface_fail {
+
+    $certiface_get_token_information = {
+        "token"         => "dd24700e-2855-4e0c-81db-53ddc14a44ec",
+        "cpf"           => 15859607059,
+        "nome"          => "Delilah Yaritza Flowers",
+        "nascimento"    => "1999-12-31",
+        "telefone"      => "3633784957",
+        "status"        => 1,
+        "resultado"     => 1,
+        "dataExpiracao" => "2018-05-17 05:02:55",
+        "resultados"    => [
+            {
+                "protocolo" => "201800012441",
+                "cause"     => "PROVA DE VIDA",
+                "valid"     => 0
+            },
+            {
+                "protocolo" => "201800012440",
+                "cause"     => "IMAGEM [Posicionamento não frontal]",
+                "valid"     => 0
+            },
+            {
+                "protocolo" => "201800012442",
+                "cause"     => "PROVA DE VIDA",
+                "valid"     => 0
+            }
+        ]
+    };
 }
 
 sub setup_sucess_mock_iugu {
@@ -423,9 +511,9 @@ sub setup_sucess_mock_iugu {
                 variable => "payment_data.transaction_number"
             }
         ]
-      };
+    };
 
-      $iugu_invoice_response_capture = {
+    $iugu_invoice_response_capture = {
         'early_payment_discount' => \0,
         'updated_at_iso'         => '2018-05-14T11:06:38-03:00',
         'currency'               => 'BRL',
@@ -603,12 +691,11 @@ sub setup_sucess_mock_iugu {
         'items_total_cents'             => 3000,
         'return_url'                    => undef,
         'occurrence_date'               => '2018-05-14'
-      };
+    };
 
 }
 
 sub setup_sucess_mock_iugu_boleto_success {
-
 
     $iugu_invoice_response = {
         'occurrence_date'               => '2018-05-14',

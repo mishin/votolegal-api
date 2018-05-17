@@ -105,3 +105,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0099-add-collect-donor-data [0098-candidate-google-analytics] 2018-05-15T13:17:56Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding donor data collection related booleans
 0100-add-payment_id-on-notification [0099-add-collect-donor-data] 2018-05-16T14:31:13Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'payment_id' on the 'payment_notification' table
 0101-unaccent [0100-add-payment_id-on-notification] 2018-05-17T00:01:32Z renato,,, <renato@renato-MS-7A34> # unaccent
+0102-DeviceAuthorizationToken [0101-unaccent] 2018-05-17T02:31:12Z renato,,, <renato@renato-MS-7A34> # DeviceAuthorizationToken
