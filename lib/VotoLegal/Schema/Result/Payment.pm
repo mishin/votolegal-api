@@ -496,7 +496,7 @@ sub get_pagseguro_data {
 
     my $payment_data = $pagseguro->transaction_data($self->code);
 
-    if ( ref $payment_data eq 'STRING' ) {
+    if ( !$payment_data->{grossAmount} ) {
         return 0;
     }
     else {
