@@ -60,8 +60,10 @@ sub verifiers_specs {
                         # tira espaços duplicados
                         $nome =~ s/\s+/\ /go;
 
+                        my $reg = qr/^[a-z\-'´]{3,29}\s[a-z\-'´\.]{1,29}(\s[a-z\-'´\.]{1,29})*$/;
+
                         # verifica se precisa tirar os acentos
-                        if ( $nome !~ /^[a-z']{3,29}\s[a-z']{1,29}(\s[a-z']{1,29})*$/io ) {
+                        if ( $nome !~ /$reg/io ) {
                             my $f = $self->result_source->schema->unaccent($nome);
 
                             $nome = lc $f->{unaccent};
@@ -69,7 +71,7 @@ sub verifiers_specs {
 
                         # verifca se segue a logica aplicada pelo certiface
                         # com isso, nao aceitamos nomes estrangeiros
-                        return $nome =~ /^[a-z']{3,29}\s[a-z']{1,29}(\s[a-z']{1,29})*$/io ? 1 : 0;
+                        return $nome =~ /$reg/io ? 1 : 0;
                     },
                 },
                 email => {
