@@ -31,7 +31,7 @@ sub list_GET {
 
         $ret->[$i]->{'status da conta'}   = $payment_status;
         $ret->[$i]->{'data de pagamento'} = $payment ? $payment->created_at : 0;
-        $ret->[$i]->{'método'}            = $payment ? $payment->get_human_like_method() : 0;
+        $ret->[$i]->{'metodo'}            = $payment ? $payment->get_human_like_method() : 0;
         $ret->[$i]->{'nome'}              = $candidate->name;
         $ret->[$i]->{'email'}             = $candidate->user->email;
         $ret->[$i]->{'cargo'}             = $candidate->office->name;
@@ -43,7 +43,7 @@ sub list_GET {
         $ret->[$i]->{'cidade'}            = $candidate->address_city;
         $ret->[$i]->{'cep'}               = $candidate->address_zipcode;
         $ret->[$i]->{'rua'}               = $candidate->address_street;
-        $ret->[$i]->{'número'}            = $candidate->address_house_number;
+        $ret->[$i]->{'numero'}            = $candidate->address_house_number;
         $ret->[$i]->{'complemento'}       = $candidate->address_complement;
 
         if (!$payment) {
@@ -65,6 +65,16 @@ sub list_GET {
                 $ret->[$i]->{'valor liquido'} = 0;
             }
 
+        }
+
+        if ( !defined $ret->[$i]->{'valor bruto'} ) {
+            $ret->[$i]->{'valor bruto'} = 0
+        }
+        if ( !defined $ret->[$i]->{'valor bruto'} ) {
+            $ret->[$i]->{'taxa'} = 0
+        }
+        if ( !defined $ret->[$i]->{'valor bruto'} ) {
+            $ret->[$i]->{'valor liquido'} = 0
         }
 
         $i += 1;
