@@ -81,7 +81,7 @@ db_transaction {
         is ($res->{candidates}->[0]->{'cidade'},            $address_city,          'cidade');
         is ($res->{candidates}->[0]->{'cep'},               $address_zipcode,       'cep');
         is ($res->{candidates}->[0]->{'rua'},               $address_street,        'rua');
-        is ($res->{candidates}->[0]->{'numero'},           $address_house_number,  'número');
+        is ($res->{candidates}->[0]->{'numero'},            $address_house_number,  'número');
         is ($res->{candidates}->[0]->{'valor bruto'},       '0',                    'valor bruto');
         is ($res->{candidates}->[0]->{'taxa'},              '0',                    'taxas');
         is ($res->{candidates}->[0]->{'valor liquido'},     '0',                    'valor líquido');
