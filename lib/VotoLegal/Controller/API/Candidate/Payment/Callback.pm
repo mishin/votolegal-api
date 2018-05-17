@@ -44,7 +44,6 @@ sub callback_POST {
             # Criando entrada no log
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
 
-            $notify->update( { payment_id => $payment->id } );
 
             $c->model("DB::PaymentLog")->create(
                 {
