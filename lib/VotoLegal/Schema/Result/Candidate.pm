@@ -1405,7 +1405,7 @@ sub get_account_payment_status {
         }
     }
     else {
-        use DDP; p "ta aqui";
+
         $ret = 'pagamento aprovado'
     }
 
