@@ -472,7 +472,7 @@ sub get_value {
 sub get_most_recent_log {
     my ($self) = @_;
 
-    return $self->payment_logs->search(undef, { max => 'created_at' } )->first;
+    return $self->payment_logs->search( undef, { max => 'created_at' } )->next;
 }
 
 sub get_human_like_method {

@@ -1395,7 +1395,7 @@ sub get_account_payment_status {
             if ( $log && $log->status eq 'analysis' ) {
                 $ret = 'pagamento em análise';
             }
-            elsif ( $log && $log->status eq 'captured' ) {
+            elsif ( $self->payment_status eq 'paid' ) {
                 $ret = 'pagamento aprovado';
             }
             else {
