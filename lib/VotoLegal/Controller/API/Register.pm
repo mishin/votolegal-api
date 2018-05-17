@@ -24,7 +24,7 @@ Catalyst Controller.
 =cut
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::Candidate');
 }
@@ -34,14 +34,13 @@ sub base : Chained('root') : PathPart('register') : CaptureArgs(0) { }
 sub register : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub register_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $candidate = $c->stash->{collection}->execute(
         $c,
         for  => 'create',
         with => {
-            %{ $c->req->params },
-            status => "pending",
+            %{ $c->req->params }, status => "pending",
         },
     );
 
@@ -49,23 +48,28 @@ sub register_POST {
     $candidate->send_email_registration();
 
     # Enviando notificação no Slack.
-    if (!is_test) {
+    if ( !is_test ) {
         my $name         = $c->req->params->{name};
         my $popular_name = $c->req->params->{popular_name};
 
-        $c->model('DB::SlackQueue')->create({
-            channel => "votolegal-bot",
-            message => "${name} (${popular_name}) realizou o pré cadastro."
-        });
+        $c->model('DB::SlackQueue')->create(
+            {
+                channel => "votolegal-bot",
+                message => "${name} (${popular_name}) realizou o pré cadastro."
+            }
+        );
     }
 
     # Forçando retorno do valor
     my $value;
-    if ( $candidate->political_movement_id && $candidate->political_movement_id == 1 ) {
-        $value = '247.50'
-    }
-    elsif ( ( $candidate->party_id == 34 && $candidate->political_movement_id != 1 ) || ($candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5)$/) ) {
-        $value = '396.00';
+    if ( $candidate->political_movement_id ) {
+        if ( $candidate->political_movement_id == 1 ) {
+            $value = '247.50';
+        }
+        elsif (( $candidate->party_id == 34 && $candidate->political_movement_id != 1 )
+            || ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5)$/ ) ) {
+            $value = '396.00';
+        }
     }
     else {
         $value = '495.00';
@@ -73,8 +77,8 @@ sub register_POST {
 
     $self->status_created(
         $c,
-        location => $c->uri_for($c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ]),
-        entity   => {
+        location => $c->uri_for( $c->controller('API::Candidate')->action_for('candidate'), [ $candidate->id ] ),
+        entity => {
             id                   => $candidate->id,
             address_state        => $candidate->address_state,
             address_city         => $candidate->address_city,
