@@ -145,7 +145,6 @@ sub create_candidate {
         address_zipcode       => '11920-000',
         address_street        => "Rua Tiradentes",
         address_house_number  => 1 + int( rand(2000) ),
-        political_movement_id => fake_int( 1, 3 )->(),
         office_id             => 4,
         birth_date            => '11/05/1998',
         party_id              => fake_int( 1, 35 )->(),

@@ -138,6 +138,30 @@ sub notification {
     return ;
 }
 
+sub transaction_data {
+    my ($self, $code) = @_;
+
+    my $merchant_id  = $self->merchant_id;
+    my $merchant_key = $self->merchant_key;
+
+    my $action = 'transaction';
+
+    my $req = $self->ua->get(
+        $self->endpoint($action) . "transactions/$code?email=$merchant_id&token=$merchant_key",
+        [],
+        transactionCode => $code
+    );
+
+    $self->logger->info($req->request->as_http_request->as_string) if $self->logger;
+    $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;
+
+    if ($req->is_success()) {
+        return XMLin($req->content);
+    }
+
+    return $req->content;
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1

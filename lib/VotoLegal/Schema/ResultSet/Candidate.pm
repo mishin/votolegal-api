@@ -226,5 +226,14 @@ sub action_specs {
     };
 }
 
+sub get_candidates_with_data_for_admin {
+    my ($self) = @_;
+
+    return $self->search(
+        { 'user.email' => { 'NOT ILIKE' => "'%eokoe%' AND email NOT ILIKE '%+%'" } },
+        { prefetch => [ qw/ party office political_movement payments user / ] }
+    );
+}
+
 
 1;

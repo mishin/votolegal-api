@@ -469,5 +469,33 @@ sub get_value {
     return $value;
 }
 
+sub get_most_recent_log {
+    my ($self) = @_;
+
+    return $self->payment_logs->search(undef, { max => 'created_at' } )->first;
+}
+
+sub get_human_like_method {
+    my ($self) = @_;
+
+    return $self->method eq 'creditCard' ? 'cartão de crédito' : 'boleto';
+}
+
+sub get_pagseguro_data {
+    my ($self) = @_;
+
+    my $merchant_id  = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID};
+    my $merchant_key = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY};
+
+    my $pagseguro = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $merchant_id,
+        merchant_key => $merchant_key,
+        callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
+        sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
+    );
+
+    my $payment_data = $pagseguro->transaction_data($self->code);
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

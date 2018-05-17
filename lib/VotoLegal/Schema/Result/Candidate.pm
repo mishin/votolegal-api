@@ -1375,6 +1375,45 @@ sub send_payment_not_approved_email {
     });
 }
 
+sub get_most_recent_payment {
+    my ($self) = @_;
+
+    return $self->payments->count > 0 ? $self->payments->search(undef, { max => 'created_at' } )->first : 0;
+}
+
+sub get_account_payment_status {
+    my ($self) = @_;
+
+    my $payment_status = $self->payment_status;
+
+    my $ret;
+    if ( $payment_status eq 'unpaid' ) {
+
+        if ( my $payment = $self->get_most_recent_payment() ) {
+            my $log = $payment->get_most_recent_log();
+
+            if ( $log->status eq 'analysis' ) {
+                $ret = 'pagamento em análise';
+            }
+            elsif ( $log->status eq 'captured' ) {
+                $ret = 'pagamento aprovado';
+            }
+            else {
+                $ret = 'pagamento recusado';
+            }
+
+        }
+        else {
+
+            $ret = 'não criou pagamento';
+
+        }
+
+    }
+
+    return $ret;
+}
+
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 
