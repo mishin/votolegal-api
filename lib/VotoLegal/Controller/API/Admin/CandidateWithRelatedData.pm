@@ -48,7 +48,7 @@ sub list_GET {
         if (!$payment) {
             $ret->[$i]->{'valor bruto'}   = 0;
             $ret->[$i]->{'taxa'}          = 0;
-            $ret->[$i]->{'valor líquido'} = 0;
+            $ret->[$i]->{'valor liquido'} = 0;
         }
         else {
             my $payment_pagseguro_data = $payment->get_pagseguro_data();
@@ -56,12 +56,12 @@ sub list_GET {
             if ( $payment_pagseguro_data ) {
                 $ret->[$i]->{'valor bruto'}   = $payment_pagseguro_data->{grossAmount};
                 $ret->[$i]->{'taxa'}          = $payment_pagseguro_data->{feeAmount};
-                $ret->[$i]->{'valor líquido'} = $payment_pagseguro_data->{netAmount};
+                $ret->[$i]->{'valor liquido'} = $payment_pagseguro_data->{netAmount};
             }
             else {
                 $ret->[$i]->{'valor bruto'}   = 0;
                 $ret->[$i]->{'taxa'}          = 0;
-                $ret->[$i]->{'valor líquido'} = 0;
+                $ret->[$i]->{'valor liquido'} = 0;
             }
 
         }
