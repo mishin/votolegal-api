@@ -101,58 +101,6 @@ sub verifiers_specs {
                     required => 1,
                     type     => CPF,
                 },
-                phone => {
-                    required   => 1,
-                    type       => "Str",
-                    post_check => sub {
-                        $_[0]->get_value('phone') =~ m{^[0-9]{10,11}$};
-                    },
-                },
-                address_street => {
-                    required   => 1,
-                    max_length => 100,
-                    type       => CommonLatinText,
-                },
-                address_house_number => {
-                    required => 1,
-                    type     => PositiveInt,
-                },
-                address_district => {
-                    required   => 1,
-                    max_length => 100,
-                    type       => CommonLatinText,
-                },
-                address_zipcode => {
-                    required   => 1,
-                    type       => "Str",
-                    max_length => 9,
-                    post_check => sub {
-                        test_cep( $_[0]->get_value('address_zipcode') );
-                    },
-                },
-                address_city => {
-                    required   => 1,
-                    max_length => 100,
-                    type       => 'Str',
-                    post_check => sub {
-                        my $city = $_[0]->get_value('address_city');
-                        $self->resultset('City')->search( { name => $city } )->count;
-                    },
-                },
-                address_state => {
-                    required   => 1,
-                    max_length => 100,
-                    type       => 'Str',
-                    post_check => sub {
-                        my $state = $_[0]->get_value('address_state');
-                        $self->resultset('State')->search( { code => $state } )->count;
-                    },
-                },
-                address_complement => {
-                    required   => 0,
-                    max_length => 100,
-                    type       => CommonLatinText,
-                },
                 amount => {
                     required   => 1,
                     type       => PositiveInt,
@@ -167,6 +115,58 @@ sub verifiers_specs {
 
                         return 1;
                     },
+                },
+                phone => {
+                    required   => 1,
+                    type       => "Str",
+                    post_check => sub {
+                        $_[0]->get_value('phone') =~ m{^[0-9]{10,11}$};
+                    },
+                },
+                address_street => {
+                    required   => 0,
+                    max_length => 100,
+                    type       => CommonLatinText,
+                },
+                address_house_number => {
+                    required   => 0,
+                    type     => PositiveInt,
+                },
+                address_district => {
+                    required   => 0,
+                    max_length => 100,
+                    type       => CommonLatinText,
+                },
+                address_zipcode => {
+                    required   => 0,
+                    type       => "Str",
+                    max_length => 9,
+                    post_check => sub {
+                        test_cep( $_[0]->get_value('address_zipcode') );
+                    },
+                },
+                address_city => {
+                    required   => 0,
+                    max_length => 100,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $city = $_[0]->get_value('address_city');
+                        $self->resultset('City')->search( { name => $city } )->count;
+                    },
+                },
+                address_state => {
+                    required   => 0,
+                    max_length => 100,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $state = $_[0]->get_value('address_state');
+                        $self->resultset('State')->search( { code => $state } )->count;
+                    },
+                },
+                address_complement => {
+                    required   => 0,
+                    max_length => 100,
+                    type       => CommonLatinText,
                 },
                 birthdate => {
                     required   => 1,
@@ -275,6 +275,16 @@ sub action_specs {
             $values{$_} =~ s/[^0-9]//go for qw/cpf address_zipcode billing_address_zipcode/;
             $values{$_} = lc $values{$_} for qw/email/;
 
+            if ( $values{payment_method} eq 'boleto' ) {
+                $values{$_} or die_with 'need-billing-adddress' for qw/
+                  billing_address_street
+                  billing_address_district
+                  billing_address_zipcode
+                  billing_address_city
+                  billing_address_state
+                  /;
+            }
+
             # tira espaços duplicados antes de salvar
             $values{name} =~ s/\s+/\ /go;
 
@@ -294,11 +304,11 @@ sub action_specs {
 
             my $donation = $self->search(
                 {
-                    'certiface_tokens.id' => $values{certiface_token},
+                    'certiface_tokens.id'         => $values{certiface_token},
                     device_authorization_token_id => $values{device_authorization_token_id},
                 },
                 {
-                    join => 'certiface_tokens',
+                    join    => 'certiface_tokens',
                     columns => ['me.id']
                 }
             )->next;
