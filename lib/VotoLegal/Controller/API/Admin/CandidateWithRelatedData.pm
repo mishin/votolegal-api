@@ -31,6 +31,7 @@ sub list_GET {
 
         $ret->[$i]->{'status da conta'}   = $payment_status;
         $ret->[$i]->{'data de pagamento'} = $payment ? $payment->created_at : 0;
+        $ret->[$i]->{'cód. do pagamento'} = $payment ? $payment->code : 0;
         $ret->[$i]->{'metodo'}            = $payment ? $payment->get_human_like_method() : 0;
         $ret->[$i]->{'nome'}              = $candidate->name;
         $ret->[$i]->{'email'}             = $candidate->user->email;
