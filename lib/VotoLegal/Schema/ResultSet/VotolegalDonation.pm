@@ -9,7 +9,7 @@ with 'VotoLegal::Role::Verification';
 
 use Data::Verifier;
 use Business::BR::CEP qw(test_cep);
-use VotoLegal::Types qw(EmailAddress CPF PositiveInt);
+use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Utils;
 use DateTime::Format::Pg;
 use DateTime;
@@ -93,7 +93,7 @@ sub verifiers_specs {
                 address_street => {
                     required   => 1,
                     max_length => 100,
-                    type       => "Str",
+                    type       => CommonLatinText,
                 },
                 address_house_number => {
                     required => 1,
@@ -102,7 +102,7 @@ sub verifiers_specs {
                 address_district => {
                     required   => 1,
                     max_length => 100,
-                    type       => "Str",
+                    type       => CommonLatinText,
                 },
                 address_zipcode => {
                     required   => 1,
@@ -133,7 +133,7 @@ sub verifiers_specs {
                 address_complement => {
                     required   => 0,
                     max_length => 100,
-                    type       => 'Str',
+                    type       => CommonLatinText,
                 },
                 amount => {
                     required   => 1,
@@ -176,7 +176,7 @@ sub verifiers_specs {
                 billing_address_street => {
                     required   => 0,
                     max_length => 100,
-                    type       => "Str",
+                    type       => CommonLatinText,
                 },
                 billing_address_house_number => {
                     required => 0,
@@ -185,7 +185,7 @@ sub verifiers_specs {
                 billing_address_district => {
                     required   => 0,
                     max_length => 100,
-                    type       => "Str",
+                    type       => CommonLatinText,
                 },
                 billing_address_zipcode => {
                     required   => 0,
@@ -216,7 +216,7 @@ sub verifiers_specs {
                 billing_address_complement => {
                     required   => 0,
                     max_length => 100,
-                    type       => "Str",
+                    type       => CommonLatinText,
                 },
                 ip_address => {
                     required => 1,

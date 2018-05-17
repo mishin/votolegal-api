@@ -5,7 +5,7 @@ use MooseX::Types -declare => [
   qw(
     NotTooBigString Int CEP
     CPF CNPJ PositiveInt
-    EmailAddress PhoneNumber
+    EmailAddress PhoneNumber CommonLatinText
   )
 ];
 
@@ -27,6 +27,13 @@ subtype PositiveInt,
     as Int,
     where { $_ >= 0 && $_ <= 2147483647 },
   message { "Int is not larger than 0" };
+
+subtype CommonLatinText,
+    as Str,
+    where { $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
+  message { "Text include non latin scripts" };
+
+
 
 subtype CPF, as NonEmptyStr, where {
   my $cpf = $_;
