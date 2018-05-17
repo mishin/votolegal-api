@@ -495,6 +495,13 @@ sub get_pagseguro_data {
     );
 
     my $payment_data = $pagseguro->transaction_data($self->code);
+
+    if ( ref $payment_data eq 'STRING' ) {
+        return 0;
+    }
+    else {
+        return $payment_data;
+    }
 }
 
 __PACKAGE__->meta->make_immutable;
