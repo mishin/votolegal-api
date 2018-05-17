@@ -296,14 +296,11 @@ sub _create_donation {
     my $is_boleto = $values{payment_method} eq 'boleto';
     my $schema    = $self->result_source->schema;
 
+    eval { $self->resultset('CpfLock')->find_or_create( { cpf => $values{cpf} } ) };
+
     my $donation;
     $schema->txn_do(
         sub {
-            $self->resultset('CpfLock')->find_or_create(
-                {
-                    cpf => $values{cpf},
-                }
-            );
 
             $donation = $self->create(
                 {
