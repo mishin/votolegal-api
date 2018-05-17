@@ -49,7 +49,6 @@ sub new_session {
 sub generate_token {
     my ( $self, $opts ) = @_;
 
-
     $opts->{$_} or croak "missing $_" for qw/cpf nascimento nome telefone/;
     croak 'data invalida' unless $opts->{nascimento} =~ /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
@@ -58,7 +57,7 @@ sub generate_token {
     $opts->{nome} =~ s/\s+$//;
 
     # precisa ter pelo menos um nome com duas palavras
-    croak 'nome invalido' unless $opts->{nome} =~ /\w\s\w/;
+    croak 'nome invalido' unless $opts->{nome} =~ /^[a-z]{3,20}\s[a-z]/i;
 
     $self->new_session() unless $self->session_token();
 
@@ -85,6 +84,8 @@ sub generate_token {
 
             $retry++;
             goto RETRY if $retry;
+
+            die "Erro ao criar token certiface: " . $res->decoded_content;
         }
         elsif ( $res->code != 200 ) {
 
@@ -121,6 +122,7 @@ sub get_token_information {
 
             $retry++;
             goto RETRY if $retry;
+            die "Erro ao baixar token certiface: " . $res->decoded_content;
         }
         elsif ( $res->code == 404 ) {
 

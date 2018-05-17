@@ -48,8 +48,27 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 name => {
-                    required => 1,
-                    type     => "Str",
+                    required   => 1,
+                    max_length => 100,
+                    min_length => 3,
+                    type       => "Str",
+                    post_check => sub {
+                        my $nome = lc $_[0]->get_value('name');
+
+                        # tira espaços duplicados
+                        $nome =~ s/\s+/\ /go;
+
+                        # verifica se precisa tirar os acentos
+                        if ( $nome !~ /^[a-z']{3,29}\s[a-z']{1,29}(\s[a-z']{1,29})*$/io ) {
+                            my $f = $self->result_source->schema->unaccent($nome);
+
+                            $nome = lc $f->{unaccent};
+                        }
+
+                        # verifca se segue a logica aplicada pelo certiface
+                        # com isso, nao aceitamos nomes estrangeiros
+                        return $nome =~ /^[a-z']{3,29}\s[a-z']{1,29}(\s[a-z']{1,29})*$/io ? 1 : 0;
+                    },
                 },
                 email => {
                     required => 1,
@@ -209,6 +228,9 @@ sub action_specs {
             # padroniza cpf
             $values{$_} =~ s/[^0-9]//go for qw/cpf/;
             $values{$_} = lc $values{$_} for qw/email/;
+
+            # tira espaços duplicados antes de salvar
+            $values{name} =~ s/\s+/\ /go;
 
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
 
