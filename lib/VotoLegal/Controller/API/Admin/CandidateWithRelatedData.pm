@@ -70,10 +70,10 @@ sub list_GET {
         if ( !defined $ret->[$i]->{'valor bruto'} ) {
             $ret->[$i]->{'valor bruto'} = 0
         }
-        if ( !defined $ret->[$i]->{'valor bruto'} ) {
+        if ( !defined $ret->[$i]->{'taxa'} ) {
             $ret->[$i]->{'taxa'} = 0
         }
-        if ( !defined $ret->[$i]->{'valor bruto'} ) {
+        if ( !defined $ret->[$i]->{'valor liquido'} ) {
             $ret->[$i]->{'valor liquido'} = 0
         }
 
