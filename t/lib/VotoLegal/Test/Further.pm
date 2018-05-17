@@ -224,7 +224,9 @@ sub generate_rand_donator_data {
         {
             name                         => fake_name(),
             email                        => fake_email(),
-            birthdate                    => fake_past_datetime("%Y-%m-%d"),
+            #birthdate                    => fake_past_datetime("%Y-%m-%d"),
+
+            birthdate                    => '2000-01-01',
             address_district             => "Centro",
             address_state                => fake_pick(qw(SP RJ MG RS PR)),
             address_city                 => "Iguape",

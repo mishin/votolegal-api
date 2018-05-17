@@ -11,6 +11,8 @@ use Data::Verifier;
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF);
 use VotoLegal::Utils;
+use DateTime::Format::Pg;
+use DateTime;
 
 use UUID::Tiny qw/is_uuid_string/;
 
@@ -71,8 +73,9 @@ sub verifiers_specs {
                     },
                 },
                 email => {
-                    required => 1,
-                    type     => EmailAddress,
+                    required   => 1,
+                    max_length => 100,
+                    type       => EmailAddress,
                 },
                 cpf => {
                     required => 1,
@@ -86,26 +89,30 @@ sub verifiers_specs {
                     },
                 },
                 address_street => {
-                    required => 1,
-                    type     => "Str",
+                    required   => 1,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 address_house_number => {
                     required => 1,
                     type     => "Int",
                 },
                 address_district => {
-                    required => 1,
-                    type     => "Str",
+                    required   => 1,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 address_zipcode => {
                     required   => 1,
                     type       => "Str",
+                    max_length => 9,
                     post_check => sub {
                         test_cep( $_[0]->get_value('address_zipcode') );
                     },
                 },
                 address_city => {
                     required   => 1,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('address_city');
@@ -114,6 +121,7 @@ sub verifiers_specs {
                 },
                 address_state => {
                     required   => 1,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $state = $_[0]->get_value('address_state');
@@ -121,8 +129,9 @@ sub verifiers_specs {
                     },
                 },
                 address_complement => {
-                    required => 0,
-                    type     => 'Str',
+                    required   => 0,
+                    max_length => 100,
+                    type       => 'Str',
                 },
                 amount => {
                     required   => 1,
@@ -141,28 +150,44 @@ sub verifiers_specs {
                         return 1;
                     },
                 },
-                credit_card_name => {
-                    required => 0,
-                    type     => "Str",
-                },
                 birthdate => {
-                    required => 1,
-                    type     => "Str",
+                    required   => 1,
+                    max_length => 100,
+                    type       => "Str",
+                    post_check => sub {
+
+                        my $date = $_[0]->get_value('birthdate');
+
+                        return 0 if $date !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+
+                        my $dt = DateTime::Format::Pg->parse_datetime($date);
+
+                        my $duration = DateTime->now->subtract_datetime($dt);
+
+                        my $idade = $duration->in_units('years');
+
+                        return 0 if $idade < 18 || $idade >= 100;
+
+                        return 1;
+                    },
                 },
                 billing_address_street => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 billing_address_house_number => {
                     required => 0,
                     type     => "Int",
                 },
                 billing_address_district => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 billing_address_zipcode => {
                     required   => 0,
+                    max_length => 9,
                     type       => "Str",
                     post_check => sub {
                         test_cep( $_[0]->get_value('billing_address_zipcode') );
@@ -170,6 +195,7 @@ sub verifiers_specs {
                 },
                 billing_address_city => {
                     required   => 0,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('billing_address_city');
@@ -178,6 +204,7 @@ sub verifiers_specs {
                 },
                 billing_address_state => {
                     required   => 0,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $state = $_[0]->get_value('billing_address_state');
@@ -185,8 +212,9 @@ sub verifiers_specs {
                     },
                 },
                 billing_address_complement => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 ip_address => {
                     required => 1,
@@ -225,8 +253,8 @@ sub action_specs {
 
             my %values = $r->valid_values;
 
-            # padroniza cpf
-            $values{$_} =~ s/[^0-9]//go for qw/cpf/;
+            # deixa apenas numeros
+            $values{$_} =~ s/[^0-9]//go for qw/cpf address_zipcode billing_address_zipcode/;
             $values{$_} = lc $values{$_} for qw/email/;
 
             # tira espaços duplicados antes de salvar
