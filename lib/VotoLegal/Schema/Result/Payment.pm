@@ -496,7 +496,7 @@ sub get_pagseguro_data {
 
     my $payment_data = $pagseguro->transaction_data($self->code);
 
-    if ( !$payment_data->{grossAmount} ) {
+    if ( ref $payment_data ne 'HASH' ) {
         return 0;
     }
     else {
