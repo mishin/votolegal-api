@@ -9,7 +9,7 @@ with 'VotoLegal::Role::Verification';
 
 use Data::Verifier;
 use Business::BR::CEP qw(test_cep);
-use VotoLegal::Types qw(EmailAddress CPF);
+use VotoLegal::Types qw(EmailAddress CPF PositiveInt);
 use VotoLegal::Utils;
 use DateTime::Format::Pg;
 use DateTime;
@@ -95,7 +95,7 @@ sub verifiers_specs {
                 },
                 address_house_number => {
                     required => 1,
-                    type     => "Int",
+                    type     => PositiveInt,
                 },
                 address_district => {
                     required   => 1,
@@ -135,7 +135,7 @@ sub verifiers_specs {
                 },
                 amount => {
                     required   => 1,
-                    type       => "Int",
+                    type       => PositiveInt,
                     post_check => sub {
                         my $amount = $_[0]->get_value('amount');
 
@@ -178,7 +178,7 @@ sub verifiers_specs {
                 },
                 billing_address_house_number => {
                     required => 0,
-                    type     => "Int",
+                    type     => PositiveInt,
                 },
                 billing_address_district => {
                     required   => 0,
@@ -230,7 +230,7 @@ sub verifiers_specs {
                 },
                 candidate_id => {
                     required => 1,
-                    type     => "Int",
+                    type     => PositiveInt,
                 },
                 payment_method => {
                     required   => 1,

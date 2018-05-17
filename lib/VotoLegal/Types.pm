@@ -25,7 +25,7 @@ use DateTime::Format::Pg;
 
 subtype PositiveInt,
     as Int,
-    where { $_ >= 0 },
+    where { $_ >= 0 && $_ <= 2147483647 },
   message { "Int is not larger than 0" };
 
 subtype CPF, as NonEmptyStr, where {
