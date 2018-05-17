@@ -1,5 +1,4 @@
 use utf8;
-
 package VotoLegal::Schema::Result::CertifaceToken;
 
 # Created by DBIx::Class::Schema::Loader
@@ -33,7 +32,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components( "InflateColumn::DateTime", "TimeStamp", "PassphraseColumn" );
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
 
 =head1 TABLE: C<certiface_token>
 
@@ -93,31 +92,31 @@ __PACKAGE__->table("certiface_token");
 =cut
 
 __PACKAGE__->add_columns(
-    "id",
-    { data_type => "uuid", is_nullable => 0, size => 16 },
-    "verification_url",
-    {
-        data_type   => "text",
-        is_nullable => 0,
-        original    => { data_type => "varchar" },
-    },
-    "votolegal_donation_id",
-    { data_type => "uuid", is_foreign_key => 1, is_nullable => 1, size => 16 },
-    "created_at",
-    {
-        data_type     => "timestamp",
-        default_value => \"current_timestamp",
-        is_nullable   => 0,
-        original      => { default_value => \"now()" },
-    },
-    "validated",
-    { data_type => "boolean", default_value => \"false", is_nullable => 0 },
-    "fail_reasons",
-    { data_type => "json", is_nullable => 1 },
-    "response_updated_at",
-    { data_type => "timestamp", is_nullable => 1 },
-    "response",
-    { data_type => "json", is_nullable => 1 },
+  "id",
+  { data_type => "uuid", is_nullable => 0, size => 16 },
+  "verification_url",
+  {
+    data_type   => "text",
+    is_nullable => 0,
+    original    => { data_type => "varchar" },
+  },
+  "votolegal_donation_id",
+  { data_type => "uuid", is_foreign_key => 1, is_nullable => 1, size => 16 },
+  "created_at",
+  {
+    data_type     => "timestamp",
+    default_value => \"current_timestamp",
+    is_nullable   => 0,
+    original      => { default_value => \"now()" },
+  },
+  "validated",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "fail_reasons",
+  { data_type => "json", is_nullable => 1 },
+  "response_updated_at",
+  { data_type => "timestamp", is_nullable => 1 },
+  "response",
+  { data_type => "json", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -143,19 +142,20 @@ Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
 =cut
 
 __PACKAGE__->belongs_to(
-    "votolegal_donation",
-    "VotoLegal::Schema::Result::VotolegalDonation",
-    { id => "votolegal_donation_id" },
-    {
-        is_deferrable => 0,
-        join_type     => "LEFT",
-        on_delete     => "NO ACTION",
-        on_update     => "NO ACTION",
-    },
+  "votolegal_donation",
+  "VotoLegal::Schema::Result::VotolegalDonation",
+  { id => "votolegal_donation_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 00:27:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G9o+juDab033kq8oK6/4pg
+
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 01:56:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lrDlRz+yLlr5XAG5DLlgLQ
 
 use WebService::Certiface;
 use JSON qw/to_json/;
