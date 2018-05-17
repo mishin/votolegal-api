@@ -191,9 +191,9 @@ sub create_invoice {
     my $invoice = $ws->create_invoice(
         %opts,
         due_date    => $due_date,
-        description => 'Doação para pre-campanha '
-          . $candidate->popular_name() . ' CPF '
-          . $candidate->get_column('cpf'),
+        description => 'Doação para pré-campanha "'
+          . $candidate->popular_name() . '" CPF do pré-candidato "'
+          . $candidate->get_column('cpf') . '"',
     );
 
     return {
