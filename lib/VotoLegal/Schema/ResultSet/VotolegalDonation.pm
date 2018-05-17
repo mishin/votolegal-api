@@ -141,11 +141,9 @@ sub verifiers_specs {
                     post_check => sub {
                         my $amount = $_[0]->get_value('amount');
 
-                        return 0 if $amount < 3000;
+                        return 0 if $amount < 2000;
 
-                        my $pm = $_[0]->get_value('payment_method');
-
-                        if ( $pm eq 'credit_card' && $amount > 106400 ) {
+                        if ( $amount > 106400 ) {
                             return 0;
                         }
 
