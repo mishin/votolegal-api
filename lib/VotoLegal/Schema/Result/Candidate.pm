@@ -1392,10 +1392,10 @@ sub get_account_payment_status {
         if ( my $payment = $self->get_most_recent_payment() ) {
             my $log = $payment->get_most_recent_log();
 
-            if ( $log->status eq 'analysis' ) {
+            if ( $log && $log->status eq 'analysis' ) {
                 $ret = 'pagamento em análise';
             }
-            elsif ( $log->status eq 'captured' ) {
+            elsif ( $log && $log->status eq 'captured' ) {
                 $ret = 'pagamento aprovado';
             }
             else {
