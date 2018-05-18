@@ -33,7 +33,8 @@ sub list_GET {
         $ret->[$i]->{'data de pagamento'} = $payment ? $payment->created_at : 0;
         $ret->[$i]->{'cod. do pagamento'} = $payment ? $payment->code : 0;
         $ret->[$i]->{'metodo'}            = $payment ? $payment->get_human_like_method() : 0;
-        $ret->[$i]->{'nome'}              = $candidate->name;
+        $ret->[$i]->{'nome do candidato'} = $candidate->name;
+        $ret->[$i]->{'cpf'}               = $candidate->cpf;
         $ret->[$i]->{'email'}             = $candidate->user->email;
         $ret->[$i]->{'cargo'}             = $candidate->office->name;
         $ret->[$i]->{'partido'}           = $candidate->party->name;
