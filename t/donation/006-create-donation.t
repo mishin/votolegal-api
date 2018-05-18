@@ -78,9 +78,7 @@ db_transaction {
 
     $response = rest_get $donation_url,
       code   => 200,
-      params => {
-        device_authorization_token_id => stash 'test_auth',
-      };
+      params => { device_authorization_token_id => stash 'test_auth', };
     is messages2str $response, 'msg_cc_paid_message', 'apenas msg final';
 
     &test_boleto;
@@ -130,7 +128,7 @@ sub test_boleto {
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
-    is links2str $response, 'msg_boleto_link', 'there is a link';
+    is links2str $response,    'msg_boleto_link',    'there is a link';
     assert_current_step('register_capture');
 
     setup_sucess_mock_iugu_boleto_success;
