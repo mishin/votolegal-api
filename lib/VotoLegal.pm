@@ -41,8 +41,11 @@ __PACKAGE__->config(
     },
 );
 
+remote_notify("Novo worker api $$");
+
 # Start the application
 __PACKAGE__->setup();
+
 
 sub build_api_error {
     my ( $app, %args ) = @_;
