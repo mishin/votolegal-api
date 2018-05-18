@@ -35,7 +35,6 @@ msgstr "Doação efeutada com Boleto efetuada com sucesso!"
 msgid "msg_cc_paid_message"
 msgstr "Doação efeutada com cartão de cŕedito efetuada com sucesso!"
 
-
 msgid "msg_link_certiface"
 msgstr "vamos lá"
 
@@ -51,4 +50,6 @@ msgstr "Não conseguimos validar"
 msgid "need-billing-adddress"
 msgstr "Dados de endereço faltando"
 
+msgid "fp-invalid-contact-support"
+msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
 

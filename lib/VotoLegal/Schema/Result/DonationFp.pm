@@ -68,6 +68,21 @@ __PACKAGE__->table("donation_fp");
   is_nullable: 0
   original: {default_value => \"now()"}
 
+=head2 ms
+
+  data_type: 'integer'
+  is_nullable: 1
+
+=head2 canvas_result
+
+  data_type: 'bigint'
+  is_nullable: 1
+
+=head2 webgl_result
+
+  data_type: 'bigint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -93,6 +108,12 @@ __PACKAGE__->add_columns(
     is_nullable   => 0,
     original      => { default_value => \"now()" },
   },
+  "ms",
+  { data_type => "integer", is_nullable => 1 },
+  "canvas_result",
+  { data_type => "bigint", is_nullable => 1 },
+  "webgl_result",
+  { data_type => "bigint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -140,8 +161,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 13:29:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZgMDcc1s7g+9++qn48UL8A
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 19:27:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tr3rc+vtUodpz3LcOkSFTQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -7,7 +7,7 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
-    create_candidate for 1 .. 3;
+    create_candidate for 1 .. 5;
     for my $candidate ($schema->resultset("Candidate")->all) {
         $candidate->update({ status => "activated", payment_status => "paid" });
     }

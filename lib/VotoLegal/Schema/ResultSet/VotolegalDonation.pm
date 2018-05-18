@@ -355,10 +355,14 @@ sub validate_donation_fp {
     my ( $self, $fp ) = @_;
 
     $fp = eval { decode_base64($fp) };
-    die 'fp-invalid-contact-support' if !$fp || $fp !~ /^{/ || $fp !~ /}$/;
+    die_with 'fp-invalid-contact-support' if !$fp || $fp !~ /^{/ || $fp !~ /}$/;
 
     $fp = eval { from_json($fp) };
-    die 'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id};
+    die_with 'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id};
+
+    for (qw/ms canvas webgl/) {
+        die_with 'fp-invalid-contact-support' if exists $fp->{$_} && $fp->{$_} !~ /^[0-9]+$/;
+    }
 
     return $fp;
 }
@@ -382,6 +386,9 @@ sub _create_donation {
                 {
                     fp_hash       => $opts{fp}{id},
                     user_agent_id => $values{user_agent_id},
+                    ms            => delete $opts{fp}{ms},
+                    canvas_result => delete $opts{fp}{canvas},
+                    webgl_result  => delete $opts{fp}{webgl},
                 }
             );
 
