@@ -78,6 +78,14 @@ db_transaction {
           };
 
         $donation_url = "/api2/donations/" . $donation->{donation_id};
+
+        my $donation_redir = rest_get '/api/certiface2donation-redirect',
+          code    => 302,
+          is_fail => 1,
+          params  => { token => 'dd24700e-2855-4e0c-81db-53ddc14a44ec' };
+
+        like $donation_redir, qr/Moved/, 'redirect ok';
+
     };
 
     # falhou no certiface
@@ -119,7 +127,6 @@ db_transaction {
         is messages2str $response, 'msg_boleto_message', 'msg_certificate_refused';
 
     };
-
 
 };
 

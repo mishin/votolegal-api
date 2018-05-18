@@ -89,6 +89,19 @@ __PACKAGE__->table("certiface_token");
   data_type: 'json'
   is_nullable: 1
 
+=head2 certiface_return_url_id
+
+  data_type: 'integer'
+  default_value: 1
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 certiface_return_count
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -117,6 +130,15 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", is_nullable => 1 },
   "response",
   { data_type => "json", is_nullable => 1 },
+  "certiface_return_url_id",
+  {
+    data_type      => "integer",
+    default_value  => 1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
+  "certiface_return_count",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -132,6 +154,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
+
+=head2 certiface_return_url
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::CertifaceReturnUrl>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "certiface_return_url",
+  "VotoLegal::Schema::Result::CertifaceReturnUrl",
+  { id => "certiface_return_url_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
 
 =head2 votolegal_donation
 
@@ -154,8 +191,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 01:56:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lrDlRz+yLlr5XAG5DLlgLQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 17:05:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cw5WTXusCaUbOR4H/KARAA
 
 use WebService::Certiface;
 use JSON qw/to_json/;

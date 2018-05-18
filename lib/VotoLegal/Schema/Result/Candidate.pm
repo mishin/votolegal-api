@@ -312,6 +312,13 @@ __PACKAGE__->table("candidate");
   is_nullable: 0
   original: {data_type => "varchar"}
 
+=head2 use_certiface_return_url_id
+
+  data_type: 'integer'
+  default_value: 1
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -424,6 +431,13 @@ __PACKAGE__->add_columns(
     default_value => "pre-campaign",
     is_nullable   => 0,
     original      => { data_type => "varchar" },
+  },
+  "use_certiface_return_url_id",
+  {
+    data_type      => "integer",
+    default_value  => 1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
   },
 );
 
@@ -662,6 +676,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 use_certiface_return_url
+
+Type: belongs_to
+
+Related object: L<VotoLegal::Schema::Result::CertifaceReturnUrl>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "use_certiface_return_url",
+  "VotoLegal::Schema::Result::CertifaceReturnUrl",
+  { id => "use_certiface_return_url_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
+
 =head2 user
 
 Type: belongs_to
@@ -707,8 +736,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 13:21:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RA+WIr7I0O+8MrYi1ULTEw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 17:05:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PKCbmHKf+s9lbfpe0RKy6Q
 
 use File::Temp q(:seekable);
 use Data::Verifier;
