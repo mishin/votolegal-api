@@ -40,7 +40,7 @@ sub register_POST {
         $c,
         for  => 'create',
         with => {
-            %{ $c->req->params }, status => "pending",
+            %{ $c->req->params },
         },
     );
 

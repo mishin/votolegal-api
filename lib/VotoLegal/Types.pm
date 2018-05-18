@@ -33,8 +33,6 @@ subtype CommonLatinText,
     where { $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
   message { "Text include non latin scripts" };
 
-
-
 subtype CPF, as NonEmptyStr, where {
   my $cpf = $_;
   $cpf =~ s/\D+//g;
