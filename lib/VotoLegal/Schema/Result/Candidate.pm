@@ -305,6 +305,13 @@ __PACKAGE__->table("candidate");
   default_value: true
   is_nullable: 0
 
+=head2 campaign_donation_type
+
+  data_type: 'text'
+  default_value: 'pre-campaign'
+  is_nullable: 0
+  original: {data_type => "varchar"}
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -411,6 +418,13 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "collect_donor_phone",
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "campaign_donation_type",
+  {
+    data_type     => "text",
+    default_value => "pre-campaign",
+    is_nullable   => 0,
+    original      => { data_type => "varchar" },
+  },
 );
 
 =head1 PRIMARY KEY
@@ -693,8 +707,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-15 10:18:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zWT/ci8DcguXEQhiWRwXFQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 06:48:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LHzK8Zt9od18gwlYPQQsCw
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -1411,6 +1425,26 @@ sub get_account_payment_status {
 
     return $ret;
 }
+
+sub cpf_formated {
+    my ($self) = @_;
+
+    my $cpf = $self->get_column('cpf');
+    $cpf =~ s/[^0-9]+//g;
+    $cpf =~ s/^(...)(...)(...)(..).*/$1.$2.$3-$4/;
+    return $cpf;
+}
+
+sub cnpj_formated {
+    my ($self) = @_;
+
+    my $cnpj = $self->get_column('cnpj');
+    $cnpj =~ s/[^0-9]+//g;
+    $cnpj =~ s|^(..)(...)(...)(....)(..).*|$1.$2.$3/$4-$5|;
+
+    return $cnpj;
+}
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

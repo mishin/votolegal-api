@@ -326,8 +326,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 01:56:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FkoUR4l/7NboVSLAL3QKlg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 06:48:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VwsOa6DrDYyErVTqXNxaYw
 
 use Carp;
 use JSON::XS;
@@ -368,9 +368,17 @@ sub obtain_lock {
 
     my ($lock_myself) =
       $self->result_source->schema->resultset('VotolegalDonation')
-      ->search( { 'me.id' => $self->id }, { for => \'UPDATE' } )->next;
+      ->search( { 'me.id' => $self->id }, { for => \'UPDATE', columns => ['id'] } )->next;
 
-    return $lock_myself;
+    # pre-fetch depois do lock, para nao dar erro
+    $lock_myself = $self->result_source->schema->resultset('VotolegalDonation')->search(
+        { 'me.id' => $self->id },
+        {
+            prefetch => [ 'candidate', 'votolegal_donation_immutable' ]
+        }
+      )->next;
+
+      return $lock_myself;
 }
 
 sub stash_parsed {
@@ -407,6 +415,8 @@ sub _create_invoice {
     my $invoice = $gateway->create_invoice(
         credit_card_token => $stash->{credit_card_token},
         is_boleto         => $self->is_boleto,
+
+        description => $self->generate_boleto_description(),
 
         amount       => $immu->amount,
         candidate_id => $self->candidate_id,
@@ -552,6 +562,35 @@ sub current_certiface {
     $payment_info->{certiface_id} or croak 'no certiface_id found';
 
     return $self->certiface_tokens->search( { id => $payment_info->{certiface_id} } )->next;
+
+}
+
+sub generate_boleto_description {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+    my $type_tx   = $self->is_pre_campaign ? 'pré-campanha' : 'campanha';
+    my $name_tx   = $self->is_pre_campaign ? 'pré-candidato' : 'candidato';
+
+    my $desc;
+
+    if ( $candidate->campaign_donation_type eq 'party' ) {
+
+        $desc = "Doação para o partido " . $candidate->popular_name;
+    }
+    else {
+        $desc = "Doação para $type_tx " . $candidate->popular_name . ' (' . $candidate->name . ') ';
+
+        if ($self->is_pre_campaign){
+
+            $desc .= "CPF do $name_tx para declaração no IR " . $candidate->cpf_formated;
+        }else{
+
+            $desc .= "CNPJ do $name_tx para declaração no IR " . $candidate->cnpj_formated;
+        }
+    }
+
+    return $desc;
 
 }
 
