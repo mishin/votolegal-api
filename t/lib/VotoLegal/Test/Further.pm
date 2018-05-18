@@ -58,7 +58,7 @@ my $obj        = CatalystX::Eta::Test::REST->new(
     decode_response => sub {
         my $res = shift;
         return undef unless $res->content;
-        return $res->content unless $res->content =~ /^{/;
+        return $res->content unless $res->content =~ /^[{\[]/;
         return decode_json( $res->content );
     }
 );
