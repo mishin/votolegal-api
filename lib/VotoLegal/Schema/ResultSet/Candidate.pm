@@ -90,7 +90,7 @@ sub verifiers_specs {
                 popular_name => {
                     required   => 1,
                     max_length => 100,
-                    type       => 'Str',
+                    type       => CommonLatinText,
                 },
                 party_id => {
                     required   => 1,

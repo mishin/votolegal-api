@@ -279,7 +279,7 @@ sub action_specs {
             my %values = $r->valid_values;
 
             # deixa apenas numeros
-            $values{$_} =~ s/[^0-9]//go for qw/cpf address_zipcode billing_address_zipcode/;
+            defined $values{$_} and $values{$_} =~ s/[^0-9]//go for qw/cpf address_zipcode billing_address_zipcode/;
             $values{$_} = lc $values{$_} for qw/email/;
 
             if ( $values{payment_method} eq 'boleto' ) {

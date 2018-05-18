@@ -30,7 +30,7 @@ subtype PositiveInt,
 
 subtype CommonLatinText,
     as Str,
-    where { $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
+    where { $_ eq '_SET_NULL_' or $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
   message { "Text include non latin scripts" };
 
 subtype CPF, as NonEmptyStr, where {
@@ -63,7 +63,7 @@ coerce CEP, from Str, via {
 
 subtype EmailAddress,
     as Str,
-    where { Email::Valid->address( -address => $_ ) eq $_ },
+    where { $_ eq '_SET_NULL_' or Email::Valid->address( -address => $_ ) eq $_ },
     message { 'Must be a valid email address' }
 ;
 

@@ -1,4 +1,5 @@
 use utf8;
+
 package VotoLegal::Schema::Result::Candidate;
 
 # Created by DBIx::Class::Schema::Loader
@@ -32,7 +33,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
+__PACKAGE__->load_components( "InflateColumn::DateTime", "TimeStamp", "PassphraseColumn" );
 
 =head1 TABLE: C<candidate>
 
@@ -315,116 +316,116 @@ __PACKAGE__->table("candidate");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
-  {
-    data_type         => "integer",
-    is_auto_increment => 1,
-    is_nullable       => 0,
-    sequence          => "candidate_id_seq",
-  },
-  "user_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "name",
-  { data_type => "text", is_nullable => 0 },
-  "popular_name",
-  { data_type => "text", is_nullable => 0 },
-  "party_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "cpf",
-  { data_type => "text", is_nullable => 0 },
-  "reelection",
-  { data_type => "boolean", is_nullable => 0 },
-  "office_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "status",
-  { data_type => "text", is_nullable => 0 },
-  "username",
-  { data_type => "text", is_nullable => 0 },
-  "address_state",
-  { data_type => "text", is_nullable => 0 },
-  "address_city",
-  { data_type => "text", is_nullable => 0 },
-  "address_zipcode",
-  { data_type => "text", is_nullable => 0 },
-  "address_street",
-  { data_type => "text", is_nullable => 0 },
-  "address_complement",
-  { data_type => "text", default_value => "", is_nullable => 0 },
-  "address_house_number",
-  { data_type => "integer", is_nullable => 0 },
-  "cnpj",
-  { data_type => "text", is_nullable => 1 },
-  "picture",
-  { data_type => "text", is_nullable => 1 },
-  "video_url",
-  { data_type => "text", is_nullable => 1 },
-  "facebook_url",
-  { data_type => "text", is_nullable => 1 },
-  "twitter_url",
-  { data_type => "text", is_nullable => 1 },
-  "website_url",
-  { data_type => "text", is_nullable => 1 },
-  "summary",
-  { data_type => "text", is_nullable => 1 },
-  "biography",
-  { data_type => "text", is_nullable => 1 },
-  "instagram_url",
-  { data_type => "text", is_nullable => 1 },
-  "raising_goal",
-  { data_type => "numeric", is_nullable => 1, size => [11, 2] },
-  "public_email",
-  { data_type => "text", is_nullable => 1 },
-  "spending_spreadsheet",
-  { data_type => "text", is_nullable => 1 },
-  "responsible_name",
-  { data_type => "text", is_nullable => 1 },
-  "responsible_email",
-  { data_type => "text", is_nullable => 1 },
-  "merchant_id",
-  { data_type => "text", is_nullable => 1 },
-  "merchant_key",
-  { data_type => "text", is_nullable => 1 },
-  "payment_status",
-  { data_type => "text", default_value => "unpaid", is_nullable => 0 },
-  "publish",
-  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
-  "phone",
-  { data_type => "text", is_nullable => 1 },
-  "address_district",
-  { data_type => "text", is_nullable => 1 },
-  "payment_gateway_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "bank_code",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "bank_agency",
-  { data_type => "integer", is_nullable => 1 },
-  "bank_account_number",
-  { data_type => "integer", is_nullable => 1 },
-  "bank_account_dv",
-  { data_type => "varchar", is_nullable => 1, size => 2 },
-  "bank_agency_dv",
-  { data_type => "varchar", is_nullable => 1, size => 2 },
-  "crawlable",
-  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-  "color",
-  { data_type => "text", default_value => "default", is_nullable => 0 },
-  "political_movement_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "birth_date",
-  { data_type => "text", is_nullable => 0 },
-  "google_analytics",
-  { data_type => "text", is_nullable => 1 },
-  "collect_donor_address",
-  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-  "collect_donor_phone",
-  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-  "campaign_donation_type",
-  {
-    data_type     => "text",
-    default_value => "pre-campaign",
-    is_nullable   => 0,
-    original      => { data_type => "varchar" },
-  },
+    "id",
+    {
+        data_type         => "integer",
+        is_auto_increment => 1,
+        is_nullable       => 0,
+        sequence          => "candidate_id_seq",
+    },
+    "user_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+    "name",
+    { data_type => "text", is_nullable => 0 },
+    "popular_name",
+    { data_type => "text", is_nullable => 0 },
+    "party_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+    "cpf",
+    { data_type => "text", is_nullable => 0 },
+    "reelection",
+    { data_type => "boolean", is_nullable => 0 },
+    "office_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+    "status",
+    { data_type => "text", is_nullable => 0 },
+    "username",
+    { data_type => "text", is_nullable => 0 },
+    "address_state",
+    { data_type => "text", is_nullable => 0 },
+    "address_city",
+    { data_type => "text", is_nullable => 0 },
+    "address_zipcode",
+    { data_type => "text", is_nullable => 0 },
+    "address_street",
+    { data_type => "text", is_nullable => 0 },
+    "address_complement",
+    { data_type => "text", default_value => "", is_nullable => 0 },
+    "address_house_number",
+    { data_type => "integer", is_nullable => 0 },
+    "cnpj",
+    { data_type => "text", is_nullable => 1 },
+    "picture",
+    { data_type => "text", is_nullable => 1 },
+    "video_url",
+    { data_type => "text", is_nullable => 1 },
+    "facebook_url",
+    { data_type => "text", is_nullable => 1 },
+    "twitter_url",
+    { data_type => "text", is_nullable => 1 },
+    "website_url",
+    { data_type => "text", is_nullable => 1 },
+    "summary",
+    { data_type => "text", is_nullable => 1 },
+    "biography",
+    { data_type => "text", is_nullable => 1 },
+    "instagram_url",
+    { data_type => "text", is_nullable => 1 },
+    "raising_goal",
+    { data_type => "numeric", is_nullable => 1, size => [ 11, 2 ] },
+    "public_email",
+    { data_type => "text", is_nullable => 1 },
+    "spending_spreadsheet",
+    { data_type => "text", is_nullable => 1 },
+    "responsible_name",
+    { data_type => "text", is_nullable => 1 },
+    "responsible_email",
+    { data_type => "text", is_nullable => 1 },
+    "merchant_id",
+    { data_type => "text", is_nullable => 1 },
+    "merchant_key",
+    { data_type => "text", is_nullable => 1 },
+    "payment_status",
+    { data_type => "text", default_value => "unpaid", is_nullable => 0 },
+    "publish",
+    { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+    "phone",
+    { data_type => "text", is_nullable => 1 },
+    "address_district",
+    { data_type => "text", is_nullable => 1 },
+    "payment_gateway_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "bank_code",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "bank_agency",
+    { data_type => "integer", is_nullable => 1 },
+    "bank_account_number",
+    { data_type => "integer", is_nullable => 1 },
+    "bank_account_dv",
+    { data_type => "varchar", is_nullable => 1, size => 2 },
+    "bank_agency_dv",
+    { data_type => "varchar", is_nullable => 1, size => 2 },
+    "crawlable",
+    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+    "color",
+    { data_type => "text", default_value => "default", is_nullable => 0 },
+    "political_movement_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+    "birth_date",
+    { data_type => "text", is_nullable => 0 },
+    "google_analytics",
+    { data_type => "text", is_nullable => 1 },
+    "collect_donor_address",
+    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+    "collect_donor_phone",
+    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+    "campaign_donation_type",
+    {
+        data_type     => "text",
+        default_value => "pre-campaign",
+        is_nullable   => 0,
+        original      => { data_type => "varchar" },
+    },
 );
 
 =head1 PRIMARY KEY
@@ -451,7 +452,7 @@ __PACKAGE__->set_primary_key("id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
+__PACKAGE__->add_unique_constraint( "candidate_cpf_key", ["cpf"] );
 
 =head2 C<candidate_username_key>
 
@@ -463,7 +464,7 @@ __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
 
 =cut
 
-__PACKAGE__->add_unique_constraint("candidate_username_key", ["username"]);
+__PACKAGE__->add_unique_constraint( "candidate_username_key", ["username"] );
 
 =head1 RELATIONS
 
@@ -476,15 +477,15 @@ Related object: L<VotoLegal::Schema::Result::Bank>
 =cut
 
 __PACKAGE__->belongs_to(
-  "bank_code",
-  "VotoLegal::Schema::Result::Bank",
-  { id => "bank_code" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
+    "bank_code",
+    "VotoLegal::Schema::Result::Bank",
+    { id => "bank_code" },
+    {
+        is_deferrable => 0,
+        join_type     => "LEFT",
+        on_delete     => "NO ACTION",
+        on_update     => "NO ACTION",
+    },
 );
 
 =head2 candidate_campaign_config
@@ -496,10 +497,8 @@ Related object: L<VotoLegal::Schema::Result::CandidateCampaignConfig>
 =cut
 
 __PACKAGE__->might_have(
-  "candidate_campaign_config",
-  "VotoLegal::Schema::Result::CandidateCampaignConfig",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "candidate_campaign_config", "VotoLegal::Schema::Result::CandidateCampaignConfig",
+    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_issue_priorities
@@ -511,10 +510,8 @@ Related object: L<VotoLegal::Schema::Result::CandidateIssuePriority>
 =cut
 
 __PACKAGE__->has_many(
-  "candidate_issue_priorities",
-  "VotoLegal::Schema::Result::CandidateIssuePriority",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "candidate_issue_priorities", "VotoLegal::Schema::Result::CandidateIssuePriority",
+    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_mandato_aberto_integrations
@@ -526,10 +523,8 @@ Related object: L<VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration>
 =cut
 
 __PACKAGE__->has_many(
-  "candidate_mandato_aberto_integrations",
-  "VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "candidate_mandato_aberto_integrations", "VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration",
+    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 donations
@@ -541,10 +536,10 @@ Related object: L<VotoLegal::Schema::Result::Donation>
 =cut
 
 __PACKAGE__->has_many(
-  "donations",
-  "VotoLegal::Schema::Result::Donation",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "donations",
+    "VotoLegal::Schema::Result::Donation",
+    { "foreign.candidate_id" => "self.id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
 );
 
 =head2 expenditures
@@ -556,10 +551,10 @@ Related object: L<VotoLegal::Schema::Result::Expenditure>
 =cut
 
 __PACKAGE__->has_many(
-  "expenditures",
-  "VotoLegal::Schema::Result::Expenditure",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "expenditures",
+    "VotoLegal::Schema::Result::Expenditure",
+    { "foreign.candidate_id" => "self.id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
 );
 
 =head2 office
@@ -571,10 +566,10 @@ Related object: L<VotoLegal::Schema::Result::Office>
 =cut
 
 __PACKAGE__->belongs_to(
-  "office",
-  "VotoLegal::Schema::Result::Office",
-  { id => "office_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "office",
+    "VotoLegal::Schema::Result::Office",
+    { id            => "office_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 party
@@ -586,10 +581,10 @@ Related object: L<VotoLegal::Schema::Result::Party>
 =cut
 
 __PACKAGE__->belongs_to(
-  "party",
-  "VotoLegal::Schema::Result::Party",
-  { id => "party_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "party",
+    "VotoLegal::Schema::Result::Party",
+    { id            => "party_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 payment_gateway
@@ -601,15 +596,15 @@ Related object: L<VotoLegal::Schema::Result::PaymentGateway>
 =cut
 
 __PACKAGE__->belongs_to(
-  "payment_gateway",
-  "VotoLegal::Schema::Result::PaymentGateway",
-  { id => "payment_gateway_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
+    "payment_gateway",
+    "VotoLegal::Schema::Result::PaymentGateway",
+    { id => "payment_gateway_id" },
+    {
+        is_deferrable => 0,
+        join_type     => "LEFT",
+        on_delete     => "NO ACTION",
+        on_update     => "NO ACTION",
+    },
 );
 
 =head2 payments
@@ -621,10 +616,10 @@ Related object: L<VotoLegal::Schema::Result::Payment>
 =cut
 
 __PACKAGE__->has_many(
-  "payments",
-  "VotoLegal::Schema::Result::Payment",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "payments",
+    "VotoLegal::Schema::Result::Payment",
+    { "foreign.candidate_id" => "self.id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
 );
 
 =head2 political_movement
@@ -636,15 +631,15 @@ Related object: L<VotoLegal::Schema::Result::PoliticalMovement>
 =cut
 
 __PACKAGE__->belongs_to(
-  "political_movement",
-  "VotoLegal::Schema::Result::PoliticalMovement",
-  { id => "political_movement_id" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
+    "political_movement",
+    "VotoLegal::Schema::Result::PoliticalMovement",
+    { id => "political_movement_id" },
+    {
+        is_deferrable => 0,
+        join_type     => "LEFT",
+        on_delete     => "NO ACTION",
+        on_update     => "NO ACTION",
+    },
 );
 
 =head2 projects
@@ -656,10 +651,10 @@ Related object: L<VotoLegal::Schema::Result::Project>
 =cut
 
 __PACKAGE__->has_many(
-  "projects",
-  "VotoLegal::Schema::Result::Project",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "projects",
+    "VotoLegal::Schema::Result::Project",
+    { "foreign.candidate_id" => "self.id" },
+    { cascade_copy           => 0, cascade_delete => 0 },
 );
 
 =head2 user
@@ -671,10 +666,10 @@ Related object: L<VotoLegal::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-  "user",
-  "VotoLegal::Schema::Result::User",
-  { id => "user_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "user",
+    "VotoLegal::Schema::Result::User",
+    { id            => "user_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 votolegal_donations
@@ -686,10 +681,8 @@ Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
 =cut
 
 __PACKAGE__->has_many(
-  "votolegal_donations",
-  "VotoLegal::Schema::Result::VotolegalDonation",
-  { "foreign.candidate_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "votolegal_donations", "VotoLegal::Schema::Result::VotolegalDonation",
+    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 issue_priorities
@@ -700,12 +693,7 @@ Composing rels: L</candidate_issue_priorities> -> issue_priority
 
 =cut
 
-__PACKAGE__->many_to_many(
-  "issue_priorities",
-  "candidate_issue_priorities",
-  "issue_priority",
-);
-
+__PACKAGE__->many_to_many( "issue_priorities", "candidate_issue_priorities", "issue_priority", );
 
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 06:48:55
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LHzK8Zt9od18gwlYPQQsCw
@@ -716,7 +704,7 @@ use Data::Validate::URI qw(is_web_uri);
 use Template;
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Utils;
-use VotoLegal::Types qw(EmailAddress CPF);
+use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
@@ -727,11 +715,11 @@ with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 sub address_state_code {
     my $self = shift;
 
-    my $state = $self->resultset('State')->search({ name => $self->address_state })->next;
+    my $state = $self->resultset('State')->search( { name => $self->address_state } )->next;
     if ($state) {
         return $state->code;
     }
-    return ;
+    return;
 }
 
 sub resultset {
@@ -748,48 +736,54 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 name => {
-                    required => 0,
-                    type     => 'Str',
+                    required   => 0,
+                    type       => CommonLatinText,
+                    max_length => 100,
                     post_check => sub {
                         my $name = $_[0]->get_value('name');
 
-                        scalar(split(m{ }, $name)) > 1;
+                        scalar( split( m{ }, $name ) ) > 1;
                     },
                 },
                 popular_name => {
-                    required => 0,
-                    type     => 'Str',
-                },
-                party_id    => {
                     required   => 0,
-                    type       => "Int",
+                    max_length => 100,
+                    type       => CommonLatinText,
+                },
+                party_id => {
+                    required   => 0,
+                    type       => PositiveInt,
                     post_check => sub {
                         my $r = shift;
 
-                        $self->result_source->schema->resultset('Party')
-                            ->search({ id => $r->get_value('party_id') })
-                            ->count;
+                        $self->result_source->schema->resultset('Party')->search( { id => $r->get_value('party_id') } )
+                          ->count;
                     },
                 },
                 cpf => {
                     required   => 0,
+                    max_length => 14,
                     type       => CPF,
                     post_check => sub {
                         my $r = shift;
 
-                        $self->resultset($self->result_source->source_name)->search({
-                            cpf     => $r->get_value('cpf'),
-                            user_id => { '!=' => $self->user_id },
-                        })->count and die \["cpf", "already exists"];
+                        $self->resultset( $self->result_source->source_name )->search(
+                            {
+                                cpf     => $r->get_value('cpf'),
+                                user_id => { '!=' => $self->user_id },
+                            }
+                          )->count
+                          and die \[ "cpf", "already exists" ];
 
                         return 1;
                     },
                 },
                 phone => {
                     required   => 0,
+                    max_length => 11,
                     type       => "Str",
                     post_check => sub {
-                        my $r = shift;
+                        my $r     = shift;
                         my $phone = $r->get_value('phone');
                         return 1 if $phone eq '_SET_NULL_';
 
@@ -808,7 +802,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $roles = $r->get_value('roles');
-                        if (!grep $_ eq 'admin', @$roles) {
+                        if ( !grep $_ eq 'admin', @$roles ) {
                             return 0;
                         }
 
@@ -822,26 +816,29 @@ sub verifiers_specs {
                 },
                 address_state => {
                     required   => 0,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $r = shift;
 
                         my $state = $r->get_value('address_state');
-                        $self->resultset('State')->search({ code => $state })->count;
+                        $self->resultset('State')->search( { code => $state } )->count;
                     },
                 },
                 address_city => {
                     required   => 0,
+                    max_length => 100,
                     type       => 'Str',
                     post_check => sub {
                         my $r = shift;
 
                         my $city = $r->get_value('address_city');
-                        $self->resultset('City')->search({ name => $city })->count;
+                        $self->resultset('City')->search( { name => $city } )->count;
                     },
                 },
                 address_zipcode => {
                     required   => 0,
+                    max_length => 9,
                     type       => 'Str',
                     post_check => sub {
                         my $r = shift;
@@ -852,11 +849,13 @@ sub verifiers_specs {
                 },
                 address_street => {
                     required   => 0,
-                    type       => 'Str',
+                    max_length => 100,
+                    type       => CommonLatinText,
                 },
                 address_house_number => {
                     required   => 0,
-                    type       => 'Str',
+                    max_length => 100,
+                    type       => CommonLatinText,
                     type_check => sub {
                         my $address_house_number = $_[0]->get_value('address_house_number');
                         $address_house_number =~ m{^\d+$};
@@ -864,15 +863,18 @@ sub verifiers_specs {
                 },
                 address_complement => {
                     required   => 0,
-                    type       => 'Str',
+                    max_length => 100,
+                    type       => CommonLatinText,
                 },
                 address_district => {
-                    type     => "Str",
-                    required => 0,
+                    required   => 0,
+                    max_length => 100,
+                    type       => CommonLatinText,
                 },
                 cnpj => {
-                    required => 0,
-                    type     => CNPJ,
+                    required   => 0,
+                    max_length => 20,
+                    type       => CNPJ,
                 },
                 issue_priorities => {
                     required   => 0,
@@ -880,15 +882,16 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
-                        my $issue_priorities   = $r->get_value("issue_priorities");
-                        my @issue_priority_ids = grep { int($_) == $_ } split(m{\s*,\s*}, $issue_priorities);
+                        my $issue_priorities = $r->get_value("issue_priorities");
+                        my @issue_priority_ids = grep { int($_) == $_ } split( m{\s*,\s*}, $issue_priorities );
 
-                        if (@issue_priority_ids > 4) {
+                        if ( @issue_priority_ids > 4 ) {
                             return 0;
                         }
 
                         my @issue_priority = map {
-                            $self->resultset('IssuePriority')->find($_) or die \["issue_priorities", "invalid issue_priority_id '$_'"]
+                            $self->resultset('IssuePriority')->find($_)
+                              or die \[ "issue_priorities", "invalid issue_priority_id '$_'" ]
                         } @issue_priority_ids;
 
                         $self->set_issue_priorities(@issue_priority);
@@ -898,20 +901,23 @@ sub verifiers_specs {
                 },
                 picture => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub { is_web_uri $_[0]->get_value('picture') },
                 },
                 video_url => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub {
                         my $video_url = $_[0]->get_value('video_url');
                         return 1 if $video_url eq "_SET_NULL_";
-                        is_web_uri $video_url
+                        is_web_uri $video_url;
                     },
                 },
                 facebook_url => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub {
                         my $facebook_url = $_[0]->get_value('facebook_url');
@@ -921,6 +927,7 @@ sub verifiers_specs {
                 },
                 twitter_url => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub {
                         my $twitter_url = $_[0]->get_value('twitter_url');
@@ -930,6 +937,7 @@ sub verifiers_specs {
                 },
                 website_url => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub {
                         my $website_url = $_[0]->get_value('website_url');
@@ -938,15 +946,18 @@ sub verifiers_specs {
                     },
                 },
                 summary => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 1024 * 100,
+                    type       => "Str",
                 },
                 biography => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 1024 * 100,
+                    type       => "Str",
                 },
                 instagram_url => {
                     required   => 0,
+                    max_length => 1024,
                     type       => "Str",
                     post_check => sub {
                         my $instagram_url = $_[0]->get_value('instagram_url');
@@ -960,32 +971,37 @@ sub verifiers_specs {
                     type     => "Num",
                 },
                 public_email => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => EmailAddress,
                 },
                 spending_spreadsheet => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 1024,
+                    type       => "Str",
                 },
                 responsible_name => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => CommonLatinText,
                 },
                 responsible_email => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => EmailAddress,
                 },
                 merchant_id => {
                     required => 0,
                     type     => "Str",
                 },
                 merchant_key => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    max_length => 100,
+                    type       => "Str",
                 },
                 payment_gateway_id => {
                     required   => 0,
-                    type       => "Int",
+                    type       => PositiveInt,
                     post_check => sub {
                         my $r = shift;
 
@@ -995,7 +1011,7 @@ sub verifiers_specs {
                 },
                 bank_code => {
                     required   => 0,
-                    type       => "Int",
+                    type       => PositiveInt,
                     post_check => sub {
                         my $r = shift;
 
@@ -1004,26 +1020,44 @@ sub verifiers_specs {
                     },
                 },
                 bank_agency => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    required   => 0,
+                    type       => "Str",
+                    max_length => 20,
+                    post_check => sub {
+                        my $test = $_[0]->get_value('bank_agency');
+                        return 1 if $test eq "_SET_NULL_";
+
+                        $test =~ m{^\d+$};
+                    },
                 },
                 bank_agency_dv => {
-                    required => 0,
-                    type     => "Str",
+                    required   => 0,
+                    required   => 0,
+                    type       => "Str",
+                    max_length => 20,
+                    post_check => sub {
+                        my $test = $_[0]->get_value('bank_agency_dv');
+                        return 1 if $test eq "_SET_NULL_";
+
+                        $test =~ m{^\d+$};
+                    },
                 },
                 bank_account_number => {
                     required   => 0,
                     type       => "Str",
+                    max_length => 20,
                     post_check => sub {
-                        my $bank_account_number = $_[0]->get_value('bank_account_number');
-                        return 1 if $bank_account_number eq "_SET_NULL_";
+                        my $test = $_[0]->get_value('bank_account_number');
+                        return 1 if $test eq "_SET_NULL_";
 
-                        $bank_account_number =~ m{^\d+$};
+                        $test =~ m{^\d+$};
                     },
                 },
                 bank_account_dv => {
                     required   => 0,
                     type       => "Str",
+                    max_length => 20,
                     post_check => sub {
                         my $bank_account_dv = $_[0]->get_value('bank_account_dv');
                         return 1 if $bank_account_dv eq "_SET_NULL_";
@@ -1040,27 +1074,31 @@ sub verifiers_specs {
                     },
                 },
                 color => {
-                    required => 0,
-                    type     => "Str"
+                    required   => 0,
+                    max_length => 100,
+                    type       => "Str"
                 },
                 political_movement_id => {
                     required   => 0,
-                    type       => "Int",
+                    type       => PositiveInt,
                     post_check => sub {
                         my $political_movement_id = $_[0]->get_value('political_movement_id');
 
-                        my $political_movement = $self->result_source->schema->resultset('PoliticalMovement')->search( { id => $political_movement_id } )->next;
+                        my $political_movement = $self->result_source->schema->resultset('PoliticalMovement')
+                          ->search( { id => $political_movement_id } )->next;
 
-                        die \['political_movement_id', 'could not find political movement with that id'] unless $political_movement;
+                        die \[ 'political_movement_id', 'could not find political movement with that id' ]
+                          unless $political_movement;
                     }
                 },
                 google_analytics => {
                     required   => 0,
+                    max_length => 35,
                     type       => "Str",
                     post_check => sub {
                         my $google_analytics = $_[0]->get_value('google_analytics');
 
-                        die \['google_analytics', 'invalid id'] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
+                        die \[ 'google_analytics', 'invalid id' ] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
 
                         return 1;
                     }
@@ -1098,8 +1136,8 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            for (keys %values) {
-                if ($values{$_} eq "_SET_NULL_") {
+            for ( keys %values ) {
+                if ( $values{$_} eq "_SET_NULL_" ) {
                     $values{$_} = undef;
                 }
             }
@@ -1109,7 +1147,7 @@ sub action_specs {
             delete $values{issue_priorities};
 
             if (%values) {
-                $self = $self->update(\%values);
+                $self = $self->update( \%values );
             }
 
             return $self;
@@ -1121,40 +1159,40 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            for (keys %values) {
-                if ($values{$_} eq "_SET_NULL_") {
+            for ( keys %values ) {
+                if ( $values{$_} eq "_SET_NULL_" ) {
                     $values{$_} = undef;
                 }
             }
 
             # Não é possível publicar um candidato que não foi aprovado.
-            if ($self->status ne "activated") {
-                die \['status', "candidate is not activated."];
+            if ( $self->status ne "activated" ) {
+                die \[ 'status', "candidate is not activated." ];
             }
 
             # Não é possível publicar um candidato que ainda não tenha pago o boleto.
-            if ($self->payment_status ne "paid") {
-                die \['payment_status', "can't publish unpaid candidate."];
+            if ( $self->payment_status ne "paid" ) {
+                die \[ 'payment_status', "can't publish unpaid candidate." ];
             }
 
             # Validando se o candidato preencheu todos os campos necessários para publicar sua página.
 
             # TODO adicionar cnpj
             my @required = qw(
-                video_url summary biography raising_goal public_email picture
+              video_url summary biography raising_goal public_email picture
             );
 
             for (@required) {
-                if (!$self->$_) {
-                    die \[$_, "can't publish until fill '$_'."];
+                if ( !$self->$_ ) {
+                    die \[ $_, "can't publish until fill '$_'." ];
                 }
             }
 
-            return $self->update({ publish => 1 });
+            return $self->update( { publish => 1 } );
         },
 
         unpublish => sub {
-            $self->update({ publish => 0 });
+            $self->update( { publish => 0 } );
         },
     };
 }
@@ -1162,39 +1200,45 @@ sub action_specs {
 sub total_donated {
     my $self = shift;
 
-    return $self->donations->search({
-        status           => "captured",
-        donation_type_id => 1,
-        (
-            $self->crawlable
-            ? ()
-            : ( by_votolegal => "true" )
-        ),
-    })->get_column('amount')->sum();
+    return $self->donations->search(
+        {
+            status           => "captured",
+            donation_type_id => 1,
+            (
+                $self->crawlable
+                ? ()
+                : ( by_votolegal => "true" )
+            ),
+        }
+    )->get_column('amount')->sum();
 }
 
 sub total_donated_by_votolegal {
     my $self = shift;
 
-    return $self->donations->search({
-        status           => "captured",
-        donation_type_id => 1,
-        by_votolegal     => "true",
-    })->get_column('amount')->sum();
+    return $self->donations->search(
+        {
+            status           => "captured",
+            donation_type_id => 1,
+            by_votolegal     => "true",
+        }
+    )->get_column('amount')->sum();
 }
 
 sub people_donated {
     my $self = shift;
 
-    return $self->donations->search({
-        status           => "captured",
-        donation_type_id => 1,
-        (
-            $self->crawlable
-            ? ()
-            : ( by_votolegal => "true" )
-        ),
-    })->count();
+    return $self->donations->search(
+        {
+            status           => "captured",
+            donation_type_id => 1,
+            (
+                $self->crawlable
+                ? ()
+                : ( by_votolegal => "true" )
+            ),
+        }
+    )->count();
 }
 
 sub party_fund {
@@ -1202,10 +1246,12 @@ sub party_fund {
 
     return 0 unless $self->crawlable;
 
-    return $self->donations->search({
-        by_votolegal     => "false",
-        donation_type_id => 2,
-    })->get_column("amount")->sum;
+    return $self->donations->search(
+        {
+            by_votolegal     => "false",
+            donation_type_id => 2,
+        }
+    )->get_column("amount")->sum;
 }
 
 sub send_email_registration {
@@ -1216,13 +1262,15 @@ sub send_email_registration {
         from     => 'no-reply@votolegal.org.br',
         subject  => "VotoLegal - Cadastro realizado",
         template => get_data_section('candidate_registration.tt'),
-        vars     => { map { $_ => $self->$_} qw(name) },
+        vars     => { map { $_ => $self->$_ } qw(name) },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-        bcc  => ['contato@votolegal.org.br'],
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+            bcc  => ['contato@votolegal.org.br'],
+        }
+    );
 }
 
 sub send_email_approval {
@@ -1239,9 +1287,11 @@ sub send_email_approval {
         },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub send_email_disapproval {
@@ -1255,21 +1305,23 @@ sub send_email_disapproval {
         vars     => { name => $self->name },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub validate_required_information_for_payment {
     my ($self) = @_;
 
     my @required = qw(
-        name address_zipcode address_city address_state address_street address_house_number
+      name address_zipcode address_city address_state address_street address_house_number
     );
 
     for (@required) {
-        if (!defined($self->$_)) {
-            die \[$_, "missing"];
+        if ( !defined( $self->$_ ) ) {
+            die \[ $_, "missing" ];
         }
     }
 }
@@ -1278,8 +1330,8 @@ sub get_phone_number_and_area_code {
     my ($self) = @_;
 
     my $phone     = $self->phone;
-    my $area_code = substr($phone, 0, 2);
-    my $number    = substr($phone, 2);
+    my $area_code = substr( $phone, 0, 2 );
+    my $number    = substr( $phone, 2 );
 
     # Retornando em camel case
     # por ser um param que vai direto
@@ -1287,7 +1339,7 @@ sub get_phone_number_and_area_code {
     return {
         areaCode => $area_code,
         number   => $number,
-    }
+    };
 }
 
 sub get_address_data {
@@ -1308,7 +1360,7 @@ sub get_address_data {
         district   => $self->address_district,
         number     => $self->address_house_number,
         complement => $self->address_complement,
-    }
+    };
 }
 
 sub candidate_has_paid {
@@ -1322,12 +1374,13 @@ sub candidate_has_payment_created {
 
     my @payments = $self->payments->all();
 
-    my $most_recent_payment = $self->payments->search(undef, { order_by => { '-desc' => 'created_at' } } )->first;
+    my $most_recent_payment = $self->payments->search( undef, { order_by => { '-desc' => 'created_at' } } )->first;
     return 0 unless $most_recent_payment;
 
-    my $most_recent_payment_log = $most_recent_payment->payment_logs->search(undef, { order_by => { '-desc' => 'created_at' } } )->first;
+    my $most_recent_payment_log =
+      $most_recent_payment->payment_logs->search( undef, { order_by => { '-desc' => 'created_at' } } )->first;
 
-    if ($most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured') {
+    if ( $most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured' ) {
         return 1;
     }
     else {
@@ -1352,9 +1405,11 @@ sub send_payment_in_analysis_email {
         vars     => { name => $self->name },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub send_payment_approved_email {
@@ -1368,9 +1423,11 @@ sub send_payment_approved_email {
         vars     => { name => $self->name },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub send_payment_not_approved_email {
@@ -1384,15 +1441,17 @@ sub send_payment_not_approved_email {
         vars     => { name => $self->name },
     )->build_email();
 
-    return $self->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub get_most_recent_payment {
     my ($self) = @_;
 
-    return $self->payments->count > 0 ? $self->payments->search(undef, { max => 'created_at' } )->first : 0;
+    return $self->payments->count > 0 ? $self->payments->search( undef, { max => 'created_at' } )->first : 0;
 }
 
 sub get_account_payment_status {
@@ -1404,7 +1463,7 @@ sub get_account_payment_status {
     if ( $payment_status eq 'unpaid' ) {
 
         if ( my $payment = $self->get_most_recent_payment() ) {
-            my $log = $payment->payment_logs->search(undef, { max => 'created_at' } )->next;
+            my $log = $payment->payment_logs->search( undef, { max => 'created_at' } )->next;
 
             if ( $log && ( $log->status eq 'analysis' || $log->status eq 'created' ) ) {
                 $ret = 'pagamento em análise';
@@ -1415,12 +1474,12 @@ sub get_account_payment_status {
 
         }
         else {
-            $ret = 'não criou pagamento'
+            $ret = 'não criou pagamento';
         }
     }
     else {
 
-        $ret = 'pagamento aprovado'
+        $ret = 'pagamento aprovado';
     }
 
     return $ret;
@@ -1444,7 +1503,6 @@ sub cnpj_formated {
 
     return $cnpj;
 }
-
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
