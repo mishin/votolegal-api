@@ -49,3 +49,5 @@ export IUGU_API_TEST_MODE="1"
 export MANDATOABERTO_SECURITY_TOKEN="Filling"
 
 export VOTOLEGAL_NO_GETH="1"
+# hangout chat (chat.google.com)
+export VOTOLEGAL_HANGOUTS_CHAT_URL=''

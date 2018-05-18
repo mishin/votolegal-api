@@ -2,7 +2,7 @@ package VotoLegal::Controller::API2;
 use Moose;
 use namespace::autoclean;
 
-BEGIN { extends 'CatalystX::Eta::Controller::REST' }
+BEGIN { extends 'VotoLegal::Controller::API2::Role::REST' }
 
 sub base : Chained('/') : PathPart('api2') : CaptureArgs(0) {
     my ( $self, $c ) = @_;

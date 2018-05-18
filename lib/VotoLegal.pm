@@ -1,8 +1,9 @@
 package VotoLegal;
 use Moose;
 use namespace::autoclean;
-
+use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
+use Data::Dumper qw/Dumper/;
 
 use Catalyst qw/
   ConfigLoader
@@ -19,8 +20,8 @@ extends 'Catalyst';
 our $VERSION = '0.01';
 
 __PACKAGE__->config(
-    name     => 'VotoLegal',
-    encoding => 'UTF-8',
+    name           => 'VotoLegal',
+    encoding       => 'UTF-8',
     'Plugin::I18N' => {
         maketext_options => {
             Path   => __PACKAGE__->path_to('lib/VotoLegal/I18N'),
@@ -43,33 +44,44 @@ __PACKAGE__->config(
 # Start the application
 __PACKAGE__->setup();
 
-=encoding utf8
+sub build_api_error {
+    my ( $app, %args ) = @_;
+    my $msg_id = $args{msg_id};
 
-=head1 NAME
+    $msg_id =~ s/[ -]/_/go;
 
-VotoLegal - Catalyst based application
+    my $loc_msg = $app->loc($msg_id);
 
-=head1 SYNOPSIS
+    if ( $loc_msg eq $msg_id && $msg_id =~ /_missing$/ ) {
+        $msg_id =~ s/_missing/_invalid/;
+        $loc_msg = $app->loc($msg_id);
+    }
 
-    script/votolegal_server.pl
+    if ( $loc_msg eq $msg_id ) {
 
-=head1 DESCRIPTION
+        remote_notify(
+            sprintf( "[Voto Legal] Faltando traducao para msg_id=$msg_id [hostname=%s] [%s]",
+                    $app->req->uri->as_string
+                  . ( $app->req->data   ? Dumper( $app->req->data )   : '' ) . " - "
+                  . ( $app->req->params ? Dumper( $app->req->params ) : '' ) ),
+            channel => '#api-error'
+        );
 
-[enter your description here]
+    }
 
-=head1 SEE ALSO
+    if ( $loc_msg =~ /invalid/ ) {
+        $loc_msg =~ s/_invalid/ com valor inválido/;
+    }
+    my %err = (
+        msg_id  => $msg_id,
+        message => $loc_msg
+    );
 
-L<VotoLegal::Controller::Root>, L<Catalyst>
+    $err{form_field} = $args{form_field} if $args{form_field};
+    $err{extra}      = $args{extra}      if exists $args{extra};
+    $err{reason}     = $args{reason}     if exists $args{reason};
 
-=head1 AUTHOR
-
-Junior Moraes,,,
-
-=head1 LICENSE
-
-This library is free software. You can redistribute it and/or modify
-it under the same terms as Perl itself.
-
-=cut
+    return \%err;
+}
 
 1;

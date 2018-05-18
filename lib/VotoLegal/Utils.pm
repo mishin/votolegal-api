@@ -1,18 +1,19 @@
 package VotoLegal::Utils;
 use common::sense;
 
-=encoding UTF-8
+use JSON qw/encode_json/;
+use Furl;
+use URI;
+use URI::QueryParam;
+use URI::Escape;
 
-=head1 NAME
-
-VotoLegal::Utils
-
-=cut
+my $alert_used;
+my $furl = Furl->new( timeout => 5 );
 
 use vars qw(@ISA @EXPORT);
 
 @ISA    = (qw(Exporter));
-@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with);
+@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify);
 
 =head1 METHODS
 
@@ -44,15 +45,44 @@ sub left_padding_whitespaces {
     return sprintf( "%0${pos}s", $string );
 }
 
-sub die_with {
-    my $msg = shift;
-    die { message => $msg, error_code => 400, msg => $msg };
+sub die_with ($) {
+    die { msg_id => shift };
 }
 
-=head1 AUTHOR
+sub die_with_reason ($$) {
+    die { msg_id => shift, reason => shift };
+}
 
-Junior Moraes L<juniorfvox@gmail.com|mailto:juniorfvox@gmail.com>.
 
-=cut
+sub remote_notify {
+    my ( $text, %opts ) = @_;
 
+    if ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ ) {
+        eval('use DDP; p $text');
+
+        if ( !$alert_used ) {
+            system( 'notify-send', '--urgency=low', $text );
+            $alert_used++;
+        }
+        return 1;
+    }
+
+    if ( exists $ENV{VOTOLEGAL_HANGOUTS_CHAT_URL} ) {
+        my $hostname = `hostname`;
+        chomp($hostname);
+
+        my $uri = URI->new( $ENV{VOTOLEGAL_HANGOUTS_CHAT_URL} );
+        $uri->query_param_append( 'thread_key', $opts{channel} || 'error' );
+
+        my $x = eval {
+            $furl->post(
+                $uri->as_string,
+                [ 'Content-type' => 'application/json' ],
+                encode_json( { text => $hostname . ' ' . $text } )
+            );
+        };
+        print STDERR "Error while sending remote_notify $text - $@" if $@;
+    }
+
+}
 1;

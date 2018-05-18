@@ -192,7 +192,7 @@ sub get_config {
 sub error_is ($$) {
     my ( $stash_name, $error_exp ) = @_;
 
-    is $obj->stash->{$stash_name}{error}, $error_exp, "$stash_name is $error_exp";
+    is $obj->stash->{$stash_name}[0]{msg_id}, $error_exp, "$stash_name is $error_exp";
 
 }
 

@@ -107,7 +107,7 @@ sub test_dup_value {
             amount                        => 3000,
           };
 
-        error_is 'donation.duplicated', 'donation-repeated';
+        error_is 'donation.duplicated', 'donation_repeated';
 
     };
 

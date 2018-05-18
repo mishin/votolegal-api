@@ -3,7 +3,7 @@ use Moose;
 use namespace::autoclean;
 use VotoLegal::Utils qw/die_with is_test/;
 
-BEGIN { extends 'CatalystX::Eta::Controller::REST' }
+BEGIN { extends 'VotoLegal::Controller::API2::Role::REST' }
 
 sub base : Chained('/api2/base') : PathPart('donations') : CaptureArgs(0) { }
 

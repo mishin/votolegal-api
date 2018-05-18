@@ -68,7 +68,7 @@ db_transaction {
             device_authorization_token_id => stash 'test_auth',
             certiface_token               => '00000000-0000-4e0c-81db-53ddc14a44e0'
           };
-        error_is 'test', 'donation-not-found';
+        error_is 'test', 'donation_not_found';
 
         my $donation = rest_get '/api2/certiface2donation',
           code   => 200,
