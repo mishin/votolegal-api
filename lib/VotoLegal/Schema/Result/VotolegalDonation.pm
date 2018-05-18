@@ -545,11 +545,11 @@ sub generate_certiface_link {
         }
     );
 
-    $payment_info->{certiface_id} = $certiface->{id};
+    $payment_info->{certiface_id} = $certiface->{uuid};
 
     $self->certiface_tokens->create(
         {
-            id               => $certiface->{id},
+            id               => $certiface->{uuid},
             verification_url => $certiface->{url},
         }
     );

@@ -86,30 +86,30 @@ sub generate_token {
     else {
         my $retry = 1;
       RETRY:
-        $res = $self->furl->post(
+        my $response = $self->furl->post(
             $ENV{CERTIFACE_API_URL} . '/api/v1/protected/genToken',
             [ 'Content-Type', 'application/json', 'Authorization', $self->session_token(), ],
             encode_json($opts)
         );
 
         # token expirou, faz login e tenta novamente
-        if ( $res->code == 500 ) {
+        if ( $response->code == 500 ) {
 
             $self->new_session();
 
             $retry++;
             goto RETRY if $retry;
 
-            die "Erro ao criar token certiface: " . $res->decoded_content;
+            die "Erro ao criar token certiface: " . $response->decoded_content;
         }
-        elsif ( $res->code != 200 ) {
+        elsif ( $response->code != 200 ) {
 
-            die "Erro ao criar token certiface: " . $res->decoded_content;
+            die "Erro ao criar token certiface: " . $response->decoded_content;
         }
 
-        $res = decode_json( $res->decoded_content );
+        $res = decode_json( $response->decoded_content );
 
-        die "Erro ao criar token certiface: " . $res->decoded_content unless $res->{id} && $res->{url};
+        die "Erro ao criar token certiface: " . $response->decoded_content unless $res->{uuid} && $res->{url};
     }
 
     return $res;

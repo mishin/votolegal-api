@@ -224,36 +224,38 @@ sub generate_rand_donator_data {
             name  => fake_name(),
             email => fake_email(),
 
-            donation_fp => encode_base64(to_json(
-                {
-                    ms                   => 200,
-                    id                   => "12345678978",
-                    language             => "en-US",
-                    color_depth          => "24",
-                    device_memory        => "-1",
-                    hardware_concurrency => "8",
-                    resolution           => "2560,1440",
-                    available_resolution => "2495,1416",
-                    timezone_offset      => "180",
-                    session_storage      => "1",
-                    local_storage        => "1",
-                    indexed_db           => "1",
-                    open_database        => "1",
-                    cpu_class            => "unknown",
-                    navigator_platform   => "Linux x86_64",
-                    regular_plugins      => "Chrome PDF Plugin::Portable",
-                    canvas               => 35567,
-                    webgl                => 8310,
-                    webgl_vendor         => "NVIDIA Corporation~GeForce",
-                    adblock              => "true",
-                    has_lied_languages   => "false",
-                    has_lied_resolution  => "false",
-                    has_lied_os          => "false",
-                    has_lied_browser     => "false",
-                    touch_support        => "0,false,false",
-                    js_fonts             => "Andale Mono,Arial,Arial Black,Verdana"
-                }
-            )),
+            donation_fp => encode_base64(
+                to_json(
+                    {
+                        ms                   => 200,
+                        id                   => "12345678978",
+                        language             => "en-US",
+                        color_depth          => "24",
+                        device_memory        => "-1",
+                        hardware_concurrency => "8",
+                        resolution           => "2560,1440",
+                        available_resolution => "2495,1416",
+                        timezone_offset      => "180",
+                        session_storage      => "1",
+                        local_storage        => "1",
+                        indexed_db           => "1",
+                        open_database        => "1",
+                        cpu_class            => "unknown",
+                        navigator_platform   => "Linux x86_64",
+                        regular_plugins      => "Chrome PDF Plugin::Portable",
+                        canvas               => 35567,
+                        webgl                => 8310,
+                        webgl_vendor         => "NVIDIA Corporation~GeForce",
+                        adblock              => "true",
+                        has_lied_languages   => "false",
+                        has_lied_resolution  => "false",
+                        has_lied_os          => "false",
+                        has_lied_browser     => "false",
+                        touch_support        => "0,false,false",
+                        js_fonts             => "Andale Mono,Arial,Arial Black,Verdana"
+                    }
+                )
+            ),
 
             birthdate => '2000-01-01',
 
@@ -336,8 +338,8 @@ sub assert_current_step ($) {
 
 sub setup_mock_certiface {
     $certiface_generate_token = {
-        url => 'https://site.domain.br/certifacetoken/dd24700e-2855-4e0c-81db-53ddc14a44ec',
-        id  => 'dd24700e-2855-4e0c-81db-53ddc14a44ec'
+        url  => 'https://site.domain.br/certifacetoken/dd24700e-2855-4e0c-81db-53ddc14a44ec',
+        uuid => 'dd24700e-2855-4e0c-81db-53ddc14a44ec'
     };
 
     $certiface_get_token_information = {
