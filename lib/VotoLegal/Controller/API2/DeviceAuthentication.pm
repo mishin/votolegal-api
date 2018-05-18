@@ -18,7 +18,6 @@ sub gentoken_POST {
     # TODO add rate limiting
 
     my $ua_str = $c->req->user_agent;
-
     die_with 'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048;
 
     my $ua = $c->model('DB')->schema->resultset('DeviceAuthorizationUa')->find_or_create( { user_agent => $ua_str } );

@@ -14,6 +14,8 @@ use VotoLegal::Utils;
 use DateTime::Format::Pg;
 use DateTime;
 
+use JSON qw/to_json/;
+
 use UUID::Tiny qw/is_uuid_string/;
 
 sub resultset {
@@ -129,7 +131,7 @@ sub verifiers_specs {
                     type       => CommonLatinText,
                 },
                 address_house_number => {
-                    required   => 0,
+                    required => 0,
                     type     => PositiveInt,
                 },
                 address_district => {
@@ -250,6 +252,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => PositiveInt,
                 },
+                user_agent_id => {
+                    required => 1,
+                    type     => "Int",
+                },
                 payment_method => {
                     required   => 1,
                     type       => "Str",
@@ -257,6 +263,7 @@ sub verifiers_specs {
                         $_[0]->get_value('payment_method') =~ /^(credit_card|boleto)$/;
                     },
                 },
+
             },
         ),
     };
@@ -357,6 +364,12 @@ sub _create_donation {
                     device_authorization_token_id => $values{device_authorization_token_id},
                     is_pre_campaign               => $config->{is_pre_campaign} ? 1 : 0,
                     payment_gateway_id            => $config->{payment_gateway_id},
+
+                    stash => to_json(
+                        {
+                            user_agent_id => $values{user_agent_id}
+                        }
+                    )
                 }
             );
 

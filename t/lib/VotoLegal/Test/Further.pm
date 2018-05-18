@@ -41,9 +41,12 @@ sub import {
     }
 }
 
-my $obj = CatalystX::Eta::Test::REST->new(
+my $current_ua = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/51.0.2704.103 Safari/' . rand;
+my $obj        = CatalystX::Eta::Test::REST->new(
     do_request => sub {
         my $req = shift;
+
+        $req->header( 'User-Agent' => $current_ua );
 
         eval 'do{my $x = $req->as_string; p $x}' if exists $ENV{TRACE} && $ENV{TRACE};
         my ( $res, $c ) = ctx_request($req);
@@ -134,21 +137,21 @@ sub create_candidate {
     $username =~ s/\s+/_/g;
 
     my %params = (
-        username              => $username,
-        password              => "foobarquux1",
-        name                  => fake_name()->(),
-        popular_name          => fake_surname()->(),
-        email                 => fake_email()->(),
-        cpf                   => random_cpf(),
-        address_state         => 'SP',
-        address_city          => 'Iguape',
-        address_zipcode       => '11920-000',
-        address_street        => "Rua Tiradentes",
-        address_house_number  => 1 + int( rand(2000) ),
-        office_id             => 4,
-        birth_date            => '11/05/1998',
-        party_id              => fake_int( 1, 35 )->(),
-        reelection            => fake_int( 0, 1 )->(),
+        username             => $username,
+        password             => "foobarquux1",
+        name                 => fake_name()->(),
+        popular_name         => fake_surname()->(),
+        email                => fake_email()->(),
+        cpf                  => random_cpf(),
+        address_state        => 'SP',
+        address_city         => 'Iguape',
+        address_zipcode      => '11920-000',
+        address_street       => "Rua Tiradentes",
+        address_house_number => 1 + int( rand(2000) ),
+        office_id            => 4,
+        birth_date           => '11/05/1998',
+        party_id             => fake_int( 1, 35 )->(),
+        reelection           => fake_int( 0, 1 )->(),
         %opts,
     );
 
@@ -202,19 +205,14 @@ sub create_candidate_contract_signature {
 }
 
 sub generate_device_token {
+
     my $res = $obj->rest_post(
         "/api2/device-authentication",
         name    => 'generate_device_token',
         code    => 200,
-        headers => [
-            'User-Agent' =>
-              'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/'
-              . rand,
-        ],
     );
 
     $obj->{stash}{test_auth} = $res->{device_authorization_token_id};
-
 }
 
 sub generate_rand_donator_data {
@@ -223,7 +221,8 @@ sub generate_rand_donator_data {
             name  => fake_name(),
             email => fake_email(),
 
-            birthdate                    => '2000-01-01',
+            birthdate => '2000-01-01',
+
             #address_district             => "Centro",
             #address_state                => fake_pick(qw(SP RJ MG RS PR)),
             #address_city                 => "Iguape",
@@ -269,7 +268,10 @@ sub messages2str ($) {
 sub buttons2str ($) {
     my ($where) = @_;
 
-    ( join ' ', map { $_->{text}.'-'.$_->{value} } grep { $_->{type} eq 'button' } @{ $where->{ui}{messages} || [] } );
+    (
+        join ' ',
+        map { $_->{text} . '-' . $_->{value} } grep { $_->{type} eq 'button' } @{ $where->{ui}{messages} || [] }
+    );
 }
 
 sub links2str ($) {

@@ -27,6 +27,13 @@ sub donation : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
 sub donation_POST {
     my ( $self, $c ) = @_;
 
+    my $ua_str = $c->req->user_agent;
+    die_with 'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048;
+
+    my $ua = $c->model('DB')->schema->resultset('DeviceAuthorizationUa')->find_or_create( { user_agent => $ua_str } );
+
+    $c->stash->{params}{user_agent_id} = $ua->id;
+
     my $donation = $c->model('DB::VotolegalDonation')->execute(
         $c,
         for  => "create",
@@ -83,8 +90,8 @@ sub result_POST {
         loc   => sub {
             return is_test() ? join( '', @_ ) : $c->loc(@_);
         },
-        donation  => $c->stash->{donation},
-        params    => $c->stash->{params},
+        donation => $c->stash->{donation},
+        params   => $c->stash->{params},
 
         supports => $self->_supports($c),
 
