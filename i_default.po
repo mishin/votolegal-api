@@ -53,3 +53,6 @@ msgstr "Dados de endereço faltando"
 msgid "fp-invalid-contact-support"
 msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
 
+msgid "donation_fp_invalid"
+msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
+

@@ -108,6 +108,8 @@ sub generate_token {
         }
 
         $res = decode_json( $res->decoded_content );
+
+        die "Erro ao criar token certiface: " . $res->decoded_content unless $res->{id} && $res->{url};
     }
 
     return $res;
