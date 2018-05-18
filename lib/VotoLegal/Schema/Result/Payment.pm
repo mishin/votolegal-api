@@ -433,19 +433,60 @@ sub get_value {
 
     my $candidate = $self->candidate;
 
+    my $has_political_movement = $candidate->political_movement_id ? 1 : 0;
+
     my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
 
     my $has_promotion;
     my $value;
 
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ || $candidate->party_id == 34 ) {
+    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5)$/ || $candidate->party_id =~ /^(34|26)$/ ) {
         $has_promotion = 1;
     }
 
     if ($has_promotion) {
-        $value = $is_boleto ?
-            ( $candidate->political_movement_id == 1 ? '246.50' : '395.00' ) :
-            ( $candidate->political_movement_id == 1 ? '247.50' : '396.00' );
+
+        if ( $is_boleto ) {
+
+            if ($has_political_movement) {
+
+                if ( $candidate->political_movement_id == 1 ) {
+                    $value = '246.50';
+                }
+                elsif ( $candidate->party_id == 26 ) {
+                    $value = '296.00';
+                }
+                else {
+                    $value = '395.00';
+                }
+
+            }
+            else {
+
+                if ( $candidate->party_id == 26 ) {
+                    $value = '296.00';
+                }
+                else {
+                    $value = '395.00'
+                }
+
+            }
+
+        }
+        else {
+
+            if ( $candidate->political_movement_id == 1 ) {
+                $value = '247.50'
+            }
+            elsif ( $candidate->party_id == 26 ) {
+                $value = '297.00'
+            }
+            else {
+                $value = '396.00'
+            }
+
+        }
+
     }
     else {
         $value = $is_boleto ? '494.00' : '495.00';

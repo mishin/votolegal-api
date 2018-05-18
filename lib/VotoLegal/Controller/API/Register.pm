@@ -66,6 +66,9 @@ sub register_POST {
         if ( $candidate->political_movement_id == 1 ) {
             $value = '247.50';
         }
+        elsif ( $candidate->party_id == 26 ) {
+            $value = '297.00';
+        }
         elsif (( $candidate->party_id == 34 && $candidate->political_movement_id != 1 )
             || ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5)$/ ) ) {
             $value = '396.00';
