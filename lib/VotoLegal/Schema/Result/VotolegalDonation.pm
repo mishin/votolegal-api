@@ -161,6 +161,11 @@ __PACKAGE__->table("votolegal_donation");
   is_nullable: 1
   original: {data_type => "varchar"}
 
+=head2 votolegal_fp
+
+  data_type: 'bigint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -234,6 +239,8 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     original    => { data_type => "varchar" },
   },
+  "votolegal_fp",
+  { data_type => "bigint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -326,8 +333,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 06:48:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VwsOa6DrDYyErVTqXNxaYw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 13:29:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:REeZ+rEIqS2yKk+hK4D1OQ
 
 use Carp;
 use JSON::XS;

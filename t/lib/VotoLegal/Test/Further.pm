@@ -11,11 +11,13 @@ use Text::Lorem;
 use Config::General;
 use Data::Printer;
 use JSON::MaybeXS;
+use JSON qw/to_json from_json/;
 use Crypt::PRNG qw(random_string);
 use Business::BR::CPF qw(random_cpf);
 use Business::BR::CNPJ qw(random_cnpj format_cnpj);
 use Data::Fake qw(Core Company Dates Internet Names Text);
 
+use MIME::Base64;
 our $iugu_invoice_response;
 our $iugu_invoice_response_capture;
 
@@ -208,8 +210,8 @@ sub generate_device_token {
 
     my $res = $obj->rest_post(
         "/api2/device-authentication",
-        name    => 'generate_device_token',
-        code    => 200,
+        name => 'generate_device_token',
+        code => 200,
     );
 
     $obj->{stash}{test_auth} = $res->{device_authorization_token_id};
@@ -220,6 +222,37 @@ sub generate_rand_donator_data {
         {
             name  => fake_name(),
             email => fake_email(),
+
+            donation_fp => encode_base64(to_json(
+                {
+                    ms                   => 200,
+                    id                   => "12345678978",
+                    language             => "en-US",
+                    color_depth          => "24",
+                    device_memory        => "-1",
+                    hardware_concurrency => "8",
+                    resolution           => "2560,1440",
+                    available_resolution => "2495,1416",
+                    timezone_offset      => "180",
+                    session_storage      => "1",
+                    local_storage        => "1",
+                    indexed_db           => "1",
+                    open_database        => "1",
+                    cpu_class            => "unknown",
+                    navigator_platform   => "Linux x86_64",
+                    regular_plugins      => "Chrome PDF Plugin::Portable",
+                    canvas               => 35567,
+                    webgl                => 8310,
+                    webgl_vendor         => "NVIDIA Corporation~GeForce",
+                    adblock              => "true",
+                    has_lied_languages   => "false",
+                    has_lied_resolution  => "false",
+                    has_lied_os          => "false",
+                    has_lied_browser     => "false",
+                    touch_support        => "0,false,false",
+                    js_fonts             => "Andale Mono,Arial,Arial Black,Verdana"
+                }
+            )),
 
             birthdate => '2000-01-01',
 

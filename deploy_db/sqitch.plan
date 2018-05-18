@@ -109,3 +109,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0103-really-_immutable [0102-DeviceAuthorizationToken] 2018-05-17T04:53:00Z renato,,, <renato@renato-MS-7A34> # votolegal_donation_immutable
 0104-remove-notification-payment_id [0103-really-_immutable] 2018-05-17T12:55:42Z Lucas Ansei,,, <lucas@lucas-G750JX> # removing payment_id
 0105-campaign_donation_type [0104-remove-notification-payment_id] 2018-05-18T09:48:13Z renato,,, <renato@renato-MS-7A34> # campaign_donation_type
+0106-votolegal-fp [0105-campaign_donation_type] 2018-05-18T14:27:18Z renato,,, <renato@renato-MS-7A34> # fp

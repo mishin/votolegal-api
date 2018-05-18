@@ -171,9 +171,6 @@ sub process_response_and_validate {
     my $response = $ws->get_token_information( $self->id );
     return 0 unless $response;
 
-    use DDP;
-    p $response;
-
     my $is_any_valid = grep { $_->{valid} } @{ $response->{resultados} || [] };
     my @fail_reasons = map { $_->{cause} } grep { $_->{valid} == 0 } @{ $response->{resultados} || [] };
 

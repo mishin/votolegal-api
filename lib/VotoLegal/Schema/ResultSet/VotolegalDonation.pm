@@ -14,7 +14,8 @@ use VotoLegal::Utils;
 use DateTime::Format::Pg;
 use DateTime;
 
-use JSON qw/to_json/;
+use JSON qw/to_json from_json/;
+use MIME::Base64;
 
 use UUID::Tiny qw/is_uuid_string/;
 
@@ -256,6 +257,13 @@ sub verifiers_specs {
                     required => 1,
                     type     => "Int",
                 },
+                donation_fp => {
+                    required => 1,
+
+                    # 1 mb
+                    max_length => 1024 * 1024,
+                    type       => "Str",
+                },
                 payment_method => {
                     required   => 1,
                     type       => "Str",
@@ -297,9 +305,11 @@ sub action_specs {
 
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
 
+            my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
+
             my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 
-            my $donation = $self->_create_donation( config => $config, values => \%values );
+            my $donation = $self->_create_donation( config => $config, values => \%values, fp => $fingerprint );
 
             return $donation;
         },
@@ -341,6 +351,18 @@ sub action_specs {
     };
 }
 
+sub validate_donation_fp {
+    my ( $self, $fp ) = @_;
+
+    $fp = eval { decode_base64($fp) };
+    die 'fp-invalid-contact-support' if !$fp || $fp !~ /^{/ || $fp !~ /}$/;
+
+    $fp = eval { from_json($fp) };
+    die 'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id};
+
+    return $fp;
+}
+
 sub _create_donation {
     my ( $self, %opts ) = @_;
 
@@ -356,6 +378,27 @@ sub _create_donation {
     my $donation;
     $schema->txn_do(
         sub {
+            my $fp = $self->resultset('DonationFp')->create(
+                {
+                    fp_hash       => $opts{fp}{id},
+                    user_agent_id => $values{user_agent_id},
+                }
+            );
+
+            while ( my ( $key, $value ) = each %{ $opts{fp} } ) {
+
+                my $key_id = $self->resultset('DonationFpKey')->find_or_create( { key => $key } );
+                my $value_id = $self->resultset('DonationFpValue')->find_or_create( { value => $value } );
+
+                $self->resultset('DonationFpDetail')->create(
+                    {
+                        donation_fp_id       => $fp->id,
+                        donation_fp_key_id   => $key_id->id,
+                        donation_fp_value_id => $value_id->id
+                    }
+                );
+
+            }
 
             $donation = $self->create(
                 {
@@ -365,11 +408,7 @@ sub _create_donation {
                     is_pre_campaign               => $config->{is_pre_campaign} ? 1 : 0,
                     payment_gateway_id            => $config->{payment_gateway_id},
 
-                    stash => to_json(
-                        {
-                            user_agent_id => $values{user_agent_id}
-                        }
-                    )
+                    votolegal_fp => $fp->id,
                 }
             );
 
