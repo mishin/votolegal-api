@@ -27,7 +27,7 @@ db_transaction {
     stash_test 'n1' => sub {
         my $res = shift;
 
-        is ($res->[0]->{id}, $candidate->id, 'by name');
+        is ($res->[0]->{id}, $candidate->id, 'by name 1');
     };
 
     # Search with lower case.
@@ -43,7 +43,7 @@ db_transaction {
     stash_test 'n2' => sub {
         my $res = shift;
 
-        is ($res->[0]->{id}, $candidate->id, 'by name');
+        is ($res->[0]->{id}, $candidate->id, 'by name 2');
     };
 
     # Search by party_id.
