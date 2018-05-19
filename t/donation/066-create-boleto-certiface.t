@@ -59,6 +59,7 @@ db_transaction {
     is messages2str $response, 'msg_text_certiface', 'message ok';
     is $response->{ui}{messages}[1]{text}, 'msg_link_certiface', 'has link';
 
+
     do {
         rest_get '/api2/certiface2donation',
           code    => 400,

@@ -8,6 +8,8 @@ use Moose;
 use JSON qw/from_json/;
 use Carp;
 use VotoLegal::Utils qw/is_test/;
+use Digest::SHA qw(sha1_hex);
+
 extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Schema::Role::ResultsetFind';
 with 'VotoLegal::Schema::Role::FsmLoader';
@@ -456,6 +458,19 @@ sub _process_credit_card_form {
         ];
         return;
     }
+    if ( !$params->{cc_hash} ) {
+
+        $stash->{prepend_messages} = [
+            {
+                type  => 'msg',
+                style => 'error',
+                text  => $loc->('msg_invalid_cc_hash'),
+            }
+        ];
+        return;
+    }
+
+    $stash->{cc_hash} = sha1_hex($params->{cc_hash});
 
     $stash->{credit_card_token} = $params->{credit_card_token};
     $stash->{value}             = 'credit_card_added';

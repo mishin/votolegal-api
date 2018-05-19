@@ -70,11 +70,16 @@ db_transaction {
       code   => 200,
       params => {
         device_authorization_token_id => stash 'test_auth',
-        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95'
+        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95',
+        cc_hash                       => '123456'
       };
 
     assert_current_step('register_capture');
     is messages2str $response, 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos';
+
+    my $donation_stash = get_current_stash;
+    is( $donation_stash->{cc_hash},           '7c4a8d09ca3762af61e59520943dc26494f8941b', 'hash saved ok' );
+    is( $donation_stash->{credit_card_token}, 'A5B22CECDA5C48C7A9A7027295BFBD95',         'teokn saved ok' );
 
     $response = rest_get $donation_url,
       code   => 200,
@@ -132,6 +137,9 @@ sub test_boleto {
     assert_current_step('register_capture');
 
     setup_sucess_mock_iugu_boleto_success;
+
+    my $donation_stash = get_current_stash;
+    is keys %$donation_stash, 0, 'nothing on stash';
 
     $response = rest_get $donation_url,
       name   => "get donation boleto",

@@ -288,7 +288,13 @@ sub set_current_dev_auth {
 sub get_current_stash () {
     my $schema = VotoLegal->model('DB');
 
-    my $row = $schema->resultset('DeviceSession')->search( { device_authorization_token_id => $sessionkey } )->next;
+    my $row = $schema->resultset('VotolegalDonation')->search(
+        { device_authorization_token_id => $sessionkey },
+        {
+            order_by => { -desc => 'id' },
+            rows     => 1
+        }
+    )->next;
     if ($row) {
         return decode_json( $row->stash );
     }

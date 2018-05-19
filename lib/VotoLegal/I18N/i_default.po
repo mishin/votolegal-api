@@ -29,6 +29,9 @@ msgstr "Por favor, informe seu cartão de crédito no formulário abaixo"
 msgid "msg_invalid_cc_token"
 msgstr "Token não recebido ou inválido"
 
+msgid "msg_invalid_cc_hash"
+msgstr "Hash do cartão não recebido ou inválido"
+
 msgid "msg_boleto_message"
 msgstr "<p>Boleto gerado com sucesso, faça o pagamento até __DUE_DATE__</p>"
 
