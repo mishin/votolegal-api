@@ -4,13 +4,13 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "donation-not-found"
+msgid "donation_not_found"
 msgstr "Doação não encontrada"
 
-msgid "donation-repeated"
+msgid "donation_repeated"
 msgstr "Já existe uma doação com valor mesmo valor com o seu CPF, tente novamente em 30 segundos."
 
-msgid "invalid-user-agent"
+msgid "invalid_user_agent"
 msgstr "Utilize outro navegador."
 
 msgid "msg_internal_we_are_in_loop"
@@ -62,10 +62,6 @@ msgstr "O processo de verificação de identidade não foi concluído com sucess
 
 msgid "fp-invalid-contact-support"
 msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
-
-msgid "donation_fp_invalid"
-msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
-
 
 # POST /api2/donations >>>
 

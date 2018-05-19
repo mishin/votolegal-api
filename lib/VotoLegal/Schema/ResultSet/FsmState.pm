@@ -401,14 +401,32 @@ sub _process_start_cc_payment {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
     my $info = $donation->payment_info_parsed;
-    $stash->{value} = $info->{_charge_response_}{'LR'} eq '00' ? 'msg_cc_authorized' : 'msg_cc_not_authorized';
 
-    $stash->{messages} = [
-        {
-            type => 'msg',
-            text => $loc->( $stash->{value} ),
-        }
-    ];
+    my $success = $info->{_charge_response_}{'LR'} eq '00';
+
+    if ($success) {
+
+        $stash->{value} = 'cc_authorized';
+
+        $stash->{messages} = [
+            {
+                type => 'msg',
+                text => $loc->('msg_cc_authorized'),
+            }
+        ];
+
+    }
+    else {
+
+        $stash->{value} = 'cc_not_authorized';
+
+        $stash->{messages} = [
+            {
+                type => 'msg',
+                text => $loc->('msg_cc_not_authorized'),
+            }
+        ];
+    }
 
 }
 
