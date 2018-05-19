@@ -308,6 +308,7 @@ sub action_specs {
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 
             my $addr;
+
             # dominios comuns não precisa verificar o mx
             if (   is_test()
                 || lc $values{email} =~ /\@(gmail|hotmail|icloud|outlook|msn|live|globo)\.com$/
@@ -399,8 +400,8 @@ sub _create_donation {
         sub {
             my $fp = $self->resultset('DonationFp')->create(
                 {
-                    fp_hash       => $opts{fp}{id},
                     user_agent_id => $values{user_agent_id},
+                    fp_hash       => delete $opts{fp}{id},
                     ms            => delete $opts{fp}{ms},
                     canvas_result => delete $opts{fp}{canvas},
                     webgl_result  => delete $opts{fp}{webgl},
