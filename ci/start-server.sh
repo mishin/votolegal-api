@@ -18,7 +18,7 @@ start_server \
   --port=8080 \
   -- starman \
   -I/src/lib \
-  --max-requests 100000
+  --max-requests 100000 \
   --workers $WORKERS \
   --error-log /data/log/starman.log \
   --user app --group app votolegal.psgi
