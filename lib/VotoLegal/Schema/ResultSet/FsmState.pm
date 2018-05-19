@@ -5,6 +5,7 @@ use VotoLegal::Logger;
 use utf8;
 use Moose;
 
+use JSON::XS;
 use JSON qw/from_json/;
 use Carp;
 use VotoLegal::Utils qw/is_test/;
@@ -442,6 +443,19 @@ sub _process_capture_cc {
     }
 
     $stash->{value} = $err ? 'error' : 'captured';
+
+    if ( $stash->{value} eq 'captured' ) {
+        $donation->result_source->schema->resultset('EmaildbQueue')->create(
+            {
+                config_id => $donation->candidate->emaildb_config_id,
+                template  => 'captured.html',
+                to        => $donation->votolegal_donation_immutable->donor_email,
+                subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_caputed_title' ),
+                variables => encode_json( $donation->as_row_for_email_variable() ),
+            }
+        );
+    }
+
 }
 
 sub _process_credit_card_form {
@@ -470,7 +484,7 @@ sub _process_credit_card_form {
         return;
     }
 
-    $stash->{cc_hash} = sha1_hex($params->{cc_hash});
+    $stash->{cc_hash} = sha1_hex( $params->{cc_hash} );
 
     $stash->{credit_card_token} = $params->{credit_card_token};
     $stash->{value}             = 'credit_card_added';

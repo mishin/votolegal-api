@@ -3,6 +3,12 @@
 use strict;
 use warnings;
 
+BEGIN {
+    use lib '../lib';
+    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
+    load_envs_via_dbi();
+}
+
 use Catalyst::ScriptRunner;
 Catalyst::ScriptRunner->run('VotoLegal', 'Create');
 

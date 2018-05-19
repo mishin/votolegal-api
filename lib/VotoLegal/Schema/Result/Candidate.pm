@@ -319,6 +319,12 @@ __PACKAGE__->table("candidate");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 emaildb_config_id
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -439,6 +445,8 @@ __PACKAGE__->add_columns(
     is_foreign_key => 1,
     is_nullable    => 0,
   },
+  "emaildb_config_id",
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -736,8 +744,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 17:05:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PKCbmHKf+s9lbfpe0RKy6Q
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-19 16:03:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QNrJPV0xSv9uJgvHDpLFbw
 
 use File::Temp q(:seekable);
 use Data::Verifier;

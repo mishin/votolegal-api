@@ -1,4 +1,5 @@
 use utf8;
+
 package VotoLegal::Schema::Result::VotolegalDonation;
 
 # Created by DBIx::Class::Schema::Loader
@@ -32,7 +33,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
+__PACKAGE__->load_components( "InflateColumn::DateTime", "TimeStamp", "PassphraseColumn" );
 
 =head1 TABLE: C<votolegal_donation>
 
@@ -45,7 +46,7 @@ __PACKAGE__->table("votolegal_donation");
 =head2 id
 
   data_type: 'uuid'
-  default_value: uuid_generate_v4()
+  default_value: uuid_generate_v1()
   is_nullable: 0
   size: 16
 
@@ -169,78 +170,78 @@ __PACKAGE__->table("votolegal_donation");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
-  {
-    data_type => "uuid",
-    default_value => \"uuid_generate_v4()",
-    is_nullable => 0,
-    size => 16,
-  },
-  "candidate_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "state",
-  {
-    data_type     => "text",
-    default_value => "created",
-    is_nullable   => 0,
-    original      => { data_type => "varchar" },
-  },
-  "created_at",
-  {
-    data_type     => "timestamp",
-    default_value => \"current_timestamp",
-    is_nullable   => 0,
-    original      => { default_value => \"now()" },
-  },
-  "captured_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "refunded_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "compensated_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "transferred_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "is_boleto",
-  { data_type => "boolean", is_nullable => 0 },
-  "is_pre_campaign",
-  { data_type => "boolean", is_nullable => 0 },
-  "payment_info",
-  { data_type => "json", is_nullable => 1 },
-  "gateway_tid",
-  { data_type => "text", is_nullable => 1 },
-  "gateway_data",
-  { data_type => "json", is_nullable => 1 },
-  "callback_id",
-  {
-    data_type => "uuid",
-    default_value => \"uuid_generate_v4()",
-    is_nullable => 0,
-    size => 16,
-  },
-  "payment_gateway_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "device_authorization_token_id",
-  { data_type => "uuid", is_foreign_key => 1, is_nullable => 0, size => 16 },
-  "stash",
-  { data_type => "json", is_nullable => 1 },
-  "decred_capture_registered_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "decred_capture_hash",
-  {
-    data_type   => "text",
-    is_nullable => 1,
-    original    => { data_type => "varchar" },
-  },
-  "decred_refund_registered_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "decred_refund_hash",
-  {
-    data_type   => "text",
-    is_nullable => 1,
-    original    => { data_type => "varchar" },
-  },
-  "votolegal_fp",
-  { data_type => "bigint", is_nullable => 1 },
+    "id",
+    {
+        data_type     => "uuid",
+        default_value => \"uuid_generate_v1()",
+        is_nullable   => 0,
+        size          => 16,
+    },
+    "candidate_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+    "state",
+    {
+        data_type     => "text",
+        default_value => "created",
+        is_nullable   => 0,
+        original      => { data_type => "varchar" },
+    },
+    "created_at",
+    {
+        data_type     => "timestamp",
+        default_value => \"current_timestamp",
+        is_nullable   => 0,
+        original      => { default_value => \"now()" },
+    },
+    "captured_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "refunded_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "compensated_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "transferred_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "is_boleto",
+    { data_type => "boolean", is_nullable => 0 },
+    "is_pre_campaign",
+    { data_type => "boolean", is_nullable => 0 },
+    "payment_info",
+    { data_type => "json", is_nullable => 1 },
+    "gateway_tid",
+    { data_type => "text", is_nullable => 1 },
+    "gateway_data",
+    { data_type => "json", is_nullable => 1 },
+    "callback_id",
+    {
+        data_type     => "uuid",
+        default_value => \"uuid_generate_v4()",
+        is_nullable   => 0,
+        size          => 16,
+    },
+    "payment_gateway_id",
+    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+    "device_authorization_token_id",
+    { data_type => "uuid", is_foreign_key => 1, is_nullable => 0, size => 16 },
+    "stash",
+    { data_type => "json", is_nullable => 1 },
+    "decred_capture_registered_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "decred_capture_hash",
+    {
+        data_type   => "text",
+        is_nullable => 1,
+        original    => { data_type => "varchar" },
+    },
+    "decred_refund_registered_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "decred_refund_hash",
+    {
+        data_type   => "text",
+        is_nullable => 1,
+        original    => { data_type => "varchar" },
+    },
+    "votolegal_fp",
+    { data_type => "bigint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -266,10 +267,10 @@ Related object: L<VotoLegal::Schema::Result::Candidate>
 =cut
 
 __PACKAGE__->belongs_to(
-  "candidate",
-  "VotoLegal::Schema::Result::Candidate",
-  { id => "candidate_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "candidate",
+    "VotoLegal::Schema::Result::Candidate",
+    { id            => "candidate_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 certiface_tokens
@@ -281,10 +282,10 @@ Related object: L<VotoLegal::Schema::Result::CertifaceToken>
 =cut
 
 __PACKAGE__->has_many(
-  "certiface_tokens",
-  "VotoLegal::Schema::Result::CertifaceToken",
-  { "foreign.votolegal_donation_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "certiface_tokens",
+    "VotoLegal::Schema::Result::CertifaceToken",
+    { "foreign.votolegal_donation_id" => "self.id" },
+    { cascade_copy                    => 0, cascade_delete => 0 },
 );
 
 =head2 device_authorization_token
@@ -296,10 +297,10 @@ Related object: L<VotoLegal::Schema::Result::DeviceAuthorizationToken>
 =cut
 
 __PACKAGE__->belongs_to(
-  "device_authorization_token",
-  "VotoLegal::Schema::Result::DeviceAuthorizationToken",
-  { id => "device_authorization_token_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "device_authorization_token",
+    "VotoLegal::Schema::Result::DeviceAuthorizationToken",
+    { id            => "device_authorization_token_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 payment_gateway
@@ -311,10 +312,10 @@ Related object: L<VotoLegal::Schema::Result::PaymentGateway>
 =cut
 
 __PACKAGE__->belongs_to(
-  "payment_gateway",
-  "VotoLegal::Schema::Result::PaymentGateway",
-  { id => "payment_gateway_id" },
-  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+    "payment_gateway",
+    "VotoLegal::Schema::Result::PaymentGateway",
+    { id            => "payment_gateway_id" },
+    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 votolegal_donation_immutable
@@ -326,15 +327,12 @@ Related object: L<VotoLegal::Schema::Result::VotolegalDonationImmutable>
 =cut
 
 __PACKAGE__->might_have(
-  "votolegal_donation_immutable",
-  "VotoLegal::Schema::Result::VotolegalDonationImmutable",
-  { "foreign.votolegal_donation_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+    "votolegal_donation_immutable", "VotoLegal::Schema::Result::VotolegalDonationImmutable",
+    { "foreign.votolegal_donation_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
 );
 
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 13:29:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:REeZ+rEIqS2yKk+hK4D1OQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-19 15:52:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m7+FVXvGyLFKVfhvqwtONQ
 
 use Carp;
 use JSON::XS;
@@ -370,6 +368,45 @@ sub as_row {
 
 }
 
+sub as_row_for_email_variable {
+    my ($self) = @_;
+
+    my $donation = $self->resultset('VotolegalDonation')->search(
+        {
+            'me.id' => $self->id
+        },
+        {
+            join         => [ 'votolegal_donation_immutable', 'candidate' ],
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+
+            columns => [
+
+                'me.id',
+                'me.is_pre_campaign',
+                'candidate.campaign_donation_type',
+                'candidate.cpf',
+                'candidate.cnpj',
+                { donor_name           => 'votolegal_donation_immutable.donor_name' },
+                { donor_email          => 'votolegal_donation_immutable.donor_email' },
+                { amount_human         => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')" },
+                { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+                {
+                    captured_at_human => \
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', captured_at)) , 'DD/MM/YYYY hh::mm:ss')"
+                },
+                {
+                    refunded_at_human => \
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', refunded_at)) , 'DD/MM/YYYY hh::mm:ss')"
+                },
+              ]
+
+        }
+    )->next;
+
+
+    return $donation;
+}
+
 sub obtain_lock {
     my ($self) = @_;
 
@@ -383,9 +420,9 @@ sub obtain_lock {
         {
             prefetch => [ 'candidate', 'votolegal_donation_immutable' ]
         }
-      )->next;
+    )->next;
 
-      return $lock_myself;
+    return $lock_myself;
 }
 
 sub stash_parsed {
@@ -588,10 +625,11 @@ sub generate_boleto_description {
     else {
         $desc = "Doação para $type_tx " . $candidate->popular_name . ' (' . $candidate->name . ') ';
 
-        if ($self->is_pre_campaign){
+        if ( $self->is_pre_campaign ) {
 
             $desc .= "CPF do $name_tx para declaração no IR " . $candidate->cpf_formated;
-        }else{
+        }
+        else {
 
             $desc .= "CNPJ do $name_tx para declaração no IR " . $candidate->cnpj_formated;
         }
