@@ -41,8 +41,10 @@ sub get_connect_info {
     };
 }
 
+my $env_loaded=0;
 sub load_envs_via_dbi {
     my ($self) = @_;
+    $env_loaded++;
 
     my $conf = get_connect_info;
 
@@ -63,6 +65,7 @@ sub load_envs_via_dbi {
 }
 
 sub get_schema {
+    load_envs_via_dbi() unless $env_loaded;
     require VotoLegal::Schema;
     return VotoLegal::Schema->connect(get_connect_info());
 }
