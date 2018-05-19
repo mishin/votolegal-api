@@ -37,6 +37,12 @@ __PACKAGE__->config(
     enable_catalyst_header                      => 0,
 );
 
+before 'setup_components' => sub {
+    my $app = shift;
+
+    $app->config->{'Model::DB'}{connect_info} = get_connect_info();
+};
+
 # Start the application
 __PACKAGE__->setup();
 
