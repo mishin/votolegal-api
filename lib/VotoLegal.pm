@@ -9,6 +9,7 @@ use Data::Dumper qw/Dumper/;
 BEGIN {
     use VotoLegal::SchemaConnected;
     get_schema()->load_envs();
+    print STDERR ">>> load_envs finsihed";
 }
 
 use Catalyst qw/

@@ -13,6 +13,8 @@ use Carp 'croak';
 BEGIN {
     use VotoLegal::Utils qw/is_test/;
 
+    print STDERR ">>> WebService::IuguForReal";
+
     if ( !is_test() || $ENV{TEST_IUGU} ) {
         die "Missing IUGU_API_IS_TEST" unless defined $ENV{IUGU_API_IS_TEST};
         die "Missing IUGU_API_KEY"     unless $ENV{IUGU_API_KEY};
@@ -215,7 +217,7 @@ sub get_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->get( $post_url );
+        my $res = $self->ua->get($post_url);
         $logger->info( "Iugu response: " . $res->decoded_content );
 
         croak 'get_invoice failed' unless $res->code == 200;
@@ -226,6 +228,4 @@ sub get_invoice {
 
     return $invoice;
 }
-
-
 

@@ -1,4 +1,5 @@
 package VotoLegal::SchemaConnected;
+print STDERR ">>> VotoLegal::SchemaConnected";
 use strict;
 use warnings;
 use utf8;
