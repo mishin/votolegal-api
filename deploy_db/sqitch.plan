@@ -112,3 +112,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0106-votolegal-fp [0105-campaign_donation_type] 2018-05-18T14:27:18Z renato,,, <renato@renato-MS-7A34> # fp
 0107-cer2redirect [0106-votolegal-fp] 2018-05-18T20:02:09Z renato,,, <renato@renato-MS-7A34> # cer2redirect
 0108-move-ms [0107-cer2redirect] 2018-05-18T22:19:18Z renato,,, <renato@renato-MS-7A34> # move-ms
+0109-config-table [0108-move-ms] 2018-05-19T01:20:29Z renato,,, <renato@renato-MS-7A34> # config-table
