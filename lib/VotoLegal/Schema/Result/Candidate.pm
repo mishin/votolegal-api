@@ -325,6 +325,12 @@ __PACKAGE__->table("candidate");
   default_value: 1
   is_nullable: 0
 
+=head2 min_donation_value
+
+  data_type: 'integer'
+  default_value: 2000
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -447,6 +453,8 @@ __PACKAGE__->add_columns(
   },
   "emaildb_config_id",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "min_donation_value",
+  { data_type => "integer", default_value => 2000, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -744,8 +752,8 @@ __PACKAGE__->many_to_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-19 16:03:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QNrJPV0xSv9uJgvHDpLFbw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-19 17:22:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KFD6mGJ5E1bl9ofiYJpWrQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;

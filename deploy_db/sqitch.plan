@@ -116,3 +116,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0110-fix-VotolegalDonation-seq [0109-config-table] 2018-05-19T13:53:33Z renato,,, <renato@renato-MS-7A34> # VotolegalDonation
 0111-config-db-values [0110-fix-VotolegalDonation-seq] 2018-05-19T14:19:38Z renato,,, <renato@renato-MS-7A34> # config-db-values
 0112-emaildb [0111-config-db-values] 2018-05-19T18:50:50Z renato,,, <renato@renato-MS-7A34> # emaildb
+0113-min-donation [0112-emaildb] 2018-05-19T20:19:29Z renato,,, <renato@renato-MS-7A34> # min-donation

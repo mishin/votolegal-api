@@ -110,7 +110,7 @@ sub verifiers_specs {
                     post_check => sub {
                         my $amount = $_[0]->get_value('amount');
 
-                        return 0 if $amount < 2000;
+                        return 0 if $amount < 100;
 
                         if ( $amount > 106400 ) {
                             return 0;
@@ -325,6 +325,8 @@ sub action_specs {
 
             my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 
+            die_with 'amount_invalid' if $values{amount} < $config->{min_donation_value};
+
             my $donation = $self->_create_donation( config => $config, values => \%values, fp => $fingerprint );
 
             return $donation;
@@ -474,13 +476,16 @@ sub _create_donation {
 }
 
 sub _get_candidate_config {
-    my ($self) = @_;
+    my ($self, %opts) = @_;
 
+    my $candidate = $self->result_source->schema->resultset('Candidate')->find($opts{candidate_id}) or die 'error';
     # TODO carregar do banco isso, de acordo com a tabela de config de campanha
     return {
         donation_type_id   => 1,    #PF
         is_pre_campaign    => 1,
         payment_gateway_id => 3,
+
+        min_donation_value => $candidate->min_donation_value
       }
 
 }
