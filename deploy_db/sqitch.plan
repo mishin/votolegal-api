@@ -114,3 +114,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0108-move-ms [0107-cer2redirect] 2018-05-18T22:19:18Z renato,,, <renato@renato-MS-7A34> # move-ms
 0109-config-table [0108-move-ms] 2018-05-19T01:20:29Z renato,,, <renato@renato-MS-7A34> # config-table
 0110-fix-VotolegalDonation-seq [0109-config-table] 2018-05-19T13:53:33Z renato,,, <renato@renato-MS-7A34> # VotolegalDonation
+0111-config-db-values [0110-fix-VotolegalDonation-seq] 2018-05-19T14:19:38Z renato,,, <renato@renato-MS-7A34> # config-db-values
