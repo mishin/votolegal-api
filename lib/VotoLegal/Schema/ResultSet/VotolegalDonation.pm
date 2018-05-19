@@ -6,7 +6,7 @@ use namespace::autoclean;
 extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
-
+use Email::Valid;
 use Data::Verifier;
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
@@ -306,6 +306,21 @@ sub action_specs {
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
 
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
+
+            my $addr;
+            # dominios comuns não precisa verificar o mx
+            if (   is_test()
+                || lc $values{email} =~ /\@(gmail|hotmail|icloud|outlook|msn|live|globo)\.com$/
+                || lc $values{email} =~ /\@(terra|uol|yahoo|outlook|bol)\.com\.br$/ ) {
+                $addr = $values{email};
+            }
+            else {
+                eval { $addr = Email::Valid->address( -address => $values{email}, -mxcheck => 1 ) };
+                die_with_reason 'email_invalid', "$@" if $@;
+            }
+            die_with 'email_domain_invalid' unless $addr;
+
+            $values{email} = $addr;
 
             my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 

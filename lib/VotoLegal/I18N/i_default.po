@@ -83,6 +83,9 @@ msgstr "Nome deve ter apenas letras A-Z e um sobrenome"
 msgid "email_invalid"
 msgstr "E-mail inválido"
 
+msgid "email_domain_invalid"
+msgstr "Provedor de e-mail não está respondendo, utilize outro e-mail!"
+
 msgid "amount_invalid"
 msgstr "Não podemos aceitar o valor informado"
 

@@ -13,7 +13,7 @@ my $furl = Furl->new( timeout => 5 );
 use vars qw(@ISA @EXPORT);
 
 @ISA    = (qw(Exporter));
-@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify);
+@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason);
 
 =head1 METHODS
 
