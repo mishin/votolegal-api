@@ -10,27 +10,24 @@ use MIME::Base64 qw(encode_base64);
 
 use VotoLegal::Utils;
 
-BEGIN {
-    for (qw/ AMAZON_S3_ACCESS_KEY AMAZON_S3_SECRET_KEY AMAZON_S3_MEDIA_BUCKET /) {
-        defined($ENV{$_}) or die "missing env '$_'\n";
-    }
-}
-
 has access_key => (
     is  => 'rw',
     isa => 'Str',
+    lazy => 1,
     default => $ENV{AMAZON_S3_ACCESS_KEY},
 );
 
 has secret_key => (
     is  => "rw",
     isa => 'Str',
+    lazy => 1,
     default => $ENV{AMAZON_S3_SECRET_KEY},
 );
 
 has media_bucket => (
     is  => "rw",
     isa => 'Str',
+    lazy => 1,
     default => $ENV{AMAZON_S3_MEDIA_BUCKET},
 );
 

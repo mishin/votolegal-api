@@ -6,12 +6,20 @@ use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 
+BEGIN {
+    $ENV{POSTGRESQL_HOST}     ||= '127.0.0.1';
+    $ENV{POSTGRESQL_PORT}     ||= '5432';
+    $ENV{POSTGRESQL_DBNAME}   ||= 'votolegal_dev';
+    $ENV{POSTGRESQL_USER}     ||= 'postgres';
+    $ENV{POSTGRESQL_PASSWORD} ||= 'trust';
+}
+
 use Catalyst qw/
   ConfigLoader
   Authentication
   Authorization::Roles
   I18N
-/;
+  /;
 extends 'Catalyst';
 
 our $VERSION = '0.01';
@@ -28,14 +36,23 @@ __PACKAGE__->config(
 
     using_frontend_proxy => 1,
 
-    # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
-    enable_catalyst_header                      => 0,    # Send X-Catalyst header
+    enable_catalyst_header                      => 0,
 );
+
+after setup_finalize => sub {
+    my $app = shift;
+
+    for ( $app->registered_plugins ) {
+        if ( $_->can('initialize_after_setup') ) {
+            $_->initialize_after_setup($app);
+        }
+    }
+    $app->model('DB')->schema->load_envs();
+};
 
 # Start the application
 __PACKAGE__->setup();
-
 
 sub build_api_error {
     my ( $app, %args ) = @_;

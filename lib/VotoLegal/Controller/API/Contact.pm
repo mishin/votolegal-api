@@ -7,10 +7,6 @@ use Data::Section::Simple qw(get_data_section);
 
 BEGIN {
     extends 'CatalystX::Eta::Controller::REST';
-
-    for (qw/ EMAIL_DEFAULT_FROM EMAIL_CONTACT_TO /) {
-        defined($ENV{$_}) or die "missing env '$_'\n";
-    }
 }
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }

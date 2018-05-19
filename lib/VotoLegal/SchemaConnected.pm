@@ -8,9 +8,11 @@ use VotoLegal::Schema;
 use VotoLegal::Utils;
 
 BEGIN {
-    for (qw/ POSTGRESQL_HOST POSTGRESQL_PORT POSTGRESQL_DBNAME POSTGRESQL_USER POSTGRESQL_PASSWORD /) {
-        defined($ENV{$_}) or die "missing env '$_'\n";
-    }
+    $ENV{POSTGRESQL_HOST} ||= '127.0.0.1';
+    $ENV{POSTGRESQL_PORT} ||= '5432';
+    $ENV{POSTGRESQL_DBNAME} ||= 'votolegal_dev';
+    $ENV{POSTGRESQL_USER} ||= 'postgres';
+    $ENV{POSTGRESQL_PASSWORD} ||= 'trust';
 };
 
 require Exporter;

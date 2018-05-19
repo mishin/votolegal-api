@@ -31,10 +31,35 @@ sub AUTOLOAD {
     goto &$AUTOLOAD;
 }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
-__PACKAGE__->meta->make_immutable( inline_constructor => 0 );
-1;
+sub set_config {
+    my ( $self, $key, $value ) = @_;
 
+    $self->txn_do(
+        sub {
+
+            my $look = $self->resultset('Config')->search( { name => $key } );
+            $look->update( { valid_to => \'NOW()' } );
+            $look->create( { value => $value } );
+        }
+    );
+
+}
+
+sub load_envs {
+    my ($self) = @_;
+    my %config =
+      ( map { $_->{name} => $_->{value} }
+          $self->resultset('Config')
+          ->search( { valid_to => 'infinity' }, { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } ) );
+
+    foreach my $k ( keys %config ) {
+
+        print STDERR ( ( exists $ENV{$k} ? '# Replacing' : '# Creating' ) . " %ENV{$k} with value '$config{$k}'\n" );
+
+        $ENV{$k} = $config{$k};
+    }
+
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable(inline_constructor => 0);
