@@ -5,20 +5,18 @@ use FindBin qw($RealBin $Script);
 use lib "$RealBin/../../lib";
 
 use AnyEvent;
-use Config::General;
 use Daemon::Generic;
 use Log::Log4perl qw(:easy);
 
 
 BEGIN {
-    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
+    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/;
     load_envs_via_dbi();
 }
 
 use VotoLegal::Worker::Email;
 
 our $verbose = 0;
-our %config  = undef;
 
 newdaemon(
     options => {
@@ -29,10 +27,6 @@ newdaemon(
 
 sub gd_preconfig {
     my $self = shift;
-
-    # Config.
-    my $config = new Config::General("$RealBin/../../votolegal.conf");
-    %config    = $config->getall;
 
     $0 = "VotoLegal::Daemon::Emailsd";
     $|++;
@@ -68,7 +62,7 @@ sub gd_run {
     my $worker = VotoLegal::Worker::Email->new(
         schema => get_schema(),
         logger => get_logger(),
-        config => \%config,
+
     );
 
     my $w = AnyEvent->timer(
