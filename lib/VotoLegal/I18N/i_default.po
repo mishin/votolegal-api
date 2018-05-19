@@ -43,7 +43,7 @@ msgstr "Doação efetuada com sucesso! Obrigado por contribuir!"
 
 msgid "msg_text_certiface"
 msgstr "<p>Antes de continuar com a doação, precisamos verificar sua identidade.</p>
-<p>Você será direcionado para que tiremos uma selfie (foto do rosto) de você.</p>"
+<p>Você será direcionado fazer o reconhecimento facial.</p>"
 
 msgid "msg_link_certiface"
 msgstr "Verificar minha identidade"
