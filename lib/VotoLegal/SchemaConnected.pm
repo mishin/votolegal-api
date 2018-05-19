@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use utf8;
 use FindBin qw($RealBin);
+use DBI;
 
-use VotoLegal::Schema;
 use VotoLegal::Utils;
 
 BEGIN {
@@ -20,6 +20,7 @@ require Exporter;
 
 our @ISA    = qw(Exporter);
 our @EXPORT = qw(get_schema get_connect_info);
+our @EXPORT_OK = qw(load_envs_via_dbi);
 
 sub get_connect_info {
     my $host     = $ENV{POSTGRESQL_HOST};
@@ -40,7 +41,29 @@ sub get_connect_info {
     };
 }
 
+sub load_envs_via_dbi {
+    my ($self) = @_;
+
+    my $conf = get_connect_info;
+
+    my $dbh = DBI->connect( $conf->{dsn} , $conf->{user}, $conf->{password}, {AutoCommit => 0});
+
+
+    my $confs = $dbh->selectall_arrayref('select "name", "value" from config where valid_to = \'infinity\'' , { Slice => {} } );
+
+    foreach my $kv ( @$confs ) {
+        my ($k, $v) = ($kv->{name}, $kv->{value} );
+        print STDERR ( ( exists $ENV{$k} ? '# Replacing' : '# Creating' ) . " %ENV{$k} with value '$v'\n" );
+
+        $ENV{$k} = $v;
+    }
+    $dbh->disconnect  or warn $dbh->errstr;
+
+    undef $dbh;
+}
+
 sub get_schema {
+    require VotoLegal::Schema;
     return VotoLegal::Schema->connect(get_connect_info());
 }
 

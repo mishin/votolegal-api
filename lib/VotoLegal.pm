@@ -7,9 +7,8 @@ use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 
 BEGIN {
-    use VotoLegal::SchemaConnected;
-    get_schema()->load_envs();
-    print STDERR ">>> load_envs finsihed";
+    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
+    load_envs_via_dbi();
 }
 
 use Catalyst qw/
