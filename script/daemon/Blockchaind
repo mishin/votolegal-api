@@ -9,7 +9,11 @@ use Config::General;
 use Daemon::Generic;
 use Log::Log4perl qw(:easy);
 
-use VotoLegal::SchemaConnected;
+
+BEGIN {
+    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
+    load_envs_via_dbi();
+}
 use VotoLegal::Worker::Blockchain;
 
 our $verbose = 0;
