@@ -7,11 +7,8 @@ use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 
 BEGIN {
-    $ENV{POSTGRESQL_HOST}     ||= '127.0.0.1';
-    $ENV{POSTGRESQL_PORT}     ||= '5432';
-    $ENV{POSTGRESQL_DBNAME}   ||= 'votolegal_dev';
-    $ENV{POSTGRESQL_USER}     ||= 'postgres';
-    $ENV{POSTGRESQL_PASSWORD} ||= 'trust';
+    use VotoLegal::SchemaConnected;
+    get_schema()->load_envs();
 }
 
 use Catalyst qw/
@@ -39,17 +36,6 @@ __PACKAGE__->config(
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header                      => 0,
 );
-
-after setup_finalize => sub {
-    my $app = shift;
-
-    for ( $app->registered_plugins ) {
-        if ( $_->can('initialize_after_setup') ) {
-            $_->initialize_after_setup($app);
-        }
-    }
-    $app->model('DB')->schema->load_envs();
-};
 
 # Start the application
 __PACKAGE__->setup();
