@@ -221,10 +221,13 @@ sub _messages_of_state {
 
         my $info = $donation->payment_info_parsed;
 
+        my $text_boleto = $loc->('msg_boleto_message');
+
+        # s/__DUE_DATE__/;
         @messages = (
             {
                 type => 'msg',
-                text => $loc->('msg_boleto_message'),
+                text => $text_boleto,
             },
             {
                 type => 'link',
@@ -398,12 +401,12 @@ sub _process_start_cc_payment {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
     my $info = $donation->payment_info_parsed;
-    $stash->{value} = $info->{_charge_response_}{'LR'} eq '00' ? 'cc_authorized' : 'cc_not_authorized';
+    $stash->{value} = $info->{_charge_response_}{'LR'} eq '00' ? 'msg_cc_authorized' : 'msg_cc_not_authorized';
 
     $stash->{messages} = [
         {
             type => 'msg',
-            text => $loc->( 'msg_' . $stash->{value} ),
+            text => $loc->( $stash->{value} ),
         }
     ];
 

@@ -1,5 +1,6 @@
 package VotoLegal;
 use Moose;
+use utf8;
 use namespace::autoclean;
 use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
@@ -40,8 +41,6 @@ __PACKAGE__->config(
         priv_key => $ENV{RECAPTCHA_PRIVKEY},
     },
 );
-
-remote_notify("Novo worker api $$");
 
 # Start the application
 __PACKAGE__->setup();

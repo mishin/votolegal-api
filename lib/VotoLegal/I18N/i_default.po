@@ -4,13 +4,13 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "donation_not_found"
+msgid "donation-not-found"
 msgstr "Doação não encontrada"
 
-msgid "donation_repeated"
+msgid "donation-repeated"
 msgstr "Já existe uma doação com valor mesmo valor com o seu CPF, tente novamente em 30 segundos."
 
-msgid "invalid_user_agent"
+msgid "invalid-user-agent"
 msgstr "Utilize outro navegador."
 
 msgid "msg_internal_we_are_in_loop"
@@ -22,30 +22,125 @@ msgstr "Erro interno, tente novamente mais tarde"
 msgid "msg_sorry"
 msgstr "Lamentamos pelo inconveniente"
 
+# Mensagems durante doação
 msgid "msg_add_credit_card"
-msgstr "Por favor, informe seu cartão de crédito"
+msgstr "Por favor, informe seu cartão de crédito no formulário abaixo"
 
 msgid "msg_invalid_cc_token"
 msgstr "Token não recebido ou inválido"
 
+msgid "msg_boleto_message"
+msgstr "<p>Boleto gerado com sucesso, faça o pagamento até __DUE_DATE__</p>"
+
+msgid "msg_boleto_link"
+msgstr "Visualizar boleto"
 
 msgid "msg_boleto_paid_message"
-msgstr "Doação efeutada com Boleto efetuada com sucesso!"
+msgstr "Boleto pago! Obrigado por contribuir!"
 
 msgid "msg_cc_paid_message"
-msgstr "Doação efeutada com cartão de cŕedito efetuada com sucesso!"
-
-
-msgid "msg_link_certiface"
-msgstr "vamos lá"
+msgstr "Doação efetuada com sucesso! Obrigado por contribuir!"
 
 msgid "msg_text_certiface"
-msgstr "<p>Para continuar com a emissão do boleto, você precisa verificar seu rosto.</p><p>Você precisa usar aparelho com web-cam</p>"
+msgstr "<p>Antes de continuar com a doação, precisamos verificar sua identidade.</p>
+<p>Você será direcionado para que tiremos uma selfie (foto do rosto) de você.</p>"
+
+msgid "msg_link_certiface"
+msgstr "Verificar minha identidade"
 
 msgid "btn_pay_with_cc"
 msgstr "Pagar com cartão"
 
-msgid "msg_certificate_refused"
-msgstr "Não conseguimos validar"
+msgid "msg_cc_authorized"
+msgstr "Compra no cartão autorizada com sucesso"
 
+msgid "msg_cc_not_authorized"
+msgstr "A operadora do cartão de crédito não autorizou a doação."
+
+msgid "msg_certificate_refused"
+msgstr "O processo de verificação de identidade não foi concluído com sucesso, por favor, use outra forma de pagamento."
+
+msgid "fp-invalid-contact-support"
+msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
+
+msgid "donation_fp_invalid"
+msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
+
+
+# POST /api2/donations >>>
+
+msgid "need-billing-adddress"
+msgstr "Dados de endereço precisam ser enviados."
+
+msgid "need-phone"
+msgstr "O telefone precisa ser informado"
+
+msgid "need-birthday"
+msgstr "A data de nascimento precisa ser informada"
+
+msgid "cpf_invalid"
+msgstr "CPF inválido"
+
+msgid "name_invalid"
+msgstr "Nome deve ter apenas letras A-Z e um sobrenome"
+
+msgid "email_invalid"
+msgstr "E-mail inválido"
+
+msgid "amount_invalid"
+msgstr "Não podemos aceitar o valor informado"
+
+msgid "phone_invalid"
+msgstr "Por favor, verifique o campo telefone"
+
+msgid "address_street_invalid"
+msgstr "Por favor, verifique o endereço"
+
+msgid "address_house_number_invalid"
+msgstr "Por favor, verifique Número do Endereço"
+
+msgid "address_district_invalid"
+msgstr "Por favor, verifique Número do Bairro"
+
+msgid "address_zipcode_invalid"
+msgstr "CEP inválido"
+
+msgid "address_city_invalid"
+msgstr "Cidade não encontrada"
+
+msgid "address_state_invalid"
+msgstr "Estado não encontrado"
+
+msgid "address_complement_invalid"
+msgstr "Complemento muito grande"
+
+msgid "birthdate_invalid"
+msgstr "Data de nascimento: você precisa ter entre 18 e 100 anos"
+
+msgid "billing_address_street_invalid"
+msgstr "Por favor, verifique o endereço"
+
+msgid "billing_address_house_number_invalid"
+msgstr "Por favor, verifique Número do Endereço"
+
+msgid "billing_address_district_invalid"
+msgstr "Por favor, verifique Número do Bairro"
+
+msgid "billing_address_zipcode_invalid"
+msgstr "CEP inválido"
+
+msgid "billing_address_city_invalid"
+msgstr "Cidade não encontrada"
+
+msgid "billing_address_state_invalid"
+msgstr "Estado não encontrado"
+
+msgid "billing_address_complement_invalid"
+msgstr "Complemento muito grande"
+
+msgid "candidate_id_invalid"
+msgstr "Candidato inválido"
+
+msgid "payment_method_invalid"
+msgstr "Meio de pagamento não suportado"
 
