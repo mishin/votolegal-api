@@ -98,7 +98,7 @@ sub candidate_GET {
         $c,
         entity => {
             candidate    => $candidate,
-            generated_at => DateTime->now->datetime()
+            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
         }
     );
 }

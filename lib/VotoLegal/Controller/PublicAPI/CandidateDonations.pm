@@ -47,7 +47,7 @@ sub donate_GET {
         },
         {
             columns => [
-                { captured_at => \" timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
+                { captured_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
                 { amount      => 'votolegal_donation_immutable.amount' },
                 { name        => 'votolegal_donation_immutable.donor_name' },
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
@@ -65,7 +65,7 @@ sub donate_GET {
         $c,
         entity => {
             donations => \@donations,
-            generated_at => DateTime->now->datetime()
+            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
         }
     );
 }
@@ -93,7 +93,7 @@ sub donators_name_GET {
         $c,
         entity => {
             names => [ map { $_->{name} } @donations ],
-            generated_at => DateTime->now->datetime()
+            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
         }
     );
 }
