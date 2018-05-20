@@ -1,5 +1,4 @@
 use utf8;
-
 package VotoLegal::Schema::Result::Candidate;
 
 # Created by DBIx::Class::Schema::Loader
@@ -33,7 +32,7 @@ extends 'DBIx::Class::Core';
 
 =cut
 
-__PACKAGE__->load_components( "InflateColumn::DateTime", "TimeStamp", "PassphraseColumn" );
+__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
 
 =head1 TABLE: C<candidate>
 
@@ -335,127 +334,127 @@ __PACKAGE__->table("candidate");
 =cut
 
 __PACKAGE__->add_columns(
-    "id",
-    {
-        data_type         => "integer",
-        is_auto_increment => 1,
-        is_nullable       => 0,
-        sequence          => "candidate_id_seq",
-    },
-    "user_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-    "name",
-    { data_type => "text", is_nullable => 0 },
-    "popular_name",
-    { data_type => "text", is_nullable => 0 },
-    "party_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-    "cpf",
-    { data_type => "text", is_nullable => 0 },
-    "reelection",
-    { data_type => "boolean", is_nullable => 0 },
-    "office_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-    "status",
-    { data_type => "text", is_nullable => 0 },
-    "username",
-    { data_type => "text", is_nullable => 0 },
-    "address_state",
-    { data_type => "text", is_nullable => 0 },
-    "address_city",
-    { data_type => "text", is_nullable => 0 },
-    "address_zipcode",
-    { data_type => "text", is_nullable => 0 },
-    "address_street",
-    { data_type => "text", is_nullable => 0 },
-    "address_complement",
-    { data_type => "text", default_value => "", is_nullable => 0 },
-    "address_house_number",
-    { data_type => "integer", is_nullable => 0 },
-    "cnpj",
-    { data_type => "text", is_nullable => 1 },
-    "picture",
-    { data_type => "text", is_nullable => 1 },
-    "video_url",
-    { data_type => "text", is_nullable => 1 },
-    "facebook_url",
-    { data_type => "text", is_nullable => 1 },
-    "twitter_url",
-    { data_type => "text", is_nullable => 1 },
-    "website_url",
-    { data_type => "text", is_nullable => 1 },
-    "summary",
-    { data_type => "text", is_nullable => 1 },
-    "biography",
-    { data_type => "text", is_nullable => 1 },
-    "instagram_url",
-    { data_type => "text", is_nullable => 1 },
-    "raising_goal",
-    { data_type => "numeric", is_nullable => 1, size => [ 11, 2 ] },
-    "public_email",
-    { data_type => "text", is_nullable => 1 },
-    "spending_spreadsheet",
-    { data_type => "text", is_nullable => 1 },
-    "responsible_name",
-    { data_type => "text", is_nullable => 1 },
-    "responsible_email",
-    { data_type => "text", is_nullable => 1 },
-    "merchant_id",
-    { data_type => "text", is_nullable => 1 },
-    "merchant_key",
-    { data_type => "text", is_nullable => 1 },
-    "payment_status",
-    { data_type => "text", default_value => "unpaid", is_nullable => 0 },
-    "publish",
-    { data_type => "boolean", default_value => \"false", is_nullable => 0 },
-    "phone",
-    { data_type => "text", is_nullable => 1 },
-    "address_district",
-    { data_type => "text", is_nullable => 1 },
-    "payment_gateway_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-    "bank_code",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-    "bank_agency",
-    { data_type => "integer", is_nullable => 1 },
-    "bank_account_number",
-    { data_type => "integer", is_nullable => 1 },
-    "bank_account_dv",
-    { data_type => "varchar", is_nullable => 1, size => 2 },
-    "bank_agency_dv",
-    { data_type => "varchar", is_nullable => 1, size => 2 },
-    "crawlable",
-    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-    "color",
-    { data_type => "text", default_value => "default", is_nullable => 0 },
-    "political_movement_id",
-    { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-    "birth_date",
-    { data_type => "text", is_nullable => 0 },
-    "google_analytics",
-    { data_type => "text", is_nullable => 1 },
-    "collect_donor_address",
-    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-    "collect_donor_phone",
-    { data_type => "boolean", default_value => \"true", is_nullable => 0 },
-    "campaign_donation_type",
-    {
-        data_type     => "text",
-        default_value => "pre-campaign",
-        is_nullable   => 0,
-        original      => { data_type => "varchar" },
-    },
-    "use_certiface_return_url_id",
-    {
-        data_type      => "integer",
-        default_value  => 1,
-        is_foreign_key => 1,
-        is_nullable    => 0,
-    },
-    "emaildb_config_id",
-    { data_type => "integer", default_value => 1, is_nullable => 0 },
-    "min_donation_value",
-    { data_type => "integer", default_value => 2000, is_nullable => 0 },
+  "id",
+  {
+    data_type         => "integer",
+    is_auto_increment => 1,
+    is_nullable       => 0,
+    sequence          => "candidate_id_seq",
+  },
+  "user_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "name",
+  { data_type => "text", is_nullable => 0 },
+  "popular_name",
+  { data_type => "text", is_nullable => 0 },
+  "party_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "cpf",
+  { data_type => "text", is_nullable => 0 },
+  "reelection",
+  { data_type => "boolean", is_nullable => 0 },
+  "office_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "status",
+  { data_type => "text", is_nullable => 0 },
+  "username",
+  { data_type => "text", is_nullable => 0 },
+  "address_state",
+  { data_type => "text", is_nullable => 0 },
+  "address_city",
+  { data_type => "text", is_nullable => 0 },
+  "address_zipcode",
+  { data_type => "text", is_nullable => 0 },
+  "address_street",
+  { data_type => "text", is_nullable => 0 },
+  "address_complement",
+  { data_type => "text", default_value => "", is_nullable => 0 },
+  "address_house_number",
+  { data_type => "integer", is_nullable => 0 },
+  "cnpj",
+  { data_type => "text", is_nullable => 1 },
+  "picture",
+  { data_type => "text", is_nullable => 1 },
+  "video_url",
+  { data_type => "text", is_nullable => 1 },
+  "facebook_url",
+  { data_type => "text", is_nullable => 1 },
+  "twitter_url",
+  { data_type => "text", is_nullable => 1 },
+  "website_url",
+  { data_type => "text", is_nullable => 1 },
+  "summary",
+  { data_type => "text", is_nullable => 1 },
+  "biography",
+  { data_type => "text", is_nullable => 1 },
+  "instagram_url",
+  { data_type => "text", is_nullable => 1 },
+  "raising_goal",
+  { data_type => "numeric", is_nullable => 1, size => [11, 2] },
+  "public_email",
+  { data_type => "text", is_nullable => 1 },
+  "spending_spreadsheet",
+  { data_type => "text", is_nullable => 1 },
+  "responsible_name",
+  { data_type => "text", is_nullable => 1 },
+  "responsible_email",
+  { data_type => "text", is_nullable => 1 },
+  "merchant_id",
+  { data_type => "text", is_nullable => 1 },
+  "merchant_key",
+  { data_type => "text", is_nullable => 1 },
+  "payment_status",
+  { data_type => "text", default_value => "unpaid", is_nullable => 0 },
+  "publish",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "phone",
+  { data_type => "text", is_nullable => 1 },
+  "address_district",
+  { data_type => "text", is_nullable => 1 },
+  "payment_gateway_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "bank_code",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "bank_agency",
+  { data_type => "integer", is_nullable => 1 },
+  "bank_account_number",
+  { data_type => "integer", is_nullable => 1 },
+  "bank_account_dv",
+  { data_type => "varchar", is_nullable => 1, size => 2 },
+  "bank_agency_dv",
+  { data_type => "varchar", is_nullable => 1, size => 2 },
+  "crawlable",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "color",
+  { data_type => "text", default_value => "default", is_nullable => 0 },
+  "political_movement_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "birth_date",
+  { data_type => "text", is_nullable => 0 },
+  "google_analytics",
+  { data_type => "text", is_nullable => 1 },
+  "collect_donor_address",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "collect_donor_phone",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
+  "campaign_donation_type",
+  {
+    data_type     => "text",
+    default_value => "pre-campaign",
+    is_nullable   => 0,
+    original      => { data_type => "varchar" },
+  },
+  "use_certiface_return_url_id",
+  {
+    data_type      => "integer",
+    default_value  => 1,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
+  "emaildb_config_id",
+  { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "min_donation_value",
+  { data_type => "integer", default_value => 2000, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -482,7 +481,7 @@ __PACKAGE__->set_primary_key("id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint( "candidate_cpf_key", ["cpf"] );
+__PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
 
 =head2 C<candidate_username_key>
 
@@ -494,7 +493,7 @@ __PACKAGE__->add_unique_constraint( "candidate_cpf_key", ["cpf"] );
 
 =cut
 
-__PACKAGE__->add_unique_constraint( "candidate_username_key", ["username"] );
+__PACKAGE__->add_unique_constraint("candidate_username_key", ["username"]);
 
 =head1 RELATIONS
 
@@ -507,15 +506,15 @@ Related object: L<VotoLegal::Schema::Result::Bank>
 =cut
 
 __PACKAGE__->belongs_to(
-    "bank_code",
-    "VotoLegal::Schema::Result::Bank",
-    { id => "bank_code" },
-    {
-        is_deferrable => 0,
-        join_type     => "LEFT",
-        on_delete     => "NO ACTION",
-        on_update     => "NO ACTION",
-    },
+  "bank_code",
+  "VotoLegal::Schema::Result::Bank",
+  { id => "bank_code" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
 =head2 candidate_campaign_config
@@ -527,8 +526,10 @@ Related object: L<VotoLegal::Schema::Result::CandidateCampaignConfig>
 =cut
 
 __PACKAGE__->might_have(
-    "candidate_campaign_config", "VotoLegal::Schema::Result::CandidateCampaignConfig",
-    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
+  "candidate_campaign_config",
+  "VotoLegal::Schema::Result::CandidateCampaignConfig",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_donation_summary
@@ -540,8 +541,10 @@ Related object: L<VotoLegal::Schema::Result::CandidateDonationSummary>
 =cut
 
 __PACKAGE__->might_have(
-    "candidate_donation_summary", "VotoLegal::Schema::Result::CandidateDonationSummary",
-    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
+  "candidate_donation_summary",
+  "VotoLegal::Schema::Result::CandidateDonationSummary",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_issue_priorities
@@ -553,8 +556,10 @@ Related object: L<VotoLegal::Schema::Result::CandidateIssuePriority>
 =cut
 
 __PACKAGE__->has_many(
-    "candidate_issue_priorities", "VotoLegal::Schema::Result::CandidateIssuePriority",
-    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
+  "candidate_issue_priorities",
+  "VotoLegal::Schema::Result::CandidateIssuePriority",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 candidate_mandato_aberto_integrations
@@ -566,8 +571,10 @@ Related object: L<VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration>
 =cut
 
 __PACKAGE__->has_many(
-    "candidate_mandato_aberto_integrations", "VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration",
-    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
+  "candidate_mandato_aberto_integrations",
+  "VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 donations
@@ -579,10 +586,10 @@ Related object: L<VotoLegal::Schema::Result::Donation>
 =cut
 
 __PACKAGE__->has_many(
-    "donations",
-    "VotoLegal::Schema::Result::Donation",
-    { "foreign.candidate_id" => "self.id" },
-    { cascade_copy           => 0, cascade_delete => 0 },
+  "donations",
+  "VotoLegal::Schema::Result::Donation",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 expenditures
@@ -594,10 +601,10 @@ Related object: L<VotoLegal::Schema::Result::Expenditure>
 =cut
 
 __PACKAGE__->has_many(
-    "expenditures",
-    "VotoLegal::Schema::Result::Expenditure",
-    { "foreign.candidate_id" => "self.id" },
-    { cascade_copy           => 0, cascade_delete => 0 },
+  "expenditures",
+  "VotoLegal::Schema::Result::Expenditure",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 office
@@ -609,10 +616,10 @@ Related object: L<VotoLegal::Schema::Result::Office>
 =cut
 
 __PACKAGE__->belongs_to(
-    "office",
-    "VotoLegal::Schema::Result::Office",
-    { id            => "office_id" },
-    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  "office",
+  "VotoLegal::Schema::Result::Office",
+  { id => "office_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 party
@@ -624,10 +631,10 @@ Related object: L<VotoLegal::Schema::Result::Party>
 =cut
 
 __PACKAGE__->belongs_to(
-    "party",
-    "VotoLegal::Schema::Result::Party",
-    { id            => "party_id" },
-    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  "party",
+  "VotoLegal::Schema::Result::Party",
+  { id => "party_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 payment_gateway
@@ -639,15 +646,15 @@ Related object: L<VotoLegal::Schema::Result::PaymentGateway>
 =cut
 
 __PACKAGE__->belongs_to(
-    "payment_gateway",
-    "VotoLegal::Schema::Result::PaymentGateway",
-    { id => "payment_gateway_id" },
-    {
-        is_deferrable => 0,
-        join_type     => "LEFT",
-        on_delete     => "NO ACTION",
-        on_update     => "NO ACTION",
-    },
+  "payment_gateway",
+  "VotoLegal::Schema::Result::PaymentGateway",
+  { id => "payment_gateway_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
 =head2 payments
@@ -659,10 +666,10 @@ Related object: L<VotoLegal::Schema::Result::Payment>
 =cut
 
 __PACKAGE__->has_many(
-    "payments",
-    "VotoLegal::Schema::Result::Payment",
-    { "foreign.candidate_id" => "self.id" },
-    { cascade_copy           => 0, cascade_delete => 0 },
+  "payments",
+  "VotoLegal::Schema::Result::Payment",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 political_movement
@@ -674,15 +681,15 @@ Related object: L<VotoLegal::Schema::Result::PoliticalMovement>
 =cut
 
 __PACKAGE__->belongs_to(
-    "political_movement",
-    "VotoLegal::Schema::Result::PoliticalMovement",
-    { id => "political_movement_id" },
-    {
-        is_deferrable => 0,
-        join_type     => "LEFT",
-        on_delete     => "NO ACTION",
-        on_update     => "NO ACTION",
-    },
+  "political_movement",
+  "VotoLegal::Schema::Result::PoliticalMovement",
+  { id => "political_movement_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
 );
 
 =head2 projects
@@ -694,10 +701,10 @@ Related object: L<VotoLegal::Schema::Result::Project>
 =cut
 
 __PACKAGE__->has_many(
-    "projects",
-    "VotoLegal::Schema::Result::Project",
-    { "foreign.candidate_id" => "self.id" },
-    { cascade_copy           => 0, cascade_delete => 0 },
+  "projects",
+  "VotoLegal::Schema::Result::Project",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 use_certiface_return_url
@@ -709,10 +716,10 @@ Related object: L<VotoLegal::Schema::Result::CertifaceReturnUrl>
 =cut
 
 __PACKAGE__->belongs_to(
-    "use_certiface_return_url",
-    "VotoLegal::Schema::Result::CertifaceReturnUrl",
-    { id            => "use_certiface_return_url_id" },
-    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  "use_certiface_return_url",
+  "VotoLegal::Schema::Result::CertifaceReturnUrl",
+  { id => "use_certiface_return_url_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 user
@@ -724,10 +731,10 @@ Related object: L<VotoLegal::Schema::Result::User>
 =cut
 
 __PACKAGE__->belongs_to(
-    "user",
-    "VotoLegal::Schema::Result::User",
-    { id            => "user_id" },
-    { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
+  "user",
+  "VotoLegal::Schema::Result::User",
+  { id => "user_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 votolegal_donations
@@ -739,8 +746,10 @@ Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
 =cut
 
 __PACKAGE__->has_many(
-    "votolegal_donations", "VotoLegal::Schema::Result::VotolegalDonation",
-    { "foreign.candidate_id" => "self.id" }, { cascade_copy => 0, cascade_delete => 0 },
+  "votolegal_donations",
+  "VotoLegal::Schema::Result::VotolegalDonation",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
 );
 
 =head2 issue_priorities
@@ -751,10 +760,15 @@ Composing rels: L</candidate_issue_priorities> -> issue_priority
 
 =cut
 
-__PACKAGE__->many_to_many( "issue_priorities", "candidate_issue_priorities", "issue_priority", );
+__PACKAGE__->many_to_many(
+  "issue_priorities",
+  "candidate_issue_priorities",
+  "issue_priority",
+);
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-20 12:17:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H6zDLRLsV2P/D6bfmsi1sw
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-05-20 17:06:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FJb2vWVev+BUxtfYmX1V1Q
 
 use File::Temp q(:seekable);
 use Data::Verifier;

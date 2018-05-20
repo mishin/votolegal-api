@@ -160,9 +160,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
+=head2 votolegal_donations
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 19:27:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tr3rc+vtUodpz3LcOkSFTQ
+Type: has_many
+
+Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
+
+=cut
+
+__PACKAGE__->has_many(
+  "votolegal_donations",
+  "VotoLegal::Schema::Result::VotolegalDonation",
+  { "foreign.votolegal_fp" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-05-20 17:06:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ADVAkodSyCg5fVZZz2YNZQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

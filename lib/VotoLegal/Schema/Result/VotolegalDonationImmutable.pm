@@ -161,6 +161,11 @@ __PACKAGE__->table("votolegal_donation_immutable");
   data_type: 'inet'
   is_nullable: 0
 
+=head2 git_hash
+
+  data_type: 'text'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -214,6 +219,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "started_ip_address",
   { data_type => "inet", is_nullable => 0 },
+  "git_hash",
+  { data_type => "text", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -261,8 +268,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-17 00:02:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2nnzTfORkm3cOJUsE2sN3w
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-05-20 19:13:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5DUNDIovjqUgc2+w1gUeAw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
