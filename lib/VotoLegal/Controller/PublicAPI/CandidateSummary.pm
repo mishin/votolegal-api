@@ -2,6 +2,7 @@ package VotoLegal::Controller::PublicAPI::CandidateSummary;
 use common::sense;
 use Moose;
 use namespace::autoclean;
+use DateTime;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -96,7 +97,8 @@ sub candidate_GET {
     return $self->status_ok(
         $c,
         entity => {
-            candidate => $candidate,
+            candidate    => $candidate,
+            generated_at => DateTime->now->datetime()
         }
     );
 }

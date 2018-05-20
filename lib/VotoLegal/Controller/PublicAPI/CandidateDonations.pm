@@ -2,6 +2,7 @@ package VotoLegal::Controller::PublicAPI::CandidateDonations;
 use common::sense;
 use Moose;
 use namespace::autoclean;
+use DateTime;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -64,6 +65,7 @@ sub donate_GET {
         $c,
         entity => {
             donations => \@donations,
+            generated_at => DateTime->now->datetime()
         }
     );
 }
@@ -91,6 +93,7 @@ sub donators_name_GET {
         $c,
         entity => {
             names => [ map { $_->{name} } @donations ],
+            generated_at => DateTime->now->datetime()
         }
     );
 }
