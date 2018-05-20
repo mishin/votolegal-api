@@ -20,8 +20,10 @@ if ( $ENV{VOTOLEGAL_API_LOG_DIR} ) {
 
     }
     else {
-        print STDERR "VOTOLEGAL_API_LOG_DIR is not a dir";
+        print STDERR "VOTOLEGAL_API_LOG_DIR is not a dir\n";
     }
+}else{
+    print STDERR "VOTOLEGAL_API_LOG_DIR Not configured\n";
 }
 
 Log::Log4perl->easy_init(
@@ -34,11 +36,6 @@ Log::Log4perl->easy_init(
 
     }
 );
-
-# importa as funcoes para o script.
-no strict 'refs';
-*{"main::$_"} = *$_ for grep { defined &{$_} } keys %VotoLegal::Logger::;
-use strict 'refs';
 
 our @ISA = qw(Exporter);
 

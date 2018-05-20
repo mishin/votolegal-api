@@ -5,11 +5,11 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 use VotoLegal::Utils qw/remote_notify/;
-use VotoLegal::Logger;
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
     load_envs_via_dbi();
+    use VotoLegal::Logger;
 }
 
 use Catalyst qw/
@@ -44,6 +44,7 @@ before 'setup_components' => sub {
     $app->config->{'Model::DB'}{connect_info} = get_connect_info();
 };
 
+use DDP; p [get_logger()->info('aa')];
 __PACKAGE__->log( get_logger() );
 
 __PACKAGE__->setup();
