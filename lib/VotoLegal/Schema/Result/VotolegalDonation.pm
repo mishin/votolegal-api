@@ -150,21 +150,9 @@ __PACKAGE__->table("votolegal_donation");
   is_nullable: 1
   original: {data_type => "varchar"}
 
-=head2 decred_refund_registered_at
-
-  data_type: 'timestamp'
-  is_nullable: 1
-
-=head2 decred_refund_hash
-
-  data_type: 'text'
-  is_nullable: 1
-  original: {data_type => "varchar"}
-
 =head2 votolegal_fp
 
   data_type: 'bigint'
-  is_foreign_key: 1
   is_nullable: 1
 
 =head2 decred_merkle_root
@@ -252,16 +240,8 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     original    => { data_type => "varchar" },
   },
-  "decred_refund_registered_at",
-  { data_type => "timestamp", is_nullable => 1 },
-  "decred_refund_hash",
-  {
-    data_type   => "text",
-    is_nullable => 1,
-    original    => { data_type => "varchar" },
-  },
   "votolegal_fp",
-  { data_type => "bigint", is_foreign_key => 1, is_nullable => 1 },
+  { data_type => "bigint", is_nullable => 1 },
   "decred_merkle_root",
   { data_type => "text", is_nullable => 1 },
   "decred_merkle_registered_at",
@@ -361,29 +341,9 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 votolegal_fp
 
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::DonationFp>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "votolegal_fp",
-  "VotoLegal::Schema::Result::DonationFp",
-  { id => "votolegal_fp" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-05-20 20:08:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eClKMMHjV9E0339ltuo9Cw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-20 20:49:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XXmtxlxWVlK0eOFmVyPCHg
 
 use Carp;
 use JSON::XS;
