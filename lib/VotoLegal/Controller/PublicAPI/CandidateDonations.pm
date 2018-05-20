@@ -68,6 +68,33 @@ sub donate_GET {
     );
 }
 
+sub donators_name : Chained('object') : PathPart('donators-name') : Args(0) : ActionClass('REST') { }
+
+sub donators_name_GET {
+    my ( $self, $c ) = @_;
+
+    my @donations = $c->stash->{candidate}->votolegal_donations->search(
+        {
+            captured_at => { '!=' => undef },
+            refunded_at => undef,
+        },
+        {
+            columns  => [ { name => 'votolegal_donation_immutable.donor_name' }, ],
+            join     => 'votolegal_donation_immutable',
+            order_by => \'1',
+            group_by => \'1',
+            result_class => "DBIx::Class::ResultClass::HashRefInflator",
+        }
+    )->all();
+
+    return $self->status_ok(
+        $c,
+        entity => {
+            names => [ map { $_->{name} } @donations ],
+        }
+    );
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

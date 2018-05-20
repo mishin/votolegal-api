@@ -105,6 +105,16 @@ db_transaction {
         is $me->{donations}[1]{amount}, 3500, 'amount ok';
     };
 
+    rest_get [ '/public-api/candidate-donations/' . stash 'candidate.id', 'donators-name' ],
+      code  => 200,
+      stash => 'res';
+
+    stash_test 'res', sub {
+        my ($me) = @_;
+
+        is @{ $me->{names} }, '2', '2 names';
+    };
+
 };
 
 done_testing();
