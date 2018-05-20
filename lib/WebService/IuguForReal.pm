@@ -151,6 +151,7 @@ sub create_invoice {
         }
     }
 
+    Log::Log4perl::NDC->remove();
     return $invoice;
 }
 
@@ -189,6 +190,7 @@ sub capture_invoice {
 
     croak "capture error " . encode_json($invoice) unless $invoice->{status} eq 'paid';
 
+    Log::Log4perl::NDC->remove();
     return $invoice;
 }
 
@@ -223,6 +225,7 @@ sub get_invoice {
         $invoice = decode_json( $res->decoded_content )
           or croak 'get_invoice parse json failed';
     }
+    Log::Log4perl::NDC->remove();
 
     return $invoice;
 }

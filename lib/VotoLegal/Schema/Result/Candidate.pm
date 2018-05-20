@@ -1277,7 +1277,7 @@ sub people_donated {
 sub party_fund {
     my $self = shift;
 
-    return 0 ;
+    return 0;
 
     # disabled for now.. shoulbe be on candidate_donation_summary
 
