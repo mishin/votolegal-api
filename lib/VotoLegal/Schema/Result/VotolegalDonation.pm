@@ -389,6 +389,7 @@ sub as_row_for_email_variable {
                 'candidate.cpf',
                 'candidate.cnpj',
                 { donor_name           => 'votolegal_donation_immutable.donor_name' },
+                { donor_cpf           => 'votolegal_donation_immutable.donor_cpf' },
                 { donor_email          => 'votolegal_donation_immutable.donor_email' },
                 { amount_human         => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')" },
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },

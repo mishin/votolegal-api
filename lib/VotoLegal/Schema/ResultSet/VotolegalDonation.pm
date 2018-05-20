@@ -120,10 +120,12 @@ sub verifiers_specs {
                     },
                 },
                 phone => {
-                    required   => 1,
+                    required   => 0,
                     type       => "Str",
                     post_check => sub {
-                        $_[0]->get_value('phone') =~ m{^[0-9]{10,11}$};
+                        my $phone = $_[0]->get_value('phone');
+                        return 1 if !$phone;
+                        return $phone =~ m{^[0-9]{10,11}$};
                     },
                 },
                 address_street => {
@@ -172,10 +174,11 @@ sub verifiers_specs {
                     type       => CommonLatinText,
                 },
                 birthdate => {
-                    required   => 1,
+                    required   => 0,
                     max_length => 100,
                     type       => "Str",
                     post_check => sub {
+                        return 1 if !$date;
 
                         my $date = $_[0]->get_value('birthdate');
 
@@ -298,6 +301,9 @@ sub action_specs {
                   billing_address_city
                   billing_address_state
                   /;
+
+                $values{$_} or die_with 'need-phone-for-cc'     for qw/phone/;
+                $values{$_} or die_with 'need-birthdate-for-cc' for qw/birthdate/;
             }
 
             # tira espaços duplicados antes de salvar
@@ -476,9 +482,10 @@ sub _create_donation {
 }
 
 sub _get_candidate_config {
-    my ($self, %opts) = @_;
+    my ( $self, %opts ) = @_;
 
-    my $candidate = $self->result_source->schema->resultset('Candidate')->find($opts{candidate_id}) or die 'error';
+    my $candidate = $self->result_source->schema->resultset('Candidate')->find( $opts{candidate_id} ) or die 'error';
+
     # TODO carregar do banco isso, de acordo com a tabela de config de campanha
     return {
         donation_type_id   => 1,    #PF

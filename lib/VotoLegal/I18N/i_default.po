@@ -71,10 +71,10 @@ msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entr
 msgid "need-billing-adddress"
 msgstr "Dados de endereço precisam ser enviados."
 
-msgid "need-phone"
+msgid "need-phone-for-cc"
 msgstr "O telefone precisa ser informado"
 
-msgid "need-birthday"
+msgid "need-birthday-for-cc"
 msgstr "A data de nascimento precisa ser informada"
 
 msgid "cpf_invalid"
