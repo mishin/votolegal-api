@@ -705,6 +705,7 @@ sub upsert_decred_data {
             $self->id,
             $immutable->get_column('donor_name'),
             $immutable->get_column('donor_cpf'),
+            $immutable->get_column('amount'),
             $self->created_at->datetime(),
             $immutable->get_column('git_hash'),
         );
