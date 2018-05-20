@@ -47,6 +47,10 @@ before 'setup_components' => sub {
 
 __PACKAGE__->log( VotoLegal::Logger::get_logger() );
 
+before 'handle_request' => sub {
+    Log::Log4perl::NDC->remove();
+};
+
 __PACKAGE__->setup();
 
 sub build_api_error {
