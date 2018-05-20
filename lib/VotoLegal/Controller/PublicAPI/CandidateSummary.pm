@@ -71,7 +71,12 @@ sub candidate_GET {
     };
 
     # fix para ficar igual os oturos valores
-    $candidate->{raising_goal} *= 100;
+    if ( $candidate->{raising_goal} ) {
+        $candidate->{raising_goal} *= 100;
+    }
+    else {
+        $candidate->{raising_goal} = 100000;
+    }
 
     $candidate->{party_fund}                 = $c->stash->{candidate}->party_fund();
     $candidate->{total_donated}              = $c->stash->{candidate}->total_donated();
@@ -97,8 +102,8 @@ sub candidate_GET {
     return $self->status_ok(
         $c,
         entity => {
-            candidate    => $candidate,
-            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
+            candidate => $candidate,
+            generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
         }
     );
 }
