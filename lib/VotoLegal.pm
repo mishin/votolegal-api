@@ -5,6 +5,7 @@ use namespace::autoclean;
 use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
+use Log::Log4perl qw(:easy);
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
@@ -43,7 +44,20 @@ before 'setup_components' => sub {
     $app->config->{'Model::DB'}{connect_info} = get_connect_info();
 };
 
-# Start the application
+Log::Log4perl->easy_init(
+    {
+        level  => $DEBUG,
+        layout => '[%P] %d %m%n',
+        (
+            $ENV{VOTOLEGAL_API_LOG_DIR}
+              && -d $ENV{VOTOLEGAL_API_LOG_DIR} ? ( file => '>>' . $ENV{VOTOLEGAL_API_LOG_DIR} . "/api.$$.log" ) : ()
+        ),
+        'utf8' => 1
+    }
+);
+
+__PACKAGE__->log( get_logger() );
+
 __PACKAGE__->setup();
 
 sub build_api_error {
