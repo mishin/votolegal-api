@@ -2,10 +2,9 @@ package VotoLegal;
 use Moose;
 use utf8;
 use namespace::autoclean;
-use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
-use Log::Log4perl qw(:easy);
+use VotoLegal::Utils qw/remote_notify/;
 use VotoLegal::Logger;
 
 BEGIN {
