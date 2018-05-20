@@ -5,9 +5,8 @@ use namespace::autoclean;
 use VotoLegal::Utils qw/remote_notify/;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
-use DateTime;
 use Log::Log4perl qw(:easy);
-use IO::Handle;
+use VotoLegal::Logger;
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
@@ -45,36 +44,6 @@ before 'setup_components' => sub {
 
     $app->config->{'Model::DB'}{connect_info} = get_connect_info();
 };
-
-if ( $ENV{VOTOLEGAL_API_LOG_DIR} ) {
-    if ( -d $ENV{VOTOLEGAL_API_LOG_DIR} ) {
-
-        my $date = DateTime->now->ymd('-');
-
-        $ENV{VOTOLEGAL_API_LOG_FILE} = $ENV{VOTOLEGAL_API_LOG_DIR} . "/api.$date.$$.log";
-        print STDERR "Redirecting STDERR/STDOUT to $ENV{VOTOLEGAL_API_LOG_FILE}\n";
-        close(STDERR);
-        close(STDOUT);
-        autoflush STDERR 1;
-        autoflush STDOUT 1;
-        open( STDERR, '>>', $ENV{VOTOLEGAL_API_LOG_FILE} ) or die 'cannot redirect STDERR';
-        open( STDOUT, '>>', $ENV{VOTOLEGAL_API_LOG_FILE} ) or die 'cannot redirect STDOUT';
-
-    }
-    else {
-        print STDERR "VOTOLEGAL_API_LOG_DIR is not a dir";
-    }
-}
-
-Log::Log4perl->easy_init(
-    {
-        level     => $DEBUG,
-        layout    => '[%P] %d %m%n',
-        autoflush => 1,
-        ( $ENV{VOTOLEGAL_API_LOG_FILE} ? ( file => '>>' . $ENV{VOTOLEGAL_API_LOG_FILE} ) : () ),
-        'utf8' => 1
-    }
-);
 
 __PACKAGE__->log( get_logger() );
 
