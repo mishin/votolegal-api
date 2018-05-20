@@ -37,6 +37,11 @@ Log::Log4perl->easy_init(
     }
 );
 
+# importa as funcoes para o script.
+no strict 'refs';
+*{"main::$_"} = *$_ for grep { defined &{$_} } keys %VotoLegal::Logger::;
+use strict 'refs';
+
 our @ISA = qw(Exporter);
 
 our @EXPORT = qw(log_info log_fatal log_error get_logger);
