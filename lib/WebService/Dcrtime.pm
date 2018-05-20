@@ -46,5 +46,7 @@ sub timestamp {
 
 sub _build_furl { Furl->new( timeout => 30 ) }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
 
