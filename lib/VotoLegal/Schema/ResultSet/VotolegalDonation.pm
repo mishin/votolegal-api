@@ -178,9 +178,9 @@ sub verifiers_specs {
                     max_length => 100,
                     type       => "Str",
                     post_check => sub {
-                        return 1 if !$date;
 
                         my $date = $_[0]->get_value('birthdate');
+                        return 1 if !$date;
 
                         return 0 if $date !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
