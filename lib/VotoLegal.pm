@@ -44,7 +44,7 @@ before 'setup_components' => sub {
     $app->config->{'Model::DB'}{connect_info} = get_connect_info();
 };
 
-__PACKAGE__->log( get_logger() );
+__PACKAGE__->log( VotoLegal::Logger::get_logger() );
 
 __PACKAGE__->setup();
 
