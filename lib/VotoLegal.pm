@@ -44,7 +44,6 @@ before 'setup_components' => sub {
     $app->config->{'Model::DB'}{connect_info} = get_connect_info();
 };
 
-use DDP; p [get_logger()->info('aa')];
 __PACKAGE__->log( get_logger() );
 
 __PACKAGE__->setup();
