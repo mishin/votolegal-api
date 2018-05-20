@@ -9,7 +9,7 @@ use WebService::Dcrtime;
 
 has 'timer' => (
     is      => 'rw',
-    default => 60*60, # 1 hour
+    default => 30*60, # 30 min.
 );
 
 has 'schema' => (
