@@ -18,6 +18,22 @@ sub base : Chained('/') : PathPart('api2') : CaptureArgs(0) {
     $c->response->headers->header( charset => "utf-8" );
 }
 
+sub recalc_summary : Chained('base') : PathPart('recalc_summary') : Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->res->body('disabled');
+
+    $c->detach() unless ( $c->req->params->{secret} || '' ) eq $ENV{RECALC_SUMMARY_SECRET};
+
+    $_->recalc_summary() for $c->model('DB::Candidate')->search(
+        {
+            payment_status => 'paid'
+        }
+    )->all;
+
+    $c->res->body("updated");
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;

@@ -68,6 +68,8 @@ sub result : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {
 sub result_GET {
     my ( $self, $c ) = @_;
 
+    my $was_captured = $c->stash->{donation}->get_column('captured_at');
+
     my $interface = $c->model('DB')->resultset('FsmState')->interface(
         class => 'payment',
         loc   => sub {
@@ -80,10 +82,13 @@ sub result_GET {
 
     $self->status_ok( $c, entity => $interface );
 
+    $self->append_recalc($c) if $interface->{donation}{captured_at} && !$was_captured;
 }
 
 sub result_POST {
     my ( $self, $c ) = @_;
+
+    my $was_captured = $c->stash->{donation}->get_column('captured_at');
 
     my $interface = $c->model('DB')->resultset('FsmState')->apply_interface(
         class => 'payment',
@@ -99,6 +104,20 @@ sub result_POST {
 
     $self->status_ok( $c, entity => $interface );
 
+    $self->append_recalc($c) if $interface->{donation}{captured_at} && !$was_captured;
+}
+
+sub append_recalc {
+    my ( $self, $c ) = @_;
+
+    my $candidate = $c->stash->{donation}->candidate;
+
+    $c->run_after_request(
+        sub {
+            $candidate->recalc_summary();
+            undef $candidate;
+        }
+    );
 }
 
 # nao temos nada ainda pelo navegador..

@@ -17,6 +17,7 @@ use Catalyst qw/
   Authentication
   Authorization::Roles
   I18N
+  RunAfterRequest
   /;
 extends 'Catalyst';
 
