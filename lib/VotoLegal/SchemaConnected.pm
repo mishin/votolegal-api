@@ -54,8 +54,6 @@ sub load_envs_via_dbi {
 
     foreach my $kv ( @$confs ) {
         my ($k, $v) = ($kv->{name}, $kv->{value} );
-        print STDERR ( ( exists $ENV{$k} ? '# Replacing' : '# Creating' ) . " %ENV{$k} with value '$v'\n" );
-
         $ENV{$k} = $v;
     }
     $dbh->disconnect  or warn $dbh->errstr;
