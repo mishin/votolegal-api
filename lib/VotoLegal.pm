@@ -7,6 +7,7 @@ use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 use DateTime;
 use Log::Log4perl qw(:easy);
+use IO::Handle;
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
@@ -54,6 +55,8 @@ if ( $ENV{VOTOLEGAL_API_LOG_DIR} ) {
         print STDERR "Redirecting STDERR/STDOUT to $ENV{VOTOLEGAL_API_LOG_FILE}\n";
         close(STDERR);
         close(STDOUT);
+        autoflush STDERR 1;
+        autoflush STDOUT 1;
         open( STDERR, '>>', $ENV{VOTOLEGAL_API_LOG_FILE} ) or die 'cannot redirect STDERR';
         open( STDOUT, '>>', $ENV{VOTOLEGAL_API_LOG_FILE} ) or die 'cannot redirect STDOUT';
 
@@ -65,8 +68,9 @@ if ( $ENV{VOTOLEGAL_API_LOG_DIR} ) {
 
 Log::Log4perl->easy_init(
     {
-        level  => $DEBUG,
-        layout => '[%P] %d %m%n',
+        level     => $DEBUG,
+        layout    => '[%P] %d %m%n',
+        autoflush => 1,
         ( $ENV{VOTOLEGAL_API_LOG_FILE} ? ( file => '>>' . $ENV{VOTOLEGAL_API_LOG_FILE} ) : () ),
         'utf8' => 1
     }
