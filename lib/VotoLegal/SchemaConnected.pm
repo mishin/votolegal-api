@@ -5,7 +5,7 @@ use utf8;
 use FindBin qw($RealBin);
 use DBI;
 
-use VotoLegal::Utils;
+#use VotoLegal::Utils;
 
 BEGIN {
     $ENV{POSTGRESQL_HOST} ||= '127.0.0.1';
