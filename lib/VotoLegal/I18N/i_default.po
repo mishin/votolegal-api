@@ -149,9 +149,9 @@ msgstr "Meio de pagamento não suportado"
 msgid "need_billing_adddress"
 msgstr "Precisamos do endereço de cobrança!"
 
-msgid "email_1_caputed_title"
-msgstr "Voto legal - Obrigador por ajudar"
+msgid "email_1_captured_subject"
+msgstr "Voto legal - Recibo provisório"
 
-msgid "email_2_caputed_title"
-msgstr "Somo Rede - Obrigador por ajudar"
+msgid "email_2_captured_subject"
+msgstr "Somo Rede - Recibo provisório"
 

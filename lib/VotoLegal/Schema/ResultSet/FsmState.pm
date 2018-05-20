@@ -450,7 +450,7 @@ sub _process_capture_cc {
                 config_id => $donation->candidate->emaildb_config_id,
                 template  => 'captured.html',
                 to        => $donation->votolegal_donation_immutable->donor_email,
-                subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_caputed_title' ),
+                subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_captured_subject' ),
                 variables => encode_json( $donation->as_row_for_email_variable() ),
             }
         );
