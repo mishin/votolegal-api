@@ -13,6 +13,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
         { status => 'activated' },
         {
             '+columns' => {
+                address_state_name => \'(select name from state x where x.code = me.address_state limit 1)',
                 has_mandatoaberto_integration => \
                   'EXISTS (select 1 from candidate_mandato_aberto_integration x where x.candidate_id = me.id)'
             },
@@ -59,13 +60,14 @@ sub candidate_GET {
         ],
     };
 
+
     $candidate = {
         %{$candidate},
-        map { $_ => $c->stash->{candidate}->$_ }
+        map { $_ => $c->stash->{candidate}->get_column($_) }
           qw(
           id name popular_name status reelection party_id office_id status username picture color publish
           video_url facebook_url twitter_url website_url summary biography instagram_url cnpj cpf
-          raising_goal public_email spending_spreadsheet address_city address_state
+          raising_goal public_email spending_spreadsheet address_city address_state address_state_name
           political_movement_id google_analytics collect_donor_phone collect_donor_address
           )
     };
