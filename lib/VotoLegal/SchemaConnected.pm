@@ -8,17 +8,17 @@ use DBI;
 #use VotoLegal::Utils;
 
 BEGIN {
-    $ENV{POSTGRESQL_HOST} ||= '127.0.0.1';
-    $ENV{POSTGRESQL_PORT} ||= '5432';
-    $ENV{POSTGRESQL_DBNAME} ||= 'votolegal_dev';
-    $ENV{POSTGRESQL_USER} ||= 'postgres';
+    $ENV{POSTGRESQL_HOST}     ||= '127.0.0.1';
+    $ENV{POSTGRESQL_PORT}     ||= '5432';
+    $ENV{POSTGRESQL_DBNAME}   ||= 'votolegal_dev';
+    $ENV{POSTGRESQL_USER}     ||= 'postgres';
     $ENV{POSTGRESQL_PASSWORD} ||= 'trust';
-};
+}
 
 require Exporter;
 
-our @ISA    = qw(Exporter);
-our @EXPORT = qw(get_schema get_connect_info);
+our @ISA       = qw(Exporter);
+our @EXPORT    = qw(get_schema get_connect_info);
 our @EXPORT_OK = qw(load_envs_via_dbi);
 
 sub get_connect_info {
@@ -40,23 +40,25 @@ sub get_connect_info {
     };
 }
 
-my $env_loaded=0;
+my $env_loaded = 0;
+
 sub load_envs_via_dbi {
     my ($self) = @_;
     $env_loaded++;
 
     my $conf = get_connect_info;
 
-    my $dbh = DBI->connect( $conf->{dsn} , $conf->{user}, $conf->{password}, {AutoCommit => 0});
+    my $dbh = DBI->connect( $conf->{dsn}, $conf->{user}, $conf->{password}, { AutoCommit => 0 } );
+    my $confs =
+      $dbh->selectall_arrayref( 'select "name", "value" from config where valid_to = \'infinity\'', { Slice => {} } );
 
-
-    my $confs = $dbh->selectall_arrayref('select "name", "value" from config where valid_to = \'infinity\'' , { Slice => {} } );
-
-    foreach my $kv ( @$confs ) {
-        my ($k, $v) = ($kv->{name}, $kv->{value} );
+    foreach my $kv (@$confs) {
+        my ( $k, $v ) = ( $kv->{name}, $kv->{value} );
         $ENV{$k} = $v;
     }
-    $dbh->disconnect  or warn $dbh->errstr;
+    $dbh->disconnect or warn $dbh->errstr;
+
+    print STDERR "Loaded " . scalar @$confs . " envs\n";
 
     undef $dbh;
 }
@@ -64,7 +66,7 @@ sub load_envs_via_dbi {
 sub get_schema {
     load_envs_via_dbi() unless $env_loaded;
     require VotoLegal::Schema;
-    return VotoLegal::Schema->connect(get_connect_info());
+    return VotoLegal::Schema->connect( get_connect_info() );
 }
 
 1;

@@ -9,7 +9,7 @@ use VotoLegal::Utils qw/remote_notify/;
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
     load_envs_via_dbi();
-    use VotoLegal::Logger;
+    require VotoLegal::Logger;
 }
 
 use Catalyst qw/
