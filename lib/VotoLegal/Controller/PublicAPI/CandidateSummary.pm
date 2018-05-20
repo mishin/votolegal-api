@@ -9,15 +9,14 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
     my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
-        undef,
+        { status => 'activated' },
         {
             '+columns' => {
-                has_mandatoaberto_integration => \'EXISTS (select 1 from candidate_mandato_aberto_integration x where x.candidate_id = me.id)'
-                },
+                has_mandatoaberto_integration => \
+                  'EXISTS (select 1 from candidate_mandato_aberto_integration x where x.candidate_id = me.id)'
+            },
             prefetch =>
-              [ 'party',
-              'candidate_donation_summary',
-               { 'candidate_issue_priorities' => 'issue_priority' }, ],
+              [ 'party', 'candidate_donation_summary', { 'candidate_issue_priorities' => 'issue_priority' }, ],
         },
     );
 }
@@ -73,10 +72,11 @@ sub candidate_GET {
     # fix para ficar igual os oturos valores
     $candidate->{raising_goal} *= 100;
 
-    $candidate->{party_fund}                    = $c->stash->{candidate}->party_fund();
-    $candidate->{total_donated}                 = $c->stash->{candidate}->total_donated();
-    $candidate->{total_donated_by_votolegal}    = $c->stash->{candidate}->total_donated_by_votolegal();
-    $candidate->{people_donated}                = $c->stash->{candidate}->people_donated();
+    $candidate->{party_fund}                 = $c->stash->{candidate}->party_fund();
+    $candidate->{total_donated}              = $c->stash->{candidate}->total_donated();
+    $candidate->{total_donated_by_votolegal} = $c->stash->{candidate}->total_donated_by_votolegal();
+    $candidate->{people_donated}             = $c->stash->{candidate}->people_donated();
+
     # nao sei o que eh isso, acho que nao aparece mais na tela
     # $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
     $candidate->{has_mandatoaberto_integration} = $c->stash->{candidate}->get_column('has_mandatoaberto_integration');

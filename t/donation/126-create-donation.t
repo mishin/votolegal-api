@@ -88,15 +88,22 @@ db_transaction {
 
     &test_boleto;
 
-    rest_get '/public-api/candidate-summary/' . stash 'candidate.id', code   => 200, stash => 'res';
+    rest_get '/public-api/candidate-summary/' . stash 'candidate.id', code => 200, stash => 'res';
 
     stash_test 'res', sub {
         my ($me) = @_;
 
-        is $me->{candidate}{people_donated}, 2, '2 doações';
+        is $me->{candidate}{people_donated},             2,    '2 doações';
         is $me->{candidate}{total_donated_by_votolegal}, 6500, '6500 recebidos';
     };
+    rest_get '/public-api/candidate-donations/' . stash 'candidate.id', code => 200, stash => 'res';
 
+    stash_test 'res', sub {
+        my ($me) = @_;
+
+        is $me->{donations}[0]{amount}, 3000, 'amount ok';
+        is $me->{donations}[1]{amount}, 3500, 'amount ok';
+    };
 
 };
 
