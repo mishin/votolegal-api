@@ -1,136 +1,112 @@
 package VotoLegal::Worker::Blockchain;
-use common::sense;
+use strict;
+use warnings;
 use Moose;
-
-use VotoLegal::Utils;
-use VotoLegal::SmartContract;
-
-use Data::Printer;
 
 with 'VotoLegal::Worker';
 
-has schema => (
-    is       => "rw",
+use WebService::Dcrtime;
+
+has 'timer' => (
+    is      => 'rw',
+    default => 60*60, # 1 hour
+);
+
+has 'schema' => (
+    is       => 'rw',
     required => 1,
 );
 
-has timer => (
-    is      => "rw",
-    default => 30,
-);
-
-has smartContract => (
-    is         => "rw",
-    isa        => "VotoLegal::SmartContract",
-    lazy_build => 1,
+has 'dcrtime' => (
+    is   => 'rw',
+    lazy => 1,
+    builder => '_build_dcrtime',
 );
 
 sub listen_queue {
-    my ($self) = @_;
+    my $self = shift;
 
-    $self->logger->debug("Buscando itens na fila...") if $self->logger;
-
-    my @items = $self->schema->resultset("Donation")->search(
-        {
-            status           => "captured",
-            transaction_hash => undef,
-            by_votolegal     => 't',
-        },
-        { rows   => 20 },
-    )->all;
-
-    if (@items) {
-        $self->logger->info(sprintf("'%d' itens serão processados.", scalar @items)) if $self->logger;
-
-        for my $item (@items) {
-            $self->exec_item($item);
-        }
-
-        $self->logger->info("Todos os items foram processados com sucesso") if $self->logger;
-    }
-    else {
-        $self->logger->info("Não há itens pendentes na fila.") if $self->logger;
+    # TODO Uratar o refund.
+    my $queue_rs = $self->queue_rs;
+    while (my $donation = $queue_rs->next()) {
+        $self->exec_item($donation);
     }
 }
 
+sub queue_rs {
+    my $self = shift;
+
+    return $self->schema->resultset('VotolegalDonation')->search(
+        {
+            '-or' => [
+                'me.decred_merkle_root'  => undef,
+                'me.decred_capture_txid' => undef,
+            ],
+        },
+        { for => 'update' }
+    );
+}
+
 sub run_once {
-    my ($self, $item_id) = @_;
+    my $self = shift;
 
-    my $item ;
-    if (defined($item_id)) {
-        $item = $self->schema->resultset("Donation")->search({
-            status           => "captured",
-            by_votolegal     => 't',
-            id               => $item_id,
-            transaction_hash => undef,
-        });
-    }
-    else {
-        $item = $self->schema->resultset("Donation")->search(
-            {
-                status           => "captured",
-                by_votolegal     => 't',
-                transaction_hash => undef,
-            },
-            { rows => 1 },
-        )->next;
-    }
-
-    if (ref $item) {
-        return $self->exec_item($item);
+    my $donation = $self->queue_rs->next;
+    if (ref $donation) {
+        return $self->exec_item($donation);
     }
     return 0;
 }
 
 sub exec_item {
-    my ($self, $item) = @_;
+    my ($self, $donation) = @_;
 
-    my $donation_id     = $item->id;
-    my $donation_cpf    = $item->cpf;
-    my $donation_amount = $item->amount;
-    my $donation_date   = $item->captured_at->strftime("%Y%m%d");
-    my $candidate_cpf   = $item->candidate->cpf;
+    $self->schema->txn_do(sub {
+        my $decred_merkle_root  = $donation->get_column('decred_merkle_root');
+        my $decred_capture_txid = $donation->get_column('decred_capture_txid');
 
-    $self->logger->info("Processando a doação id '$donation_id'...") if $self->logger;
+        if (!defined($decred_merkle_root)) {
+            # Timestamp.
+            $donation->upsert_decred_data;
+            my $decred_data_digest = $donation->get_column('decred_data_digest');
 
-    my $donation = $donation_cpf . "-" . $donation_amount . "-" . $donation_date;
+            if (!defined($decred_merkle_root)) {
+                $self->dcrtime->timestamp(
+                    id      => 'votolegal',
+                    digests => [ $decred_data_digest ]
+                );
+            }
 
-    $self->logger->info("Registrando a transação na blockchain...") if $self->logger;
-    $self->logger->info("CPF: '$candidate_cpf'")                    if $self->logger;
-    $self->logger->info("Registro: '$donation'")                    if $self->logger;
+            # Verify.
+            my $verify = $self->dcrtime->verify(
+                id      => 'votolegal',
+                digests => [ $decred_data_digest ]
+            );
 
-    my $res = $self->smartContract->addDonation($candidate_cpf, $donation);
+            my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
+            my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
+            my $empty = '0' x 64;
 
-    if (my $transactionHash = $res->getTransactionHash()) {
-        $item->update({ transaction_hash => $transactionHash });
-        $item->send_email();
+            my %update_data;
+            if ($merkleroot ne $empty) {
+                $update_data{decred_merkle_root} = $merkleroot;
+                $update_data{decred_merkle_registered_at} = \'NOW()';
+            }
 
-        return 1;
-    }
+            if ($transaction ne $empty) {
+                $update_data{decred_capture_txid} = $transaction;
+                $update_data{decred_capture_registered_at} = \'NOW()';
+            }
 
-    return 0;
+            if (%update_data) {
+                $donation->update( \%update_data );
+            }
+        }
+    });
+
+    return 1;
 }
 
-sub _build_smartContract {
-    my ($self) = @_;
-
-    my $environment = is_test() ? "testnet" : "mainnet";
-
-    my $smartContract = VotoLegal::SmartContract->new(
-        %{ $self->config->{ethereum}->{$environment} }
-    );
-
-    die "geth isn't running." unless $smartContract->geth->isRunning();
-
-    if (is_test()) {
-        $smartContract->geth->isTestnet() or die "geth isn't running on testnet.";
-    }
-    else {
-        $smartContract->geth->isMainnet() or die "geth isn't running on mainnet.";
-    }
-
-    return $smartContract;
-}
+sub _build_dcrtime { WebService::Dcrtime->new() }
 
 __PACKAGE__->meta->make_immutable;
 
