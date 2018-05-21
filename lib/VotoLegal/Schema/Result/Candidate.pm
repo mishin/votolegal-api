@@ -983,8 +983,9 @@ sub verifiers_specs {
                     type       => "Str",
                     post_check => sub {
                         my $video_url = $_[0]->get_value('video_url');
+
                         return 1 if $video_url eq "_SET_NULL_";
-                        is_web_uri $video_url;
+                        die \['video_url', 'invalid'] unless $video_url =~ /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
                     },
                 },
                 facebook_url => {
