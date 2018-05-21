@@ -24,16 +24,6 @@ my $candidate_rs = $schema->resultset('Candidate')->search(
 while ( my $candidate = $candidate_rs->next() ) {
     if ( test_cnpj( $candidate->cnpj ) ) {
         $candidate->update( { status => "activated" } );
-
-        $schema->resultset('SlackQueue')->create(
-            {
-                channel => "votolegal-bot",
-                message => sprintf(
-                    "O candidato %s (%s) de CNPJ %s foi aprovado.",
-                    $candidate->name, $candidate->popular_name, $candidate->cnpj,
-                ),
-            }
-        );
     }
 }
 
