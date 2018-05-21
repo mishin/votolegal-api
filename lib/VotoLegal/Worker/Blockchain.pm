@@ -133,6 +133,12 @@ sub exec_item {
                 ) if $self->has_log;
 
                 $donation->update( \%update_data );
+
+                if ($update_data{decred_capture_txid}){
+
+                    $donation->send_decred_email();
+
+                }
             }
         }
     });

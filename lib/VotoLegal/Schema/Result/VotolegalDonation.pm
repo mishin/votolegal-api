@@ -697,5 +697,14 @@ sub upsert_decred_data {
     return $self->discard_changes;
 }
 
+sub send_decred_email {
+    my ($self) = @_;
+
+
+    # enviar email falando sobre registro na block
+
+
+}
+
 __PACKAGE__->meta->make_immutable;
 1;
