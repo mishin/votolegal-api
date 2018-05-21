@@ -483,7 +483,6 @@ sub _process_credit_card_form {
         ];
         return;
     }
-
     $stash->{cc_hash} = sha1_hex( $params->{cc_hash} );
 
     $stash->{credit_card_token} = $params->{credit_card_token};

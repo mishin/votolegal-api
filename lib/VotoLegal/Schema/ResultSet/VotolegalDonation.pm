@@ -310,7 +310,12 @@ sub action_specs {
             $values{name} =~ s/\s+/\ /go;
 
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
-            #$self->_check_daily_limit( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
+            my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
+
+            $self->_check_daily_limit(
+                max_donation_value => $config->{max_donation_value},
+                map { $_ => $values{$_} } qw/cpf amount candidate_id/
+            );
 
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 
@@ -329,8 +334,6 @@ sub action_specs {
             die_with 'email_domain_invalid' unless $addr;
 
             $values{email} = $addr;
-
-            my $config = $self->_get_candidate_config( candidate_id => $values{candidate_id} );
 
             die_with 'amount_invalid' if $values{amount} < $config->{min_donation_value};
 
@@ -534,7 +537,7 @@ sub _check_daily_limit {
 
     # Buscando por todas doações deste dia, deste CPF para o candidato,
     # onde é cartão e está captured, ou
-    my $repeatedDonation = $self->search(
+    my $sum_donation = $self->search(
         {
             candidate_id                             => $values{candidate_id},
             'votolegal_donation_immutable.donor_cpf' => $values{cpf},
@@ -546,10 +549,9 @@ sub _check_daily_limit {
 
                 {
                     '-and' => [
-                        is_boleto => 0,
+
                         # converte ambas para America/Sao_Paulo
                         \" timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))::date = timezone('America/Sao_Paulo', now())::date",
-
                     ],
 
                 }
@@ -559,8 +561,14 @@ sub _check_daily_limit {
             join => 'votolegal_donation_immutable'
 
         }
-    )->next;
+    )->get_column('votolegal_donation_immutable.amount')->sum();
 
+    $sum_donation ||= 0;
+    $sum_donation += $values{amount};
+
+    if ( $sum_donation && $sum_donation > $values{max_donation_value} ) {
+        die_with 'donation-daily-reached';
+    }
 
 }
 
