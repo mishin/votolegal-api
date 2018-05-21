@@ -124,3 +124,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0118-fix-existing-captured [0117-set-timezone] 2018-05-21T01:24:04Z renato,,, <renato@renato-MS-7A34> # captured
 0119-add-new-office [0118-fix-existing-captured] 2018-05-21T14:43:24Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding a the 'Deputado Distrital' office
 0120-is_published [0119-add-new-office] 2018-05-21T22:14:56Z renato,,, <renato@renato-MS-7A34> # publish
+0121-view-donations [0120-is_published] 2018-05-21T22:19:15Z renato,,, <renato@renato-MS-7A34> # view-donatiosn
