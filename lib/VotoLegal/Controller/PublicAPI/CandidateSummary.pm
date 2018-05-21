@@ -58,6 +58,7 @@ sub candidate_GET {
                 { $_->issue_priority->get_columns() }
             } $c->stash->{candidate}->candidate_issue_priorities->all
         ],
+        max_donation_value => 106400
     };
 
 
@@ -69,6 +70,7 @@ sub candidate_GET {
           video_url facebook_url twitter_url website_url summary biography instagram_url cnpj cpf
           raising_goal public_email spending_spreadsheet address_city address_state address_state_name
           political_movement_id google_analytics collect_donor_phone collect_donor_address
+          min_donation_value
           )
     };
 
