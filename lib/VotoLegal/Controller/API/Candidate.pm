@@ -90,6 +90,7 @@ sub candidate_GET {
         };
     }
 
+    $candidate->{political_movement_name}       = $c->stash->{candidate}->political_movement_id ? $c->stash->{candidate}->political_movement->name : ();
     $candidate->{party_fund}                    = $c->stash->{candidate}->party_fund();
     $candidate->{total_donated}                 = $c->stash->{candidate}->total_donated();
     $candidate->{total_donated_by_votolegal}    = $c->stash->{candidate}->total_donated_by_votolegal();

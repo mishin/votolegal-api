@@ -146,6 +146,24 @@ db_transaction {
       ;
 
     rest_put "/api/candidate/${candidate_id}",
+      name    => "Adding political movement",
+      [ political_movement_id => 1 ],
+    ;
+
+    rest_get "/api/candidate/$username",
+      name => 'get candidate by username',
+      stash => "get_candidate"
+    ;
+
+    stash_test "get_candidate" => sub {
+        my $res = shift;
+
+        is ($res->{candidate}->{political_movement_id},   1,          'political_movement_id');
+        is ($res->{candidate}->{political_movement_name}, 'RenovaBR', 'political_movement_name');
+    };
+
+
+    rest_put "/api/candidate/${candidate_id}",
       name  => 'edit myself',
       files => {
         picture              => "$Bin/picture.jpg",
