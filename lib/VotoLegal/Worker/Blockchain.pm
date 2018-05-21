@@ -26,10 +26,21 @@ has 'dcrtime' => (
 sub listen_queue {
     my $self = shift;
 
-    # TODO Uratar o refund.
+    $self->logger->info("Buscando itens na fila...") if $self->has_log;
+
     my $queue_rs = $self->queue_rs;
-    while (my $donation = $queue_rs->next()) {
-        $self->exec_item($donation);
+
+    my $count = $queue_rs->count;
+
+    if ($count > 0) {
+        $self->logger->info("Há '$count' itens na fila para serem processados.") if $self->has_log;
+
+        while (my $donation = $queue_rs->next()) {
+            $self->exec_item($donation);
+        }
+    }
+    else {
+        $self->logger->info("Nenhum item na fila.") if $self->has_log;
     }
 }
 
@@ -61,15 +72,27 @@ sub exec_item {
     my ($self, $donation) = @_;
 
     $self->schema->txn_do(sub {
+        $self->logger->info("Processando a donation_id=" . $donation->id) if $self->has_log;
+
         my $decred_merkle_root  = $donation->get_column('decred_merkle_root');
         my $decred_capture_txid = $donation->get_column('decred_capture_txid');
 
-        if (!defined($decred_merkle_root)) {
+        if (defined($decred_merkle_root)) {
+            $self->logger->info("A doação donation_id=" . $donation->id . ' já possui merkle root.') if $self->has_log;
+            $self->logger->debug(sprintf("[donation_id=%s] [decred_merkle_root=%s]", $donation->id, $decred_merkle_root))
+              if $self->has_log;
+        }
+        else {
             # Timestamp.
             $donation->upsert_decred_data;
             my $decred_data_digest = $donation->get_column('decred_data_digest');
 
+            $self->logger->info(sprintf("[donation_id=%s] [decred_data_digest=%s]", $donation->id, $decred_data_digest))
+              if $self->has_log;
+
             if (!defined($decred_merkle_root)) {
+                $self->logger->info("Registrando a doação id=" . $donation->id . '.') if $self->has_log;
+
                 $self->dcrtime->timestamp(
                     id      => 'votolegal',
                     digests => [ $decred_data_digest ]
@@ -77,6 +100,8 @@ sub exec_item {
             }
 
             # Verify.
+            $self->logger->info("Verificando a doação id=" . $donation->id . '...') if $self->has_log;
+
             my $verify = $self->dcrtime->verify(
                 id      => 'votolegal',
                 digests => [ $decred_data_digest ]
@@ -98,6 +123,15 @@ sub exec_item {
             }
 
             if (%update_data) {
+                $self->logger->info("Atualizando a doação id=" . $donation->id . '.') if $self->has_log;
+                $self->logger->debug(
+                    sprintf(
+                        "[donation_id=%s] [decred_merkle_root=%s] [decred_capture_txid=%s]",
+                        $update_data{decred_merkle_root}  || 'undef',
+                        $update_data{decred_capture_txid} || 'undef',
+                    )
+                ) if $self->has_log;
+
                 $donation->update( \%update_data );
             }
         }

@@ -659,18 +659,29 @@ sub upsert_decred_data {
     my $self = shift;
 
     my $immutable = $self->votolegal_donation_immutable;
+    my $candidate = $self->candidate;
 
     my $data_raw    = $self->get_column('decred_data_raw');
     my $data_digest = $self->get_column('decred_data_digest');
+    my $is_boleto   = $self->get_column('is_boleto');
 
     if ( !defined($data_raw) && !defined($data_digest) ) {
-        $data_raw = join( "\n",
+        $data_raw = join(
+            "\n",
+            "@@ DOADOR @@\n",
+
             $self->id,
             $immutable->get_column('donor_name'),
             $immutable->get_column('donor_cpf'),
             $immutable->get_column('amount'),
             $self->created_at->datetime(),
+            $is_boleto ? 'Boleto' : 'Cartão de crédito',
             $immutable->get_column('git_hash'),
+            "\n@@ CANDIDATO @@\n",
+            $candidate->get_column('name'),
+            $candidate->party->get_column('name'),
+            $candidate->cpf_formated(),
+            $candidate->cnpj_formated() || '00.000.000/0000-00',
         );
 
         $data_digest = sha256_hex($data_raw);

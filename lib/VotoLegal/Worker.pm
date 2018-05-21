@@ -36,4 +36,14 @@ around [ qw/ listen_queue run_once / ] => sub {
     return $ret;
 };
 
+sub has_log {
+    my $self = shift;
+
+    if (ref $self->logger) {
+        return 1;
+    }
+    return 0;
+}
+
 1;
+

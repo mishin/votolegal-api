@@ -1540,6 +1540,7 @@ sub cpf_formated {
     my ($self) = @_;
 
     my $cpf = $self->get_column('cpf');
+    return '' unless $cpf;
     $cpf =~ s/[^0-9]+//g;
     $cpf =~ s/^(...)(...)(...)(..).*/$1.$2.$3-$4/;
     return $cpf;
@@ -1549,6 +1550,7 @@ sub cnpj_formated {
     my ($self) = @_;
 
     my $cnpj = $self->get_column('cnpj');
+    return '' unless $cnpj;
     $cnpj =~ s/[^0-9]+//g;
     $cnpj =~ s|^(..)(...)(...)(....)(..).*|$1.$2.$3/$4-$5|;
 
