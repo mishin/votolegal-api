@@ -4,6 +4,8 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
+plan skip_all => 'no dcrtime' unless $ENV{VOTOLEGAL_DCRTIME_API};
+
 my $schema = VotoLegal->model('DB');
 
 my $candidate;
