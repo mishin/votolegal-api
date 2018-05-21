@@ -37,6 +37,7 @@ sub get_connect_info {
         name_sep       => ".",
         auto_savepoint => 1,
         pg_enable_utf8 => 1,
+        on_connect_do  => ["SET client_encoding=UTF8; SET TIME ZONE 'UTC'"]
     };
 }
 

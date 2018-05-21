@@ -310,6 +310,7 @@ sub action_specs {
             $values{name} =~ s/\s+/\ /go;
 
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
+            $self->_check_daily_limit( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
 
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 
@@ -486,14 +487,14 @@ sub _get_candidate_config {
 
     my $candidate = $self->result_source->schema->resultset('Candidate')->find( $opts{candidate_id} ) or die 'error';
 
-    # TODO carregar do banco isso, de acordo com a tabela de config de campanha
     return {
-        donation_type_id   => 1,    #PF
-        is_pre_campaign    => 1,
+        donation_type_id   => 1,                                                      #PF
+        is_pre_campaign    => $candidate->campaign_donation_type eq 'pre-campaign',
         payment_gateway_id => 3,
 
-        min_donation_value => $candidate->min_donation_value
-      }
+        min_donation_value => $candidate->min_donation_value,
+        max_donation_value => $candidate->campaign_donation_type eq 'party' ? 106400 : 106400,
+    };
 
 }
 
@@ -507,6 +508,43 @@ sub _refuse_duplicate {
             'votolegal_donation_immutable.donor_cpf' => $values{cpf},
             'votolegal_donation_immutable.amount'    => $values{amount},
             created_at                               => { ">=" => \"(now() - '30 seconds'::interval)" },
+        },
+        {
+            join => 'votolegal_donation_immutable'
+
+        }
+    )->next;
+
+    if ($repeatedDonation) {
+        die_with 'donation-repeated';
+    }
+}
+
+sub _check_daily_limit {
+    my ( $self, %values ) = @_;
+
+    # Buscando por todas doações deste dia, deste CPF para o candidato,
+    # onde é cartão e está captured, ou
+    my $repeatedDonation = $self->search(
+        {
+            candidate_id                             => $values{candidate_id},
+            'votolegal_donation_immutable.donor_cpf' => $values{cpf},
+
+            '-or' => [
+
+                # todos boletos abertos
+                { 'state' => 'waiting_boleto_payment' },
+
+                {
+                    '-and' => [
+                        is_boleto => 0,
+                        # converte ambas para America/Sao_Paulo
+                        \" timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))::date = timezone('America/Sao_Paulo', now())::date",
+
+                    ],
+
+                }
+            ]
         },
         {
             join => 'votolegal_donation_immutable'
