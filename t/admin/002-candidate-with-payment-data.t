@@ -42,7 +42,6 @@ db_transaction {
     api_auth_as candidate_id => $candidate_id;
 
     create_candidate_contract_signature($candidate_id);
-
     api_auth_as user_id => 1;
 
     rest_get "/api/admin/candidate-with-related-data",
