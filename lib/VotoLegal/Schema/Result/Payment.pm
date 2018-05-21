@@ -76,7 +76,6 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hEyowmVu9X+nL8NB1Gimrg
 
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
 use VotoLegal::Utils;
@@ -85,9 +84,9 @@ use JSON::MaybeXS;
 use XML::Hash::XS qw/ hash2xml /;
 
 sub send_pagseguro_transaction {
-    my ($self, $credit_card_token, $log) = @_;
+    my ( $self, $credit_card_token, $log ) = @_;
 
-    my $xs = XML::Hash::XS->new(utf8 => 0, encoding => 'utf-8');
+    my $xs = XML::Hash::XS->new( utf8 => 0, encoding => 'utf-8' );
 
     my $merchant_id  = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID};
     my $merchant_key = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY};
@@ -120,7 +119,7 @@ sub send_pagseguro_transaction {
         creditCard      => $creditCard ? $creditCard : ()
     };
 
-    $payment_args = $xs->hash2xml($payment_args, root => 'payment');
+    $payment_args = $xs->hash2xml( $payment_args, root => 'payment' );
 
     # Criando entrada no log
     $self->result_source->schema->resultset("PaymentLog")->create(
@@ -142,8 +141,8 @@ sub build_callback_url {
     my $candidate_id = $self->candidate_id;
 
     my $callback_url = $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL};
-    $callback_url   .= "/" unless $callback_url =~ m{\/$};
-    $callback_url   .= "api/candidate/$candidate_id/payment/callback";
+    $callback_url .= "/" unless $callback_url =~ m{\/$};
+    $callback_url .= "api/candidate/$candidate_id/payment/callback";
 
     return $callback_url;
 }
@@ -168,23 +167,23 @@ sub build_sender_object {
     # e em prod '<sender><senderHash></senderHash></sender>'
     my $ret;
 
-    if ($ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX}) {
+    if ( $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX} ) {
         $ret = {
             senderHash => $self->sender_hash,
             name       => $self->name,
             phone      => $self->build_phone_object(),
-            email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
-            documents  => [ $document ]
-        }
+            email      => ( is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email ),
+            documents  => [$document]
+        };
     }
     else {
         $ret = {
-            hash       => $self->sender_hash,
-            name       => $self->name,
-            phone      => $self->build_phone_object(),
-            email      => (is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email),
-            documents  => [ $document ]
-        }
+            hash      => $self->sender_hash,
+            name      => $self->name,
+            phone     => $self->build_phone_object(),
+            email     => ( is_test() ? 'fvox@sandbox.pagseguro.com.br' : $self->email ),
+            documents => [$document]
+        };
     }
 
     return $ret;
@@ -210,13 +209,11 @@ sub build_item_object {
 sub build_shipping_object {
     my ($self) = @_;
 
-    return {
-        address => $self->get_address_data()
-    }
+    return { address => $self->get_address_data() };
 }
 
 sub build_credit_card_object {
-    my ($self, $credit_card_token) = @_;
+    my ( $self, $credit_card_token ) = @_;
 
     my $address_data = $self->get_address_data();
 
@@ -226,7 +223,7 @@ sub build_credit_card_object {
             quantity => 1,
             value    => $self->get_value()
         },
-        holder      => {
+        holder => {
             name      => $self->name,
             phone     => $self->build_phone_object(),
             birthDate => $self->candidate->birth_date,
@@ -238,7 +235,7 @@ sub build_credit_card_object {
                     }
                 }
             ],
-            address  => $address_data
+            address => $address_data
         },
         billingAddress => $address_data
     };
@@ -258,7 +255,7 @@ sub get_address_data {
         district   => $self->address_district,
         number     => $self->address_house_number,
         complement => $self->address_complement,
-    }
+    };
 }
 
 sub build_phone_object {
@@ -268,16 +265,16 @@ sub build_phone_object {
 
     $phone =~ s/\D+//g;
 
-    my $area_code = substr($phone, 0, 2);
-    my $number    = substr($phone, 2);
+    my $area_code = substr( $phone, 0, 2 );
+    my $number = substr( $phone, 2 );
     return {
         areaCode => $area_code,
         number   => $number
-    }
+    };
 }
 
 sub update_code {
-    my ($self, $code) = @_;
+    my ( $self, $code ) = @_;
 
     return $self->update( { code => $code } );
 }
@@ -300,7 +297,7 @@ sub get_value {
 
     if ($has_promotion) {
 
-        if ( $is_boleto ) {
+        if ($is_boleto) {
 
             if ($has_political_movement) {
 
@@ -321,7 +318,7 @@ sub get_value {
                     $value = '296.00';
                 }
                 else {
-                    $value = '395.00'
+                    $value = '395.00';
                 }
 
             }
@@ -330,13 +327,13 @@ sub get_value {
         else {
 
             if ( $candidate->political_movement_id == 1 ) {
-                $value = '247.50'
+                $value = '247.50';
             }
             elsif ( $candidate->party_id == 26 ) {
-                $value = '297.00'
+                $value = '297.00';
             }
             else {
-                $value = '396.00'
+                $value = '396.00';
             }
 
         }
@@ -374,7 +371,7 @@ sub get_pagseguro_data {
         sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
     );
 
-    my $payment_data = $pagseguro->transaction_data($self->code);
+    my $payment_data = $pagseguro->transaction_data( $self->code );
 
     if ( ref $payment_data ne 'HASH' ) {
         return 0;

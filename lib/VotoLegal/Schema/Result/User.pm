@@ -91,40 +91,44 @@ __PACKAGE__->add_column(
 );
 
 sub new_session {
-    my ($self, %args) = @_;
+    my ( $self, %args ) = @_;
 
     my $schema = $self->result_source->schema;
 
-    my $session = $schema->resultset('UserSession')->search({
-        user_id      => $self->id,
-        valid_for_ip => $args{ip},
-    })->first;
-
-    if (!defined($session)) {
-        $session = $self->user_sessions->create({
+    my $session = $schema->resultset('UserSession')->search(
+        {
+            user_id      => $self->id,
             valid_for_ip => $args{ip},
-            api_key      => random_string(128),
-        });
+        }
+    )->first;
+
+    if ( !defined($session) ) {
+        $session = $self->user_sessions->create(
+            {
+                valid_for_ip => $args{ip},
+                api_key      => random_string(128),
+            }
+        );
     }
 
     my $candidate = $self->candidates->next;
 
     return {
         user_id        => $self->id,
-        candidate_id   => $candidate ? $candidate->id   : undef,
+        candidate_id   => $candidate ? $candidate->id : undef,
         candidate_name => $candidate ? $candidate->name : undef,
-        roles          => [ map { $_->name } $self->roles ],
-        api_key        => $session->api_key,
+        roles   => [ map { $_->name } $self->roles ],
+        api_key => $session->api_key,
     };
 }
 
 sub send_email_forgot_password {
-    my ($self, $token) = @_;
+    my ( $self, $token ) = @_;
 
     # Admin não possui relação 'Candidato', logo, não possui 'name'. Então, quando não houver Candidate, passo o
     # endereço de email para o template para que fique "Olá admin@votolegal.org...".
     my $name;
-    if (my $candidate = $self->candidates->next) {
+    if ( my $candidate = $self->candidates->next ) {
         $name = $candidate->name;
     }
     else {
@@ -143,13 +147,15 @@ sub send_email_forgot_password {
         },
     )->build_email();
 
-    return $self->result_source->schema->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->result_source->schema->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub send_email_contract_signed {
-    my ($self, $token) = @_;
+    my ( $self, $token ) = @_;
 
     my $candidate = $self->candidates->next;
     my $name      = $candidate->name;
@@ -160,14 +166,16 @@ sub send_email_contract_signed {
         subject  => "VotoLegal - Assinatura do Contrato",
         template => get_data_section('contract_signed.tt'),
         vars     => {
-            name  => $name,
+            name => $name,
         },
     )->build_email();
 
-    return $self->result_source->schema->resultset('EmailQueue')->create({
-        body => $email->as_string,
-        bcc  => ['contato@votolegal.org.br']
-    });
+    return $self->result_source->schema->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+            bcc  => ['contato@votolegal.org.br']
+        }
+    );
 }
 
 sub has_signed_contract {

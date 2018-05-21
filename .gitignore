@@ -5,3 +5,4 @@ log/*
 Makefile
 MYMETA*
 envfile.sh
+.tidyall.d/

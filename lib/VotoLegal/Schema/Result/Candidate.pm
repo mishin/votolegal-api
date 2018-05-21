@@ -371,7 +371,7 @@ sub verifiers_specs {
 
                         my $status = $r->get_value('status');
                         $status =~ m{^(pending|activated|deactivated)$};
-                    }
+                      }
                 },
                 roles => {
                     required => 1,
@@ -476,7 +476,9 @@ sub verifiers_specs {
                         my $video_url = $_[0]->get_value('video_url');
 
                         return 1 if $video_url eq "_SET_NULL_";
-                        die \['video_url', 'invalid'] unless $video_url =~ /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
+                        die \[ 'video_url', 'invalid' ]
+                          unless $video_url =~
+/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
                     },
                 },
                 facebook_url => {
@@ -627,7 +629,7 @@ sub verifiers_specs {
                         return 1 if $bank_account_dv eq "_SET_NULL_";
 
                         $bank_account_dv =~ m{^([a-zA-Z0-9]+)$};
-                    }
+                      }
                 },
                 crawlable => {
                     required   => 0,
@@ -653,7 +655,7 @@ sub verifiers_specs {
 
                         die \[ 'political_movement_id', 'could not find political movement with that id' ]
                           unless $political_movement;
-                    }
+                      }
                 },
                 google_analytics => {
                     required   => 0,
@@ -665,7 +667,7 @@ sub verifiers_specs {
                         die \[ 'google_analytics', 'invalid id' ] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
 
                         return 1;
-                    }
+                      }
                 },
                 collect_donor_address => {
                     required => 0,
@@ -765,7 +767,7 @@ sub total_donated {
     my $self = shift;
 
     return $self->candidate_donation_summary->amount_donation_by_votolegal +
-        $self->candidate_donation_summary->amount_donation_beside_votolegal;
+      $self->candidate_donation_summary->amount_donation_beside_votolegal;
 }
 
 sub total_donated_by_votolegal {
@@ -777,7 +779,8 @@ sub total_donated_by_votolegal {
 sub people_donated {
     my $self = shift;
 
-    return $self->candidate_donation_summary->count_donation_by_votolegal + $self->candidate_donation_summary->count_donation_beside_votolegal;
+    return $self->candidate_donation_summary->count_donation_by_votolegal +
+      $self->candidate_donation_summary->count_donation_beside_votolegal;
 }
 
 sub party_fund {
@@ -1056,18 +1059,18 @@ sub recalc_summary {
         {
 
             amount_donation_by_votolegal => \[
-                "coalesce( ( SELECT SUM(b.amount) FROM votolegal_donation a JOIN votolegal_donation_immutable b on b.votolegal_donation_id = a.id
+"coalesce( ( SELECT SUM(b.amount) FROM votolegal_donation a JOIN votolegal_donation_immutable b on b.votolegal_donation_id = a.id
             WHERE captured_at IS NOT NULL AND refunded_at IS NULL AND candidate_id = ? ), 0)", $self->id
             ],
 
             count_donation_by_votolegal => \[
                 "( SELECT count(1) FROM votolegal_donation
-            WHERE captured_at IS NOT NULL AND refunded_at IS NULL AND candidate_id = ? )",$self->id
+            WHERE captured_at IS NOT NULL AND refunded_at IS NULL AND candidate_id = ? )", $self->id
             ],
 
             amount_donation_beside_votolegal => \[
                 "coalesce( ( SELECT SUM( amount ) FROM donation
-            WHERE status = 'captured' AND candidate_id = ? ), 0)",  $self->id
+            WHERE status = 'captured' AND candidate_id = ? ), 0)", $self->id
             ],
 
             count_donation_beside_votolegal => \[

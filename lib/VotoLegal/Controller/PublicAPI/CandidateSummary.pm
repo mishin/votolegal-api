@@ -13,7 +13,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
         { status => 'activated' },
         {
             '+columns' => {
-                address_state_name => \'(select name from state x where x.code = me.address_state limit 1)',
+                address_state_name            => \'(select name from state x where x.code = me.address_state limit 1)',
                 has_mandatoaberto_integration => \
                   'EXISTS (select 1 from candidate_mandato_aberto_integration x where x.candidate_id = me.id)'
             },
@@ -60,7 +60,6 @@ sub candidate_GET {
         ],
         max_donation_value => 106400
     };
-
 
     $candidate = {
         %{$candidate},

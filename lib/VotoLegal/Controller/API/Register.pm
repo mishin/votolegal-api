@@ -39,9 +39,7 @@ sub register_POST {
     my $candidate = $c->stash->{collection}->execute(
         $c,
         for  => 'create',
-        with => {
-            %{ $c->req->params },
-        },
+        with => { %{ $c->req->params }, },
     );
 
     # Enviando email de confirmação.

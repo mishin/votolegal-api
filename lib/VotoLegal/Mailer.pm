@@ -59,14 +59,14 @@ sub _build__transport {
 }
 
 sub send {
-    my ($self, $email, $bcc) = @_;
+    my ( $self, $email, $bcc ) = @_;
 
-    if ($ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/) {
+    if ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ ) {
         return 1;
     }
 
-    sendmail($email, { transport => $self->_transport });
-    sendmail($email, { transport => $self->_transport, to => $_ }) for @{$bcc || []};
+    sendmail( $email, { transport => $self->_transport } );
+    sendmail( $email, { transport => $self->_transport, to => $_ } ) for @{ $bcc || [] };
 
     return 1;
 }

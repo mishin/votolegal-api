@@ -11,17 +11,22 @@ sub base : Chained('root') : PathPart('stats') : CaptureArgs(0) { }
 sub stats : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub stats_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    my $total_amount_raised = $c->model("DB::Donation")->search({
-        status       => "captured",
-        by_votolegal => "t",
-    })->get_column("amount")->sum || 0;
+    my $total_amount_raised = $c->model("DB::Donation")->search(
+        {
+            status       => "captured",
+            by_votolegal => "t",
+        }
+      )->get_column("amount")->sum
+      || 0;
 
-    my $candidates = $c->model("DB::Candidate")->search({
-        status         => "activated",
-        payment_status => "paid"
-    })->count;
+    my $candidates = $c->model("DB::Candidate")->search(
+        {
+            status         => "activated",
+            payment_status => "paid"
+        }
+    )->count;
 
     my $total_people_donated = $c->model('DB::Donation')->search(
         {
@@ -31,17 +36,22 @@ sub stats_GET {
         { group_by => "cpf" },
     )->count;
 
-    my $total_donations = $c->model('DB::Donation')->search({
-        status       => "captured",
-        by_votolegal => 't',
-    })->count;
+    my $total_donations = $c->model('DB::Donation')->search(
+        {
+            status       => "captured",
+            by_votolegal => 't',
+        }
+    )->count;
 
-    return $self->status_ok($c, entity => {
-        total_amount_raised  => $total_amount_raised,
-        candidates           => $candidates,
-        total_people_donated => $total_people_donated,
-        total_donations      => $total_donations,
-    });
+    return $self->status_ok(
+        $c,
+        entity => {
+            total_amount_raised  => $total_amount_raised,
+            candidates           => $candidates,
+            total_people_donated => $total_people_donated,
+            total_donations      => $total_donations,
+        }
+    );
 }
 
 =encoding utf8

@@ -17,7 +17,7 @@ Catalyst Controller.
 =cut
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::PaymentGateway');
 }
@@ -27,14 +27,14 @@ sub base : Chained('root') : PathPart('payment_gateway') : CaptureArgs(0) { }
 sub payment_gateway : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub payment_gateway_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    return $self->status_ok($c, entity => {
-        payment_gateway => [
-            map { { id => $_->id, name => $_->name } }
-              $c->stash->{collection}->all()
-        ]
-    });
+    return $self->status_ok(
+        $c,
+        entity => {
+            payment_gateway => [ map { { id => $_->id, name => $_->name } } $c->stash->{collection}->all() ]
+        }
+    );
 }
 
 =encoding utf8

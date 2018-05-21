@@ -8,9 +8,10 @@ use List::Util qw(shuffle);
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    $c->stash->{collection} = $c->model('DB::Candidate')->search({ status => "activated" }, { order_by => 'me.name'});
+    $c->stash->{collection} =
+      $c->model('DB::Candidate')->search( { status => "activated" }, { order_by => 'me.name' } );
 }
 
 sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }
@@ -18,7 +19,7 @@ sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }
 sub search : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub search_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $name             = $c->req->params->{name};
     my $party_id         = $c->req->params->{party_id};
@@ -30,70 +31,78 @@ sub search_POST {
     my $page    = $c->req->params->{page}    || 1;
     my $results = $c->req->params->{results} || 20;
 
-    $c->stash->{collection} = $c->stash->{collection}->search(
-        { },
-        { page => $page, rows => $results }
-    );
+    $c->stash->{collection} = $c->stash->{collection}->search( {}, { page => $page, rows => $results } );
 
-    if ($c->req->params->{issue_priorities}) {
-        @issue_priorities = grep { int($_) == $_ } split(m{\s*,\s*}, $c->req->params->{issue_priorities});
+    if ( $c->req->params->{issue_priorities} ) {
+        @issue_priorities = grep { int($_) == $_ } split( m{\s*,\s*}, $c->req->params->{issue_priorities} );
     }
 
     if ($name) {
-        $c->stash->{collection} = $c->stash->{collection}->search({
-            '-or' => [
-                'me.name'         => { 'ilike' => "%${name}%" },
-                'me.popular_name' => { 'ilike' => "%${name}%" },
-            ],
-        });
+        $c->stash->{collection} = $c->stash->{collection}->search(
+            {
+                '-or' => [
+                    'me.name'         => { 'ilike' => "%${name}%" },
+                    'me.popular_name' => { 'ilike' => "%${name}%" },
+                ],
+            }
+        );
     }
 
     if ($party_id) {
-        $c->stash->{collection} = $c->stash->{collection}->search({
-            'me.party_id' => $party_id,
-        });
+        $c->stash->{collection} = $c->stash->{collection}->search(
+            {
+                'me.party_id' => $party_id,
+            }
+        );
     }
 
     if ($office_id) {
-        $c->stash->{collection} = $c->stash->{collection}->search({
-            'me.office_id' => $office_id,
-        });
+        $c->stash->{collection} = $c->stash->{collection}->search(
+            {
+                'me.office_id' => $office_id,
+            }
+        );
     }
 
     if (@issue_priorities) {
         $c->stash->{collection} = $c->stash->{collection}->search(
             { '-or' => [ map { 'candidate_issue_priorities.issue_priority_id' => $_ }, @issue_priorities ] },
-            { join  => 'candidate_issue_priorities' },
+            { join => 'candidate_issue_priorities' },
         );
     }
 
     if ($address_state) {
-        $c->stash->{collection} = $c->stash->{collection}->search({ address_state => { 'ilike' => $address_state } });
+        $c->stash->{collection} = $c->stash->{collection}->search( { address_state => { 'ilike' => $address_state } } );
     }
 
     if ($address_city) {
-        $c->stash->{collection} = $c->stash->{collection}->search({ address_city => { 'ilike' => $address_city } });
+        $c->stash->{collection} = $c->stash->{collection}->search( { address_city => { 'ilike' => $address_city } } );
     }
 
-    my @random = shuffle $c->stash->{collection}->search({
-        status         => "activated",
-        payment_status => "paid",
-    },
-    {
-        prefetch     => ['party'],
-        result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-    })->all();
+    my @random = shuffle $c->stash->{collection}->search(
+        {
+            status         => "activated",
+            payment_status => "paid",
+        },
+        {
+            prefetch     => ['party'],
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+        }
+    )->all();
 
-    my @candidates ;
+    my @candidates;
     for my $candidate (@random) {
         push @candidates, {
-            (map { $_ => $candidate->{$_} } qw(
-              id name popular_name username address_state address_city address_street picture website_url party
-            )),
+            (
+                map { $_ => $candidate->{$_} }
+                  qw(
+                  id name popular_name username address_state address_city address_street picture website_url party
+                  )
+            ),
         };
     }
 
-    return $self->status_ok($c, entity => \@candidates);
+    return $self->status_ok( $c, entity => \@candidates );
 }
 
 =encoding utf8

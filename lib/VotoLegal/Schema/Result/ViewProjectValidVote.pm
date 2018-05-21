@@ -1,4 +1,5 @@
 use common::sense;
+
 package VotoLegal::Schema::Result::ViewProjectValidVote;
 use base qw(DBIx::Class::Core);
 
@@ -7,9 +8,7 @@ __PACKAGE__->table_class('DBIx::Class::ResultSource::View');
 # For the time being this is necessary even for virtual views
 __PACKAGE__->table('ViewProjectValidVote');
 
-__PACKAGE__->add_columns(
-    qw(id candidate_id title scope votes)
-);
+__PACKAGE__->add_columns(qw(id candidate_id title scope votes));
 
 # do not attempt to deploy() this view
 __PACKAGE__->result_source_instance->is_virtual(1);

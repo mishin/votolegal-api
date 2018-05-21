@@ -33,26 +33,22 @@ has template => (
 );
 
 has vars => (
-    is       => "ro",
-    isa      => "HashRef",
-    default  => sub { {} },
+    is      => "ro",
+    isa     => "HashRef",
+    default => sub { {} },
 );
 
 sub build_email {
     my ($self) = @_;
 
-    my $tt = Template->new(EVAL_PERL => 0);
+    my $tt = Template->new( EVAL_PERL => 0 );
 
-    my $content ;
-    $tt->process(
-        \$self->template,
-        $self->vars,
-        \$content,
-    );
+    my $content;
+    $tt->process( \$self->template, $self->vars, \$content, );
 
     my $email = MIME::Lite->new(
         To       => $self->to,
-        Subject  => Encode::encode("MIME-Header", $self->subject),
+        Subject  => Encode::encode( "MIME-Header", $self->subject ),
         From     => $self->from,
         Type     => "text/html",
         Data     => $content,

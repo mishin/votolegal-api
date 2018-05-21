@@ -16,28 +16,26 @@ my $config = new Config::General("$RealBin/../votolegal.conf");
 $config = { $config->getall };
 
 # Schema.
-my $schema = VotoLegal::Schema->connect($config->{model}->{DB}->{connect_info});
+my $schema = VotoLegal::Schema->connect( $config->{model}->{DB}->{connect_info} );
 
 # Buscando candidatos ativos.
-my $candidate_rs = $schema->resultset('Candidate')->search({
-    status         => "activated",
-    payment_status => "paid",
-});
+my $candidate_rs = $schema->resultset('Candidate')->search(
+    {
+        status         => "activated",
+        payment_status => "paid",
+    }
+);
 
 printf "%d candidatos encontrados.\n", $candidate_rs->count;
 
-while (my $candidate = $candidate_rs->next()) {
+while ( my $candidate = $candidate_rs->next() ) {
     my $merchant_id  = $candidate->merchant_id;
     my $merchant_key = $candidate->merchant_key;
 
-    if (!$merchant_id || !$merchant_key) {
+    if ( !$merchant_id || !$merchant_key ) {
         printf(
-            "'%s' (id %d) não configurou os dados de pagamento corretamente. [merchant_id: '%s'] [merchant_key: '%s']\n",
-            $candidate->name,
-            $candidate->id,
-            $merchant_id,
-            $merchant_key,
-        );
+"'%s' (id %d) não configurou os dados de pagamento corretamente. [merchant_id: '%s'] [merchant_key: '%s']\n",
+            $candidate->name, $candidate->id, $merchant_id, $merchant_key, );
         next;
     }
 
@@ -49,15 +47,10 @@ while (my $candidate = $candidate_rs->next()) {
 
     my $session = $pagseguro->createSession();
 
-    if (!$session) {
+    if ( !$session ) {
         printf(
-            "'%s' (id %d) não configurou os dados de pagamento corretamente. Fone: '%s'. [merchant_id: '%s'] [merchant_key: '%s']\n",
-            $candidate->name,
-            $candidate->id,
-            $candidate->phone,
-            $merchant_id,
-            $merchant_key,
-        );
+"'%s' (id %d) não configurou os dados de pagamento corretamente. Fone: '%s'. [merchant_id: '%s'] [merchant_key: '%s']\n",
+            $candidate->name, $candidate->id, $candidate->phone, $merchant_id, $merchant_key, );
     }
 }
 

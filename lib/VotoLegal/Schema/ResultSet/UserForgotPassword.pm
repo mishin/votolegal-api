@@ -22,16 +22,18 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 email => {
-                    required => 1,
-                    type     => EmailAddress,
-                    filters => [qw(lower)],
+                    required   => 1,
+                    type       => EmailAddress,
+                    filters    => [qw(lower)],
                     post_check => sub {
                         my $r = shift;
 
-                        $self->result_source->schema->resultset('User')->search({
-                            email => $r->get_value('email'),
-                        })->count;
-                    }
+                        $self->result_source->schema->resultset('User')->search(
+                            {
+                                email => $r->get_value('email'),
+                            }
+                        )->count;
+                      }
                 },
             }
         ),
@@ -49,28 +51,30 @@ sub action_specs {
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             my $email = $values{email};
-            my $user  = $self->result_source->schema->resultset('User')->search({ email => $email })->next;
+            my $user = $self->result_source->schema->resultset('User')->search( { email => $email } )->next;
 
             # Inativando os tokens existentes desse usuário por segurança.
-            $self->search({
-                user_id     => $user->id,
-                valid_until => { '>=' => \'NOW()' },
-            })
-            ->update({ valid_until => \"(NOW() - '1 second'::interval)" });
+            $self->search(
+                {
+                    user_id     => $user->id,
+                    valid_until => { '>=' => \'NOW()' },
+                }
+            )->update( { valid_until => \"(NOW() - '1 second'::interval)" } );
 
             # Criando um token válido por 24 horas.
-            my $forgot_password = $self->create({
-                user        => $user,
-                token       => sha1_hex(Time::HiRes::time()),
-                valid_until => \"(NOW() + '1 days'::interval)",
-            });
+            my $forgot_password = $self->create(
+                {
+                    user        => $user,
+                    token       => sha1_hex( Time::HiRes::time() ),
+                    valid_until => \"(NOW() + '1 days'::interval)",
+                }
+            );
 
-            $user->send_email_forgot_password($forgot_password->token);
+            $user->send_email_forgot_password( $forgot_password->token );
 
             return $forgot_password;
         },
     };
 }
-
 
 1;

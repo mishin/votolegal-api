@@ -32,29 +32,31 @@ has ua => (
     is      => "rw",
     isa     => "Furl",
     default => sub {
-        Furl->new(
-            ssl_opts => { SSL_verify_mode => SSL_VERIFY_NONE },
-        )
+        Furl->new( ssl_opts => { SSL_verify_mode => SSL_VERIFY_NONE }, );
     },
     lazy => 1,
 );
 
-has logger => (
-    is => "rw",
-);
+has logger => ( is => "rw", );
 
 sub endpoint {
-    my ($self, $action) = @_;
+    my ( $self, $action ) = @_;
 
-    die \['action', 'invalid'] unless $action =~ m{^(transaction|notification|session)$};
+    die \[ 'action', 'invalid' ] unless $action =~ m{^(transaction|notification|session)$};
 
     # A API do PagSeguro atualmente (11/04/2018)
     # possui seu endpoint de transação e sessão
     # na v2 e o endpoint de consulta de notificação no v3
 
-    my $endpoint = $self->sandbox
-        ? ( $action eq 'transaction' || $action eq 'session' ? "https://ws.sandbox.pagseguro.uol.com.br/v2/" : "https://ws.sandbox.pagseguro.uol.com.br/v3/")
-        : ( $action eq 'transaction' || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/"         : "https://ws.pagseguro.uol.com.br/v3/" );
+    my $endpoint =
+      $self->sandbox
+      ? (
+        $action eq 'transaction' || $action eq 'session'
+        ? "https://ws.sandbox.pagseguro.uol.com.br/v2/"
+        : "https://ws.sandbox.pagseguro.uol.com.br/v3/"
+      )
+      : (    $action eq 'transaction'
+          || $action eq 'session' ? "https://ws.pagseguro.uol.com.br/v2/" : "https://ws.pagseguro.uol.com.br/v3/" );
 
     return $endpoint;
 }
@@ -73,90 +75,83 @@ sub createSession {
         }
     );
 
-    $self->logger->info($req->request->as_string) if $self->logger;
-    $self->logger->info("PagSeguro session: " . $req->content) if $self->logger;
+    $self->logger->info( $req->request->as_string ) if $self->logger;
+    $self->logger->info( "PagSeguro session: " . $req->content ) if $self->logger;
 
-    if ($req->is_success()) {
-        my $xml = XMLin($req->content);
+    if ( $req->is_success() ) {
+        my $xml = XMLin( $req->content );
 
-        if (ref $xml) {
+        if ( ref $xml ) {
 
             return $xml;
         }
     }
 
-    return ;
+    return;
 }
 
 sub transaction {
-    my ($self, $args) = @_;
+    my ( $self, $args ) = @_;
 
     my $merchant_id  = $self->merchant_id;
     my $merchant_key = $self->merchant_key;
 
     my $action = 'transaction';
 
-    my $req = $self->ua->post(
-        $self->endpoint($action) . "transactions/?email=$merchant_id&token=$merchant_key",
-        [ 'Content-Type', 'application/xml' ],
-        $args
-    );
+    my $req = $self->ua->post( $self->endpoint($action) . "transactions/?email=$merchant_id&token=$merchant_key",
+        [ 'Content-Type', 'application/xml' ], $args );
 
-    $self->logger->info($req->request->as_http_request->as_string) if $self->logger;
-    $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;
+    $self->logger->info( $req->request->as_http_request->as_string ) if $self->logger;
+    $self->logger->info( "PagSeguro transaction: " . $req->content ) if $self->logger;
 
-    if ($req->is_success()) {
-        return XMLin($req->content);
+    if ( $req->is_success() ) {
+        return XMLin( $req->content );
     }
 
     return $req->content;
 }
 
 sub notification {
-    my ($self, $notificationCode) = @_;
+    my ( $self, $notificationCode ) = @_;
 
     my $action = 'transaction';
 
     defined $notificationCode or die "missing 'notification code'.";
 
-    my $req = $self->ua->get(
-        $self->endpoint($action)
-        . "transactions/notifications/"
-        . $notificationCode
-        . "?email="
-        . $self->merchant_id
-        . "&token="
-        . $self->merchant_key
-    );
+    my $req =
+      $self->ua->get( $self->endpoint($action)
+          . "transactions/notifications/"
+          . $notificationCode
+          . "?email="
+          . $self->merchant_id
+          . "&token="
+          . $self->merchant_key );
 
-    $self->logger->info("PagSeguro notification: " . $req->content) if $self->logger;
+    $self->logger->info( "PagSeguro notification: " . $req->content ) if $self->logger;
 
-    if ($req->is_success()) {
-        return XMLin($req->content);
+    if ( $req->is_success() ) {
+        return XMLin( $req->content );
     }
 
-    return ;
+    return;
 }
 
 sub transaction_data {
-    my ($self, $code) = @_;
+    my ( $self, $code ) = @_;
 
     my $merchant_id  = $self->merchant_id;
     my $merchant_key = $self->merchant_key;
 
     my $action = 'transaction';
 
-    my $req = $self->ua->get(
-        $self->endpoint($action) . "transactions/$code?email=$merchant_id&token=$merchant_key",
-        [],
-        transactionCode => $code
-    );
+    my $req = $self->ua->get( $self->endpoint($action) . "transactions/$code?email=$merchant_id&token=$merchant_key",
+        [], transactionCode => $code );
 
-    $self->logger->info($req->request->as_http_request->as_string) if $self->logger;
-    $self->logger->info("PagSeguro transaction: " . $req->content) if $self->logger;
+    $self->logger->info( $req->request->as_http_request->as_string ) if $self->logger;
+    $self->logger->info( "PagSeguro transaction: " . $req->content ) if $self->logger;
 
-    if ($req->is_success()) {
-        return XMLin($req->content);
+    if ( $req->is_success() ) {
+        return XMLin( $req->content );
     }
 
     return $req->content;

@@ -10,7 +10,7 @@ BEGIN {
 }
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VotoLegal', 'Create');
+Catalyst::ScriptRunner->run( 'VotoLegal', 'Create' );
 
 1;
 

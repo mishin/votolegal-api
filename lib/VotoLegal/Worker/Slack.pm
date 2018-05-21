@@ -28,13 +28,10 @@ sub listen_queue {
 
     $self->logger->debug("Buscando itens na fila...") if $self->logger;
 
-    my @items = $self->schema->resultset('SlackQueue')->search(
-        {},
-        { rows => 20 },
-    )->all;
+    my @items = $self->schema->resultset('SlackQueue')->search( {}, { rows => 20 }, )->all;
 
     if (@items) {
-        $self->logger->info(sprintf("'%d' itens serão processados.", scalar @items)) if $self->logger;
+        $self->logger->info( sprintf( "'%d' itens serão processados.", scalar @items ) ) if $self->logger;
 
         for my $item (@items) {
             $self->exec_item($item);
@@ -48,39 +45,37 @@ sub listen_queue {
 }
 
 sub run_once {
-    my ($self, $item_id) = @_;
+    my ( $self, $item_id ) = @_;
 
-    my $item ;
-    if (defined($item_id)) {
+    my $item;
+    if ( defined($item_id) ) {
         $item = $self->schema->resultset('SlackQueue')->find($item_id);
     }
     else {
         $item = $self->schema->resultset('SlackQueue')->search(
             undef,
             {
-                order_by => [ 'created_at' ],
+                order_by => ['created_at'],
                 rows     => 1,
             },
         )->next;
     }
 
-    if (ref $item) {
+    if ( ref $item ) {
         return $self->exec_item($item);
     }
     return 0;
 }
 
 sub exec_item {
-    my ($self, $item) = @_;
+    my ( $self, $item ) = @_;
 
-    $self->logger->debug(sprintf("[#%s] %s", $item->channel, $item->message)) if $self->logger;
+    $self->logger->debug( sprintf( "[#%s] %s", $item->channel, $item->message ) ) if $self->logger;
 
     # Parametrizando o 'channel'.
     $self->slack->{channel} = $item->channel;
 
-    eval {
-        $self->slack->post(text => $item->message) unless is_test();
-    };
+    eval { $self->slack->post( text => $item->message ) unless is_test(); };
     return 0 if $@;
 
     $item->delete();

@@ -6,7 +6,7 @@ use namespace::autoclean;
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/api/candidate/base') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model("DB::CandidateMandatoAbertoIntegration");
 }
@@ -16,23 +16,23 @@ sub base : Chained('root') : PathPart('mandatoaberto_integration') : CaptureArgs
 sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub list_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $security_token = $c->req->params->{security_token};
-    die \['security_token', 'missing'] unless $security_token;
-    die \['security_token', 'invalid'] unless $security_token eq $ENV{MANDATOABERTO_SECURITY_TOKEN};
+    die \[ 'security_token', 'missing' ] unless $security_token;
+    die \[ 'security_token', 'invalid' ] unless $security_token eq $ENV{MANDATOABERTO_SECURITY_TOKEN};
 
     my $email = $c->req->params->{email};
-    die \['email', 'missing'] unless $email;
+    die \[ 'email', 'missing' ] unless $email;
 
     my $candidate_user = $c->model("DB::User")->search( { email => $email } )->next;
-    die \['email', 'could not find user with that email'] unless $candidate_user;
+    die \[ 'email', 'could not find user with that email' ] unless $candidate_user;
 
     my $candidate = $candidate_user->candidates->search()->next;
-    die \['email', 'user is not a candidate'] unless $candidate;
+    die \[ 'email', 'user is not a candidate' ] unless $candidate;
 
     my $mandatoaberto_id = $c->req->params->{mandatoaberto_id};
-    die \['mandatoaberto_id', 'missing'] unless $mandatoaberto_id;
+    die \[ 'mandatoaberto_id', 'missing' ] unless $mandatoaberto_id;
 
     my $mandatoaberto_integration = $c->stash->{collection}->execute(
         $c,
@@ -49,7 +49,7 @@ sub list_POST {
             id       => $candidate->id,
             username => $candidate->username
         }
-    )
+    );
 }
 
 __PACKAGE__->meta->make_immutable;

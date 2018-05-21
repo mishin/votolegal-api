@@ -8,14 +8,14 @@ use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) {}
+sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }
 
 sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub session_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $pagseguro = VotoLegal::Payment::PagSeguro->new(
         merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
@@ -27,12 +27,12 @@ sub session_GET {
 
     my $session = $pagseguro->createSession();
 
-    if (!$session) {
-        $self->status_bad_request($c, message => 'Invalid gateway response');
+    if ( !$session ) {
+        $self->status_bad_request( $c, message => 'Invalid gateway response' );
         $c->detach();
     }
 
-    return $self->status_ok($c, entity => { id => $session->{id} });
+    return $self->status_ok( $c, entity => { id => $session->{id} } );
 }
 
 =encoding utf8

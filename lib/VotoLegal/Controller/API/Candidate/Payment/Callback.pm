@@ -12,7 +12,7 @@ with 'CatalystX::Eta::Controller::TypesValidation';
 sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::PaymentNotification');
 
@@ -24,7 +24,7 @@ sub callback_POST {
     my ( $self, $c ) = @_;
 
     my $notification_code = $c->req->params->{notificationCode};
-    die \['notificationCode', 'missing'] unless $notification_code;
+    die \[ 'notificationCode', 'missing' ] unless $notification_code;
 
     my $notify = $c->stash->{collection}->execute(
         $c,
@@ -35,15 +35,13 @@ sub callback_POST {
     if ( my $req = $c->stash->{pagseguro}->notification($notification_code) ) {
         my $status = $req->{status};
 
-
-        if ($status == 3 || $status == 4) {
+        if ( $status == 3 || $status == 4 ) {
 
             $c->stash->{candidate}->update( { payment_status => "paid" } );
             $c->stash->{candidate}->send_payment_approved_email();
 
             # Criando entrada no log
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
-
 
             $c->model("DB::PaymentLog")->create(
                 {
@@ -53,7 +51,7 @@ sub callback_POST {
             );
 
         }
-        elsif ($status == 6 || $status == 7) {
+        elsif ( $status == 6 || $status == 7 ) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
             $c->model("DB::PaymentLog")->create(
                 {
@@ -64,7 +62,7 @@ sub callback_POST {
             $c->stash->{candidate}->send_payment_not_approved_email();
 
         }
-        elsif ($status == 2) {
+        elsif ( $status == 2 ) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
             $c->model("DB::PaymentLog")->create(
                 {
@@ -79,7 +77,7 @@ sub callback_POST {
 }
 
 sub callback_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     return $self->status_ok(
         $c,

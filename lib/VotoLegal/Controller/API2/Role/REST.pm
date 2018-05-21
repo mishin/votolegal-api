@@ -54,7 +54,6 @@ sub end : Private {
         }
         elsif ( ref $top eq 'DBIx::Class::Exception' ) {
 
-
             if ( $top =~ /violates not-null constraint/ ) {
 
                 my ($col) = $top =~ /column "([^"]+)" violates/;
@@ -92,7 +91,7 @@ sub end : Private {
         eval {
             $err = substr( $err, 0, 350 ) . ':koko:' . substr( $err, -250 )
               if length $err > 603;
-            remote_notify(  "Erro 500 $err", channel => '#api-error' );
+            remote_notify( "Erro 500 $err", channel => '#api-error' );
         };
         $c->stash->{rest} = [
             {

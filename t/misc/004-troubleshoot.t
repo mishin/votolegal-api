@@ -10,17 +10,17 @@ my $schema = VotoLegal->model('DB');
 
 db_transaction {
     rest_post '/api/troubleshoot',
-        name   => "contact",
-        stash  => 't1',
-        code   => 200,
-        params => {
-            route => "/api/troubleshoot",
-            error => "TypeError: 'undefined' is not a function",
-        },
-    ;
+      name   => "contact",
+      stash  => 't1',
+      code   => 200,
+      params => {
+        route => "/api/troubleshoot",
+        error => "TypeError: 'undefined' is not a function",
+      },
+      ;
 
     my $email = stash 't1';
-    ok ($schema->resultset('EmailQueue')->find($email->{id}), 'email queued');
+    ok( $schema->resultset('EmailQueue')->find( $email->{id} ), 'email queued' );
 };
 
 done_testing();

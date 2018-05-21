@@ -6,7 +6,7 @@ use Test::More;
 
 use_ok 'VotoLegal::Utils';
 
-ok (is_test(), 'is_test');
+ok( is_test(), 'is_test' );
 
 done_testing();
 

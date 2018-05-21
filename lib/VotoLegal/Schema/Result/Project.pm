@@ -81,17 +81,14 @@ sub action_specs {
 
             my %values = $r->valid_values;
 
-            %values = map {
-                $_ => $r->get_original_value($_)
-            } keys %values;
+            %values = map { $_ => $r->get_original_value($_) } keys %values;
 
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            return $self->update(\%values);
+            return $self->update( \%values );
         },
     };
 }
-
 
 __PACKAGE__->meta->make_immutable;
 1;

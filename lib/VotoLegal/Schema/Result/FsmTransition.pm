@@ -30,7 +30,6 @@ __PACKAGE__->set_primary_key("fsm_class", "from_state", "to_state");
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VYy3hhoN4lYvzET9/RA60Q
 
-
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
 1;

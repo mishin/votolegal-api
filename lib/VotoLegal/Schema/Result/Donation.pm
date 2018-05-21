@@ -187,15 +187,13 @@ has _transaction_id => (
     isa => "Str",
 );
 
-has logger => (
-    is => "rw",
-);
-
+has logger => ( is => "rw", );
 
 sub tokenize {
     my ($self) = @_;
 
-    if ($self->payment_gateway_id == 1) {
+    if ( $self->payment_gateway_id == 1 ) {
+
         # Cielo.
         defined $self->credit_card_name     or die "missing 'credit_card_name'.";
         defined $self->credit_card_validity or die "missing 'credit_card_validity'.";
@@ -223,12 +221,13 @@ sub tokenize {
             }
         );
 
-        $self->update({ status => "tokenized" });
+        $self->update( { status => "tokenized" } );
         return 1;
     }
-    elsif ($self->payment_gateway_id == 2) {
+    elsif ( $self->payment_gateway_id == 2 ) {
+
         # PagSeguro.
-        if (defined($self->credit_card_token)) {
+        if ( defined( $self->credit_card_token ) ) {
             return 1;
         }
     }
@@ -239,18 +238,21 @@ sub tokenize {
 sub authorize {
     my ($self) = @_;
 
-    if ($self->payment_gateway_id == 1) {
+    if ( $self->payment_gateway_id == 1 ) {
+
         # Cielo.
-        if ($self->driver->do_authorization()) {
-            $self->update({ status => "authorized" });
+        if ( $self->driver->do_authorization() ) {
+            $self->update( { status => "authorized" } );
             return 1;
         }
     }
-    elsif ($self->payment_gateway_id == 2) {
+    elsif ( $self->payment_gateway_id == 2 ) {
+
         # PagSeguro.
         return 1;
     }
-    elsif ($self->payment_gateway_id == 3) {
+    elsif ( $self->payment_gateway_id == 3 ) {
+
         # Iugu
         my $opts = $self->build_iugu_invoice_data();
         if ( $self->driver->do_authorization( %{$opts} ) ) {
@@ -265,14 +267,17 @@ sub authorize {
 sub capture {
     my ($self) = @_;
 
-    if ($self->payment_gateway_id == 1 || $self->payment_gateway_id == 3) {
+    if ( $self->payment_gateway_id == 1 || $self->payment_gateway_id == 3 ) {
+
         # Cielo ou Iugu.
-        if ($self->driver->do_capture()) {
-            $self->update({
-                payment_gateway_code => $self->driver->payment_gateway_code,
-                status               => "captured",
-                captured_at          => \"now()",
-            });
+        if ( $self->driver->do_capture() ) {
+            $self->update(
+                {
+                    payment_gateway_code => $self->driver->payment_gateway_code,
+                    status               => "captured",
+                    captured_at          => \"now()",
+                }
+            );
             return 1;
         }
     }
@@ -282,14 +287,14 @@ sub capture {
         # Tratando alguns dados.
         my $billing_address_complement = $self->billing_address_complement;
         my $phone                      = $self->phone;
-        my $phoneDDD                   = substr($self->phone, 0, 2);
-        my $phoneNumber                = substr($self->phone, 2);
-        my $amount                     = sprintf("%.2f", $self->amount / 100);
+        my $phoneDDD                   = substr( $self->phone, 0, 2 );
+        my $phoneNumber                = substr( $self->phone, 2 );
+        my $amount                     = sprintf( "%.2f", $self->amount / 100 );
         my $birthdate                  = $self->birthdate->strftime("%d/%m/%Y");
         my $zipcode                    = $self->address_zipcode;
         my $cpf                        = $self->cpf;
-        $zipcode                       =~ s/\D//g;
-        $cpf                           =~ s/\D//g;
+        $zipcode =~ s/\D//g;
+        $cpf =~ s/\D//g;
 
         my $req = $self->driver->transaction(
             itemQuantity1             => 1,
@@ -341,7 +346,7 @@ sub capture {
 sub driver {
     my ($self) = @_;
 
-    if (ref $self->_driver) {
+    if ( ref $self->_driver ) {
         return $self->_driver;
     }
 
@@ -369,7 +374,7 @@ sub send_email {
 
     # Quando fui o primeiro, a mensagem é uma. Quando outras pessoas já doaram, a mensagem é outra.
     my $total_msg;
-    if ($people_donated > 0) {
+    if ( $people_donated > 0 ) {
         $total_msg = "e outras $people_donated pessoas já doaram";
     }
     else {
@@ -383,22 +388,25 @@ sub send_email {
         subject  => "Doação confirmada",
         template => get_data_section('email.tt'),
         vars     => {
-            donation_name    => $self->name,
-            donation_cpf     => $self->cpf,,
-            donation_amount  => sprintf("%.2f", ($self->amount / 100)),
-            donation_date    => $self->captured_at->strftime("%d/%m/%Y"),
-            candidate_name   => $self->candidate->name,
-            candidate_cnpj   => $self->candidate->cnpj,
-            candidate_cpf    => $self->candidate->cpf,
-            total_donations  => $total_msg,
+            donation_name => $self->name,
+            donation_cpf  => $self->cpf,
+            ,
+            donation_amount => sprintf( "%.2f", ( $self->amount / 100 ) ),
+            donation_date   => $self->captured_at->strftime("%d/%m/%Y"),
+            candidate_name  => $self->candidate->name,
+            candidate_cnpj  => $self->candidate->cnpj,
+            candidate_cpf   => $self->candidate->cpf,
+            total_donations => $total_msg,
             transaction_hash => $self->transaction_hash,
         }
     )->build_email();
 
     # Inserindo na queue.
-    return $self->result_source->schema->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->result_source->schema->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub send_email_canceled {
@@ -417,9 +425,11 @@ sub send_email_canceled {
     )->build_email();
 
     # Inserindo na queue.
-    return $self->result_source->schema->resultset('EmailQueue')->create({
-        body => $email->as_string,
-    });
+    return $self->result_source->schema->resultset('EmailQueue')->create(
+        {
+            body => $email->as_string,
+        }
+    );
 }
 
 sub build_iugu_invoice_data {
@@ -441,7 +451,7 @@ sub build_iugu_invoice_data {
                 number   => $self->address_house_number,
             }
         }
-    }
+    };
 }
 
 __PACKAGE__->meta->make_immutable;

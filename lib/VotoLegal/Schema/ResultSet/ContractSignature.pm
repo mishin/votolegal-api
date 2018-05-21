@@ -22,10 +22,10 @@ sub verifiers_specs {
                     post_check => sub {
                         my $user_id = $_[0]->get_value('user_id');
 
-                        die \['user_id', 'alredy signed contract'] if $self->search( { user_id => $user_id } )->next;
+                        die \[ 'user_id', 'alredy signed contract' ] if $self->search( { user_id => $user_id } )->next;
 
                         return 1;
-                    }
+                      }
                 },
                 ip_address => {
                     required => 1,
@@ -46,7 +46,7 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            my $contract_signature = $self->create(\%values);
+            my $contract_signature = $self->create( \%values );
 
             $contract_signature->user->send_email_contract_signed();
 
@@ -54,6 +54,5 @@ sub action_specs {
         },
     };
 }
-
 
 1;

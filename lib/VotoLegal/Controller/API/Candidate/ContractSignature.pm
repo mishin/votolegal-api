@@ -12,7 +12,7 @@ with "CatalystX::Eta::Controller::TypesValidation";
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
 
 sub base : Chained('root') : PathPart('contract_signature') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model("DB::ContractSignature");
 }
@@ -20,11 +20,11 @@ sub base : Chained('root') : PathPart('contract_signature') : CaptureArgs(0) {
 sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub list_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $user_id = $c->stash->{candidate}->user->id;
 
-    my $ipAddr = ($c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address);
+    my $ipAddr = ( $c->req->header("CF-Connecting-IP") || $c->req->header("X-Forwarded-For") || $c->req->address );
 
     my $contract_signature = $c->stash->{collection}->execute(
         $c,
@@ -37,8 +37,8 @@ sub list_POST {
 
     return $self->status_created(
         $c,
-        location => $c->uri_for_action($c->action, $c->req->captures, $contract_signature->id)->as_string,
-        entity   => { id => $contract_signature->id },
+        location => $c->uri_for_action( $c->action, $c->req->captures, $contract_signature->id )->as_string,
+        entity => { id => $contract_signature->id },
     );
 }
 

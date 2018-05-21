@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VotoLegal', 'Test');
+Catalyst::ScriptRunner->run( 'VotoLegal', 'Test' );
 
 1;
 

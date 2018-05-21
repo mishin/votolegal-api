@@ -17,10 +17,10 @@ Catalyst Controller.
 =cut
 
 sub root : Chained('/api/logged') : PathPart('admin') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    if (!$c->check_user_roles(qw(admin))) {
-        $self->status_forbidden($c, message => "access denied");
+    if ( !$c->check_user_roles(qw(admin)) ) {
+        $self->status_forbidden( $c, message => "access denied" );
         $c->detach();
     }
 }

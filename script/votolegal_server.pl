@@ -5,7 +5,7 @@ BEGIN {
 }
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VotoLegal', 'Server');
+Catalyst::ScriptRunner->run( 'VotoLegal', 'Server' );
 
 1;
 

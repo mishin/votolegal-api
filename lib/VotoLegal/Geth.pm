@@ -13,7 +13,7 @@ has binary => (
 );
 
 sub execute {
-    my ($self, $command) = @_;
+    my ( $self, $command ) = @_;
 
     defined $command or die "missing 'command'.";
 
@@ -21,7 +21,7 @@ sub execute {
 
     my @data = map { chomp; $_ } `echo '$command' | $binary attach 2>&1`;
 
-    return VotoLegal::Geth::Response->new(data => [ @data[9 .. $#data - 1] ]);
+    return VotoLegal::Geth::Response->new( data => [ @data[ 9 .. $#data - 1 ] ] );
 }
 
 sub isRunning {

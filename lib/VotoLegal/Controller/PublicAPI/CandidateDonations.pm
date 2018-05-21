@@ -55,7 +55,7 @@ sub donate_GET {
                 { id          => 'me.id' },
             ],
             join         => 'votolegal_donation_immutable',
-            order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' }],
+            order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
             page         => 1,
             rows         => 100,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
@@ -65,8 +65,8 @@ sub donate_GET {
     return $self->status_ok(
         $c,
         entity => {
-            donations => \@donations,
-            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
+            donations    => \@donations,
+            generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
         }
     );
 }
@@ -93,8 +93,8 @@ sub donators_name_GET {
     return $self->status_ok(
         $c,
         entity => {
-            names => [ map { $_->{name} } @donations ],
-            generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
+            names        => [ map                    { $_->{name} } @donations ],
+            generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
 
         }
     );

@@ -22,35 +22,39 @@ sub root : Chained('/api/admin/candidate/object') : PathPart('') : CaptureArgs(0
 sub activate : Chained('root') : PathPart('activate') : Args(0) : ActionClass('REST') { }
 
 sub activate_PUT {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $candidate = $c->stash->{candidate};
     my $status    = $candidate->status;
 
-    $candidate->update({
-        status => "activated",
-    });
+    $candidate->update(
+        {
+            status => "activated",
+        }
+    );
 
     #$candidate->send_email_approval() if $status eq "pending";
 
-    return $self->status_ok($c, entity => { id => $candidate->id });
+    return $self->status_ok( $c, entity => { id => $candidate->id } );
 }
 
 sub deactivate : Chained('root') : PathPart('deactivate') : Args(0) : ActionClass('REST') { }
 
 sub deactivate_PUT {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $candidate = $c->stash->{candidate};
     my $status    = $candidate->status;
 
-    $candidate->update({
-        status => "deactivated",
-    });
+    $candidate->update(
+        {
+            status => "deactivated",
+        }
+    );
 
     #$candidate->send_email_disapproval() if $status eq "pending";
 
-    return $self->status_ok($c, entity => { id => $candidate->id });
+    return $self->status_ok( $c, entity => { id => $candidate->id } );
 }
 
 =encoding utf8

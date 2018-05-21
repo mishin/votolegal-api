@@ -23,7 +23,7 @@ has config => (
     default => sub { {} },
 );
 
-around [ qw/ listen_queue run_once / ] => sub {
+around [qw/ listen_queue run_once /] => sub {
     my $orig = shift;
     my $self = shift;
 
@@ -39,7 +39,7 @@ around [ qw/ listen_queue run_once / ] => sub {
 sub has_log {
     my $self = shift;
 
-    if (ref $self->logger) {
+    if ( ref $self->logger ) {
         return 1;
     }
     return 0;

@@ -14,10 +14,10 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) { }
 sub base : Chained('root') : PathPart('contact') : CaptureArgs(0) { }
 
 sub contact : Chained('base') : Args(0) : PathPart('') {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     for (qw(name is_candidate email phone type message)) {
-        die \[$_, "missing"] unless defined $c->req->params->{$_};
+        die \[ $_, "missing" ] unless defined $c->req->params->{$_};
     }
 
     $c->req->params->{is_candidate} = $c->req->params->{is_candidate} ? "Sim" : "Não";
@@ -29,14 +29,13 @@ sub contact : Chained('base') : Args(0) : PathPart('') {
         template => get_data_section('contact.tt'),
         vars     => {
             user_agent => $c->req->user_agent || "N/A",
-            map { $_ => $c->req->params->{$_} }
-              qw(name is_candidate email phone type message)
+            map { $_ => $c->req->params->{$_} } qw(name is_candidate email phone type message)
         }
     )->build_email();
 
-    my $queued = $c->model('DB::EmailQueue')->create({ body => $email->as_string });
+    my $queued = $c->model('DB::EmailQueue')->create( { body => $email->as_string } );
 
-    return $self->status_ok($c, entity => { id => $queued->id });
+    return $self->status_ok( $c, entity => { id => $queued->id } );
 }
 
 =encoding utf8

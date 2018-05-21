@@ -30,20 +30,14 @@ has ua => (
     is      => "rw",
     isa     => "Furl",
     default => sub {
-        Furl->new(
-            ssl_opts => { SSL_verify_mode => SSL_VERIFY_NONE },
-        )
+        Furl->new( ssl_opts => { SSL_verify_mode => SSL_VERIFY_NONE }, );
     },
     lazy => 1,
 );
 
-has payment_gateway_code => (
-    is => "rw",
-);
+has payment_gateway_code => ( is => "rw", );
 
-has logger => (
-    is => "rw",
-);
+has logger => ( is => "rw", );
 
 my $domains = {
     sandbox    => "https://apisandbox.cieloecommerce.cielo.com.br/1/",
@@ -56,9 +50,9 @@ sub tokenize_credit_card {
     my $endpoint = $domains->{ $self->sandbox ? "sandbox" : "production" };
 
     # Tratando o campo 'ExpirationDate'.
-    my $credit_card_validity = $opts{credit_card_data}->{credit_card}->{validity};
-    my $credit_card_validity_year  = substr($credit_card_validity, 0, 4);
-    my $credit_card_validity_month = substr($credit_card_validity, 4);
+    my $credit_card_validity       = $opts{credit_card_data}->{credit_card}->{validity};
+    my $credit_card_validity_year  = substr( $credit_card_validity, 0, 4 );
+    my $credit_card_validity_month = substr( $credit_card_validity, 4 );
     $credit_card_validity = $credit_card_validity_month . "/" . $credit_card_validity_year;
 
     # Enviando a request.
@@ -71,29 +65,31 @@ sub tokenize_credit_card {
             RequestId      => Data::GUID->new->as_string,
 
         ],
-        encode_json({
-            MerchantOrderId => $opts{order_data}->{id},
-            Customer => {
-               Name => $opts{order_data}->{name},
-            },
-            Payment => {
-                Type         => "CreditCard",
-                Amount       => $opts{order_data}->{amount},
-                Installments => 1,
-                CreditCard   => {
-                    CardNumber     => $opts{credit_card_data}->{secret}->{number},
-                    Holder         => $opts{credit_card_data}->{credit_card}->{name_on_card},
-                    ExpirationDate => $credit_card_validity,
-                    SecurityCode   => $opts{credit_card_data}->{secret}->{cvv},
-                    Brand          => $self->_brand_to_bandeira($opts{credit_card_data}->{credit_card}->{brand}),
+        encode_json(
+            {
+                MerchantOrderId => $opts{order_data}->{id},
+                Customer        => {
+                    Name => $opts{order_data}->{name},
                 },
-            },
-        }),
+                Payment => {
+                    Type         => "CreditCard",
+                    Amount       => $opts{order_data}->{amount},
+                    Installments => 1,
+                    CreditCard   => {
+                        CardNumber     => $opts{credit_card_data}->{secret}->{number},
+                        Holder         => $opts{credit_card_data}->{credit_card}->{name_on_card},
+                        ExpirationDate => $credit_card_validity,
+                        SecurityCode   => $opts{credit_card_data}->{secret}->{cvv},
+                        Brand          => $self->_brand_to_bandeira( $opts{credit_card_data}->{credit_card}->{brand} ),
+                    },
+                },
+            }
+        ),
     );
 
-    $self->logger->info("Cielo: " . $req->content) if $self->logger;
+    $self->logger->info( "Cielo: " . $req->content ) if $self->logger;
 
-    if ($req->is_success) {
+    if ( $req->is_success ) {
         my $json       = decode_json $req->content;
         my $returnCode = $json->{Payment}->{ReturnCode};
 
@@ -101,11 +97,11 @@ sub tokenize_credit_card {
         # http://developercielo.github.io/Webservice-3.0/#sandbox
 
         # Não autorizado.
-        if (grep { $returnCode == $_ } qw(2 77 70 78 57 99)) {
-            die \['donation', "not authorized"];
+        if ( grep { $returnCode == $_ } qw(2 77 70 78 57 99) ) {
+            die \[ 'donation', "not authorized" ];
         }
 
-        $self->payment_gateway_code($json->{Payment}->{PaymentId});
+        $self->payment_gateway_code( $json->{Payment}->{PaymentId} );
         return 1;
     }
 
@@ -135,12 +131,12 @@ sub do_capture {
         ],
         {},
     );
-    $self->logger->info("Cielo: " . $req->content) if $self->logger;
+    $self->logger->info( "Cielo: " . $req->content ) if $self->logger;
 
-    if ($req->is_success) {
+    if ( $req->is_success ) {
         my $json = decode_json $req->content;
 
-        if ($json->{Status} == 2) {
+        if ( $json->{Status} == 2 ) {
             return 1;
         }
     }
@@ -149,7 +145,7 @@ sub do_capture {
 }
 
 sub _brand_to_bandeira {
-    my ($self, $brand) = @_;
+    my ( $self, $brand ) = @_;
 
     my $from_to = {
         'visa'            => 'Visa',

@@ -23,9 +23,12 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
-                        $self->search({
-                            username => $r->get_value('username'),
-                        })->count and die \["username", "already exists"];
+                        $self->search(
+                            {
+                                username => $r->get_value('username'),
+                            }
+                          )->count
+                          and die \[ "username", "already exists" ];
 
                         return 1;
                     },
@@ -36,12 +39,15 @@ sub verifiers_specs {
                     post_check => sub {
                         my $r = shift;
 
-                        $self->search({
-                            email => $r->get_value('email'),
-                        })->count and die \["email", "already exists"];
+                        $self->search(
+                            {
+                                email => $r->get_value('email'),
+                            }
+                          )->count
+                          and die \[ "email", "already exists" ];
 
                         return 1;
-                    }
+                      }
                 },
                 password => {
                     required => 1,
@@ -55,10 +61,7 @@ sub verifiers_specs {
 sub action_specs {
     my ($self) = @_;
 
-    return {
-        create => sub { 1 },
-    };
+    return { create => sub { 1 }, };
 }
-
 
 1;

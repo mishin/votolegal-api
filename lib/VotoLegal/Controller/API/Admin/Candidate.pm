@@ -20,10 +20,12 @@ with 'CatalystX::Eta::Controller::Search';
 with 'CatalystX::Eta::Controller::Order';
 
 __PACKAGE__->config(
+
     # Search
     search_ok => {
         status => 'Str',
     },
+
     # Order
     order_ok => {
         name => 1,
@@ -31,21 +33,21 @@ __PACKAGE__->config(
 );
 
 sub root : Chained('/api/admin/root') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    $c->stash->{collection} = $c->model('DB::Candidate')->search({}, { order_by => 'me.name' });
+    $c->stash->{collection} = $c->model('DB::Candidate')->search( {}, { order_by => 'me.name' } );
 }
 
 sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }
 
 sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
-    my ($self, $c, $candidate_id) = @_;
+    my ( $self, $c, $candidate_id ) = @_;
 
-    $c->stash->{object}    = $c->stash->{collection}->search({ id => $candidate_id });
+    $c->stash->{object} = $c->stash->{collection}->search( { id => $candidate_id } );
     $c->stash->{candidate} = $c->stash->{object}->single;
 
-    if (!$c->stash->{candidate}) {
-        $self->status_bad_request($c, message => "Candidate not found");
+    if ( !$c->stash->{candidate} ) {
+        $self->status_bad_request( $c, message => "Candidate not found" );
         $c->detach();
     }
 }
@@ -53,7 +55,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
 sub list : Chained('base') : PathPart('list') : Args(0) : ActionClass('REST') { }
 
 sub list_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $candidate_rs = $c->stash->{collection}->search(
         {},
@@ -65,24 +67,27 @@ sub list_GET {
         },
     );
 
-    my @rows ;
-    while (my $candidate = $candidate_rs->next()) {
+    my @rows;
+    while ( my $candidate = $candidate_rs->next() ) {
         push @rows, $candidate;
     }
 
-    return $self->status_ok($c, entity => \@rows);
+    return $self->status_ok( $c, entity => \@rows );
 }
 
 sub count : Chained('base') : PathPart('count') : Args(0) : ActionClass('REST') { }
 
 sub count_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    my $count = $c->stash->{collection}->search({})->count;
+    my $count = $c->stash->{collection}->search( {} )->count;
 
-    return $self->status_ok($c, entity => {
-        count => $count,
-    });
+    return $self->status_ok(
+        $c,
+        entity => {
+            count => $count,
+        }
+    );
 }
 
 =encoding utf8

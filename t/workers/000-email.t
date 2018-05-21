@@ -9,12 +9,15 @@ my $schema = VotoLegal->model('DB');
 db_transaction {
     use_ok 'VotoLegal::Worker::Email';
 
-    my $worker = new_ok('VotoLegal::Worker::Email', [
-        schema => $schema,
-        config => get_config,
-    ]);
+    my $worker = new_ok(
+        'VotoLegal::Worker::Email',
+        [
+            schema => $schema,
+            config => get_config,
+        ]
+    );
 
-    ok ($worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Email does VotoLegal::Worker');
+    ok( $worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Email does VotoLegal::Worker' );
 
     create_candidate;
     my $email_rs = $schema->resultset('EmailQueue');
@@ -22,7 +25,7 @@ db_transaction {
     #is ($email_rs->count, 1, 'email is queued');
 
     my $email = $email_rs->next;
-    ok ($worker->run_once($email->id), 'run once');
+    ok( $worker->run_once( $email->id ), 'run once' );
 
     #is ($email_rs->count, 0, 'email out of queue');
 };

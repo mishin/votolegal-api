@@ -22,7 +22,8 @@ if ( $ENV{VOTOLEGAL_API_LOG_DIR} ) {
     else {
         print STDERR "VOTOLEGAL_API_LOG_DIR is not a dir\n";
     }
-}else{
+}
+else {
     print STDERR "VOTOLEGAL_API_LOG_DIR Not configured\n";
 }
 

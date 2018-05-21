@@ -17,7 +17,7 @@ Catalyst Controller.
 =cut
 
 sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::Party');
 }
@@ -27,17 +27,12 @@ sub base : Chained('root') : PathPart('party') : CaptureArgs(0) { }
 sub party : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub party_GET {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
-    my @all = map {
-        {
-            id      => $_->id,
-            name    => $_->name,
-            acronym => $_->acronym,
-        }
-    } $c->stash->{collection}->search( undef, { order_by => 'acronym' } )->all();
+    my @all = map { { id => $_->id, name => $_->name, acronym => $_->acronym, } }
+      $c->stash->{collection}->search( undef, { order_by => 'acronym' } )->all();
 
-    return $self->status_ok($c, entity => { party => \@all });
+    return $self->status_ok( $c, entity => { party => \@all } );
 }
 
 =encoding utf8

@@ -88,7 +88,7 @@ sub _draw_machine {
 
     my $fms_simple = $self->_get_fms_simple( $opts{class} );
 
-    my $sc = $self->state_configuration($opts{class});
+    my $sc = $self->state_configuration( $opts{class} );
 
     sub generate_graphviz_code {
         my ( $sc, $self, %args ) = @_;
@@ -103,8 +103,7 @@ sub _draw_machine {
               : $rh_trans->{returned_value} =~ /GiveUP/ ? 'color = "#FF8000"'
               :                                           '';
 
-              $color = 'color = "#00cc1e"' if $sc->{$rh_trans->{from}}{auto_continue};
-
+            $color = 'color = "#00cc1e"' if $sc->{ $rh_trans->{from} }{auto_continue};
 
             $transitions .= sprintf "    %s -> %s [ label = \"%s\" $color];\n", $rh_trans->{from}, $rh_trans->{to},
               $rh_trans->{returned_value};

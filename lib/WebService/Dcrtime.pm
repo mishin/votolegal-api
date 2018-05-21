@@ -12,15 +12,15 @@ has 'ua' => (
     builder => '_build_ua',
 );
 
-BEGIN { defined($ENV{VOTOLEGAL_DCRTIME_API}) or die "Missing env 'VOTOLEGAL_DCRTIME_API'"; }
+BEGIN { defined( $ENV{VOTOLEGAL_DCRTIME_API} ) or die "Missing env 'VOTOLEGAL_DCRTIME_API'"; }
 
 sub timestamp {
-    my ($self, %opts) = @_;
+    my ( $self, %opts ) = @_;
 
     my $res;
     eval {
         retry {
-            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/timestamp/', [], encode_json(\%opts) );
+            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/timestamp/', [], encode_json( \%opts ) );
             die $res->decoded_content unless $res->is_success;
         }
         retry_if { shift() < 3 } catch { die $_; };
@@ -34,12 +34,12 @@ sub timestamp {
 }
 
 sub verify {
-    my ($self, %opts) = @_;
+    my ( $self, %opts ) = @_;
 
     my $res;
     eval {
         retry {
-            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/verify/', [], encode_json(\%opts) );
+            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/verify/', [], encode_json( \%opts ) );
             die $res->decoded_content unless $res->is_success;
         }
         retry_if { shift() < 3 } catch { die $_; };

@@ -72,9 +72,11 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            $self->user->update({
-                password => $values{new_password},
-            });
+            $self->user->update(
+                {
+                    password => $values{new_password},
+                }
+            );
 
             $self->delete();
 

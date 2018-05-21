@@ -829,7 +829,7 @@ sub setup_sucess_mock_iugu_boleto_success {
         'paid'                    => '35.00 BRL',
         'commission'              => '0.00 BRL',
         'customer_name'           => undef,
-        'paid_at'                       => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00',
+        'paid_at'                 => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00',
         'total_overpaid'          => '0.00 BRL',
         'discount'                => undef,
         'commission_cents'        => 0,

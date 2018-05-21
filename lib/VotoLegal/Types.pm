@@ -2,11 +2,11 @@ package VotoLegal::Types;
 use common::sense;
 
 use MooseX::Types -declare => [
-  qw(
-    NotTooBigString Int CEP
-    CPF CNPJ PositiveInt
-    EmailAddress PhoneNumber CommonLatinText
-  )
+    qw(
+      NotTooBigString Int CEP
+      CPF CNPJ PositiveInt
+      EmailAddress PhoneNumber CommonLatinText
+      )
 ];
 
 use Email::Valid;
@@ -23,49 +23,43 @@ use Business::BR::CNPJ qw(test_cnpj);
 use DateTime;
 use DateTime::Format::Pg;
 
-subtype PositiveInt,
-    as Int,
-    where { $_ >= 0 && $_ <= 2147483647 },
-  message { "Int is not larger than 0" };
+subtype PositiveInt, as Int, where { $_ >= 0 && $_ <= 2147483647 }, message { "Int is not larger than 0" };
 
-subtype CommonLatinText,
-    as Str,
-    where { $_ eq '_SET_NULL_' or $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
+subtype CommonLatinText, as Str,
+  where { $_ eq '_SET_NULL_' or $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:]+$/ },
   message { "Text include non latin scripts" };
 
 subtype CPF, as NonEmptyStr, where {
-  my $cpf = $_;
-  $cpf =~ s/\D+//g;
-  $cpf !~ /^0+$/ && test_cpf($cpf);
+    my $cpf = $_;
+    $cpf =~ s/\D+//g;
+    $cpf !~ /^0+$/ && test_cpf($cpf);
 };
 
 subtype CNPJ, as NonEmptyStr, where {
-  my $cnpj = $_;
-  $cnpj =~ s/\D+//g;
-  $cnpj !~ /^0+$/ && test_cnpj($cnpj);
+    my $cnpj = $_;
+    $cnpj =~ s/\D+//g;
+    $cnpj !~ /^0+$/ && test_cnpj($cnpj);
 };
 
 subtype NotTooBigString, as NonEmptyStr, where {
-  length($_) <= 1024
+    length($_) <= 1024;
 }, message { "'$_[0]' is too long (max length 1024)" };
 
 subtype CEP, as Str, where {
-  my $cep = $_;
-  $cep =~ s/\D+//g;
-  $cep =~ s/^(\d+)(\d{3})$/$1-$2/;
-  return test_cep($cep);
+    my $cep = $_;
+    $cep =~ s/\D+//g;
+    $cep =~ s/^(\d+)(\d{3})$/$1-$2/;
+    return test_cep($cep);
 }, message { "$_[0] is not a valid CEP" };
 
 coerce CEP, from Str, via {
-  s/\D+//g;
-  $_
+    s/\D+//g;
+    $_;
 };
 
-subtype EmailAddress,
-    as Str,
-    where { $_ eq '_SET_NULL_' or Email::Valid->address( -address => $_ ) eq $_ },
-    message { 'Must be a valid email address' }
-;
+subtype EmailAddress, as Str,
+  where { $_ eq '_SET_NULL_' or Email::Valid->address( -address => $_ ) eq $_ },
+  message { 'Must be a valid email address' };
 
 my $is_mobile_number = sub {
     my $num = shift;
@@ -74,9 +68,6 @@ my $is_mobile_number = sub {
     return $num =~ /^\+\d{10,16}$/ ? 1 : 0;
 };
 
-subtype PhoneNumber, as Str,
-  where   { $is_mobile_number->($_) },
-  message { "$_ phone number invalido" }
-;
+subtype PhoneNumber, as Str, where { $is_mobile_number->($_) }, message { "$_ phone number invalido" };
 
 1;

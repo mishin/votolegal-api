@@ -36,7 +36,7 @@ sub verifiers_specs {
                           and die \[ "email", "already exists" ];
 
                         return 1;
-                    }
+                      }
                 },
                 password => {
                     required   => 1,
@@ -192,7 +192,7 @@ sub verifiers_specs {
                           unless $birth_date =~ /^(\d{2}\/){2}\d{4}$/;
 
                         return 1;
-                    }
+                      }
                 },
                 political_movement_id => {
                     required   => 0,
@@ -205,7 +205,7 @@ sub verifiers_specs {
 
                         die \[ 'political_movement_id', 'could not find political movement with that id' ]
                           unless $political_movement;
-                    }
+                      }
                 }
             },
         ),

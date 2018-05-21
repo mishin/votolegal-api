@@ -5,9 +5,9 @@ use lib "$Bin/../lib";
 use VotoLegal::Test::Further;
 
 rest_get "/api/payment_gateway",
-    name  => "payment gateways",
-    stash => "p1",
-;
+  name  => "payment gateways",
+  stash => "p1",
+  ;
 
 stash_test 'p1' => sub {
     my $res = shift;

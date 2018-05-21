@@ -17,8 +17,8 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 notification_code => {
-                    required   => 1,
-                    type       => 'Str',
+                    required => 1,
+                    type     => 'Str',
                 },
             },
         ),
@@ -37,7 +37,7 @@ sub action_specs {
 
             my $notification = $self->search( { notification_code => $values{notification_code} } )->next;
 
-            $notification = $self->create(\%values) unless $notification;
+            $notification = $self->create( \%values ) unless $notification;
 
             return $notification;
         },

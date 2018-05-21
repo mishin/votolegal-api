@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('VotoLegal', 'FastCGI');
+Catalyst::ScriptRunner->run( 'VotoLegal', 'FastCGI' );
 
 1;
 

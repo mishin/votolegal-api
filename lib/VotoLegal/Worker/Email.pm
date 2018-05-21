@@ -8,9 +8,9 @@ use VotoLegal::Mailer;
 
 BEGIN {
     for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
-        defined($ENV{$_}) or die "missing env '$_'\n";
+        defined( $ENV{$_} ) or die "missing env '$_'\n";
     }
-};
+}
 
 has timer => (
     is      => "rw",
@@ -37,12 +37,12 @@ sub listen_queue {
         undef,
         {
             rows   => 20,
-            column => [ qw(me.id me.body) ],
+            column => [qw(me.id me.body)],
         },
     )->all;
 
     if (@items) {
-        $self->logger->info(sprintf("'%d' itens serão processados.", scalar @items)) if $self->logger;
+        $self->logger->info( sprintf( "'%d' itens serão processados.", scalar @items ) ) if $self->logger;
 
         for my $item (@items) {
             $self->exec_item($item);
@@ -56,10 +56,10 @@ sub listen_queue {
 }
 
 sub run_once {
-    my ($self, $item_id) = @_;
+    my ( $self, $item_id ) = @_;
 
-    my $item ;
-    if (defined($item_id)) {
+    my $item;
+    if ( defined($item_id) ) {
         $item = $self->schema->resultset('EmailQueue')->find($item_id);
     }
     else {
@@ -67,7 +67,7 @@ sub run_once {
             undef,
             {
                 rows   => 1,
-                column => [ qw(me.id me.body) ],
+                column => [qw(me.id me.body)],
             },
         )->next;
     }
@@ -79,11 +79,11 @@ sub run_once {
 }
 
 sub exec_item {
-    my ($self, $item) = @_;
+    my ( $self, $item ) = @_;
 
-    $self->logger->debug($item->body) if $self->logger;
+    $self->logger->debug( $item->body ) if $self->logger;
 
-    if ($self->mailer->send($item->body, $item->bcc)) {
+    if ( $self->mailer->send( $item->body, $item->bcc ) ) {
         $item->delete();
         return 1;
     }

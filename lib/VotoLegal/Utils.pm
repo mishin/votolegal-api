@@ -53,7 +53,6 @@ sub die_with_reason ($$) {
     die { msg_id => shift, reason => shift };
 }
 
-
 sub remote_notify {
     my ( $text, %opts ) = @_;
 

@@ -11,27 +11,29 @@ use VotoLegal::Schema;
 my $config = new Config::General("$RealBin/../votolegal.conf");
 $config = { $config->getall };
 
-my $schema = VotoLegal::Schema->connect($config->{model}->{DB}->{connect_info});
+my $schema = VotoLegal::Schema->connect( $config->{model}->{DB}->{connect_info} );
 
-my $candidate_rs = $schema->resultset('Candidate')->search({
-    cnpj   => { '!=' => undef },
-    cnpj   => { '!=' => "" },
-    status => "pending",
-});
+my $candidate_rs = $schema->resultset('Candidate')->search(
+    {
+        cnpj   => { '!=' => undef },
+        cnpj   => { '!=' => "" },
+        status => "pending",
+    }
+);
 
-while (my $candidate = $candidate_rs->next()) {
-    if (test_cnpj($candidate->cnpj)) {
-        $candidate->update({ status => "activated" });
+while ( my $candidate = $candidate_rs->next() ) {
+    if ( test_cnpj( $candidate->cnpj ) ) {
+        $candidate->update( { status => "activated" } );
 
-        $schema->resultset('SlackQueue')->create({
-            channel => "votolegal-bot",
-            message => sprintf(
-                "O candidato %s (%s) de CNPJ %s foi aprovado.",
-                $candidate->name,
-                $candidate->popular_name,
-                $candidate->cnpj,
-            ),
-        });
+        $schema->resultset('SlackQueue')->create(
+            {
+                channel => "votolegal-bot",
+                message => sprintf(
+                    "O candidato %s (%s) de CNPJ %s foi aprovado.",
+                    $candidate->name, $candidate->popular_name, $candidate->cnpj,
+                ),
+            }
+        );
     }
 }
 

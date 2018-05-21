@@ -13,14 +13,14 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 with 'CatalystX::Eta::Controller::TypesValidation';
 
 sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::Payment');
 
     my $candidate = $c->stash->{candidate};
 
-    if ($candidate->user->has_signed_contract == 0) {
-        $self->status_bad_request($c, message => 'user did not sign contract');
+    if ( $candidate->user->has_signed_contract == 0 ) {
+        $self->status_bad_request( $c, message => 'user did not sign contract' );
         $c->detach();
     }
 
@@ -33,33 +33,32 @@ sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
     );
 }
 
-sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) {}
+sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) { }
 
 sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub payment_POST {
-    my ($self, $c) = @_;
+    my ( $self, $c ) = @_;
 
     my $candidate = $c->stash->{candidate};
 
     my $method = $c->req->params->{method};
-    die \['method', 'missing'] unless $method;
+    die \[ 'method', 'missing' ] unless $method;
 
     my $credit_card_token = $c->req->params->{credit_card_token};
 
-    die \['credit_card_token', 'missing'] if $method eq 'creditCard' && !$credit_card_token;
-    die \['credit_card_token', 'should not be sent'] if $method eq 'boleto' && $credit_card_token;
+    die \[ 'credit_card_token', 'missing' ]            if $method eq 'creditCard' && !$credit_card_token;
+    die \[ 'credit_card_token', 'should not be sent' ] if $method eq 'boleto'     && $credit_card_token;
 
     my $payment = $c->stash->{collection}->execute(
         $c,
         for  => "create",
         with => {
-            %{$c->req->params},
-            candidate_id => $c->stash->{candidate}->id
+            %{ $c->req->params }, candidate_id => $c->stash->{candidate}->id
         }
     );
 
-    my $payment_execution = $payment->send_pagseguro_transaction($credit_card_token, $c->log);
+    my $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
 
     if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
 
@@ -73,7 +72,7 @@ sub payment_POST {
 
         $c->stash->{candidate}->send_payment_not_approved_email();
 
-        die \['Pagseguro: ', $payment_execution ];
+        die \[ 'Pagseguro: ', $payment_execution ];
     }
 
     $candidate->send_payment_in_analysis_email();

@@ -25,11 +25,12 @@ sub verifiers_specs {
                     post_check => sub {
                         my $candidate_id = $_[0]->get_value('candidate_id');
 
-                        die \['candidate_id', "can't find candidate with that id"]
-                            unless $self->result_source->schema->resultset('Candidate')->search( { id => $candidate_id } );
+                        die \[ 'candidate_id', "can't find candidate with that id" ]
+                          unless $self->result_source->schema->resultset('Candidate')
+                          ->search( { id => $candidate_id } );
 
                         return 1;
-                    }
+                      }
                 },
                 method => {
                     required   => 1,
@@ -37,10 +38,11 @@ sub verifiers_specs {
                     post_check => sub {
                         my $method = $_[0]->get_value('method');
 
-                        die \['method', "must be 'creditCard' or 'boleto'"] unless $method =~ m{^(creditCard|boleto)$};
+                        die \[ 'method', "must be 'creditCard' or 'boleto'" ]
+                          unless $method =~ m{^(creditCard|boleto)$};
 
                         return 1;
-                    }
+                      }
                 },
                 sender_hash => {
                     required => 1,
@@ -61,7 +63,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $state = $r->get_value('address_state');
-                        $self->result_source->schema->resultset('State')->search({ code => $state })->count;
+                        $self->result_source->schema->resultset('State')->search( { code => $state } )->count;
                     },
                 },
                 address_city => {
@@ -71,7 +73,7 @@ sub verifiers_specs {
                         my $r = shift;
 
                         my $city = $r->get_value('address_city');
-                        $self->result_source->schema->resultset('City')->search({ name => $city })->count;
+                        $self->result_source->schema->resultset('City')->search( { name => $city } )->count;
                     },
                 },
                 address_zipcode => {
@@ -86,20 +88,20 @@ sub verifiers_specs {
                     },
                 },
                 address_street => {
-                    required   => 1,
-                    type       => 'Str',
+                    required => 1,
+                    type     => 'Str',
                 },
                 address_house_number => {
-                    required   => 1,
-                    type       => 'Int',
+                    required => 1,
+                    type     => 'Int',
                 },
                 address_district => {
                     required => 1,
                     type     => "Str"
                 },
                 address_complement => {
-                    required   => 0,
-                    type       => 'Str',
+                    required => 0,
+                    type     => 'Str',
                 },
                 phone => {
                     required => 1,
@@ -120,7 +122,7 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            my $payment = $self->create(\%values);
+            my $payment = $self->create( \%values );
 
             # Criando entrada no log
             $self->result_source->schema->resultset("PaymentLog")->create(

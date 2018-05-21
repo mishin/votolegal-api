@@ -17,8 +17,8 @@ sub verifiers_specs {
             filters => [qw(trim)],
             profile => {
                 candidate_id => {
-                    required   => 1,
-                    type       => 'Int',
+                    required => 1,
+                    type     => 'Int',
                 },
                 mandatoaberto_id => {
                     required => 1,
@@ -39,10 +39,9 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            return $self->create(\%values);
+            return $self->create( \%values );
         },
     };
 }
-
 
 1;

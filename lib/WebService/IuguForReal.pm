@@ -15,18 +15,18 @@ BEGIN {
 
     if ( !is_test() || $ENV{TEST_IUGU} ) {
         die "Missing IUGU_API_TEST_MODE" unless defined $ENV{IUGU_API_TEST_MODE};
-        die "Missing IUGU_API_KEY"     unless $ENV{IUGU_API_KEY};
-        die "Missing IUGU_ACCOUNT_ID"  unless $ENV{IUGU_ACCOUNT_ID};
-        die "Missing IUGU_API_URL"     unless $ENV{IUGU_API_URL};
+        die "Missing IUGU_API_KEY"       unless $ENV{IUGU_API_KEY};
+        die "Missing IUGU_ACCOUNT_ID"    unless $ENV{IUGU_ACCOUNT_ID};
+        die "Missing IUGU_API_URL"       unless $ENV{IUGU_API_URL};
 
         $ENV{IUGU_MOCK} = 0;
     }
     else {
-        $ENV{IUGU_MOCK}        = 1;
+        $ENV{IUGU_MOCK}          = 1;
         $ENV{IUGU_API_TEST_MODE} = 1;
-        $ENV{IUGU_API_KEY}     = 'Fooba';
-        $ENV{IUGU_ACCOUNT_ID}  = 'Fooba';
-        $ENV{IUGU_API_URL}     = 'http://foobar.com';
+        $ENV{IUGU_API_KEY}       = 'Fooba';
+        $ENV{IUGU_ACCOUNT_ID}    = 'Fooba';
+        $ENV{IUGU_API_URL}       = 'http://foobar.com';
 
     }
 }
