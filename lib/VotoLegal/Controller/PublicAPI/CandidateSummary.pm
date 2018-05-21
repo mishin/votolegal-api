@@ -105,6 +105,8 @@ sub candidate_GET {
           )->all
     ];
 
+    $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement_id ? $c->stash->{candidate}->political_movement->name : ();
+
     return $self->status_ok(
         $c,
         entity => {
