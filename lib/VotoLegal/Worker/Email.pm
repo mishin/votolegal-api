@@ -6,12 +6,6 @@ with 'VotoLegal::Worker';
 
 use VotoLegal::Mailer;
 
-BEGIN {
-    for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
-        defined( $ENV{$_} ) or die "missing env '$_'\n";
-    }
-}
-
 has timer => (
     is      => "rw",
     default => 5,
@@ -93,7 +87,9 @@ sub exec_item {
 
 sub _build_mailer {
     my $self = shift;
-
+   for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
+        defined( $ENV{$_} ) or die "missing env '$_'\n";
+    }
     return VotoLegal::Mailer->new(
         smtp_server   => $ENV{EMAIL_SMTP_SERVER},
         smtp_port     => $ENV{EMAIL_SMTP_PORT},
