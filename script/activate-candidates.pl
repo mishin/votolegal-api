@@ -12,8 +12,8 @@ my $schema = get_schema;
 
 my $candidate_rs = $schema->resultset('Candidate')->search(
     {
-        cpf   => { '!=' => undef },
-        cpf   => { '!=' => "" },
+        cpf    => { '!=' => undef },
+        cpf    => { '!=' => "" },
         status => "pending",
     }
 );

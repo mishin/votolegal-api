@@ -30,7 +30,7 @@ sub verifiers_specs {
                           ->search( { id => $candidate_id } );
 
                         return 1;
-                      }
+                    }
                 },
                 method => {
                     required   => 1,
@@ -42,7 +42,7 @@ sub verifiers_specs {
                           unless $method =~ m{^(creditCard|boleto)$};
 
                         return 1;
-                      }
+                    }
                 },
                 sender_hash => {
                     required => 1,

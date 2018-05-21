@@ -47,7 +47,7 @@ sub verifiers_specs {
                           and die \[ "email", "already exists" ];
 
                         return 1;
-                      }
+                    }
                 },
                 password => {
                     required => 1,

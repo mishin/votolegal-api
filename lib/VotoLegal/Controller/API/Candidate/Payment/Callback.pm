@@ -37,7 +37,12 @@ sub callback_POST {
 
         if ( $status == 3 || $status == 4 ) {
 
-            $c->stash->{candidate}->update( { payment_status => "paid" } );
+            $c->stash->{candidate}->update(
+                {
+                    payment_status => "paid",
+                    status         => 'activated'
+                }
+            );
             $c->stash->{candidate}->send_payment_approved_email();
 
             # Criando entrada no log

@@ -10,7 +10,10 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
     my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
-        { status => 'activated' },
+        {
+            status  => 'activated',
+            publish => 1
+        },
         {
             '+columns' => {
                 address_state_name            => \'(select name from state x where x.code = me.address_state limit 1)',

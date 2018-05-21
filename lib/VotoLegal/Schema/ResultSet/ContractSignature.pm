@@ -25,7 +25,7 @@ sub verifiers_specs {
                         die \[ 'user_id', 'alredy signed contract' ] if $self->search( { user_id => $user_id } )->next;
 
                         return 1;
-                      }
+                    }
                 },
                 ip_address => {
                     required => 1,
