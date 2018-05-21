@@ -664,7 +664,7 @@ sub upsert_decred_data {
     if (!defined($data_raw) && !defined($data_digest)) {
         $data_raw = join(
             "\n",
-            "@@ DOADOR\n",
+            "@@ DOADOR @@\n",
             $self->id,
             $immutable->get_column('donor_name'),
             $immutable->get_column('donor_cpf'),
@@ -672,7 +672,7 @@ sub upsert_decred_data {
             $self->created_at->datetime(),
             $is_boleto ? 'Boleto' : 'Cartão de crédito',
             $immutable->get_column('git_hash'),
-            "\n@@ CANDIDATO\n",
+            "\n@@ CANDIDATO @@\n",
             $candidate->get_column('name'),
             $candidate->party->get_column('name'),
             $candidate->cpf_formated(),
