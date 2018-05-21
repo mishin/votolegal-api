@@ -923,7 +923,7 @@ sub candidate_has_payment_created {
     my $most_recent_payment_log =
       $most_recent_payment->payment_logs->search( undef, { order_by => { '-desc' => 'created_at' } } )->first;
 
-    if ( $most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured' ) {
+    if ( $most_recent_payment_log && ($most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured') ) {
         return 1;
     }
     else {
