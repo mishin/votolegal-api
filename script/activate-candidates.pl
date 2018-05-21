@@ -7,11 +7,9 @@ use Config::General;
 use Business::BR::CNPJ qw(test_cnpj);
 use VotoLegal::Schema;
 
-# Config.
-my $config = new Config::General("$RealBin/../votolegal.conf");
-$config = { $config->getall };
+use VotoLegal::SchemaConnected;
 
-my $schema = VotoLegal::Schema->connect( $config->{model}->{DB}->{connect_info} );
+my $schema = get_schema;
 
 my $candidate_rs = $schema->resultset('Candidate')->search(
     {
@@ -22,8 +20,6 @@ my $candidate_rs = $schema->resultset('Candidate')->search(
 );
 
 while ( my $candidate = $candidate_rs->next() ) {
-    if ( test_cnpj( $candidate->cnpj ) ) {
-        $candidate->update( { status => "activated" } );
-    }
+    $candidate->update( { status => "activated" } );
 }
 
