@@ -472,6 +472,8 @@ sub _create_donation {
                     billing_address_complement   => $values{billing_address_complement},
 
                     started_ip_address => $values{ip_address},
+
+                    git_hash => get_git_hash(),
                 }
             )->insert;
         }
@@ -480,6 +482,13 @@ sub _create_donation {
     $donation->discard_changes;
 
     return $donation;
+}
+
+sub get_git_hash {
+    my $git_hash = `git rev-parse HEAD`;
+    $git_hash =~ s/^\s+|\s+$//g;
+
+    return $git_hash;
 }
 
 sub _get_candidate_config {

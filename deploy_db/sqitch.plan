@@ -118,3 +118,5 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0112-emaildb [0111-config-db-values] 2018-05-19T18:50:50Z renato,,, <renato@renato-MS-7A34> # emaildb
 0113-min-donation [0112-emaildb] 2018-05-19T20:19:29Z renato,,, <renato@renato-MS-7A34> # min-donation
 0114-candidate_donation_summary [0113-min-donation] 2018-05-20T15:11:26Z renato,,, <renato@renato-MS-7A34> # cached big numbers
+0115-donation-decred [0114-candidate_donation_summary] 2018-05-20T23:36:31Z junior,,, <junior@fvox> # nation-decred
+0116-remove-decred-old-hash [0115-donation-decred] 2018-05-20T23:47:41Z renato,,, <renato@renato-MS-7A34> # decred_capture_registered_at

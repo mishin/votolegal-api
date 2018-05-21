@@ -9,7 +9,6 @@ use Config::General;
 use Daemon::Generic;
 use Log::Log4perl qw(:easy);
 
-
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/;
     load_envs_via_dbi();
@@ -67,7 +66,6 @@ sub gd_run {
     my $worker = VotoLegal::Worker::Blockchain->new(
         schema => get_schema(),
         logger => get_logger(),
-        config => \%config,
     );
 
     my $w = AnyEvent->timer(

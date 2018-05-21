@@ -145,18 +145,7 @@ __PACKAGE__->table("votolegal_donation");
   data_type: 'timestamp'
   is_nullable: 1
 
-=head2 decred_capture_hash
-
-  data_type: 'text'
-  is_nullable: 1
-  original: {data_type => "varchar"}
-
-=head2 decred_refund_registered_at
-
-  data_type: 'timestamp'
-  is_nullable: 1
-
-=head2 decred_refund_hash
+=head2 decred_capture_txid
 
   data_type: 'text'
   is_nullable: 1
@@ -167,9 +156,30 @@ __PACKAGE__->table("votolegal_donation");
   data_type: 'bigint'
   is_nullable: 1
 
+=head2 decred_merkle_root
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 decred_merkle_registered_at
+
+  data_type: 'timestamp'
+  is_nullable: 1
+
+=head2 decred_data_raw
+
+  data_type: 'text'
+  is_nullable: 1
+
+=head2 decred_data_digest
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
+
     "id",
     {
         data_type     => "uuid",
@@ -226,15 +236,7 @@ __PACKAGE__->add_columns(
     { data_type => "json", is_nullable => 1 },
     "decred_capture_registered_at",
     { data_type => "timestamp", is_nullable => 1 },
-    "decred_capture_hash",
-    {
-        data_type   => "text",
-        is_nullable => 1,
-        original    => { data_type => "varchar" },
-    },
-    "decred_refund_registered_at",
-    { data_type => "timestamp", is_nullable => 1 },
-    "decred_refund_hash",
+    "decred_capture_txid",
     {
         data_type   => "text",
         is_nullable => 1,
@@ -242,6 +244,14 @@ __PACKAGE__->add_columns(
     },
     "votolegal_fp",
     { data_type => "bigint", is_nullable => 1 },
+    "decred_merkle_root",
+    { data_type => "text", is_nullable => 1 },
+    "decred_merkle_registered_at",
+    { data_type => "timestamp", is_nullable => 1 },
+    "decred_data_raw",
+    { data_type => "text", is_nullable => 1 },
+    "decred_data_digest",
+    { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -337,6 +347,7 @@ __PACKAGE__->might_have(
 use Carp;
 use JSON::XS;
 use JSON qw/to_json from_json/;
+use Digest::SHA qw/ sha256_hex /;
 use WebService::Certiface;
 
 sub resultset { shift->result_source->resultset }
@@ -644,6 +655,36 @@ sub generate_boleto_description {
 
 }
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub upsert_decred_data {
+    my $self = shift;
+
+    my $immutable = $self->votolegal_donation_immutable;
+
+    my $data_raw    = $self->get_column('decred_data_raw');
+    my $data_digest = $self->get_column('decred_data_digest');
+
+    if ( !defined($data_raw) && !defined($data_digest) ) {
+        $data_raw = join( "\n",
+            $self->id,
+            $immutable->get_column('donor_name'),
+            $immutable->get_column('donor_cpf'),
+            $immutable->get_column('amount'),
+            $self->created_at->datetime(),
+            $immutable->get_column('git_hash'),
+        );
+
+        $data_digest = sha256_hex($data_raw);
+
+        $self->update(
+            {
+                decred_data_raw    => $data_raw,
+                decred_data_digest => $data_digest,
+            }
+        );
+    }
+
+    return $self->discard_changes;
+}
+
 __PACKAGE__->meta->make_immutable;
 1;

@@ -51,7 +51,8 @@ sub donate_GET {
                 { amount      => 'votolegal_donation_immutable.amount' },
                 { name        => 'votolegal_donation_immutable.donor_name' },
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
-                { hash        => 'me.decred_capture_hash' }
+                { hash        => 'me.decred_capture_txid' },
+                { id          => 'me.id' },
             ],
             join         => 'votolegal_donation_immutable',
             order_by     => [ { '-desc' => "captured_at" }, 'me.id' ],
@@ -94,6 +95,7 @@ sub donators_name_GET {
         entity => {
             names => [ map { $_->{name} } @donations ],
             generated_at => DateTime->now( time_zone=> 'America/Sao_Paulo' )->datetime()
+
         }
     );
 }
