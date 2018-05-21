@@ -55,7 +55,7 @@ sub donate_GET {
                 { id          => 'me.id' },
             ],
             join         => 'votolegal_donation_immutable',
-            order_by     => [ { '-desc' => "captured_at" }, 'me.id' ],
+            order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' }],
             page         => 1,
             rows         => 100,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",

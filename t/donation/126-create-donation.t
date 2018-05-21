@@ -49,6 +49,7 @@ db_transaction {
         cpf                           => $cpf,
         amount                        => 3000,
       };
+    my $id_donation_of_3k = $response->{donation}{id};
 
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
@@ -101,8 +102,10 @@ db_transaction {
     stash_test 'res', sub {
         my ($me) = @_;
 
-        is $me->{donations}[0]{amount}, 3000, 'amount ok';
-        is $me->{donations}[1]{amount}, 3500, 'amount ok';
+        is $me->{donations}[0]{amount}, 3500, 'amount ok';
+        is $me->{donations}[1]{amount}, 3000, 'amount ok';
+
+        is $me->{donations}[1]{id}, $id_donation_of_3k, 'last donation is the first (reverse order)';
     };
 
     rest_get [ '/public-api/candidate-donations/' . stash 'candidate.id', 'donators-name' ],
