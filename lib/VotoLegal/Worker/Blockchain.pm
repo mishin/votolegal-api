@@ -49,6 +49,8 @@ sub queue_rs {
 
     return $self->schema->resultset('VotolegalDonation')->search(
         {
+            'me.captured_at' => { '!=' => undef },
+            'me.refunded_at' => { '!=' => undef },
             '-or' => [
                 'me.decred_merkle_root'  => undef,
                 'me.decred_capture_txid' => undef,
