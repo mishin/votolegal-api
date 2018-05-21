@@ -310,7 +310,7 @@ sub action_specs {
             $values{name} =~ s/\s+/\ /go;
 
             $self->_refuse_duplicate( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
-            $self->_check_daily_limit( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
+            #$self->_check_daily_limit( map { $_ => $values{$_} } qw/cpf amount candidate_id/ );
 
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 
@@ -561,9 +561,7 @@ sub _check_daily_limit {
         }
     )->next;
 
-    if ($repeatedDonation) {
-        die_with 'donation-repeated';
-    }
+
 }
 
 1;
