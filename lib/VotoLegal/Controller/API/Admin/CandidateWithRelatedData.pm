@@ -32,7 +32,7 @@ sub list_GET {
 
         my $payment_status = $candidate->get_account_payment_status();
 
-        my $payment_created_at = $payment ? DateTime::Format::Pg->parse_datetime( $payment->created_at )->ymd('/') : 0;
+        my $payment_created_at = $payment ? DateTime::Format::Pg->parse_datetime( $payment->created_at )->dmy('/') : 0;
 
         $ret->[$i]->{'status da conta'}   = $payment_status;
         $ret->[$i]->{'data de pagamento'} = $payment_created_at;
