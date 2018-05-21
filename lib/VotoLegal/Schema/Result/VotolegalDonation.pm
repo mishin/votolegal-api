@@ -665,9 +665,10 @@ sub upsert_decred_data {
         $data_raw = join(
             "\n",
             "@@ DOADOR @@\n",
-            $self->id,
             $immutable->get_column('donor_name'),
             $immutable->get_column('donor_cpf'),
+            "\n@@ DOACAO @@\n",
+            $self->id,
             $immutable->get_column('amount'),
             $self->created_at->datetime(),
             $is_boleto ? 'Boleto' : 'Cartão de crédito',
@@ -678,6 +679,8 @@ sub upsert_decred_data {
             $candidate->cpf_formated(),
             $candidate->cnpj_formated() || '00.000.000/0000-00',
         );
+
+        use DDP; p $data_raw;
 
         $data_digest = sha256_hex($data_raw);
 
