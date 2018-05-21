@@ -997,7 +997,9 @@ sub send_payment_not_approved_email {
 sub get_most_recent_payment {
     my ($self) = @_;
 
-    return $self->payments->count > 0 ? $self->payments->search( undef, { max => 'created_at' } )->first : 0;
+    my $payment = $self->payments->search( undef, { order_by => [ { '-desc' => 'created_at' } ] } )->next;
+
+    return $payment ? $payment : 0;
 }
 
 sub get_account_payment_status {
@@ -1009,7 +1011,7 @@ sub get_account_payment_status {
     if ( $payment_status eq 'unpaid' ) {
 
         if ( my $payment = $self->get_most_recent_payment() ) {
-            my $log = $payment->payment_logs->search( undef, { max => 'created_at' } )->next;
+            my $log = $payment->payment_logs->search( undef, { order_by => [ { '-desc' => 'created_at' } ] } )->next;
 
             if ( $log && ( $log->status eq 'analysis' || $log->status eq 'created' ) ) {
                 $ret = 'pagamento em análise';
