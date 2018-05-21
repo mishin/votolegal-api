@@ -1,14 +1,9 @@
+#<<<
 use utf8;
 package VotoLegal::Schema::Result::Donation;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
-
-=head1 NAME
-
-VotoLegal::Schema::Result::Donation
-
-=cut
 
 use strict;
 use warnings;
@@ -17,206 +12,8 @@ use Moose;
 use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
-
-=head1 COMPONENTS LOADED
-
-=over 4
-
-=item * L<DBIx::Class::InflateColumn::DateTime>
-
-=item * L<DBIx::Class::TimeStamp>
-
-=item * L<DBIx::Class::PassphraseColumn>
-
-=back
-
-=cut
-
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
-
-=head1 TABLE: C<donation>
-
-=cut
-
 __PACKAGE__->table("donation");
-
-=head1 ACCESSORS
-
-=head2 id
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 32
-
-=head2 candidate_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 name
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 email
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 cpf
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 phone
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 amount
-
-  data_type: 'integer'
-  is_nullable: 0
-
-=head2 status
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 birthdate
-
-  data_type: 'date'
-  is_nullable: 1
-
-=head2 transaction_hash
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 ip_address
-
-  data_type: 'text'
-  is_nullable: 0
-
-=head2 created_at
-
-  data_type: 'timestamp'
-  default_value: current_timestamp
-  is_nullable: 0
-  original: {default_value => \"now()"}
-
-=head2 address_state
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 address_city
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 address_zipcode
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 address_street
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 address_complement
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 address_house_number
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 billing_address_street
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 billing_address_house_number
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 billing_address_district
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 billing_address_zipcode
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 billing_address_city
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 billing_address_state
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 billing_address_complement
-
-  data_type: 'text'
-  default_value: (empty string)
-  is_nullable: 1
-
-=head2 address_district
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 captured_at
-
-  data_type: 'timestamp'
-  is_nullable: 1
-
-=head2 payment_gateway_code
-
-  data_type: 'text'
-  is_nullable: 1
-
-=head2 species
-
-  data_type: 'text'
-  default_value: 'Cartão de crédito'
-  is_nullable: 1
-
-=head2 by_votolegal
-
-  data_type: 'boolean'
-  is_nullable: 0
-
-=head2 donation_type_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 payment_gateway_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 certiface_token_id
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=cut
-
 __PACKAGE__->add_columns(
   "id",
   { data_type => "varchar", is_nullable => 0, size => 32 },
@@ -294,84 +91,35 @@ __PACKAGE__->add_columns(
   "certiface_token_id",
   { data_type => "integer", is_nullable => 1 },
 );
-
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</id>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("id");
-
-=head1 RELATIONS
-
-=head2 candidate
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::Candidate>
-
-=cut
-
 __PACKAGE__->belongs_to(
   "candidate",
   "VotoLegal::Schema::Result::Candidate",
   { id => "candidate_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
-
-=head2 donation_type
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::DonationType>
-
-=cut
-
 __PACKAGE__->belongs_to(
   "donation_type",
   "VotoLegal::Schema::Result::DonationType",
   { id => "donation_type_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
-
-=head2 payment_gateway
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::PaymentGateway>
-
-=cut
-
 __PACKAGE__->belongs_to(
   "payment_gateway",
   "VotoLegal::Schema::Result::PaymentGateway",
   { id => "payment_gateway_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
-
-=head2 project_votes
-
-Type: has_many
-
-Related object: L<VotoLegal::Schema::Result::ProjectVote>
-
-=cut
-
 __PACKAGE__->has_many(
   "project_votes",
   "VotoLegal::Schema::Result::ProjectVote",
   { "foreign.donation_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+#>>>
 
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 23:59:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RxI6BJf2zMyB0twcyhbxWA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TqQVnkk4pJk8LH2KkDMS5Q
 
 use common::sense;
 use Digest::MD5 qw(md5_hex);

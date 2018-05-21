@@ -1,14 +1,9 @@
+#<<<
 use utf8;
 package VotoLegal::Schema::Result::CertifaceToken;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
-
-=head1 NAME
-
-VotoLegal::Schema::Result::CertifaceToken
-
-=cut
 
 use strict;
 use warnings;
@@ -17,93 +12,8 @@ use Moose;
 use MooseX::NonMoose;
 use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Core';
-
-=head1 COMPONENTS LOADED
-
-=over 4
-
-=item * L<DBIx::Class::InflateColumn::DateTime>
-
-=item * L<DBIx::Class::TimeStamp>
-
-=item * L<DBIx::Class::PassphraseColumn>
-
-=back
-
-=cut
-
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
-
-=head1 TABLE: C<certiface_token>
-
-=cut
-
 __PACKAGE__->table("certiface_token");
-
-=head1 ACCESSORS
-
-=head2 id
-
-  data_type: 'uuid'
-  is_nullable: 0
-  size: 16
-
-=head2 verification_url
-
-  data_type: 'text'
-  is_nullable: 0
-  original: {data_type => "varchar"}
-
-=head2 votolegal_donation_id
-
-  data_type: 'uuid'
-  is_foreign_key: 1
-  is_nullable: 1
-  size: 16
-
-=head2 created_at
-
-  data_type: 'timestamp'
-  default_value: current_timestamp
-  is_nullable: 0
-  original: {default_value => \"now()"}
-
-=head2 validated
-
-  data_type: 'boolean'
-  default_value: false
-  is_nullable: 0
-
-=head2 fail_reasons
-
-  data_type: 'json'
-  is_nullable: 1
-
-=head2 response_updated_at
-
-  data_type: 'timestamp'
-  is_nullable: 1
-
-=head2 response
-
-  data_type: 'json'
-  is_nullable: 1
-
-=head2 certiface_return_url_id
-
-  data_type: 'integer'
-  default_value: 1
-  is_foreign_key: 1
-  is_nullable: 0
-
-=head2 certiface_return_count
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 0
-
-=cut
-
 __PACKAGE__->add_columns(
   "id",
   { data_type => "uuid", is_nullable => 0, size => 16 },
@@ -140,44 +50,13 @@ __PACKAGE__->add_columns(
   "certiface_return_count",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
 );
-
-=head1 PRIMARY KEY
-
-=over 4
-
-=item * L</id>
-
-=back
-
-=cut
-
 __PACKAGE__->set_primary_key("id");
-
-=head1 RELATIONS
-
-=head2 certiface_return_url
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::CertifaceReturnUrl>
-
-=cut
-
 __PACKAGE__->belongs_to(
   "certiface_return_url",
   "VotoLegal::Schema::Result::CertifaceReturnUrl",
   { id => "certiface_return_url_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
-
-=head2 votolegal_donation
-
-Type: belongs_to
-
-Related object: L<VotoLegal::Schema::Result::VotolegalDonation>
-
-=cut
-
 __PACKAGE__->belongs_to(
   "votolegal_donation",
   "VotoLegal::Schema::Result::VotolegalDonation",
@@ -189,10 +68,10 @@ __PACKAGE__->belongs_to(
     on_update     => "NO ACTION",
   },
 );
+#>>>
 
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-18 17:05:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cw5WTXusCaUbOR4H/KARAA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RsofEtczLvOuxH5O0ERO8Q
 
 use WebService::Certiface;
 use JSON qw/to_json/;

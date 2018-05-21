@@ -1,3 +1,4 @@
+#<<<
 use utf8;
 package VotoLegal::Schema;
 
@@ -9,10 +10,10 @@ use MooseX::MarkAsMethods autoclean => 1;
 extends 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces;
+#>>>
 
-
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-16 23:31:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Oy58CXNLp/hwPdWXRdMEQw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pasST6ejjgQnvB/0HWqLog
 
 sub AUTOLOAD {
     ( my $name = our $AUTOLOAD ) =~ s/.*:://;
