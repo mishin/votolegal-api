@@ -444,6 +444,8 @@ sub _create_donation {
                     payment_gateway_id            => $config->{payment_gateway_id},
 
                     votolegal_fp => $fp->id,
+
+                    created_at => is_test() ? \'clock_timestamp()' : 'now()',
                 }
             );
 
