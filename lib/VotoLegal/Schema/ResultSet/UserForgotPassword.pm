@@ -33,7 +33,7 @@ sub verifiers_specs {
                                 email => $r->get_value('email'),
                             }
                         )->count;
-                      }
+                    }
                 },
             }
         ),

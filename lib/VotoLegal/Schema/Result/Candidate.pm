@@ -371,7 +371,7 @@ sub verifiers_specs {
 
                         my $status = $r->get_value('status');
                         $status =~ m{^(pending|activated|deactivated)$};
-                      }
+                    }
                 },
                 roles => {
                     required => 1,
@@ -629,7 +629,7 @@ sub verifiers_specs {
                         return 1 if $bank_account_dv eq "_SET_NULL_";
 
                         $bank_account_dv =~ m{^([a-zA-Z0-9]+)$};
-                      }
+                    }
                 },
                 crawlable => {
                     required   => 0,
@@ -655,7 +655,7 @@ sub verifiers_specs {
 
                         die \[ 'political_movement_id', 'could not find political movement with that id' ]
                           unless $political_movement;
-                      }
+                    }
                 },
                 google_analytics => {
                     required   => 0,
@@ -667,7 +667,7 @@ sub verifiers_specs {
                         die \[ 'google_analytics', 'invalid id' ] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
 
                         return 1;
-                      }
+                    }
                 },
                 collect_donor_address => {
                     required => 0,
@@ -926,7 +926,8 @@ sub candidate_has_payment_created {
     my $most_recent_payment_log =
       $most_recent_payment->payment_logs->search( undef, { order_by => { '-desc' => 'created_at' } } )->first;
 
-    if ( $most_recent_payment_log && ($most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured') ) {
+    if ( $most_recent_payment_log
+        && ( $most_recent_payment_log->status eq 'analysis' || $most_recent_payment_log->status eq 'captured' ) ) {
         return 1;
     }
     else {
