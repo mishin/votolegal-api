@@ -396,6 +396,7 @@ sub as_row_for_email_variable {
                 'me.is_pre_campaign',
                 'candidate.campaign_donation_type',
                 'candidate.cpf',
+                'candidate.name',
                 'candidate.cnpj',
                 { donor_name  => 'votolegal_donation_immutable.donor_name' },
                 { donor_cpf   => 'votolegal_donation_immutable.donor_cpf' },
@@ -406,11 +407,11 @@ sub as_row_for_email_variable {
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
                     captured_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', captured_at)) , 'DD/MM/YYYY hh::mm:ss')"
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', captured_at)) , 'DD/MM/YYYY hh:mm:ss')"
                 },
                 {
                     refunded_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', refunded_at)) , 'DD/MM/YYYY hh::mm:ss')"
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', refunded_at)) , 'DD/MM/YYYY hh:mm:ss')"
                 },
               ]
 
