@@ -478,7 +478,7 @@ sub verifiers_specs {
                         return 1 if $video_url eq "_SET_NULL_";
                         die \[ 'video_url', 'invalid' ]
                           unless $video_url =~
-/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
+/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))?((?:vimeo\.com))?(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
                     },
                 },
                 facebook_url => {
