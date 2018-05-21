@@ -59,7 +59,7 @@ db_transaction {
       code => 200,
       ;
 
-    is( $candidate->discard_changes->publish, 1, 'published' );
+    is( $candidate->discard_changes->is_published, 1, 'published' );
 
     # Despublicando.
     rest_post "/api/candidate/$id_candidate/unpublish",
@@ -67,7 +67,7 @@ db_transaction {
       code => 200,
       ;
 
-    is( $candidate->discard_changes->publish, 0, 'unpublished' );
+    is( $candidate->discard_changes->is_published, 0, 'unpublished' );
 
     # Não posso publicar e nem despublicar se eu não for o proprio candidato.
     create_candidate;

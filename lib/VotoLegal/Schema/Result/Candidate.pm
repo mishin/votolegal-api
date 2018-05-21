@@ -136,6 +136,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 1, is_nullable => 0 },
   "min_donation_value",
   { data_type => "integer", default_value => 2000, is_nullable => 0 },
+  "is_published",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -258,8 +260,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pbTc3pDtkk9kM779/5kd3g
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 19:15:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GJQUZ3WnPQQZZriLTdZboQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -754,11 +756,11 @@ sub action_specs {
                 }
             }
 
-            return $self->update( { publish => 1 } );
+            return $self->update( { is_published => 1 } );
         },
 
         unpublish => sub {
-            $self->update( { publish => 0 } );
+            $self->update( { is_published => 0 } );
         },
     };
 }

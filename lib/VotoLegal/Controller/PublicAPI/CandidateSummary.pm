@@ -12,7 +12,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
         {
             status  => 'activated',
-            publish => 1
+            is_published => 1
         },
         {
             '+columns' => {
