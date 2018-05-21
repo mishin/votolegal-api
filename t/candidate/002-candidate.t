@@ -91,6 +91,21 @@ db_transaction {
     ;
 
     rest_put "/api/candidate/${candidate_id}",
+        name    => "can't add invalid video url",
+        is_fail => 1,
+        params  => {
+            video_url => "www.google.com",
+        },
+    ;
+
+    rest_put "/api/candidate/${candidate_id}",
+        name    => "video url",
+        params  => {
+            video_url => "https://www.youtube.com/watch?v=49J9g5gCcWM",
+        },
+    ;
+
+    rest_put "/api/candidate/${candidate_id}",
         name    => "can't add invalid facebook url",
         is_fail => 1,
         params  => {
