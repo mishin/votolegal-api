@@ -2,6 +2,8 @@ package VotoLegal::Controller::API::Admin::CandidateWithRelatedData;
 use Moose;
 use namespace::autoclean;
 
+use DateTime::Format::Pg;
+
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with "CatalystX::Eta::Controller::AutoBase";
@@ -29,8 +31,10 @@ sub list_GET {
 
         my $payment_status = $candidate->get_account_payment_status();
 
+        my $payment_created_at = $payment ? DateTime::Format::Pg->parse_datetime( $payment->created_at )->ymd('/') : 0;
+
         $ret->[$i]->{'status da conta'}   = $payment_status;
-        $ret->[$i]->{'data de pagamento'} = $payment ? $payment->created_at : 0;
+        $ret->[$i]->{'data de pagamento'} = $payment_created_at;
         $ret->[$i]->{'cod. do pagamento'} = $payment ? $payment->code : 0;
         $ret->[$i]->{'metodo'}            = $payment ? $payment->get_human_like_method() : 0;
         $ret->[$i]->{'nome do candidato'} = $candidate->name;
