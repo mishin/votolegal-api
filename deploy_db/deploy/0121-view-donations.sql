@@ -7,7 +7,8 @@ create schema reports;
 
 create or replace view reports.donations_our as
 select
-    *,
+    me.*,
+    b.*,
     c.name as candidate_name
 from votolegal_donation me
 join votolegal_donation_immutable  b on b.votolegal_donation_id = me.id
