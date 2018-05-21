@@ -3,7 +3,6 @@ use common::sense;
 use FindBin qw($RealBin $Script);
 use lib "$RealBin/../lib";
 
-use Config::General;
 use Business::BR::CNPJ qw(test_cnpj);
 use VotoLegal::Schema;
 
