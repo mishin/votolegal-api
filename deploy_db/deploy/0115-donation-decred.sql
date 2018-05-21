@@ -16,7 +16,7 @@ DROP TRIGGER tg_votolegal_donation_immutable_update ON public.votolegal_donation
 
 UPDATE votolegal_donation_immutable SET git_hash = '(null)';
 
-ALTER TABLE votolegal_donation_immutable ADD COLUMN git_hash SET NOT NULL;
+ALTER TABLE votolegal_donation_immutable ALTER COLUMN git_hash SET NOT NULL;
 
 ALTER TABLE votolegal_donation RENAME COLUMN decred_capture_hash TO decred_capture_txid;
 
