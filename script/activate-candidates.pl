@@ -15,8 +15,8 @@ my $schema = VotoLegal::Schema->connect( $config->{model}->{DB}->{connect_info} 
 
 my $candidate_rs = $schema->resultset('Candidate')->search(
     {
-        cnpj   => { '!=' => undef },
-        cnpj   => { '!=' => "" },
+        cpf   => { '!=' => undef },
+        cpf   => { '!=' => "" },
         status => "pending",
     }
 );
