@@ -4,6 +4,8 @@ use Moose;
 
 with 'VotoLegal::Payment';
 
+use VotoLegal::Utils;
+
 use Carp;
 use Furl;
 use XML::Simple;
@@ -113,6 +115,13 @@ sub transaction {
 
 sub notification {
     my ( $self, $notificationCode ) = @_;
+
+    if (is_test()) {
+        return {
+            status => 3,
+            code   => 'foobar'
+        }
+    }
 
     my $action = 'transaction';
 

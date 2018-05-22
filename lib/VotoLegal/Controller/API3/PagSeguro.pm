@@ -1,20 +1,29 @@
-package VotoLegal::Controller::API::Candidate::Payment::Callback;
+package VotoLegal::Controller::API3::PagSeguro;
 use common::sense;
 use Moose;
 use namespace::autoclean;
 
 use VotoLegal::Utils;
+use VotoLegal::Payment::PagSeguro;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with 'CatalystX::Eta::Controller::TypesValidation';
 
-sub root : Chained('/api/candidate/payment/base') : PathPart('') : CaptureArgs(0) { }
+sub root : Chained('/api3/base') : PathPart('') : CaptureArgs(0) { }
 
-sub base : Chained('root') : PathPart('callback') : CaptureArgs(0) {
+sub base : Chained('root') : PathPart('pagseguro') : CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     $c->stash->{collection} = $c->model('DB::PaymentNotification');
+
+    $c->stash->{pagseguro} = VotoLegal::Payment::PagSeguro->new(
+        merchant_id  => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID},
+        merchant_key => $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY},
+        callback_url => $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL},
+        sandbox      => $ENV{VOTOLEGAL_PAGSEGURO_IS_SANDBOX},
+        logger       => $c->log,
+    );
 }
 
 sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
@@ -34,46 +43,34 @@ sub callback_POST {
     if ( my $req = $c->stash->{pagseguro}->notification($notification_code) ) {
         my $status = $req->{status};
 
+        my $transaction_code = $req->{code};
+        die \['transaction_code', 'missing'] unless $transaction_code;
+
+        my $payment = $c->model("DB::Payment")->search( { code => $transaction_code } )->next;
+        die \['transaction_code', 'could not find payment with that transaction code'] unless $payment;
+
+        my $candidate = $payment->candidate;
+
         if ( $status == 3 || $status == 4 ) {
 
-            $c->stash->{candidate}->update(
+            $candidate->update(
                 {
                     payment_status => "paid",
                     status         => 'activated'
                 }
             );
-            $c->stash->{candidate}->send_payment_approved_email();
+            $candidate->send_payment_approved_email();
 
-            # Criando entrada no log
-            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
-
-            $c->model("DB::PaymentLog")->create(
-                {
-                    payment_id => $payment->id,
-                    status     => 'captured'
-                }
-            );
-
+            $payment->payment_logs->create( { status => 'captured' } );
         }
         elsif ( $status == 6 || $status == 7 ) {
-            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
-            $c->model("DB::PaymentLog")->create(
-                {
-                    payment_id => $payment->id,
-                    status     => 'failed'
-                }
-            );
-            $c->stash->{candidate}->send_payment_not_approved_email();
+            $payment->payment_logs->create( { status => 'failed' } );
 
+            $candidate->send_payment_not_approved_email();
         }
         elsif ( $status == 2 ) {
-            my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
-            $c->model("DB::PaymentLog")->create(
-                {
-                    payment_id => $payment->id,
-                    status     => 'analysis'
-                }
-            );
+            $payment->payment_logs->create( { status => 'analysis' } );
+
         }
     }
 
