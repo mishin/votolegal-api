@@ -13,4 +13,5 @@ if [ -e "$PIDFILE" ]; then
 fi
 
 pgrep -f VotoLegal::Daemon::Emailsd | xargs kill -INT
+pgrep -f VotoLegal::Daemon::Blockchaind | xargs kill -INT
 
