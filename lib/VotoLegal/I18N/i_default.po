@@ -153,7 +153,7 @@ msgid "email_1_captured_subject"
 msgstr "Voto legal - Recibo provisório"
 
 msgid "email_2_captured_subject"
-msgstr "Somo Rede - Recibo provisório"
+msgstr "Somos Rede - Recibo provisório"
 
 msgid "donation-daily-reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."

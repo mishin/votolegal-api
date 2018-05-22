@@ -178,17 +178,20 @@ sub as_row_for_email_variable {
             'me.id' => $self->id
         },
         {
-            join         => [ 'votolegal_donation_immutable', 'candidate' ],
+            join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator',
 
             columns => [
 
                 'me.id',
                 'me.is_pre_campaign',
+                'me.decred_merkle_root',
+                'me.decred_capture_txid',
                 'candidate.campaign_donation_type',
                 'candidate.cpf',
                 'candidate.name',
                 'candidate.cnpj',
+                { party_name  => 'party.name' },
                 { donor_name  => 'votolegal_donation_immutable.donor_name' },
                 { donor_cpf   => 'votolegal_donation_immutable.donor_cpf' },
                 { donor_email => 'votolegal_donation_immutable.donor_email' },
@@ -494,7 +497,17 @@ sub upsert_decred_data {
 sub send_decred_email {
     my ($self) = @_;
 
-    # enviar email falando sobre registro na block
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'decred.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $self->candidate->emaildb_config_id == 1
+            ? 'Voto Legal - Registro na blockchain'
+            : 'Somos rede - Registro na blockchain',
+            variables => encode_json( $donation->as_row_for_email_variable() ),
+        }
+    );
 
 }
 
