@@ -505,7 +505,7 @@ sub send_decred_email {
             subject   => $self->candidate->emaildb_config_id == 1
             ? 'Voto Legal - Registro na blockchain'
             : 'Somos rede - Registro na blockchain',
-            variables => encode_json( $donation->as_row_for_email_variable() ),
+            variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );
 
