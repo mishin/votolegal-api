@@ -39,5 +39,5 @@ RUN mkdir /etc/service/votolegal-email
 COPY votolegal-email.sh /etc/service/votolegal-email/run
 
 RUN mkdir /etc/service/votolegal-blockchain
-COPY votolegal-blockchain.sh /etc/service/votolegal-email/run
+COPY votolegal-blockchain.sh /etc/service/votolegal-blockchain/run
 
