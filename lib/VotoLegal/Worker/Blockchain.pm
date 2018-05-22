@@ -80,72 +80,64 @@ sub exec_item {
             my $decred_merkle_root  = $donation->get_column('decred_merkle_root');
             my $decred_capture_txid = $donation->get_column('decred_capture_txid');
 
-            if ( defined($decred_merkle_root) ) {
-                $self->logger->info( "A doação donation_id=" . $donation->id . ' já possui merkle root.' )
-                  if $self->has_log;
-                $self->logger->debug(
-                    sprintf( "[donation_id=%s] [decred_merkle_root=%s]", $donation->id, $decred_merkle_root ) )
-                  if $self->has_log;
+            $donation = $donation->upsert_decred_data;
+            my $decred_data_digest = $donation->get_column('decred_data_digest');
+
+            # Timestamp.
+            $self->logger->info( "Registrando a doação id=" . $donation->id . '.' ) if $self->has_log;
+            $self->logger->debug(
+                sprintf(
+                    "[donation_id=%s] [decred_data_digest=%s] Timestamping.",
+                    $donation->id,
+                    $decred_data_digest
+                )
+            ) if $self->has_log;
+
+            $self->dcrtime->timestamp(
+                id      => 'votolegal',
+                digests => [$decred_data_digest]
+            );
+
+            # Verify.
+            $self->logger->info( "Verificando a doação id=" . $donation->id . '...' ) if $self->has_log;
+
+            my $verify = $self->dcrtime->verify(
+                id      => 'votolegal',
+                digests => [$decred_data_digest]
+            );
+
+            my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
+            my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
+            my $empty       = '0' x 64;
+
+            my %update_data;
+            if ( $merkleroot ne $empty ) {
+                $update_data{decred_merkle_root}          = $merkleroot;
+                $update_data{decred_merkle_registered_at} = \'NOW()';
             }
-            else {
-                # Timestamp.
-                $donation->upsert_decred_data;
-                my $decred_data_digest = $donation->get_column('decred_data_digest');
 
-                $self->logger->info(
-                    sprintf( "[donation_id=%s] [decred_data_digest=%s]", $donation->id, $decred_data_digest ) )
-                  if $self->has_log;
+            if ( $transaction ne $empty ) {
+                $update_data{decred_capture_txid}          = $transaction;
+                $update_data{decred_capture_registered_at} = \'NOW()';
+            }
 
-                if ( !defined($decred_merkle_root) ) {
-                    $self->logger->info( "Registrando a doação id=" . $donation->id . '.' ) if $self->has_log;
+            if (%update_data) {
+                $self->logger->info( "Atualizando a doação id=" . $donation->id . '.' ) if $self->has_log;
+                $self->logger->debug(
+                    sprintf(
+                        "[donation_id=%s] [decred_merkle_root=%s] [decred_capture_txid=%s]",
+                        $update_data{decred_merkle_root}  || 'undef',
+                        $update_data{decred_capture_txid} || 'undef',
+                    )
+                ) if $self->has_log;
 
-                    $self->dcrtime->timestamp(
-                        id      => 'votolegal',
-                        digests => [$decred_data_digest]
-                    );
-                }
+                $donation->update( \%update_data );
+            }
 
-                # Verify.
-                $self->logger->info( "Verificando a doação id=" . $donation->id . '...' ) if $self->has_log;
-
-                my $verify = $self->dcrtime->verify(
-                    id      => 'votolegal',
-                    digests => [$decred_data_digest]
-                );
-
-                my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
-                my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
-                my $empty       = '0' x 64;
-
-                my %update_data;
-                if ( $merkleroot ne $empty ) {
-                    $update_data{decred_merkle_root}          = $merkleroot;
-                    $update_data{decred_merkle_registered_at} = \'NOW()';
-                }
-
-                if ( $transaction ne $empty ) {
-                    $update_data{decred_capture_txid}          = $transaction;
-                    $update_data{decred_capture_registered_at} = \'NOW()';
-                }
-
-                if (%update_data) {
-                    $self->logger->info( "Atualizando a doação id=" . $donation->id . '.' ) if $self->has_log;
-                    $self->logger->debug(
-                        sprintf(
-                            "[donation_id=%s] [decred_merkle_root=%s] [decred_capture_txid=%s]",
-                            $update_data{decred_merkle_root}  || 'undef',
-                            $update_data{decred_capture_txid} || 'undef',
-                        )
-                    ) if $self->has_log;
-
-                    $donation->update( \%update_data );
-
-                    if ( $update_data{decred_capture_txid} ) {
-
-                        $donation->send_decred_email();
-
-                    }
-                }
+            # Send email.
+            $donation->discard_changes;
+            if ( $donation->get_column('decred_merkle_root') && $donation->get_column('decred_capture_txid') ) {
+                $donation->send_decred_email();
             }
         }
     );
