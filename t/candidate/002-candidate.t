@@ -98,10 +98,10 @@ db_transaction {
       params => { video_url => "https://www.youtube.com/watch?v=49J9g5gCcWM", },
       ;
 
-      rest_put "/api/candidate/${candidate_id}",
-          name    => "can't add invalid video url",
-          is_fail => 1,
-          params  => { video_url => "www.vimeo.com", },
+    rest_put "/api/candidate/${candidate_id}",
+      name    => "can't add invalid video url",
+      is_fail => 1,
+      params  => { video_url => "www.vimeo.com", },
       ;
 
     rest_put "/api/candidate/${candidate_id}",
@@ -146,22 +146,20 @@ db_transaction {
       ;
 
     rest_put "/api/candidate/${candidate_id}",
-      name    => "Adding political movement",
+      name => "Adding political movement",
       [ political_movement_id => 1 ],
-    ;
+      ;
 
     rest_get "/api/candidate/$username",
-      name => 'get candidate by username',
-      stash => "get_candidate"
-    ;
+      name  => 'get candidate by username',
+      stash => "get_candidate";
 
     stash_test "get_candidate" => sub {
         my $res = shift;
 
-        is ($res->{candidate}->{political_movement_id},   1,          'political_movement_id');
-        is ($res->{candidate}->{political_movement_name}, 'RenovaBR', 'political_movement_name');
+        is( $res->{candidate}->{political_movement_id},   1,          'political_movement_id' );
+        is( $res->{candidate}->{political_movement_name}, 'RenovaBR', 'political_movement_name' );
     };
-
 
     rest_put "/api/candidate/${candidate_id}",
       name  => 'edit myself',

@@ -11,7 +11,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
 
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
         {
-            status  => 'activated',
+            status       => 'activated',
             is_published => 1
         },
         {
@@ -105,7 +105,8 @@ sub candidate_GET {
           )->all
     ];
 
-    $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement_id ? $c->stash->{candidate}->political_movement->name : ();
+    $candidate->{political_movement_name} =
+      $c->stash->{candidate}->political_movement_id ? $c->stash->{candidate}->political_movement->name : ();
 
     return $self->status_ok(
         $c,

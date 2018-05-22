@@ -18,7 +18,7 @@ db_transaction {
             {
                 status         => "activated",
                 payment_status => "paid",
-                is_published        => 1,
+                is_published   => 1,
             }
         ),
         'activate',

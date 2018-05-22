@@ -87,7 +87,7 @@ sub exec_item {
 
 sub _build_mailer {
     my $self = shift;
-   for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
+    for (qw/ EMAIL_SMTP_SERVER EMAIL_SMTP_PORT EMAIL_SMTP_USERNAME EMAIL_SMTP_PASSWORD /) {
         defined( $ENV{$_} ) or die "missing env '$_'\n";
     }
     return VotoLegal::Mailer->new(
