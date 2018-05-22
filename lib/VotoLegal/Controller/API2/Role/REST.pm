@@ -55,7 +55,6 @@ sub end : Private {
         elsif ( ref $top eq 'DBIx::Class::Exception' ) {
 
             if ( $top =~ /violates not-null constraint/ ) {
-
                 my ($col) = $top =~ /column "([^"]+)" violates/;
                 $c->stash->{rest} = [ $c->build_api_error( msg_id => "${col}-invalid" ) ];
                 $code = 400;

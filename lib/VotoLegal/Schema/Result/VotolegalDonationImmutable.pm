@@ -34,7 +34,7 @@ __PACKAGE__->add_columns(
   "donor_phone",
   { data_type => "text", is_nullable => 1 },
   "donor_birthdate",
-  { data_type => "date", is_nullable => 0 },
+  { data_type => "date", is_nullable => 1 },
   "address_zipcode",
   { data_type => "text", is_nullable => 1 },
   "address_state",
@@ -83,8 +83,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aBYbglU6DmR4I1qQzFfmkw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-22 20:38:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vcw0Nvzw2PfhthTOI9c7/A
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

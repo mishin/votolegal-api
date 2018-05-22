@@ -42,7 +42,7 @@ db_transaction {
     $response = rest_post "/api2/donations",
       name   => "add donation",
       params => {
-        generate_rand_donator_data(),
+        generate_rand_donator_data_cc(),
 
         candidate_id                  => stash 'candidate.id',
         device_authorization_token_id => stash 'test_auth',
@@ -134,7 +134,7 @@ sub test_dup_value {
           is_fail => 1,
           stash   => 'donation.duplicated',
           params  => {
-            generate_rand_donator_data(),
+            generate_rand_donator_data_cc(),
 
             candidate_id                  => stash 'candidate.id',
             device_authorization_token_id => stash 'test_auth',
@@ -154,11 +154,12 @@ sub test_boleto {
     $response = rest_post "/api2/donations",
       name   => "add donation with boleto",
       params => {
-        generate_rand_donator_data(),
+        generate_rand_donator_data_boleto(),
 
         candidate_id                  => stash 'candidate.id',
         device_authorization_token_id => stash 'test_auth',
         payment_method                => 'boleto',
+
         cpf                           => $cpf,
         amount                        => 3500,
       };

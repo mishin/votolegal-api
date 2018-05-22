@@ -317,6 +317,7 @@ sub action_specs {
                 map { $_ => $values{$_} } qw/cpf amount candidate_id/
             );
 
+
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 
             my $addr;

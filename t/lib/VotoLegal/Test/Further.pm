@@ -218,7 +218,7 @@ sub generate_device_token {
     $obj->{stash}{test_auth} = $res->{device_authorization_token_id};
 }
 
-sub generate_rand_donator_data {
+sub generate_rand_donator_data_cc {
     my $info = fake_hash(
         {
             name  => fake_name(),
@@ -257,8 +257,56 @@ sub generate_rand_donator_data {
                 )
             ),
 
-            birthdate => '2000-01-01',
 
+        }
+    )->();
+
+    return wantarray ? %$info : $info;
+}
+
+
+sub generate_rand_donator_data_boleto {
+    my $info = fake_hash(
+        {
+            name  => fake_name(),
+            email => fake_email(),
+
+            donation_fp => encode_base64(
+                to_json(
+                    {
+                        ms                   => 200,
+                        id                   => "12345678978",
+                        language             => "en-US",
+                        color_depth          => "24",
+                        device_memory        => "-1",
+                        hardware_concurrency => "8",
+                        resolution           => "2560,1440",
+                        available_resolution => "2495,1416",
+                        timezone_offset      => "180",
+                        session_storage      => "1",
+                        local_storage        => "1",
+                        indexed_db           => "1",
+                        open_database        => "1",
+                        cpu_class            => "unknown",
+                        navigator_platform   => "Linux x86_64",
+                        regular_plugins      => "Chrome PDF Plugin::Portable",
+                        canvas               => 35567,
+                        webgl                => 8310,
+                        webgl_vendor         => "NVIDIA Corporation~GeForce",
+                        adblock              => "true",
+                        has_lied_languages   => "false",
+                        has_lied_resolution  => "false",
+                        has_lied_os          => "false",
+                        has_lied_browser     => "false",
+                        touch_support        => "0,false,false",
+                        js_fonts             => "Andale Mono,Arial,Arial Black,Verdana"
+                    }
+                )
+            ),
+
+
+            birthdate => '2000-01-01',
+            phone                        => fake_digits("##########")->(),
             #address_district             => "Centro",
             #address_state                => fake_pick(qw(SP RJ MG RS PR)),
             #address_city                 => "Iguape",
@@ -272,7 +320,6 @@ sub generate_rand_donator_data {
             billing_address_state        => "SP",
             billing_address_street       => "Rua Tiradentes",
             billing_address_zipcode      => "11920-000",
-            phone                        => fake_digits("##########")->(),
         }
     )->();
 

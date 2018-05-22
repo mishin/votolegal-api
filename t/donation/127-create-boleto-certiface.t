@@ -46,7 +46,7 @@ db_transaction {
     $response = rest_post "/api2/donations",
       name   => "add donation",
       params => {
-        generate_rand_donator_data(),
+        generate_rand_donator_data_boleto(),
 
         candidate_id                  => stash 'candidate.id',
         device_authorization_token_id => stash 'test_auth',
