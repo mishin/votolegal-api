@@ -294,7 +294,7 @@ sub action_specs {
             $values{$_} = lc $values{$_} for qw/email/;
 
             if ( $values{payment_method} eq 'boleto' ) {
-                $values{$_} or die_with 'need-billing-adddress' for qw/
+                $values{$_} or die_with 'need_billing_adddress' for qw/
                   billing_address_street
                   billing_address_district
                   billing_address_zipcode
@@ -302,8 +302,8 @@ sub action_specs {
                   billing_address_state
                   /;
 
-                $values{$_} or die_with 'need-phone-for-cc'     for qw/phone/;
-                $values{$_} or die_with 'need-birthdate-for-cc' for qw/birthdate/;
+                $values{$_} or die_with 'need_phone_for_cc'     for qw/phone/;
+                $values{$_} or die_with 'need_birthdate_for_cc' for qw/birthdate/;
             }
 
             # tira espaços duplicados antes de salvar
@@ -316,7 +316,6 @@ sub action_specs {
                 max_donation_value => $config->{max_donation_value},
                 map { $_ => $values{$_} } qw/cpf amount candidate_id/
             );
-
 
             my $fingerprint = $self->validate_donation_fp( $values{donation_fp} );
 

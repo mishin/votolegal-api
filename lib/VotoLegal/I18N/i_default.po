@@ -62,18 +62,18 @@ msgstr "A operadora do cartão de crédito não autorizou a doação."
 msgid "msg_certificate_refused"
 msgstr "O processo de verificação de identidade não foi concluído com sucesso, por favor, use outra forma de pagamento."
 
-msgid "fp-invalid-contact-support"
+msgid "fp_invalid_contact_support"
 msgstr "Doação não pode ser efetuada: Favor utilizar outro computador ou entrar em contato com o suporte."
 
 # POST /api2/donations >>>
 
-msgid "need-billing-adddress"
+msgid "need_billing_adddress"
 msgstr "Dados de endereço precisam ser enviados."
 
-msgid "need-phone-for-cc"
+msgid "need_phone_for_cc"
 msgstr "O telefone precisa ser informado"
 
-msgid "need-birthday-for-cc"
+msgid "need_birthday_for_cc"
 msgstr "A data de nascimento precisa ser informada"
 
 msgid "cpf_invalid"
@@ -154,5 +154,5 @@ msgstr "Voto legal - Recibo provisório"
 msgid "email_2_captured_subject"
 msgstr "Somos Rede - Recibo provisório"
 
-msgid "donation-daily-reached"
+msgid "donation_daily_reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."
