@@ -100,7 +100,7 @@ sub candidate_GET {
             { candidate_id => $c->stash->{candidate}->id },
             {
                 rows     => 20,
-                order_by => "votes",
+                order_by => "id",
             }
           )->all
     ];
