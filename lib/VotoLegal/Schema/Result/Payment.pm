@@ -137,12 +137,9 @@ sub send_pagseguro_transaction {
 sub build_callback_url {
     my ($self) = @_;
 
-    my $candidate    = $self->candidate;
-    my $candidate_id = $self->candidate_id;
-
     my $callback_url = $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL};
     $callback_url .= "/" unless $callback_url =~ m{\/$};
-    $callback_url .= "api/candidate/$candidate_id/payment/callback";
+    $callback_url .= "api3/pagseguro";
 
     return $callback_url;
 }
