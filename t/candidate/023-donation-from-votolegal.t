@@ -7,20 +7,53 @@ use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
 
+my $candidate;
+my $candidate_id;
+
 db_transaction {
-    create_candidate;
-    my $candidate_id = stash 'candidate.id';
+
+    $candidate    = create_candidate;
+    $candidate_id = $candidate->{id};
 
     # Aprovando o candidato.
-    api_auth_as user_id => 1;
-    rest_put "/api/admin/candidate/$candidate_id/activate",
-      name => 'activate candidate',
-      code => 200,
-      ;
+    ok(
+        $schema->resultset('Candidate')->find($candidate_id)->update(
+            {
+                status         => "activated",
+                payment_status => "paid",
+            }
+        ),
+        'activate',
+    );
 
     api_auth_as candidate_id => $candidate_id;
+    rest_put "/api/candidate/${candidate_id}",
+      name   => 'edit candidate',
+      params => {
+        payment_gateway_id => 1,
+        merchant_id        => fake_email->(),
+        merchant_key       => random_string(32),
+      },
+      ;
 
+    my $donation = &mock_donation;
 
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name  => 'get donations from voto legal',
+        list  => 1,
+        stash => 'get_donations'
+    ;
+
+    stash_test 'get_donations' => sub {
+        my $res = shift;
+
+        is ( $res->{donations}->[0]->{amount}, 3000,           'amount');
+        ok ( defined( $res->{donations}->[0]->{name} ),        'donor name is defined');
+        ok ( defined( $res->{donations}->[0]->{birthdate} ),   'donor birthdate is defined');
+        ok ( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
+        ok ( defined( $res->{donations}->[0]->{email} ),       'donor email is defined');
+        ok ( defined( $res->{donations}->[0]->{phone} ),       'donor phone is defined');
+    }
 };
 
 done_testing();

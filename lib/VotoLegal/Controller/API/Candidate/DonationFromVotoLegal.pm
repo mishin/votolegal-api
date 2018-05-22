@@ -27,6 +27,7 @@ sub list_GET {
                 { captured_at      => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
                 { amount           => 'votolegal_donation_immutable.amount' },
                 { name             => 'votolegal_donation_immutable.donor_name' },
+                { email            => 'votolegal_donation_immutable.donor_email' },
                 { phone            => 'votolegal_donation_immutable.donor_phone' },
                 { birthdate        => 'votolegal_donation_immutable.donor_birthdate' },
                 { cpf              => 'votolegal_donation_immutable.donor_cpf' },
