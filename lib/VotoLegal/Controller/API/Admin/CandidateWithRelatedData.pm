@@ -35,6 +35,8 @@ sub list_GET {
         my $payment_created_at = $payment ? DateTime::Format::Pg->parse_datetime( $payment->created_at )->dmy('/') : 0;
 
         $ret->[$i]->{'status da conta'}   = $payment_status;
+        $ret->[$i]->{'pagina publicada'}  = $candidate->is_published;
+        $ret->[$i]->{'url'}               = "www.votolegal.com.br/em/" . $candidate->username;
         $ret->[$i]->{'data de pagamento'} = $payment_created_at;
         $ret->[$i]->{'cod. do pagamento'} = $payment ? $payment->code : 0;
         $ret->[$i]->{'metodo'}            = $payment ? $payment->get_human_like_method() : 0;

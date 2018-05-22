@@ -25,6 +25,7 @@ db_transaction {
     create_candidate(
         email                => $email,
         name                 => $name,
+        username             => 'foobar',
         party_id             => $party_id,
         cpf                  => $cpf,
         office_id            => $office_id,
@@ -52,20 +53,22 @@ db_transaction {
     stash_test "get_candidate" => sub {
         my $res = shift;
 
-        is( $res->{candidates}->[0]->{'status da conta'},   'não criou pagamento', 'payment status' );
-        is( $res->{candidates}->[0]->{'metodo'},            '0',                    'payment method' );
-        is( $res->{candidates}->[0]->{'nome do candidato'}, $name,                  'nome' );
-        is( $res->{candidates}->[0]->{'cpf'},               $cpf,                   'cpf' );
-        is( $res->{candidates}->[0]->{'nome do pagamento'}, '0',                    'nome do pagamento' );
-        is( $res->{candidates}->[0]->{'telefone'},          '0',                    'telefone' );
-        is( $res->{candidates}->[0]->{'estado'},            $address_state,         'estado' );
-        is( $res->{candidates}->[0]->{'cidade'},            $address_city,          'cidade' );
-        is( $res->{candidates}->[0]->{'cep'},               $address_zipcode,       'cep' );
-        is( $res->{candidates}->[0]->{'rua'},               $address_street,        'rua' );
-        is( $res->{candidates}->[0]->{'numero'},            $address_house_number,  'número' );
-        is( $res->{candidates}->[0]->{'valor bruto'},       '0',                    'valor bruto' );
-        is( $res->{candidates}->[0]->{'taxa'},              '0',                    'taxas' );
-        is( $res->{candidates}->[0]->{'valor liquido'},     '0',                    'valor líquido' );
+        is( $res->{candidates}->[0]->{'status da conta'},   'não criou pagamento',            'payment status' );
+        is( $res->{candidates}->[0]->{'pagina publicada'},  0,                                'publish bool' );
+        is( $res->{candidates}->[0]->{'url'},               'www.votolegal.com.br/em/foobar', 'url' );
+        is( $res->{candidates}->[0]->{'metodo'},            '0',                              'payment method' );
+        is( $res->{candidates}->[0]->{'nome do candidato'}, $name,                            'nome' );
+        is( $res->{candidates}->[0]->{'cpf'},               $cpf,                             'cpf' );
+        is( $res->{candidates}->[0]->{'nome do pagamento'}, '0',                              'nome do pagamento' );
+        is( $res->{candidates}->[0]->{'telefone'},          '0',                              'telefone' );
+        is( $res->{candidates}->[0]->{'estado'},            $address_state,                   'estado' );
+        is( $res->{candidates}->[0]->{'cidade'},            $address_city,                    'cidade' );
+        is( $res->{candidates}->[0]->{'cep'},               $address_zipcode,                 'cep' );
+        is( $res->{candidates}->[0]->{'rua'},               $address_street,                  'rua' );
+        is( $res->{candidates}->[0]->{'numero'},            $address_house_number,            'número' );
+        is( $res->{candidates}->[0]->{'valor bruto'},       '0',                              'valor bruto' );
+        is( $res->{candidates}->[0]->{'taxa'},              '0',                              'taxas' );
+        is( $res->{candidates}->[0]->{'valor liquido'},     '0',                              'valor líquido' );
       }
 };
 
