@@ -291,10 +291,6 @@ sub _process_state {
 
     my $stash = $donation->stash_parsed();
 
-    use DDP; p "_process_state";
-     p $stash;
-    p $params;
-
     my @params = ( $state, $loc, $donation, $params, $stash );
 
     if ( $state eq 'created' ) {
