@@ -128,3 +128,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0122-donor_birthdate_can-be-null [0121-view-donations] 2018-05-22T23:38:21Z renato,,, <renato@renato-MS-7A34> # null birthday
 0123-audit-tables [0122-donor_birthdate_can-be-null] 2018-05-23T08:20:20Z renato,,, <renato@renato-MS-7A34> # audit
 0124-uuid_generate_v1mc [0123-audit-tables] 2018-05-23T11:53:04Z renato,,, <renato@renato-MS-7A34> # uuid_generate_v1mc
+0125-remove-unused-states [0124-uuid_generate_v1mc] 2018-05-23T12:39:05Z renato,,, <renato@renato-MS-7A34> # remove-states

@@ -77,7 +77,7 @@ db_transaction {
         cc_hash                       => '123456'
       };
 
-    assert_current_step('register_capture');
+    assert_current_step('wait_for_compensation');
     is messages2str $response, 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos';
 
     my $donation_stash = get_current_stash;
@@ -216,6 +216,6 @@ sub test_boleto {
 
     is messages2str $response, 'msg_boleto_paid_message', 'msg_boleto_paid_message';
 
-    assert_current_step('register_capture');
+    assert_current_step('wait_for_compensation');
 
 }

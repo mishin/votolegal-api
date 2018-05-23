@@ -124,7 +124,7 @@ digraph $graph_name {
         fillcolor="#ffbfc6",
         style="filled,solid"
     ];
-    register_capture [
+    wait_for_compensation [
         color="black",
         fillcolor="#68ffa7",
         style="filled,solid"
@@ -145,11 +145,7 @@ digraph $graph_name {
 
     { rank=same capture_cc validate_payment not_authorized boleto_expired}
     { rank=same boleto_authentication credit_card_form}
-    { rank=same register_capture }
 
-    { rank=same created wait_for_compensation  }
-
-    { rank=same register_refund pending_refund_register}
 
 }
     |;
