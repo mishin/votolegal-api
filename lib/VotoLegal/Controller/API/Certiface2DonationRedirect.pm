@@ -28,8 +28,13 @@ sub lookup : Chained('base') : PathPart('') : Args(0) {
 
             $token->update( { certiface_return_count => \'certiface_return_count + 1' } );
 
-            my $url = $token->certiface_return_url->url;
+            my $return = $token->certiface_return_url;
+            my $url    = $return->url;
 
+            # no voto legal precisa colocar /em/username
+            if ( $return->id == 1 ) {
+                $url .= 'em/' . $token->votolegal_donation->candidate->username;
+            }
             my $uri = URI->new($url);
 
             $uri->query_form( 'donation_id' => $token->votolegal_donation_id );
