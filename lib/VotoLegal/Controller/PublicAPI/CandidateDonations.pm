@@ -50,8 +50,6 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
                 { hash        => 'me.decred_capture_txid' },
                 { id          => 'me.id' },
-                { _ccat       => \"me.created_at" },
-                { _cpat       => \"me.captured_at" },
                 { _marker     => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 
             ],
