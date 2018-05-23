@@ -105,8 +105,10 @@ sub candidate_GET {
           )->all
     ];
 
-    $candidate->{political_movement_name} =
-      $c->stash->{candidate}->political_movement_id ? $c->stash->{candidate}->political_movement->name : ();
+    if ( my $political_movement_id = $c->stash->{candidate}->political_movement_id ) {
+
+        $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name if $political_movement_id !~ /^(6|7)$/
+    }
 
     return $self->status_ok(
         $c,
