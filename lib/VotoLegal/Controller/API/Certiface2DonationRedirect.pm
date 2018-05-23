@@ -38,6 +38,7 @@ sub lookup : Chained('base') : PathPart('') : Args(0) {
             my $uri = URI->new($url);
 
             $uri->query_form( 'donation_id' => $token->votolegal_donation_id );
+            $uri->query_form( 'ref' => $c->req->params->{ref} ) if $c->req->params->{ref};
 
             $c->response->redirect( $uri->as_string, 302 );
 
