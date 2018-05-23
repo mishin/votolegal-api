@@ -339,13 +339,19 @@ sub set_current_dev_auth {
     $sessionkey = shift;
 }
 
+
+our $donation_id;
+sub set_current_donation {
+    $donation_id = shift;
+}
+
 sub get_current_stash () {
     my $schema = VotoLegal->model('DB');
 
     my $row = $schema->resultset('VotolegalDonation')->search(
         { device_authorization_token_id => $sessionkey },
         {
-            order_by => { -desc => 'id' },
+            order_by => { -desc => 'created_at' },
             rows     => 1
         }
     )->next;
@@ -386,13 +392,15 @@ sub assert_current_step ($) {
     my ($stepname) = @_;
     my $schema = VotoLegal->model('DB');
 
-    my $row = $schema->resultset('VotolegalDonation')->search( { device_authorization_token_id => $sessionkey } )->next;
+    my $row = $schema->resultset('VotolegalDonation')->find($donation_id);
     if ($row) {
         unless ( is( $row->state, $stepname, "current state is $stepname" ) ) {
             my $str = 'Real fail is on' . ( join " - ", caller() ) . "\n\n";
             print STDERR $str;
             exit(1);
         }
+    }else{
+        fail 'assert_current_step not found';
     }
 }
 

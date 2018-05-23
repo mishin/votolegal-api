@@ -52,6 +52,7 @@ db_transaction {
       };
     my $id_donation_of_3k = $response->{donation}{id};
 
+    set_current_donation $id_donation_of_3k;
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
     is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
@@ -199,9 +200,10 @@ sub test_boleto {
         amount => 3500,
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
+    set_current_donation $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';
     is links2str $response,    'msg_boleto_link',    'there is a link';
-    assert_current_step('register_capture');
+    assert_current_step('waiting_boleto_payment');
 
     setup_sucess_mock_iugu_boleto_success;
 

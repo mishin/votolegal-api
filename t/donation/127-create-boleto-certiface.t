@@ -54,6 +54,7 @@ db_transaction {
         cpf                           => $cpf,
         amount                        => 3000,
       };
+      set_current_donation $response->{donation}{id};
 
     assert_current_step('boleto_authentication');
     is messages2str $response, 'msg_text_certiface', 'message ok';
