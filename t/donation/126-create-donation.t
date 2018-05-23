@@ -87,26 +87,61 @@ db_transaction {
       code   => 200,
       params => { device_authorization_token_id => stash 'test_auth', };
     is messages2str $response, 'msg_cc_paid_message', 'apenas msg final';
-
+    inc_paid_at_seconds;
     &test_boleto;
 
     rest_get '/public-api/candidate-summary/' . stash 'candidate.id', code => 200, stash => 'res';
 
     stash_test 'res', sub {
         my ($me) = @_;
-
         is $me->{candidate}{people_donated},             2,    '2 doações';
         is $me->{candidate}{total_donated_by_votolegal}, 6500, '6500 recebidos';
     };
-    rest_get '/public-api/candidate-donations/' . stash 'candidate.id', code => 200, stash => 'res';
+
+    $ENV{MAX_DONATIONS_ROWS} = 2;
+    rest_get '/public-api/candidate-donations/' . stash 'candidate.id',
+      code  => 200,
+      stash => 'res',
+      name  => 'list last donations';
 
     stash_test 'res', sub {
         my ($me) = @_;
 
+        is $me->{has_more}, 0, 'end of page';
         is $me->{donations}[0]{amount}, 3500, 'amount ok';
         is $me->{donations}[1]{amount}, 3000, 'amount ok';
-
         is $me->{donations}[1]{id}, $id_donation_of_3k, 'last donation is the first (reverse order)';
+    };
+
+    subtest 'pagination tests' => sub {
+        $ENV{MAX_DONATIONS_ROWS} = 1;
+        rest_get '/public-api/candidate-donations/' . stash 'candidate.id',
+          code  => 200,
+          stash => 'res',
+          name  => 'list last donations with MAX_DONATIONS_ROWS=1';
+
+        my $next;
+        stash_test 'res', sub {
+            my ($me) = @_;
+
+            is $me->{has_more}, 1, 'has second page';
+            is $me->{donations}[0]{amount}, 3500, 'amount ok';
+
+            $next = $me->{donations}[0]{_marker};
+        };
+
+        rest_get [ '/public-api/candidate-donations', stash 'candidate.id', $next ],
+          code  => 200,
+          stash => 'res',
+          name  => 'list donations before ' . $next;
+        stash_test 'res', sub {
+            my ($me) = @_;
+
+            is $me->{has_more}, 0, 'end of page';
+            is $me->{donations}[0]{amount}, 3000, 'amount ok';
+
+        };
+
     };
 
     rest_get [ '/public-api/candidate-donations/' . stash 'candidate.id', 'donators-name' ],
@@ -160,8 +195,8 @@ sub test_boleto {
         device_authorization_token_id => stash 'test_auth',
         payment_method                => 'boleto',
 
-        cpf                           => $cpf,
-        amount                        => 3500,
+        cpf    => $cpf,
+        amount => 3500,
       };
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     is messages2str $response, 'msg_boleto_message', 'msg_boleto_message';

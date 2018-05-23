@@ -24,6 +24,13 @@ our $iugu_invoice_response_capture;
 our $certiface_generate_token;
 our $certiface_get_token_information;
 
+our $paid_at_further = DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00';
+
+my $inc = 0;
+sub inc_paid_at_seconds {
+    $inc++;
+    $paid_at_further  = DateTime->now( time_zone => 'America/Sao_Paulo' )->add(seconds => $inc)->datetime . '-03:00';
+}
 # ugly hack
 sub import {
     strict->import;
@@ -769,7 +776,7 @@ sub setup_sucess_mock_iugu {
         'secure_url'                    => 'https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb',
         'total_on_occurrence_day'       => '30.00 BRL',
         'total_paid_cents'              => 3000,
-        'paid_at'                       => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00',
+        'paid_at'                       => $paid_at_further,
         'fines_on_occurrence_day'       => '0.00 BRL',
         'customer_ref'                  => undef,
         'paid_cents'                    => 3000,
@@ -876,7 +883,7 @@ sub setup_sucess_mock_iugu_boleto_success {
         'paid'                    => '35.00 BRL',
         'commission'              => '0.00 BRL',
         'customer_name'           => undef,
-        'paid_at'                 => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00',
+        'paid_at'                 => $paid_at_further,
         'total_overpaid'          => '0.00 BRL',
         'discount'                => undef,
         'commission_cents'        => 0,

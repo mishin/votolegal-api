@@ -3,6 +3,7 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 use DateTime;
+use VotoLegal::Utils;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -33,14 +34,10 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     }
 
     $c->stash->{candidate} = $candidate;
-}
 
-sub donate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }
+    $c->stash->{max_rows} = $ENV{MAX_DONATIONS_ROWS} || 100;
 
-sub donate_GET {
-    my ( $self, $c ) = @_;
-
-    my @donations = $c->stash->{candidate}->votolegal_donations->search(
+    $c->stash->{donations_rs} = $c->stash->{candidate}->votolegal_donations->search(
         {
             captured_at => { '!=' => undef },
             refunded_at => undef,
@@ -53,19 +50,75 @@ sub donate_GET {
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
                 { hash        => 'me.decred_capture_txid' },
                 { id          => 'me.id' },
+                { _ccat       => \"me.created_at" },
+                { _cpat       => \"me.captured_at" },
+                { _marker     => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
+
             ],
             join         => 'votolegal_donation_immutable',
             order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
-            page         => 1,
-            rows         => 100,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
+            rows         => $c->stash->{max_rows} + 1
+        }
+    );
+
+}
+
+sub donate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }
+
+sub donate_GET {
+    my ( $self, $c ) = @_;
+
+    my @donations = $c->stash->{donations_rs}->all();
+
+    my $has_more = 0;
+    if ( @donations == $c->stash->{max_rows} + 1 ) {
+        $has_more++;
+        pop @donations;
+    }
+    return $self->status_ok(
+        $c,
+        entity => {
+            donations => \@donations,
+            has_more  => $has_more ? \1 : \0,
+            generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
+        }
+    );
+}
+
+sub donations_more : Chained('object') : PathPart('') : Args(1) : ActionClass('REST') { }
+
+sub donations_more_GET {
+    my ( $self, $c, $timestamps ) = @_;
+
+    if ( $timestamps !~ /^[0-9]{10,11}(\.[0-9]{1,5})?\*[0-9]{10,11}(\.[0-9]{1,5})?$/ ) {
+        $self->status_not_found( $c, message => 'invalid pagination' );
+        $c->detach();
+    }
+
+    my ( $captured_at, $created_at ) = split /\*/, $timestamps;
+
+    my $op = is_test() ? '<' : '<=';
+    my @donations = $c->stash->{donations_rs}->search(
+        {
+            # capture precisao de segundos, entao pode trazer os que sao iguais
+            # durante o teste, preciso ignorar isso
+            captured_at => { $op => \[ "to_timestamp(?)", $captured_at ] },
+            created_at  => { '<' => \[ "to_timestamp(?)", $created_at ] },
         }
     )->all();
+
+    my $has_more = 0;
+    if ( @donations == $c->stash->{max_rows} + 1 ) {
+        $has_more++;
+        pop @donations;
+    }
 
     return $self->status_ok(
         $c,
         entity => {
-            donations    => \@donations,
+            donations => \@donations,
+            has_more  => $has_more ? \1 : \0,
             generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
         }
     );
