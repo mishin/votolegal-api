@@ -92,7 +92,7 @@ sub candidate_GET {
 
     if ( my $political_movement_id = $c->stash->{candidate}->political_movement_id ) {
 
-        $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name unless $political_movement_id =~ /^(6|7)$/
+        $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name if $political_movement_id !~ /^(6|7)$/
     }
 
     $candidate->{party_fund}                    = $c->stash->{candidate}->party_fund();
