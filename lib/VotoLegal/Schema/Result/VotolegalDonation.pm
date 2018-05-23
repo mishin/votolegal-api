@@ -18,7 +18,7 @@ __PACKAGE__->add_columns(
   "id",
   {
     data_type => "uuid",
-    default_value => \"uuid_generate_v1()",
+    default_value => \"uuid_generate_v1mc()",
     is_nullable => 0,
     size => 16,
   },
@@ -132,8 +132,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:x7KSprVw8CZlj0kuyfi+uw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-23 08:53:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uweR/jkf/Piz7Ysk4fL+pA
 
 use Carp;
 use JSON::XS;
