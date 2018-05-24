@@ -388,8 +388,10 @@ sub validate_donation_fp {
     $fp = eval { from_json($fp) };
     die_with 'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id};
 
-    for (qw/ms canvas webgl/) {
-        die_with 'fp-invalid-contact-support' if exists $fp->{$_} && $fp->{$_} !~ /^[0-9]+$/;
+    if ( exists $fp->{id} ne 'error' ) {
+        for (qw/ms canvas webgl/) {
+            die_with 'fp-invalid-contact-support' if exists $fp->{$_} && $fp->{$_} !~ /^[0-9]+$/;
+        }
     }
 
     return $fp;
