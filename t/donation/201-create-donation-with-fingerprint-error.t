@@ -46,7 +46,7 @@ db_transaction {
       params => {
         generate_rand_donator_data_cc(),
 
-        donation_fp => 'eyJpZCI6ImVycm9yIiwgIm1zIjogMTAwfQ==',
+        donation_fp => 'eyJpZCI6ImVycm9yIiwgIm1zZyI6ICJqcyBlcnJvciBoZXJlIn0=',
 
         candidate_id                  => stash 'candidate.id',
         device_authorization_token_id => stash 'test_auth',
@@ -59,8 +59,12 @@ db_transaction {
     set_current_donation $id_donation_of_3k;
     assert_current_step('credit_card_form');
 
-    is $schema->resultset('DonationFpDetail')->count, 0, 'still no DonationFpDetail inserted';
-    is $schema->resultset('DonationFp')->next->fp_hash, 'error', 'hash is error';
+    is $schema->resultset('DonationFpDetail')->count, 1, 'one DonationFpDetail inserted';
+
+    my $fp = $schema->resultset('DonationFp')->next;
+
+    is $fp->fp_hash, 'error', 'hash is error';
+    is $fp->donation_fp_details->next->donation_fp_value, 'js error here', 'accept js error on FP';
 
 };
 
