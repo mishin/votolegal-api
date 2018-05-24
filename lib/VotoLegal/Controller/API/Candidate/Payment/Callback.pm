@@ -57,6 +57,8 @@ sub callback_POST {
         }
         elsif ( $status == 6 || $status == 7 ) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+            die \['code', 'could not find payment with that code'] unless $payment;
+
             $c->model("DB::PaymentLog")->create(
                 {
                     payment_id => $payment->id,
@@ -68,6 +70,8 @@ sub callback_POST {
         }
         elsif ( $status == 2 ) {
             my $payment = $c->model("DB::Payment")->search( { code => $req->{code} } )->next;
+            die \['code', 'could not find payment with that code'] unless $payment;
+
             $c->model("DB::PaymentLog")->create(
                 {
                     payment_id => $payment->id,
