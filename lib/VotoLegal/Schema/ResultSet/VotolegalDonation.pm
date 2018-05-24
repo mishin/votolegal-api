@@ -302,8 +302,8 @@ sub action_specs {
                   billing_address_state
                   /;
 
-                $values{$_} or die_with 'need_phone_for_cc'     for qw/phone/;
-                $values{$_} or die_with 'need_birthdate_for_cc' for qw/birthdate/;
+                $values{$_} or die_with 'need_phone_for_boleto'     for qw/phone/;
+                $values{$_} or die_with 'need_birthdate_for_boleto' for qw/birthdate/;
             }
 
             # tira espaços duplicados antes de salvar
