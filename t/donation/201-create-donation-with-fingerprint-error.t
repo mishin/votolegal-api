@@ -64,7 +64,7 @@ db_transaction {
     my $fp = $schema->resultset('DonationFp')->next;
 
     is $fp->fp_hash, 'error', 'hash is error';
-    is $fp->donation_fp_details->next->donation_fp_value, 'js error here', 'accept js error on FP';
+    is $fp->donation_fp_details->next->donation_fp_value->value, 'js error here', 'accept js error on FP';
 
 };
 
