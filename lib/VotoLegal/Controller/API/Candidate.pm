@@ -90,6 +90,11 @@ sub candidate_GET {
         };
     }
 
+
+    if ( $c->stash->{candidate}->running_for_address_state ) {
+        $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
+    }
+
     if ( my $political_movement_id = $c->stash->{candidate}->political_movement_id ) {
 
         $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name if $political_movement_id !~ /^(6|7)$/

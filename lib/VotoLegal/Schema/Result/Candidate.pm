@@ -138,6 +138,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 2000, is_nullable => 0 },
   "is_published",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "running_for_address_state",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -260,8 +262,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 19:15:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GJQUZ3WnPQQZZriLTdZboQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-24 14:40:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:egPkvjPROwroN/Sq4D5KXQ
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -679,6 +681,19 @@ sub verifiers_specs {
                     required => 0,
                     type     => "Bool"
                 },
+                running_for_address_state => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $address_state = $_[0]->get_value('running_for_address_state');
+
+                        my $state = $self->result_source->schema->resultset('State')
+                          ->search( { name => $address_state } )->next;
+
+                        die \[ 'running_for_address_state', 'could not find state with that name' ]
+                          unless $state;
+                    }
+                }
             },
         ),
 

@@ -178,6 +178,21 @@ db_transaction {
     };
 
     rest_put "/api/candidate/${candidate_id}",
+      name => "Adding political movement",
+      [ running_for_address_state => 'Amazonas' ],
+      ;
+
+      rest_get "/api/candidate/$username",
+      name  => 'get candidate by username',
+      stash => "get_candidate";
+
+    stash_test "get_candidate" => sub {
+        my $res = shift;
+
+        is( $res->{candidate}->{address_state_name}, 'Amazonas', 'address state name' );
+    };
+
+    rest_put "/api/candidate/${candidate_id}",
       name  => 'edit myself',
       files => {
         picture              => "$Bin/picture.jpg",
