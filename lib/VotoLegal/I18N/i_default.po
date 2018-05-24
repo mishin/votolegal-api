@@ -156,3 +156,9 @@ msgstr "Somos Rede - Recibo provisório"
 
 msgid "donation_daily_reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."
+
+msgid "device_authorization_token_id_invalid"
+msgstr "device_authorization_token_id invalido"
+
+msgid "certiface_token_invalid"
+msgstr "certiface_token invalido"
