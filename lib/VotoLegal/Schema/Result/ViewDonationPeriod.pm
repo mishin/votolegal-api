@@ -19,7 +19,7 @@ __PACKAGE__->result_source_instance->is_virtual(1);
 
 __PACKAGE__->result_source_instance->view_definition(<<'SQL_QUERY');
 SELECT
-    c.id AS candidate_id,
+    s.candidate_id AS candidate_id,
     c.name AS candidate_name,
     c.address_state,
     p.name as party,
@@ -29,7 +29,7 @@ SELECT
     ( s.amount_donation_by_votolegal / 100 )::numeric(20, 2) AS amount_raised,
     ( ( s.amount_donation_by_votolegal / (date_part('day', age(current_date::timestamp, published_at::timestamp) ) + 1)::int ) / 100 )::numeric(20, 2) AS median_per_day
 FROM candidate AS c, candidate_donation_summary AS s, party AS p
-WHERE c.party_id = p.id
+WHERE c.party_id = p.id AND s.candidate_id = c.id
 
 SQL_QUERY
 1;
