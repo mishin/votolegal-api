@@ -10,6 +10,8 @@ my $schema = VotoLegal->model('DB');
 
 db_transaction {
 
+    create_candidate();
+
     my $name          = fake_name()->();
     my $party_id      = fake_int(1, 35)->();
     my $address_state = 'SP';
@@ -50,6 +52,8 @@ db_transaction {
 
     stash_test "get_candidate_donation_data" => sub {
         my $res = shift;
+
+        is ( scalar @{ $res->{candidates} }, 1, 'only one candidate');
 
         my $res_candidate = $res->{candidates}->[0];
 

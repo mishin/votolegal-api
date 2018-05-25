@@ -29,7 +29,7 @@ SELECT
     ( s.amount_donation_by_votolegal / 100 )::numeric(20, 2) AS amount_raised,
     ( ( s.amount_donation_by_votolegal / (date_part('day', age(current_date::timestamp, published_at::timestamp) ) + 1)::int ) / 100 )::numeric(20, 2) AS median_per_day
 FROM candidate AS c, candidate_donation_summary AS s, party AS p
-WHERE c.party_id = p.id AND s.candidate_id = c.id
+WHERE c.party_id = p.id AND s.candidate_id = c.id AND c.is_published = true
 
 SQL_QUERY
 1;
