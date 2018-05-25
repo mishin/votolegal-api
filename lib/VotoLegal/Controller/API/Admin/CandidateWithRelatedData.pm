@@ -35,7 +35,7 @@ sub list_GET {
         my $payment_created_at = $payment ? DateTime::Format::Pg->parse_datetime( $payment->created_at )->dmy('/') : 0;
 
         $ret->[$i]->{'status da conta'}   = $payment_status;
-        $ret->[$i]->{'pagina publicada'}  = $candidate->is_published;
+        $ret->[$i]->{'pagina publicada'}  = $candidate->is_published ? 'ATIVO' : 'DESABILITADO';
         $ret->[$i]->{'url'}               = "www.votolegal.com.br/em/" . $candidate->username;
         $ret->[$i]->{'data de pagamento'} = $payment_created_at;
         $ret->[$i]->{'cod. do pagamento'} = $payment ? $payment->code : 0;
@@ -45,7 +45,7 @@ sub list_GET {
         $ret->[$i]->{'email'}             = $candidate->user->email;
         $ret->[$i]->{'cargo'}             = $candidate->office->name;
         $ret->[$i]->{'partido'}           = $candidate->party->name;
-        $ret->[$i]->{'movimento'} = $candidate->political_movement_id ? $candidate->political_movement->name : 0;
+        $ret->[$i]->{'movimento'}         = $candidate->political_movement_id ? $candidate->political_movement->name : 0;
         $ret->[$i]->{'nome do pagamento'} = $payment ? $payment->name : 0;
         $ret->[$i]->{'telefone'}          = $payment ? $payment->phone : 0;
         $ret->[$i]->{'estado'}            = $candidate->address_state;

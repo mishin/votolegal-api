@@ -54,7 +54,7 @@ db_transaction {
         my $res = shift;
 
         is( $res->{candidates}->[0]->{'status da conta'},   'não criou pagamento',            'payment status' );
-        is( $res->{candidates}->[0]->{'pagina publicada'},  0,                                'publish bool' );
+        is( $res->{candidates}->[0]->{'pagina publicada'},  'DESABILITADO',                   'publish string' );
         is( $res->{candidates}->[0]->{'url'},               'www.votolegal.com.br/em/foobar', 'url' );
         is( $res->{candidates}->[0]->{'metodo'},            '0',                              'payment method' );
         is( $res->{candidates}->[0]->{'nome do candidato'}, $name,                            'nome' );
