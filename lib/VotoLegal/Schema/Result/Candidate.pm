@@ -140,6 +140,10 @@ __PACKAGE__->add_columns(
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
   "running_for_address_state",
   { data_type => "text", is_nullable => 1 },
+  "published_at",
+  { data_type => "timestamp", is_nullable => 1 },
+  "unpublished_at",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -262,8 +266,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-24 14:40:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:egPkvjPROwroN/Sq4D5KXQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-25 09:50:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mtVzvjzlZ7Is0OpTTys/jw
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -771,11 +775,21 @@ sub action_specs {
                 }
             }
 
-            return $self->update( { is_published => 1 } );
+            return $self->update(
+              {
+                is_published => 1,
+                published_at => \'NOW()'
+              }
+            );
         },
 
         unpublish => sub {
-            $self->update( { is_published => 0 } );
+            $self->update(
+                {
+                    is_published   => 0,
+                    unpublished_at => \'NOW()'
+                }
+            );
         },
     };
 }
