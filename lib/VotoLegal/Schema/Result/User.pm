@@ -106,7 +106,7 @@ sub new_session {
         $session = $self->user_sessions->create(
             {
                 valid_for_ip => $args{ip},
-                api_key      => random_string(128),
+                api_key      => random_string(14),
             }
         );
     }
