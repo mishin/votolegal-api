@@ -53,6 +53,8 @@ sub die_with_reason ($$) {
     die { msg_id => shift, reason => shift };
 }
 
+my $already_notifed;
+
 sub remote_notify {
     my ( $text, %opts ) = @_;
 
@@ -72,6 +74,9 @@ sub remote_notify {
 
         my $uri = URI->new( $ENV{VOTOLEGAL_HANGOUTS_CHAT_URL} );
         $uri->query_param_append( 'thread_key', $opts{channel} || 'error' );
+
+        return 1 if exists $already_notifed->{$text};
+        $already_notifed->{$text} = 1;
 
         my $x = eval {
             $furl->post(
