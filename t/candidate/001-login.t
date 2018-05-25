@@ -45,7 +45,7 @@ db_transaction {
 
         is( $res->{candidate_id},   $candidate_id,    'candidate id' );
         is( $res->{candidate_name}, $candidate->name, 'candidate name' );
-        is( length $res->{api_key}, 128,              'api key' );
+        is( length $res->{api_key}, 14,               'api key' );
     };
 
     # Candidatos que não foram aprovados não podem logar na plataforma.
