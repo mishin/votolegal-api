@@ -226,7 +226,9 @@ sub _messages_of_state {
 
         my $text_boleto = $loc->('msg_boleto_message');
 
-        # s/__DUE_DATE__/;
+        my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
+        $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
+
         @messages = (
             {
                 type => 'msg',
