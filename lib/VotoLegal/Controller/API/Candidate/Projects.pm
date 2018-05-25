@@ -79,12 +79,17 @@ sub project : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {
 sub project_GET {
     my ( $self, $c ) = @_;
 
-    my $response = {
-        ( map { $_ => $c->stash->{project}->$_ } qw(id title scope) ),
-        votes =>
-          $c->stash->{project}->project_votes->search( { 'donation.status' => "captured" }, { join => 'donation' }, )
-          ->count,
-    };
+    my $response = [
+        map {
+            { $_->get_columns }
+          } $c->model('DB::ViewProjectValidVote')->search(
+            { candidate_id => $c->stash->{candidate}->id },
+            {
+                rows     => 20,
+                order_by => "id",
+            }
+          )->all
+    ];
 
     return $self->status_ok( $c, entity => $response );
 }
