@@ -201,11 +201,15 @@ sub as_row_for_email_variable {
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
                     captured_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', captured_at)) , 'DD/MM/YYYY hh:mm:ss')"
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    created_at_human => \
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     refunded_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', refunded_at)) , 'DD/MM/YYYY hh:mm:ss')"
+                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
               ]
 
