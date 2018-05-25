@@ -32,7 +32,7 @@ db_transaction {
 
     $candidate->update(
         {
-            raising_goal   => 10000,
+            raising_goal   => 100.00,
             payment_status => 'paid',
             status         => 'activated',
             is_published   => 1,
