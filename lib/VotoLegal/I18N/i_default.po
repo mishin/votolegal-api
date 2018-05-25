@@ -162,3 +162,7 @@ msgstr "device_authorization_token_id invalido"
 
 msgid "certiface_token_invalid"
 msgstr "certiface_token invalido"
+
+msgid "donation_id_invalid"
+msgstr "donation_id invalido"
+
