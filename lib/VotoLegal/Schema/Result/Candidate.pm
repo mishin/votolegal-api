@@ -778,7 +778,7 @@ sub action_specs {
             return $self->update(
               {
                 is_published => 1,
-                published_at => \'NOW()'
+                published_at => \'coalesce(published_at, NOW())'
               }
             );
         },
