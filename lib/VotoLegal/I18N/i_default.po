@@ -57,7 +57,7 @@ msgid "msg_cc_authorized"
 msgstr "<p class="payment-confirmation-message">Doação confirmada</p>"
 
 msgid "msg_cc_not_authorized"
-msgstr "A operadora do cartão de crédito não autorizou a doação."
+msgstr "<p class="payment-final-message">A operadora do cartão de crédito não autorizou a doação.</p>"
 
 msgid "msg_certificate_refused"
 msgstr "O processo de verificação de identidade não foi concluído com sucesso, por favor, use outra forma de pagamento."
