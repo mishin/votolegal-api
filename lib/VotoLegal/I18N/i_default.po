@@ -54,7 +54,7 @@ msgid "btn_pay_with_cc"
 msgstr "Pagar com cartão"
 
 msgid "msg_cc_authorized"
-msgstr "Compra no cartão autorizada com sucesso"
+msgstr "<p class="payment-confirmation-message">Doação confirmada</p>"
 
 msgid "msg_cc_not_authorized"
 msgstr "A operadora do cartão de crédito não autorizou a doação."
