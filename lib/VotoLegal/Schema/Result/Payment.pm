@@ -57,6 +57,12 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "payment_id_seq",
   },
+  "gross_amount",
+  { data_type => "text", is_nullable => 1 },
+  "net_amount",
+  { data_type => "text", is_nullable => 1 },
+  "fee_amount",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -73,8 +79,8 @@ __PACKAGE__->has_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hEyowmVu9X+nL8NB1Gimrg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-28 10:30:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OdKFIoPo4fPmL1cL2Mh6Qw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
@@ -358,6 +364,22 @@ sub get_human_like_method {
 sub get_pagseguro_data {
     my ($self) = @_;
 
+    if ( is_test() ) {
+        $self->update(
+            {
+               gross_amount => 10,
+               fee_amount   => 3,
+               net_amount   => 7
+            }
+        );
+
+        return {
+            grossAmount => 10,
+            feeAmount   => 3,
+            netAmount   => 7
+        };
+    }
+
     my $merchant_id  = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_ID};
     my $merchant_key = $ENV{VOTOLEGAL_PAGSEGURO_MERCHANT_KEY};
 
@@ -374,8 +396,32 @@ sub get_pagseguro_data {
         return 0;
     }
     else {
+        $self->update(
+            {
+               gross_amount => $payment_data->{grossAmount},
+               fee_amount   => $payment_data->{feeAmount},
+               net_amount   => $payment_data->{netAmount}
+            }
+        );
+
         return $payment_data;
     }
+}
+
+sub has_amount_data {
+    my ($self) = @_;
+
+    # Verifico se há algum dado de valor.
+    # Caso tenha, não é necessário buscar no
+    # Pagseguro.
+
+    my $ret = 1;
+    my @cols = qw/ gross_amount net_amount fee_amount /;
+    for my $col (@cols) {
+        $ret = 0 unless $self->$col;
+    }
+
+    return $ret;
 }
 
 __PACKAGE__->meta->make_immutable;
