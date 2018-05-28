@@ -39,10 +39,10 @@ msgid "msg_boleto_link"
 msgstr "Visualizar boleto"
 
 msgid "msg_boleto_paid_message"
-msgstr "Boleto pago! Obrigado por contribuir!"
+msgstr "<p class="payment-final-message">Boleto pago! Obrigado por contribuir!</p>"
 
 msgid "msg_cc_paid_message"
-msgstr "Doação efetuada com sucesso! Obrigado por contribuir!"
+msgstr "<p class="payment-final-message">Doação efetuada com sucesso! Obrigado por contribuir!<p/>"
 
 msgid "msg_text_certiface"
 msgstr "<p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
