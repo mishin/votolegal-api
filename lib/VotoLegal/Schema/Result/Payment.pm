@@ -426,13 +426,7 @@ sub has_amount_data {
     # Caso tenha, não é necessário buscar no
     # Pagseguro.
 
-    my $ret = 1;
-    my @cols = qw/ gross_amount net_amount fee_amount /;
-    for my $col (@cols) {
-        $ret = 0 unless $self->$col;
-    }
-
-    return $ret;
+    return $self->gross_amount ? 1 : 0;
 }
 
 __PACKAGE__->meta->make_immutable;
