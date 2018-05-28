@@ -45,7 +45,7 @@ msgid "msg_cc_paid_message"
 msgstr "<p class="payment-final-message">Doação efetuada com sucesso! Obrigado por contribuir!<p/>"
 
 msgid "msg_text_certiface"
-msgstr "<p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
+msgstr "<h3>Reconhecimento facial</h3><img src="" alt="uma face" class="certiface-img"><p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
 
 msgid "msg_link_certiface"
 msgstr "Verificar minha identidade"
