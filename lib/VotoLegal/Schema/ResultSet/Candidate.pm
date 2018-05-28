@@ -246,14 +246,15 @@ sub get_candidates_with_data_for_admin {
     return $self->search(
         {
             -and => [
-                'user.email' => { 'NOT ILIKE' => '%eokoe%' },
-                'user.email' => { 'NOT ILIKE' => '%appcivico%' },
-                'user.email' => { 'NOT ILIKE' => '%+%' },
-                'me.name'    => { 'NOT ILIKE' => '%Thiago Rondon%' },
-                'me.name'    => { 'NOT ILIKE' => '%Lucas Ansei%' },
-                'me.name'    => { 'NOT ILIKE' => '%Hernani Mattos%' },
-                'me.name'    => { 'NOT ILIKE' => '%Evelyn Perez%' },
-                'me.name'    => { 'NOT ILIKE' => '%Edgard Lobo%' },
+                'user.email'  => { 'NOT ILIKE' => '%eokoe%' },
+                'user.email'  => { 'NOT ILIKE' => '%appcivico%' },
+                'user.email'  => { 'NOT ILIKE' => '%+%' },
+                'me.name'     => { 'NOT ILIKE' => '%Thiago Rondon%' },
+                'me.name'     => { 'NOT ILIKE' => '%Lucas Ansei%' },
+                'me.name'     => { 'NOT ILIKE' => '%Hernani Mattos%' },
+                'me.name'     => { 'NOT ILIKE' => '%Evelyn Perez%' },
+                'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
+                'me.username' => { 'NOT ILIKE' => '%campanharede%' }
             ]
         },
         { prefetch => [qw/ party office political_movement payments user /] }
