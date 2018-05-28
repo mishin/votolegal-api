@@ -358,7 +358,18 @@ sub get_most_recent_log {
 sub get_human_like_method {
     my ($self) = @_;
 
-    return $self->method eq 'creditCard' ? 'cartão de crédito' : 'boleto';
+    my $ret;
+
+    if ( $self->method eq 'creditCard' ) {
+        $ret = 'cartão de crédito';
+    }
+    elsif ( $self->method eq 'deposit' ) {
+        $ret = 'depósito';
+    }
+    else {
+        $ret = 'boleto';
+    }
+    return $ret;
 }
 
 sub get_pagseguro_data {
