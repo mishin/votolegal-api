@@ -45,12 +45,14 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
         {
             columns => [
                 { captured_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
+                { refunded_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at))" },
                 { amount      => 'votolegal_donation_immutable.amount' },
                 { name        => 'votolegal_donation_immutable.donor_name' },
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
                 { hash        => 'me.decred_capture_txid' },
-                { id          => 'me.id' },
-                { _marker     => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
+
+                { id      => 'me.id' },
+                { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 
             ],
             join         => 'votolegal_donation_immutable',
