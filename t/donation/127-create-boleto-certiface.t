@@ -124,6 +124,8 @@ db_transaction {
           code   => 200,
           params => { device_authorization_token_id => stash 'test_auth', };
 
+        is ($schema->resultset("EmaildbQueue")->count, 1, 'Boleto created email is queued');
+
         assert_current_step('waiting_boleto_payment');
         is messages2str $response, 'msg_boleto_message', 'msg_certificate_refused';
 

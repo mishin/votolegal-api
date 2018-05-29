@@ -211,6 +211,7 @@ sub as_row_for_email_variable {
                     refunded_at_human => \
                       "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
+                { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
               ]
 
         }
@@ -303,6 +304,20 @@ sub _create_invoice {
             payment_info => to_json($payment_info),
         }
     );
+
+    if ( $self->is_boleto ) {
+        $self->result_source->schema->resultset('EmaildbQueue')->create(
+            {
+                config_id => $self->candidate->emaildb_config_id,
+                template  => 'boleto_created.html',
+                to        => $self->votolegal_donation_immutable->donor_email,
+                subject   => $self->candidate->emaildb_config_id == 1
+                    ? 'Voto Legal - Boleto Gerado'
+                    : 'Somos Rede - Boleto Gerado',
+                variables => encode_json( $self->as_row_for_email_variable() ),
+            }
+        );
+    }
 
 }
 
@@ -508,7 +523,7 @@ sub send_decred_email {
             to        => $self->votolegal_donation_immutable->donor_email,
             subject   => $self->candidate->emaildb_config_id == 1
             ? 'Voto Legal - Registro na blockchain'
-            : 'Somos rede - Registro na blockchain',
+            : 'Somos Rede - Registro na blockchain',
             variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );
