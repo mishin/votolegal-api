@@ -309,7 +309,7 @@ sub _create_invoice {
         $self->result_source->schema->resultset('EmaildbQueue')->create(
             {
                 config_id => $self->candidate->emaildb_config_id,
-                template  => 'boleto_created.html',
+                template  => 'captured.html',
                 to        => $self->votolegal_donation_immutable->donor_email,
                 subject   => $self->candidate->emaildb_config_id == 1
                     ? 'Voto Legal - Boleto Gerado'
