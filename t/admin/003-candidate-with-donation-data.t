@@ -57,16 +57,15 @@ db_transaction {
 
         my $res_candidate = $res->{candidates}->[0];
 
-        is ($res_candidate->{id},                $candidate_id,  'candidate id');
-        is ($res_candidate->{name},              $name,          'candidate name');
-        is ($res_candidate->{party},             $party_name,    'party');
-        is ($res_candidate->{address_state},     $address_state, 'address state');
-        is ($res_candidate->{raising_goal},      'R$ 100,00',    'candidate raising goal');
-        is ($res_candidate->{donation_count},    1,              'candidate donation count');
-        is ($res_candidate->{donation_count},    1,              'candidate donation count');
-        is ($res_candidate->{amount_raised},     'R$ 30,00',     'candidate amount raised');
-        is ($res_candidate->{days_fund_raising}, 10,             'days fundraising');
-        is ($res_candidate->{median_per_day},    'R$ 3,00',      'median per day');
+        is ($res_candidate->{id},                  $candidate_id,  'candidate id');
+        is ($res_candidate->{name},                $name,          'candidate name');
+        is ($res_candidate->{party},               $party_name,    'party');
+        is ($res_candidate->{address_state},       $address_state, 'address state');
+        is ($res_candidate->{raising_goal},        '100.00',       'candidate raising goal');
+        is ($res_candidate->{donation_count},      1,              'candidate donation count');
+        is ($res_candidate->{donation_count},      1,              'candidate donation count');
+        is ($res_candidate->{amount_raised},       '30',           'candidate amount raised');
+        is ($res_candidate->{avg_donation_amount}, '30',           'candidate average donation amount');
     }
 };
 

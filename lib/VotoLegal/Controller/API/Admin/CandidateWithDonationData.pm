@@ -30,15 +30,18 @@ sub list_GET {
                 map {
 
                     +{
-                        id                => $_->candidate_id,
-                        name              => $_->candidate_name,
-                        party             => $_->party,
-                        raising_goal      => $_->raising_goal,
-                        address_state     => $_->address_state,
-                        donation_count    => $_->donation_count,
-                        amount_raised     => $_->amount_raised,
-                        days_fund_raising => $_->days_fundraising,
-                        median_per_day    => $_->median_per_day,
+                        id                  => $_->candidate_id,
+                        name                => $_->candidate_name,
+                        party               => $_->party,
+                        raising_goal        => $_->raising_goal,
+                        address_state       => $_->address_state,
+                        donation_count      => $_->donation_count,
+                        amount_raised       => $_->amount_raised,
+                        avg_donation_amount => $_->avg_donation_amount,
+
+                        # Deactivating these columns for now
+                        # days_fund_raising => $_->days_fundraising,
+                        # median_per_day    => $_->median_per_day,
                     }
                 } $c->stash->{collection}->search()->all()
             ]
