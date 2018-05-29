@@ -28,7 +28,11 @@ SELECT
     date_part('day', age(current_date::timestamp, published_at::timestamp) ) + 1 AS days_fundraising,
     ( s.amount_donation_by_votolegal / 100 )::float8::numeric(11, 0) AS amount_raised,
     ( ( s.amount_donation_by_votolegal / (date_part('day', age(current_date::timestamp, published_at::timestamp) ) + 1)::int ) / 100 )::float8::numeric AS median_per_day,
-    ( ( s.amount_donation_by_votolegal / s.count_donation_by_votolegal ) / 100 )::float8::numeric(11, 0) as avg_donation_amount
+    ( CASE s.count_donation_by_votolegal
+        WHEN 0 THEN 0
+        ELSE ( ( s.amount_donation_by_votolegal / s.count_donation_by_votolegal ) / 100 )::float8::numeric(11, 0)
+        END
+    ) as avg_donation_amount
 FROM candidate AS c, candidate_donation_summary AS s, party AS p
 WHERE c.party_id = p.id AND s.candidate_id = c.id AND c.is_published = true
     AND c.name NOT ILIKE '%Edgard%' AND c.name NOT ILIKE '%Lucas Ansei%'
