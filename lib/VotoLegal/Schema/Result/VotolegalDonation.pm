@@ -450,8 +450,9 @@ sub generate_certiface_link {
 
     $self->certiface_tokens->create(
         {
-            id               => $certiface->{uuid},
-            verification_url => $certiface->{url},
+            id                      => $certiface->{uuid},
+            verification_url        => $certiface->{url},
+            certiface_return_url_id => $self->candidate->use_certiface_return_url_id
         }
     );
 
