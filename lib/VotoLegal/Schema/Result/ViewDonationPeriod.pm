@@ -11,7 +11,8 @@ __PACKAGE__->table('ViewDonationPeriod');
 __PACKAGE__->add_columns(qw(
     candidate_id candidate_name address_state
     days_fundraising amount_raised donation_count
-    raising_goal median_per_day party avg_donation_amount)
+    raising_goal median_per_day party avg_donation_amount
+    goal_raised_percentage)
 );
 
 # do not attempt to deploy() this view
@@ -32,7 +33,8 @@ SELECT
         WHEN 0 THEN 0
         ELSE ( ( s.amount_donation_by_votolegal / s.count_donation_by_votolegal ) / 100 )::float8::numeric(11, 0)
         END
-    ) as avg_donation_amount
+    ) as avg_donation_amount,
+    ( ( ( s.amount_donation_by_votolegal / 100 ) / c.raising_goal ) * 100 )::numeric(11, 3) as goal_raised_percentage
 FROM candidate AS c, candidate_donation_summary AS s, party AS p
 WHERE c.party_id = p.id AND s.candidate_id = c.id AND c.is_published = true
     AND c.name NOT ILIKE '%Edgard%' AND c.name NOT ILIKE '%Lucas Ansei%'

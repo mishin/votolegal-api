@@ -29,15 +29,22 @@ sub list_GET {
             candidates => [
                 map {
 
+                    my $raising_goal = $_->raising_goal;
+                    $raising_goal =~ s/\./,/g;
+
+                    my $goal_raised_percentage = $_->goal_raised_percentage . '%';
+                    $goal_raised_percentage =~ s/\./,/g;
+
                     +{
-                        id                  => $_->candidate_id,
-                        name                => $_->candidate_name,
-                        party               => $_->party,
-                        raising_goal        => $_->raising_goal,
-                        address_state       => $_->address_state,
-                        donation_count      => $_->donation_count,
-                        amount_raised       => $_->amount_raised,
-                        avg_donation_amount => $_->avg_donation_amount,
+                        id                     => $_->candidate_id,
+                        name                   => $_->candidate_name,
+                        party                  => $_->party,
+                        raising_goal           => $raising_goal,
+                        address_state          => $_->address_state,
+                        donation_count         => $_->donation_count,
+                        amount_raised          => $_->amount_raised,
+                        avg_donation_amount    => $_->avg_donation_amount,
+                        goal_raised_percentage => $goal_raised_percentage
 
                         # Deactivating these columns for now
                         # days_fund_raising => $_->days_fundraising,
