@@ -32,8 +32,7 @@ sub candidate_GET {
                     my $c = $_;
 
                     +{
-                        slug     => $c->username,
-                        url_path => '/em/' . $c->username
+                        slug => $c->username,
                     }
                 } $c->stash->{collection}->all()
             ],
