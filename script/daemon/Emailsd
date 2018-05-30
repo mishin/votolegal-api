@@ -5,6 +5,7 @@ use FindBin qw($RealBin $Script);
 use lib "$RealBin/../../lib";
 
 use AnyEvent;
+use Config::General;
 use Daemon::Generic;
 use Log::Log4perl qw(:easy);
 
@@ -17,6 +18,7 @@ BEGIN {
 use VotoLegal::Worker::Email;
 
 our $verbose = 0;
+our %config  = undef;
 
 newdaemon(
     options => {
@@ -27,6 +29,10 @@ newdaemon(
 
 sub gd_preconfig {
     my $self = shift;
+
+    # Config.
+    my $config = new Config::General("$RealBin/../../votolegal.conf");
+    %config    = $config->getall;
 
     $0 = "VotoLegal::Daemon::Emailsd";
     $|++;
@@ -43,7 +49,7 @@ sub gd_preconfig {
         $l4p[0]->{layout} = '%m%n';
         $l4p[0]->{level}  = $INFO;
         push @l4p, {
-            file   => ">>$RealBin/../../log/Votolegal_$Script.log",
+            file   => ">>$RealBin/../../log/$Script.log",
             layout => '[%d] %m%n',
             level  => $verbose ? $DEBUG : $INFO,
             utf8   => 1,
