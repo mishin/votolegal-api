@@ -45,7 +45,7 @@ msgid "msg_cc_paid_message"
 msgstr "<p class="payment-final-message">Doação efetuada com sucesso! Obrigado por contribuir!<p/>"
 
 msgid "msg_text_certiface"
-msgstr "<h3>Reconhecimento facial</h3><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/b3f3b78d-0582-4432-908c-c438fc3acbcd.png" alt="uma face" class="certiface-img"><p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
+msgstr "<h3>Reconhecimento facial</h3><img src="https://votolegal.com.br/static/template-emails/face.png" alt="uma face" class="certiface-img"><p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
 
 msgid "msg_link_certiface"
 msgstr "Verificar minha identidade"
