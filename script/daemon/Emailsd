@@ -24,7 +24,7 @@ newdaemon(
     options => {
         'verbose!' => \$verbose,
     },
-    pidfile => "/tmp/Votolegal_$Script.pid",
+    pidfile => "/tmp/$Script.pid",
 );
 
 sub gd_preconfig {
