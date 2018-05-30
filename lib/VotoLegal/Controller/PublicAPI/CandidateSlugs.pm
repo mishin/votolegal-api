@@ -19,7 +19,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-slugs') : CaptureArg
 
 sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }
 
-sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }
+sub candidate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub candidate_GET {
     my ( $self, $c ) = @_;
