@@ -31,8 +31,10 @@ sub candidate_GET {
                 map {
                     my $c = $_;
 
-                    slug     => $c->username,
-                    url_path => '/em/' . $c->username
+                    +{
+                        slug     => $c->username,
+                        url_path => '/em/' . $c->username
+                    }
                 } $c->stash->{collection}->all()
             ],
             generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
