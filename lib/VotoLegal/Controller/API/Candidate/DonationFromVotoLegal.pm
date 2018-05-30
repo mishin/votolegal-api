@@ -19,12 +19,15 @@ sub list_GET {
     # O candidato vê apenas doações do VotoLegal.
     my @donations = $c->stash->{candidate}->votolegal_donations->search(
         {
-            captured_at => { '!=' => undef },
+            # captured_at => { '!=' => undef },
             refunded_at => undef,
         },
         {
             columns => [
                 { captured_at      => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
+                { refunded_at      => \"timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at))" },
+                { is_pre_campaign  => 'me.is_pre_campaign' },
+                { is_boleto        => 'me.is_boleto' },
                 { amount           => 'votolegal_donation_immutable.amount' },
                 { name             => 'votolegal_donation_immutable.donor_name' },
                 { email            => 'votolegal_donation_immutable.donor_email' },
@@ -33,6 +36,9 @@ sub list_GET {
                 { cpf              => 'votolegal_donation_immutable.donor_cpf' },
                 { transaction_hash => 'me.decred_capture_txid' },
                 { id               => 'me.id' },
+                { payment_succeded => \"me.payment_info->'_charge_response_'->>'success'" },
+                { payment_lr       => \"me.payment_info->'_charge_response_'->>'LR'" },
+                { payment_message  => \"me.payment_info->'_charge_response_'->>'message'" },
             ],
             join         => 'votolegal_donation_immutable',
             order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
