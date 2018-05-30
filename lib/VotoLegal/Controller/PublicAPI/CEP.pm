@@ -1,4 +1,4 @@
-package VotoLegal::Controller::API::CEP;
+package VotoLegal::Controller::PublicAPI::CEP;
 use Moose;
 use utf8;
 use JSON::XS;
@@ -18,7 +18,7 @@ use namespace::autoclean -except => [qw(Int CEP)];
 my $options;
 my @_address_fields = qw(city district state street);
 
-sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
+sub cep : Chained('/publicapi/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
     my ( $self, $c ) = @_;
 
     $options ||= [ map { WebService::CEP->new_with_traits( traits => $_ ) } @{ $self->config->{cep_backends} } ];
@@ -38,15 +38,15 @@ sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
 
     if ($candidate) {
 
-        my $state = $c->model('DB::LState')->search( { code => $candidate->{result}{state} } )->next;
+        my $state = $c->model('DB::State')->search( { code => $candidate->{result}{state} } )->next;
 
         die_with 'state-not-found' unless $state;
 
-        my $city = $state->l_cities->search( { name => $candidate->{result}{city} } )->next;
+        my $city = $state->cities->search( { name => $candidate->{result}{city} } )->next;
         unless ($city) {
 
-            eval { $state->l_cities->search( { name => $candidate->{result}{city} } )->create( { cep => $cep } ) };
-            die $@ if $@ && $@ !~ /l_city_pkey/;
+            eval { $state->cities->search( { name => $candidate->{result}{city} } )->create( { cep => $cep } ) };
+            die $@ if $@ && $@ !~ /city_pkey/;
         }
 
         $c->res->header( 'X-Cep-Backend' => $candidate->{backend} );
@@ -57,7 +57,7 @@ sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
     $self->status_not_found( $c, message => 'CEP not found' );
 }
 
-sub state : Chained('/api/root') : PathPart('cep-states') CaptureArgs(0) {
+sub state : Chained('/publicapi/root') : PathPart('cep-states') CaptureArgs(0) {
 }
 
 sub list_states : Chained('state') : PathPart('') Args(0) GET {
@@ -66,7 +66,7 @@ sub list_states : Chained('state') : PathPart('') Args(0) GET {
     $self->status_ok(
         $c,
         entity => [
-            $c->model('DB::LState')->search_rs(
+            $c->model('DB::State')->search_rs(
                 undef,
                 {
                     result_class => 'DBIx::Class::ResultClass::HashRefInflator',
@@ -79,13 +79,13 @@ sub list_states : Chained('state') : PathPart('') Args(0) GET {
 
 sub list_cities : Chained('state') : PathPart('') Args('Int') GET {
     my ( $self, $c, $id ) = @_;
-    my $state = $c->model('DB::LState')->find($id)
+    my $state = $c->model('DB::State')->find($id)
       or $self->status_not_found( $c, message => 'state not found' ), $c->detach;
 
     $self->status_ok(
         $c,
         entity => [
-            $state->l_cities->search_rs(
+            $state->cities->search_rs(
                 undef,
                 {
                     result_class => 'DBIx::Class::ResultClass::HashRefInflator',
