@@ -306,14 +306,25 @@ sub _create_invoice {
     );
 
     if ( $self->is_boleto ) {
+        my $emaildb_config_id = $self->candidate->emaildb_config_id;
+        my $subject;
+
+        if ( $emaildb_config_id == 1 ) {
+            $subject = 'Voto Legal - Boleto gerado';
+        }
+        elsif ( $emaildb_config_id == 2 ) {
+            $subject = 'Somos Rede - Boleto gerado';
+        }
+        else {
+            $subject = 'Campanha PSOL - Boleto gerado';
+        }
+
         $self->result_source->schema->resultset('EmaildbQueue')->create(
             {
                 config_id => $self->candidate->emaildb_config_id,
                 template  => 'boleto_created.html',
                 to        => $self->votolegal_donation_immutable->donor_email,
-                subject   => $self->candidate->emaildb_config_id == 1
-                    ? 'Voto Legal - Boleto Gerado'
-                    : 'Somos Rede - Boleto Gerado',
+                subject   => $subject,
                 variables => encode_json( $self->as_row_for_email_variable() ),
             }
         );
@@ -388,6 +399,29 @@ sub set_boleto_paid {
         {
             # converte para UTC
             captured_at => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+        }
+    );
+
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Recibo provisório';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+        $subject = 'Somos Rede - Recibo provisório';
+    }
+    else {
+        $subject = 'Campanha PSOL - Recibo provisório';
+    }
+
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'captured.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $subject,
+            variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );
 }
@@ -516,14 +550,25 @@ sub upsert_decred_data {
 sub send_decred_email {
     my ($self) = @_;
 
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Registro na blockchain';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+        $subject = 'Somos Rede - Registro na blockchain';
+    }
+    else {
+        $subject = 'Campanha PSOL - Registro na blockchain';
+    }
+
     $self->result_source->schema->resultset('EmaildbQueue')->create(
         {
             config_id => $self->candidate->emaildb_config_id,
             template  => 'decred.html',
             to        => $self->votolegal_donation_immutable->donor_email,
-            subject   => $self->candidate->emaildb_config_id == 1
-            ? 'Voto Legal - Registro na blockchain'
-            : 'Somos Rede - Registro na blockchain',
+            subject   => $subject,
             variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );
