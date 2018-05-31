@@ -71,9 +71,6 @@ sub generate_token {
     $opts->{nome} =~ s/^\s+//;
     $opts->{nome} =~ s/\s+$//;
 
-    # precisa ter pelo menos um nome com duas palavras
-    croak 'nome invalido' unless $opts->{nome} =~ /^[a-z]{3,20}\s[a-z]/i;
-
     $self->new_session() unless $self->session_token();
 
     my $res;
