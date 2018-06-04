@@ -87,6 +87,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "decred_data_digest",
   { data_type => "text", is_nullable => 1 },
+  "next_gateway_check",
+  { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -132,8 +134,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-23 08:53:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uweR/jkf/Piz7Ysk4fL+pA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-04 08:14:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q6iOVOApvu8nTwQOLvfdcQ
 
 use Carp;
 use JSON::XS;
