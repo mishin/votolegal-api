@@ -214,13 +214,6 @@ sub as_row_for_email_variable {
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
-                { donor_address_state        => 'votolegal_donation_immutable.address_state' },
-                { donor_address_city         => 'votolegal_donation_immutable.address_city' },
-                { donor_address_district     => 'votolegal_donation_immutable.address_district' },
-                { donor_address_zipcode      => 'votolegal_donation_immutable.address_zipcode' },
-                { donor_address_street       => 'votolegal_donation_immutable.address_street' },
-                { donor_address_house_number => 'votolegal_donation_immutable.address_house_number' },
-                { donor_address_complement   => 'votolegal_donation_immutable.address_complement' },
               ]
 
         }
