@@ -293,6 +293,21 @@ sub action_specs {
             defined $values{$_} and $values{$_} =~ s/[^0-9]//go for qw/cpf address_zipcode billing_address_zipcode/;
             $values{$_} = lc $values{$_} for qw/email/;
 
+            my $candidate = $self->result_source->schema->resultset("Candidate")->find($values{candidate_id});
+
+            if ( $candidate->name eq 'PARTIDO SOCIALISMO E LIBERDADE' ) {
+				$values{$_} or die_with 'need_billing_adddress' for qw/
+				  billing_address_street
+				  billing_address_district
+				  billing_address_zipcode
+				  billing_address_city
+				  billing_address_state
+				  /;
+
+				$values{$_} or die_with 'need_phone_for_psol'     for qw/phone/;
+				$values{$_} or die_with 'need_birthdate_for_psol' for qw/birthdate/;
+            }
+
             if ( $values{payment_method} eq 'boleto' ) {
                 $values{$_} or die_with 'need_billing_adddress' for qw/
                   billing_address_street

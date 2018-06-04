@@ -73,8 +73,14 @@ msgstr "Dados de endereço precisam ser enviados."
 msgid "need_phone_for_boleto"
 msgstr "O telefone precisa ser informado para boletos"
 
+msgid "need_phone_for_psol"
+msgstr "O telefone precisa ser informado"
+
 msgid "need_birthdate_for_boleto"
 msgstr "A data de nascimento precisa ser informada para boletos"
+
+msgid "need_birthdate_for_psol"
+msgstr "A data de nascimento precisa ser informada."
 
 msgid "cpf_invalid"
 msgstr "CPF inválido"
