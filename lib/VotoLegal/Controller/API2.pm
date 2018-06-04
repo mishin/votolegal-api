@@ -34,6 +34,17 @@ sub recalc_summary : Chained('base') : PathPart('recalc_summary') : Args(0) {
     $c->res->body("updated");
 }
 
+sub sync_payments : Chained('base') : PathPart('sync_payments') : Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->res->body('disabled');
+
+    $c->detach() unless ( $c->req->params->{secret} || '' ) eq $ENV{RECALC_SUMMARY_SECRET};
+
+    $c->model('DB::VotolegalDonation')->sync_pending_payments;
+
+    $c->res->body("synced");
+}
 __PACKAGE__->meta->make_immutable;
 
 1;

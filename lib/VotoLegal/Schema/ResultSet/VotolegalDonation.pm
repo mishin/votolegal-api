@@ -576,5 +576,20 @@ sub _check_daily_limit {
 
 }
 
+sub sync_pending_payments {
+    my ( $self ) = @_;
+
+
+    my $rs = $self->search(
+        {
+            next_gateway_check => {'<=' => \'now()'},
+        }
+    );
+
+    while (my $r = $rs->next){
+        $r->sync_gateway_status;
+    }
+}
+
 1;
 

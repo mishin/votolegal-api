@@ -203,15 +203,15 @@ sub as_row_for_email_variable {
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
                     captured_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     created_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     refunded_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
               ]
@@ -374,18 +374,35 @@ sub capture_cc {
 
 sub sync_gateway_status {
     my ($self) = @_;
-    my $gateway = $self->payment_gateway;
 
-    my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
+    if ( $self->gateway_tid ) {
+        my $next_check = \"now() + '1 day'::interval";
+        my $gateway    = $self->payment_gateway;
 
-    my $payment_info = $self->payment_info_parsed;
-    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+        my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
 
-    $self->update(
-        {
-            payment_info => to_json($payment_info),
+        my $payment_info = $self->payment_info_parsed;
+        $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
+        # se foi paga, nao precisamos mais ficar verificando todo dia
+        if ( $payment_info->{status} =~ /paid/ ) {
+            $next_check = 'infinity';
         }
-    );
+
+        $self->update(
+            {
+                payment_info       => to_json($payment_info),
+                next_gateway_check => $next_check
+            }
+        );
+    }
+    else {
+        $self->update(
+            {
+                next_gateway_check => 'infinity'
+            }
+        );
+    }
 
     return $self;
 }
