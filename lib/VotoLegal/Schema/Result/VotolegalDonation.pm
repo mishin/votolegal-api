@@ -214,13 +214,13 @@ sub as_row_for_email_variable {
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
-                { donor_billing_address_state              => 'votolegal_donation_immutable.billing_address_state' },
-                { donor_billing_address_city               => 'votolegal_donation_immutable.billing_address_city' },
-                { donor_billing_address_district           => 'votolegal_donation_immutable.billing_address_district' },
-                { donor_billing_address_zipcode            => 'votolegal_donation_immutable.billing_address_zipcode' },
-                { donor_billing_address_street             => 'votolegal_donation_immutable.billing_address_street' },
-                { donor_billing_address_house_number       => 'votolegal_donation_immutable.billing_address_house_number' },
-                { donor_billing_billing_address_complement => 'votolegal_donation_immutable.billing_address_complement' },
+                { donor_billing_address_state        => 'votolegal_donation_immutable.billing_address_state' },
+                { donor_billing_address_city         => 'votolegal_donation_immutable.billing_address_city' },
+                { donor_billing_address_district     => 'votolegal_donation_immutable.billing_address_district' },
+                { donor_billing_address_zipcode      => 'votolegal_donation_immutable.billing_address_zipcode' },
+                { donor_billing_address_street       => 'votolegal_donation_immutable.billing_address_street' },
+                { donor_billing_address_house_number => 'votolegal_donation_immutable.billing_address_house_number' },
+                { donor_billing_address_complement   => 'votolegal_donation_immutable.billing_address_complement' },
               ]
 
         }
