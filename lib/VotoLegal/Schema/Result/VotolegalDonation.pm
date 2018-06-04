@@ -376,7 +376,8 @@ sub sync_gateway_status {
     my ($self) = @_;
 
     if ( $self->gateway_tid ) {
-        my $next_check = \"now() + '1 day'::interval";
+        # 1 dia + 0 ate 5 minutos
+        my $next_check = \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval";
         my $gateway    = $self->payment_gateway;
 
         my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
