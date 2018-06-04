@@ -263,6 +263,10 @@ sub payment_info_parsed {
     return $self->payment_info ? from_json( $self->payment_info ) : {};
 }
 
+sub _next_day_rand_str() {
+    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval"
+}
+
 sub _create_invoice {
     my ($self) = @_;
 
@@ -300,10 +304,16 @@ sub _create_invoice {
     my $payment_info = $self->payment_info_parsed;
     $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 
+    my $next_check = &_next_day_rand_str;
+
+    $next_check = 'infinity' unless $self->is_boleto;
+
     $self->update(
         {
             gateway_tid  => $invoice->{gateway_tid},
             payment_info => to_json($payment_info),
+
+            next_gateway_check => $next_check
         }
     );
 
@@ -376,8 +386,9 @@ sub sync_gateway_status {
     my ($self) = @_;
 
     if ( $self->gateway_tid ) {
+
         # 1 dia + 0 ate 5 minutos
-        my $next_check = \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval";
+        my $next_check = &_next_day_rand_str;
         my $gateway    = $self->payment_gateway;
 
         my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
