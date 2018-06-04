@@ -148,7 +148,7 @@ sub get_token_information {
             die "Erro ao consultar certiface token: " . $res->decoded_content;
         }
 
-        $res = decode_json( $res->decoded_content )
+        $res = decode_json( $res->decoded_content ) if $res;
 
     }
 
