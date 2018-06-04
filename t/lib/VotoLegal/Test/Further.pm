@@ -480,6 +480,37 @@ sub setup_mock_certiface_fail {
     };
 }
 
+sub setup_mock_certiface_fail_with_3_proof_of_life {
+
+	$certiface_get_token_information = {
+		"token"         => "dd24700e-2855-4e0c-81db-53ddc14a44ec",
+		"cpf"           => 15859607059,
+		"nome"          => "Delilah Yaritza Flowers",
+		"nascimento"    => "1999-12-31",
+		"telefone"      => "3633784957",
+		"status"        => 1,
+		"resultado"     => 1,
+		"dataExpiracao" => "2018-05-17 05:02:55",
+		"resultados"    => [
+			{
+				"protocolo" => "201800012441",
+				"cause"     => "PROVA DE VIDA",
+				"valid"     => 0
+			},
+			{
+				"protocolo" => "201800012440",
+				"cause"     => "PROVA DE VIDA",
+				"valid"     => 0
+			},
+			{
+				"protocolo" => "201800012442",
+				"cause"     => "PROVA DE VIDA",
+				"valid"     => 0
+			}
+		]
+	};
+}
+
 sub setup_sucess_mock_iugu {
 
     $iugu_invoice_response = {

@@ -114,6 +114,30 @@ db_transaction {
         assert_current_step('credit_card_form');
     };
 
+	# falhou no certiface com 3 erros de 'PROVA DE VIDA'
+	db_transaction {
+		setup_mock_certiface_fail_with_3_proof_of_life;
+		$response = rest_get $donation_url,
+		  code   => 200,
+		  params => { device_authorization_token_id => stash 'test_auth', };
+		assert_current_step('certificate_refused');
+		is messages2str $response, 'msg_certificate_refused',     'msg_certificate_refused';
+		is buttons2str $response,  'btn_pay_with_cc-pay_with_cc', 'button to pay with credit card';
+
+		my $token = $schema->resultset('CertifaceToken')->find('dd24700e-2855-4e0c-81db-53ddc14a44ec');
+
+		is $token->fail_reasons, '["PROVA DE VIDA","PROVA DE VIDA","PROVA DE VIDA"]','fail reasons';
+		is $token->validated, 0, 'not validated';
+		ok $token->response, 'response updated';
+
+		# troca metodo para cartao
+		$response = rest_post $donation_url,
+		  code   => 200,
+		  name   => 'diz que quer pagar com cartao entao',
+		  params => { device_authorization_token_id => stash 'test_auth', action_id => 'pay_with_cc' };
+		assert_current_step('credit_card_form');
+	};
+
     # sucesso no certiface
     db_transaction {
 
