@@ -133,3 +133,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0127-add-publish-timestamps [0126-add-running_for_address_state] 2018-05-25T13:02:43Z Lucas Ansei,,, <lucas@lucas-G750JX> # Adding timestamps for the 'is_published' boolean
 0128-add-amounts-on-payment [0127-add-publish-timestamps] 2018-05-28T13:29:26Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the following columns: 'gross_amount', 'net_amount' and 'fee_amount' to the 'payment' table.
 0129-next-gateway-check [0128-add-amounts-on-payment] 2018-06-04T11:12:29Z renato,,, <renato@renato-MS-7A34> # next-gateway-check
+0130-add-political-movement [0129-next-gateway-check] 2018-06-04T13:28:52Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding a political movement
