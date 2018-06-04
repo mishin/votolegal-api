@@ -114,6 +114,21 @@ db_transaction {
         assert_current_step('credit_card_form');
     };
 
+	# falhou no certiface com 3 erros de 'PROVA DE VIDA'
+	db_transaction {
+		setup_mock_certiface_fail_with_3_proof_of_life;
+        setup_sucess_mock_iugu;
+
+		$response = rest_get $donation_url,
+		  code   => 200,
+		  params => { device_authorization_token_id => stash 'test_auth', };
+
+		is($schema->resultset("EmaildbQueue")->count, 1, 'Boleto created email is queued');
+
+		assert_current_step('waiting_boleto_payment');
+		is messages2str $response, 'msg_boleto_message', 'msg_certificate_refused';
+	};
+
     # sucesso no certiface
     db_transaction {
 
