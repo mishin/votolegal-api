@@ -19,13 +19,47 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
-    my $donation_rs = $c->stash->{collection}->search(
+    $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
         {
             candidate_id => $c->stash->{candidate}->id,
-            status       => "captured",
-            by_votolegal => "t",
+            captured_at  => \'IS NOT NULL'
+        },
+        {
+            join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+
+			columns => [
+
+				'me.id',
+				'me.is_pre_campaign',
+				'me.decred_merkle_root',
+				'me.decred_capture_txid',
+				'candidate.campaign_donation_type',
+				'candidate.cpf',
+				'candidate.name',
+				'candidate.cnpj',
+				{ party_name  => 'party.name' },
+				{ donor_name  => 'votolegal_donation_immutable.donor_name' },
+				{ donor_cpf   => 'votolegal_donation_immutable.donor_cpf' },
+				{ donor_email => 'votolegal_donation_immutable.donor_email' },
+				{
+					amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
+				},
+				{ payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+				{
+					captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+				{
+					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+				{
+					refunded_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+			]
         }
     );
+
+    my $votolegal_donation_rs = $c->stash->{collection}->search( { candidate_id => $c->stash->{candidate}->id } );
 
     my $csv = Text::CSV->new(
         {
@@ -57,35 +91,36 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         ]
     );
 
-    while ( my $result = $donation_rs->next() ) {
-        my $address_street       = $result->address_street       || "";
-        my $address_complement   = $result->address_complement   || "";
-        my $address_house_number = $result->address_house_number || "";
+    while ( my $votolegal_donation = $votolegal_donation_rs->next() ) {
+        use DDP; p $votolegal_donation;
+        my $address_street       = $votolegal_donation->address_street       || "";
+        my $address_complement   = $votolegal_donation->address_complement   || "";
+        my $address_house_number = $votolegal_donation->address_house_number || "";
 
         $csv->print(
             $fh,
             [
-                $result->name,
-                $result->cpf,
-                $result->email,
-                $result->phone,
-                $result->address_state,
-                $result->address_city,
+                $votolegal_donation->name,
+                $votolegal_donation->cpf,
+                $votolegal_donation->email,
+                $votolegal_donation->phone,
+                $votolegal_donation->address_state,
+                $votolegal_donation->address_city,
                 sprintf( "%s %s, %s", $address_street, $address_complement, $address_house_number ),
                 sprintf( "%.2f",      $result->amount / 100 ),
-                $result->birthdate->strftime("%d/%m/%Y"),
-                $result->captured_at->strftime("%d/%m/%Y %H:%M:%S"),
+                $votolegal_donation->birthdate->strftime("%d/%m/%Y"),
+                $votolegal_donation->captured_at->strftime("%d/%m/%Y %H:%M:%S"),
             ]
         );
     }
 
-    binmode( $fh, ":raw" );
-    $fh->seek( 0, SEEK_SET );
+    # binmode( $fh, ":raw" );
+    # $fh->seek( 0, SEEK_SET );
 
-    $c->response->headers->header( "content-disposition" => "attachment;filename=" . basename( $fh->filename ) );
-    $c->response->content_type("text/csv");
-    $c->res->body($fh);
-    $c->detach();
+    # $c->response->headers->header( "content-disposition" => "attachment;filename=" . basename( $fh->filename ) );
+    # $c->response->content_type("text/csv");
+    # $c->res->body($fh);
+    # $c->detach();
 }
 
 =encoding utf8

@@ -31,37 +31,8 @@ db_transaction {
 
     # Não consigo testar a doação efetivamente com o PagSeguro porque o senderHash é gerado no
     # front-end. Então vou mockar algumas doações.
-    for ( 1 .. 15 ) {
-        $schema->resultset("Donation")->create(
-            {
-                id                           => md5_hex($_),
-                candidate_id                 => $candidate_id,
-                name                         => fake_name()->(),
-                email                        => fake_email()->(),
-                cpf                          => random_cpf(),
-                phone                        => fake_digits("##########")->(),
-                amount                       => fake_int( 1000, 10000 )->(),
-                birthdate                    => "1992-01-01",
-                ip_address                   => "127.0.0.1",
-                address_state                => "SP",
-                address_city                 => "Iguape",
-                address_district             => "Centro",
-                address_zipcode              => "11920-000",
-                address_street               => "Rua Tiradentes",
-                address_house_number         => 123,
-                billing_address_street       => "Rua Tiradentes",
-                billing_address_house_number => 123,
-                billing_address_district     => "Centro",
-                billing_address_zipcode      => "11920-000",
-                billing_address_city         => "Iguape",
-                billing_address_state        => "SP",
-                status                       => "captured",
-                captured_at                  => \'now()',
-                by_votolegal                 => "t",
-                donation_type_id             => 1,
-                payment_gateway_id           => 1,
-            }
-        );
+    for ( 1 .. 3 ) {
+        &mock_donation
     }
 
     # Obtendo a api_key do candidate.
@@ -76,3 +47,39 @@ db_transaction {
 
 done_testing();
 
+sub mock_donation {
+	api_auth_as 'nobody';
+
+	generate_device_token;
+	set_current_dev_auth( stash 'test_auth' );
+
+	my $cpf = random_cpf();
+
+	my $response = rest_post "/api2/donations",
+	  name   => "add donation",
+	  params => {
+		generate_rand_donator_data_cc(),
+		candidate_id                  => stash 'candidate.id',
+		device_authorization_token_id => stash 'test_auth',
+		payment_method                => 'credit_card',
+		cpf                           => $cpf,
+		amount                        => 3000,
+	  };
+
+	setup_sucess_mock_iugu;
+	my $donation_id  = $response->{donation}{id};
+	my $donation_url = "/api2/donations/" . $donation_id;
+
+	$response = rest_post $donation_url,
+	  code   => 200,
+	  params => {
+		device_authorization_token_id => stash 'test_auth',
+		credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95',
+		cc_hash                       => '123456'
+	  };
+	is( messages2str($response), 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos' );
+
+	ok( my $donation = $schema->resultset('VotolegalDonation')->find($donation_id), 'get donation' );
+
+	return $donation;
+}
