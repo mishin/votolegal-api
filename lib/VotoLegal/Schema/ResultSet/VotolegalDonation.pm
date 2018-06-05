@@ -238,7 +238,7 @@ sub verifiers_specs {
                 billing_address_complement => {
                     required   => 0,
                     max_length => 100,
-                    type       => CommonLatinText,
+                    type       => 'Str',
                 },
                 ip_address => {
                     required => 1,
