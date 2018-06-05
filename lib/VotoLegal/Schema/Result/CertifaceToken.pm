@@ -94,7 +94,7 @@ sub process_response_and_validate {
     # e todos os erros tenham sido *apenas* prova de vida
     # a geração do boleto prossegue normalmente.
     my $error_string = join '', @fail_reasons;
-    $is_any_valid++ if $error_string eq 'PROVA DE VIDAPROVA DE VIDAPROVA DE VIDA';
+    $is_any_valid = 1 if $error_string eq 'PROVA DE VIDAPROVA DE VIDAPROVA DE VIDA';
 
     $self->update(
         {
