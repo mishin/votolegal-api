@@ -444,6 +444,16 @@ sub set_boleto_paid {
     }
     else {
         $subject = 'Campanha PSOL - Recibo provis&#xF3;rio';
+
+		$self->result_source->schema->resultset('EmaildbQueue')->create(
+			{
+				config_id => $self->candidate->emaildb_config_id,
+				template  => 'captured.html',
+				to        => 'doacao@psol50.org.br',
+				subject   => $subject,
+				variables => encode_json( $self->as_row_for_email_variable() ),
+			}
+		);
     }
 
     $self->result_source->schema->resultset('EmaildbQueue')->create(
