@@ -163,6 +163,9 @@ msgstr "Somos Rede - Recibo provisório"
 msgid "email_3_captured_subject"
 msgstr "Campanha PSOL - Recibo provisório"
 
+msgid "email_4_captured_subject"
+msgstr "Campanha PSOL - Recibo provisório"
+
 msgid "donation_daily_reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."
 
