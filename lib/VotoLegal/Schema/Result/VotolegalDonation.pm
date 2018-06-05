@@ -437,13 +437,13 @@ sub set_boleto_paid {
     my $subject;
 
     if ( $emaildb_config_id == 1 ) {
-        $subject = 'Voto Legal - Recibo provisório';
+        $subject = 'Voto Legal - Recibo provis&#xF3;rio';
     }
     elsif ( $emaildb_config_id == 2 ) {
-        $subject = 'Somos Rede - Recibo provisório';
+        $subject = 'Somos Rede - Recibo provis&#xF3;rio';
     }
     else {
-        $subject = 'Campanha PSOL - Recibo provisório';
+        $subject = 'Campanha PSOL - Recibo provis&#xF3;rio';
     }
 
     $self->result_source->schema->resultset('EmaildbQueue')->create(
