@@ -456,6 +456,18 @@ sub _process_capture_cc {
                 variables => encode_json( $donation->as_row_for_email_variable() ),
             }
         );
+
+        if ( $donation->candidate->name eq 'PARTIDO SOCIALISMO E LIBERDADE' ) {
+			$donation->result_source->schema->resultset('EmaildbQueue')->create(
+				{
+					config_id => $donation->candidate->emaildb_config_id,
+					template  => 'captured.html',
+					to        => 'doacao@psol50.org.br',
+					subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_captured_subject' ),
+					variables => encode_json( $donation->as_row_for_email_variable() ),
+				}
+			);
+        }
     }
 
 }
