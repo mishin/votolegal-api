@@ -37,6 +37,10 @@ sub candidate_GET {
 
                     my $twitter_profile = $4;
 
+                    if ( $twitter_profile !~ m/^@/ ) {
+                        $twitter_profile = '@' . $twitter_profile
+                    }
+
 					+{
 						name            => $c->name,
                         slug            => $c->username,

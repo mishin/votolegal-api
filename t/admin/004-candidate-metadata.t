@@ -44,7 +44,7 @@ db_transaction {
 		ok( exists( $candidate_res->{picture} ), 'picture param exists' );
 		is( $candidate_res->{name},              $name,         'name' );
 		is( $candidate_res->{slug},              $username,     'slug' );
-		is( $candidate_res->{twitter_profile},   'lucas_ansei', 'twitter profile' );
+		is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
 	}
 };
 
