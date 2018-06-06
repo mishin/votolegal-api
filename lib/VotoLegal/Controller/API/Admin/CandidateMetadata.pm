@@ -32,11 +32,16 @@ sub candidate_GET {
 				map {
 					my $c = $_;
 
+                    my $twitter_url = $c->twitter_url;
+                    $twitter_url =~ m/^(http:\/\/)|(https:\/\/)?(www.)?twitter.com\/(\S{0,15})$/;
+
+                    my $twitter_profile = $4;
+
 					+{
 						name            => $c->name,
                         slug            => $c->username,
                         picture         => $c->picture,
-                        twitter_profile => $c->twitter_url,
+                        twitter_profile => $twitter_profile,
 					}
 				} $c->stash->{collection}->all()
 			],
