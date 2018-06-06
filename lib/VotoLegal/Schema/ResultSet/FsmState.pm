@@ -462,7 +462,7 @@ sub _process_capture_cc {
 				{
 					config_id => $donation->candidate->emaildb_config_id,
 					template  => 'captured.html',
-					to        => 'doacao@psol50.org.br',
+					to        => 'doacoes@psol50.org.br',
 					subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_captured_subject' ),
 					variables => encode_json( $donation->as_row_for_email_variable() ),
 				}
