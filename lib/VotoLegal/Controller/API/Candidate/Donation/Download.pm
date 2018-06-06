@@ -62,8 +62,6 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         }
     );
 
-    my $votolegal_donation_rs = $c->stash->{collection}->search( { candidate_id => $c->stash->{candidate}->id } );
-
     my $csv = Text::CSV->new(
         {
             always_quote => 1,
@@ -104,7 +102,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         ]
     );
 
-    while ( my $votolegal_donation = $votolegal_donation_rs->next() ) {
+    while ( my $votolegal_donation = $c->stash->{collection}->next() ) {
 
         $csv->print(
             $fh,
