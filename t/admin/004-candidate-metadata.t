@@ -15,7 +15,8 @@ db_transaction {
 
 	create_candidate(
 		name          => $name,
-        username      => $username
+        username      => $username,
+        popular_name  => 'foobar'
 	);
 
 	my $candidate_id = stash "candidate.id";
@@ -45,6 +46,7 @@ db_transaction {
 		is( $candidate_res->{name},              $name,         'name' );
 		is( $candidate_res->{slug},              $username,     'slug' );
 		is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
+        is( $candidate_res->{popular_name},      'foobar',       'popular_name' )
 	}
 };
 
