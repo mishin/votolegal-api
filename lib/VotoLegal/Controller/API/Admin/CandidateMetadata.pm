@@ -43,6 +43,7 @@ sub candidate_GET {
 
 					+{
 						name            => $c->name,
+                        popular_name    => $c->popular_name,
                         slug            => $c->username,
                         picture         => $c->picture,
                         twitter_profile => $twitter_profile,
