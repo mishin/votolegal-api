@@ -6,3 +6,6 @@ Makefile
 MYMETA*
 envfile.sh
 .tidyall.d/
+.vscode/*
+.vstags
+.jenkins

@@ -90,6 +90,12 @@ sub process_response_and_validate {
     my $is_any_valid = grep { $_->{valid} } @{ $response->{resultados} || [] };
     my @fail_reasons = map { $_->{cause} } grep { $_->{valid} == 0 } @{ $response->{resultados} || [] };
 
+    # Caso o o Face Captcha tenha falhado 3 vezes
+    # e todos os erros tenham sido *apenas* prova de vida
+    # a geração do boleto prossegue normalmente.
+    my $error_string = join '', @fail_reasons;
+    $is_any_valid = 1 if $error_string eq 'PROVA DE VIDAPROVA DE VIDAPROVA DE VIDA';
+
     $self->update(
         {
             validated           => $is_any_valid,

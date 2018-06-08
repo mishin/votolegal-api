@@ -47,12 +47,54 @@ db_transaction {
     stash_test 'get_donations' => sub {
         my $res = shift;
 
-        is ( $res->{donations}->[0]->{amount}, 3000,           'amount');
-        ok ( defined( $res->{donations}->[0]->{name} ),        'donor name is defined');
-        ok ( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
-        ok ( defined( $res->{donations}->[0]->{email} ),       'donor email is defined');
+        is ( $res->{donations}->[0]->{amount_human},                 '30,00',      'amount');
+        is ( $res->{donations}->[0]->{payment_lr},                   '00',         'LR code' );
+        is ( $res->{donations}->[0]->{payment_succeded},             'true',       'payment succeded' );
+        is ( $res->{donations}->[0]->{payment_message},              'Autorizado', 'payment message' );
+        ok ( defined( $res->{donations}->[0]->{name} ),              'donor name is defined');
+        ok ( defined( $res->{donations}->[0]->{captured_at_human} ), 'donation captured_at is defined');
+        ok ( defined( $res->{donations}->[0]->{email} ),             'donor email is defined');
+		ok( !defined( $res->{refunded_donations}->[0] ),             'no refunded donations' );
+		ok( !defined( $res->{non_completed_donations}->[0] ),        'no non completed donations' );
+    };
 
-    }
+    $donation->update( { refunded_at => \'now()' } );
+
+    rest_reload_list 'get_donations';
+
+    stash_test 'get_donations.list' => sub {
+        my $res = shift;
+
+		is( $res->{refunded_donations}->[0]->{amount_human},                 '30,00',      'amount');
+		ok( defined( $res->{refunded_donations}->[0]->{name} ),              'donor name is defined');
+		ok( defined( $res->{refunded_donations}->[0]->{captured_at_human} ), 'donation captured_at is defined');
+		ok( defined( $res->{refunded_donations}->[0]->{email} ),             'donor email is defined');
+		ok( !defined( $res->{donations}->[0] ),                              'no sucessful donations' );
+		ok( !defined( $res->{non_completed_donations}->[0] ),                'no non completed donations' );
+    };
+
+	$donation->update(
+        {
+            refunded_at => undef,
+            captured_at => undef,
+            state       => 'wait_for_compensation'
+        }
+    );
+
+	rest_reload_list 'get_donations';
+
+	stash_test 'get_donations.list' => sub {
+		my $res = shift;
+
+		is( $res->{non_completed_donations}->[0]->{amount_human},                 '30,00',      'amount');
+		is( $res->{non_completed_donations}->[0]->{payment_lr},                   '00',         'LR code' );
+		is( $res->{non_completed_donations}->[0]->{payment_succeded},             'true',       'payment succeded' );
+		is( $res->{non_completed_donations}->[0]->{payment_message},              'Autorizado', 'payment message' );
+		ok( defined( $res->{non_completed_donations}->[0]->{name} ),              'donor name is defined');
+		ok( defined( $res->{non_completed_donations}->[0]->{email} ),             'donor email is defined');
+		ok( !defined( $res->{donations}->[0] ),                                   'no sucessful donations' );
+		ok( !defined( $res->{refunded_donations}->[0] ),                          'no refunded donations' );
+	};
 };
 
 done_testing();

@@ -87,6 +87,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "decred_data_digest",
   { data_type => "text", is_nullable => 1 },
+  "next_gateway_check",
+  { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -132,8 +134,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-23 08:53:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uweR/jkf/Piz7Ysk4fL+pA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-04 08:14:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q6iOVOApvu8nTwQOLvfdcQ
 
 use Carp;
 use JSON::XS;
@@ -201,16 +203,17 @@ sub as_row_for_email_variable {
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
                     captured_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     created_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     refunded_at_human => \
-                      "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
+                { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
               ]
 
         }
@@ -260,6 +263,10 @@ sub payment_info_parsed {
     return $self->payment_info ? from_json( $self->payment_info ) : {};
 }
 
+sub _next_day_rand_str() {
+    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval"
+}
+
 sub _create_invoice {
     my ($self) = @_;
 
@@ -297,12 +304,43 @@ sub _create_invoice {
     my $payment_info = $self->payment_info_parsed;
     $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 
+    my $next_check = &_next_day_rand_str;
+
+    $next_check = 'infinity' unless $self->is_boleto;
+
     $self->update(
         {
             gateway_tid  => $invoice->{gateway_tid},
             payment_info => to_json($payment_info),
+
+            next_gateway_check => $next_check
         }
     );
+
+    if ( $self->is_boleto ) {
+        my $emaildb_config_id = $self->candidate->emaildb_config_id;
+        my $subject;
+
+        if ( $emaildb_config_id == 1 ) {
+            $subject = 'Voto Legal - Boleto gerado';
+        }
+        elsif ( $emaildb_config_id == 2 ) {
+            $subject = 'Somos Rede - Boleto gerado';
+        }
+        else {
+            $subject = 'Campanha PSOL - Boleto gerado';
+        }
+
+        $self->result_source->schema->resultset('EmaildbQueue')->create(
+            {
+                config_id => $self->candidate->emaildb_config_id,
+                template  => 'boleto_created.html',
+                to        => $self->votolegal_donation_immutable->donor_email,
+                subject   => $subject,
+                variables => encode_json( $self->as_row_for_email_variable() ),
+            }
+        );
+    }
 
 }
 
@@ -346,18 +384,37 @@ sub capture_cc {
 
 sub sync_gateway_status {
     my ($self) = @_;
-    my $gateway = $self->payment_gateway;
 
-    my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
+    if ( $self->gateway_tid ) {
 
-    my $payment_info = $self->payment_info_parsed;
-    $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+        # 1 dia + 0 ate 5 minutos
+        my $next_check = &_next_day_rand_str;
+        my $gateway    = $self->payment_gateway;
 
-    $self->update(
-        {
-            payment_info => to_json($payment_info),
+        my $invoice = $gateway->get_invoice( donation_id => $self->id, id => $self->gateway_tid );
+
+        my $payment_info = $self->payment_info_parsed;
+        $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
+
+        # se foi paga, nao precisamos mais ficar verificando todo dia
+        if ( $payment_info->{status} =~ /paid/ ) {
+            $next_check = 'infinity';
         }
-    );
+
+        $self->update(
+            {
+                payment_info       => to_json($payment_info),
+                next_gateway_check => $next_check
+            }
+        );
+    }
+    else {
+        $self->update(
+            {
+                next_gateway_check => 'infinity'
+            }
+        );
+    }
 
     return $self;
 }
@@ -373,6 +430,39 @@ sub set_boleto_paid {
         {
             # converte para UTC
             captured_at => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+        }
+    );
+
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Recibo provis&#xF3;rio';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+        $subject = 'Somos Rede - Recibo provis&#xF3;rio';
+    }
+    else {
+        $subject = 'Campanha PSOL - Recibo provis&#xF3;rio';
+
+		$self->result_source->schema->resultset('EmaildbQueue')->create(
+			{
+				config_id => $self->candidate->emaildb_config_id,
+				template  => 'captured.html',
+				to        => 'doacao@psol50.org.br',
+				subject   => $subject,
+				variables => encode_json( $self->as_row_for_email_variable() ),
+			}
+		);
+    }
+
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'captured.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $subject,
+            variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );
 }
@@ -401,8 +491,9 @@ sub generate_certiface_link {
 
     $self->certiface_tokens->create(
         {
-            id               => $certiface->{uuid},
-            verification_url => $certiface->{url},
+            id                      => $certiface->{uuid},
+            verification_url        => $certiface->{url},
+            certiface_return_url_id => $self->candidate->use_certiface_return_url_id
         }
     );
 
@@ -501,14 +592,25 @@ sub upsert_decred_data {
 sub send_decred_email {
     my ($self) = @_;
 
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Registro na blockchain';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+        $subject = 'Somos Rede - Registro na blockchain';
+    }
+    else {
+        $subject = 'Campanha PSOL - Registro na blockchain';
+    }
+
     $self->result_source->schema->resultset('EmaildbQueue')->create(
         {
             config_id => $self->candidate->emaildb_config_id,
             template  => 'decred.html',
             to        => $self->votolegal_donation_immutable->donor_email,
-            subject   => $self->candidate->emaildb_config_id == 1
-            ? 'Voto Legal - Registro na blockchain'
-            : 'Somos rede - Registro na blockchain',
+            subject   => $subject,
             variables => encode_json( $self->as_row_for_email_variable() ),
         }
     );

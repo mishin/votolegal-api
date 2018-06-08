@@ -5,13 +5,16 @@ use FindBin qw($RealBin $Script);
 use lib "$RealBin/../../lib";
 
 use AnyEvent;
+use Config::General;
 use Daemon::Generic;
-use Log::Log4perl qw(:easy);
 
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/;
     load_envs_via_dbi();
+
+    require VotoLegal::Logger;
+
 }
 
 use VotoLegal::Worker::Email;
@@ -31,26 +34,6 @@ sub gd_preconfig {
     $0 = "VotoLegal::Daemon::Emailsd";
     $|++;
 
-    # Logger.
-    my @l4p = ({
-        file   => "STDOUT",
-        layout => '[%d] [%p] %m%n',
-        level  => $DEBUG,
-        utf8   => 1,
-    });
-
-    if (!$self->{gd_foreground}) {
-        $l4p[0]->{layout} = '%m%n';
-        $l4p[0]->{level}  = $INFO;
-        push @l4p, {
-            file   => ">>$RealBin/../../log/Votolegal_$Script.log",
-            layout => '[%d] %m%n',
-            level  => $verbose ? $DEBUG : $INFO,
-            utf8   => 1,
-        };
-    }
-    Log::Log4perl->easy_init(@l4p);
-
     return ();
 }
 
@@ -61,7 +44,7 @@ sub gd_run {
 
     my $worker = VotoLegal::Worker::Email->new(
         schema => get_schema(),
-        logger => get_logger(),
+        logger => VotoLegal::Logger::get_logger(),
 
     );
 

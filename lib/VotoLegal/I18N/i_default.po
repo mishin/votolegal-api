@@ -45,7 +45,7 @@ msgid "msg_cc_paid_message"
 msgstr "<p class="payment-final-message">Doação efetuada com sucesso! Obrigado por contribuir!<p/>"
 
 msgid "msg_text_certiface"
-msgstr "<h3>Reconhecimento facial</h3><img src="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/images/b3f3b78d-0582-4432-908c-c438fc3acbcd.png" alt="uma face" class="certiface-img"><p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
+msgstr "<h3>Reconhecimento facial</h3><img src="https://votolegal.com.br/static/template-emails/face.png" alt="uma face" class="certiface-img"><p>Para garantir a transparência dessa transação, você será direcionado para um rápido reconhecimento facial antes de gerar o boleto</p>"
 
 msgid "msg_link_certiface"
 msgstr "Verificar minha identidade"
@@ -73,8 +73,14 @@ msgstr "Dados de endereço precisam ser enviados."
 msgid "need_phone_for_boleto"
 msgstr "O telefone precisa ser informado para boletos"
 
+msgid "need_phone_for_psol"
+msgstr "O telefone precisa ser informado"
+
 msgid "need_birthdate_for_boleto"
 msgstr "A data de nascimento precisa ser informada para boletos"
+
+msgid "need_birthdate_for_psol"
+msgstr "A data de nascimento precisa ser informada."
 
 msgid "cpf_invalid"
 msgstr "CPF inválido"
@@ -153,6 +159,12 @@ msgstr "Voto legal - Recibo provisório"
 
 msgid "email_2_captured_subject"
 msgstr "Somos Rede - Recibo provisório"
+
+msgid "email_3_captured_subject"
+msgstr "Campanha PSOL - Recibo provisório"
+
+msgid "email_4_captured_subject"
+msgstr "Campanha PSOL - Recibo provisório"
 
 msgid "donation_daily_reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."

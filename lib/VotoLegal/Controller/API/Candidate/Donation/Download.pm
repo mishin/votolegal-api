@@ -19,11 +19,46 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
-    my $donation_rs = $c->stash->{collection}->search(
+    $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
         {
             candidate_id => $c->stash->{candidate}->id,
-            status       => "captured",
-            by_votolegal => "t",
+            captured_at  => \'IS NOT NULL'
+        },
+        {
+            join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
+            result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+
+			columns => [
+
+				'me.id',
+				'me.is_pre_campaign',
+				'me.decred_merkle_root',
+				'me.decred_capture_txid',
+				{ donor_name                         => 'votolegal_donation_immutable.donor_name' },
+				{ donor_cpf                          => 'votolegal_donation_immutable.donor_cpf' },
+				{ donor_email                        => 'votolegal_donation_immutable.donor_email' },
+				{ donor_birthdate                    => 'votolegal_donation_immutable.donor_birthdate' },
+                { donor_billing_address_state        => 'votolegal_donation_immutable.billing_address_state' },
+                { donor_billing_address_city         => 'votolegal_donation_immutable.billing_address_city' },
+				{ donor_billing_address_zipcode      => 'votolegal_donation_immutable.billing_address_zipcode' },
+				{ donor_billing_address_district     => 'votolegal_donation_immutable.billing_address_district' },
+				{ donor_billing_address_street       => 'votolegal_donation_immutable.billing_address_district' },
+				{ donor_billing_address_house_number => 'votolegal_donation_immutable.billing_address_house_number' },
+				{ donor_billing_address_complement   => 'votolegal_donation_immutable.billing_address_complement' },
+				{
+					amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
+				},
+				{ payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+				{
+					captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+				{
+					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+				{
+					refunded_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+				},
+			]
         }
     );
 
@@ -43,38 +78,55 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         $fh,
         [
             qw(
-              NAME
-              CPF
-              EMAIL
-              PHONE
-              STATE
-              CITY
-              ADDRESS
-              AMOUNT
-              BIRTHDATE
-              DATE
+                DOACAO_DE_PRE_CAMPANHA
+                METODO
+                NOME
+                CPF
+                EMAIL
+                TELEFONE
+                ESTADO
+                CIDADE
+                CEP
+                BAIRRO
+                RUA
+                NUMERO
+                COMPLEMENTO
+                VALOR
+                NASCIMENTO
+                DECRED_MERKLE_ROOT
+                DECRED_CAPTURE_TXID
+                DATA_DE_CRIAÇÃO
+                DATA_DE_CAPTURA
+                DATA_DE_ESTORNO
               )
         ]
     );
 
-    while ( my $result = $donation_rs->next() ) {
-        my $address_street       = $result->address_street       || "";
-        my $address_complement   = $result->address_complement   || "";
-        my $address_house_number = $result->address_house_number || "";
+    while ( my $votolegal_donation = $c->stash->{collection}->next() ) {
 
         $csv->print(
             $fh,
             [
-                $result->name,
-                $result->cpf,
-                $result->email,
-                $result->phone,
-                $result->address_state,
-                $result->address_city,
-                sprintf( "%s %s, %s", $address_street, $address_complement, $address_house_number ),
-                sprintf( "%.2f",      $result->amount / 100 ),
-                $result->birthdate->strftime("%d/%m/%Y"),
-                $result->captured_at->strftime("%d/%m/%Y %H:%M:%S"),
+                $votolegal_donation->{is_pre_campaign},
+                $votolegal_donation->{payment_method_human},
+                $votolegal_donation->{donor_name},
+                $votolegal_donation->{donor_cpf},
+                $votolegal_donation->{donor_email},
+                $votolegal_donation->{donor_phone},
+                $votolegal_donation->{donor_billing_address_state},
+                $votolegal_donation->{donor_billing_address_city},
+                $votolegal_donation->{donor_billing_address_zipcode},
+                $votolegal_donation->{donor_billing_address_district},
+                $votolegal_donation->{donor_billing_address_street},
+                $votolegal_donation->{donor_billing_address_house_number},
+                $votolegal_donation->{donor_billing_address_complement},
+                $votolegal_donation->{amount_human},
+                $votolegal_donation->{donor_birthdate},
+                $votolegal_donation->{decred_merkle_root},
+                $votolegal_donation->{decred_capture_txid},
+                $votolegal_donation->{created_at_human},
+                $votolegal_donation->{captured_at_human},
+				$votolegal_donation->{refunded_at_human},
             ]
         );
     }

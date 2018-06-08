@@ -207,6 +207,8 @@ sub test_boleto {
 
     setup_sucess_mock_iugu_boleto_success;
 
+    is ($schema->resultset("EmaildbQueue")->count, 2, 'Boleto created and captured emails are queued');
+
     my $donation_stash = get_current_stash;
     is keys %$donation_stash, 0, 'nothing on stash';
 
