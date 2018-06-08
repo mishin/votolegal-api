@@ -279,6 +279,7 @@ use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
+use Furl;
 
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
@@ -697,6 +698,40 @@ sub verifiers_specs {
                         die \[ 'running_for_address_state', 'could not find state with that name' ]
                           unless $state;
                     }
+                },
+                username => {
+                    required   => 0,
+					max_length => 100,
+                    type       => 'Str',
+                    filters    => [qw(lower)],
+                    post_check => sub {
+						my $r = shift;
+
+						my $username = $r->get_value('username');
+
+						$username =~ m{^[a-z0-9_-]+$} or die \[ 'username', 'invalid characters' ];
+
+						# api/www/badges
+						return 0 if $username =~ /^(www(\d+)?|ftp|email|.?api|.*badges.*)$/i;
+
+						if ( $username !~ m{[a-z]} ) {
+							die \[ 'username', "must have letters" ];
+						}
+
+						# Menos de 4 caracteres.
+						die \[ 'username', 'too short' ] if length $username < 4;
+
+						# Só numeros.
+						return 0 if $username =~ /^([0-9]+)$/i;
+
+						# Inicia com número.
+						return 0 if $username =~ /^\d/i;
+
+						$self->search( { username => { 'ilike' => $username } } )->count
+						  and die \[ "username", "already exists" ];
+
+						return 1;
+                    }
                 }
             },
         ),
@@ -734,6 +769,23 @@ sub action_specs {
             delete $values{issue_priorities};
 
             if (%values) {
+                if ( $ENV{IUGU_API_TEST_MODE} == 0 && (
+                     $values{popular_name} ||
+                     $values{username}     ||
+                     $values{twitter_url}
+                    )
+                   ) {
+                        my $furl = Furl->new();
+                        my $url  = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+
+						my $res = $furl->post(
+							$url,
+							[ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ]
+                        );
+
+                        die $res->decoded_content unless $res->is_success;
+                }
+
                 $self = $self->update( \%values );
             }
 
