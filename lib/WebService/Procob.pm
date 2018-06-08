@@ -39,7 +39,7 @@ sub examine_cpf {
     else {
         my $res = $self->furl->post(
             $ENV{PROCOB_API_URL} . '/consultas/v2/L0001/' . $cpf,
-            [ 'Authorization', 'Basic' ],
+            [ 'Authorization', "Basic $ENV{PROCOB_AUTH}" ],
         );
 
         die "Erro ao consultar cpf no Procob: " . $res->decoded_content if $res->code != 000;
