@@ -100,13 +100,21 @@ sub candidate_GET {
         $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name if $political_movement_id !~ /^(6|7)$/
     }
 
+    my $has_mandatoaberto_integration = $c->stash->{candidate}->has_mandatoaberto_integration();
+
     $candidate->{party_fund}                    = $c->stash->{candidate}->party_fund();
     $candidate->{total_donated}                 = $c->stash->{candidate}->total_donated();
     $candidate->{total_donated_by_votolegal}    = $c->stash->{candidate}->total_donated_by_votolegal();
     $candidate->{people_donated}                = $c->stash->{candidate}->people_donated();
     $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
     $candidate->{paid}                          = $c->stash->{candidate}->candidate_has_paid();
-    $candidate->{has_mandatoaberto_integration} = $c->stash->{candidate}->has_mandatoaberto_integration();
+	$candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
+
+    if ($has_mandatoaberto_integration) {
+        $candidate->{fb_chat_plugin_code} = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next->fb_chat_plugin_code;
+    }
+
+    $has_mandatoaberto_integration ? $candidate->{fb_chat_plugin_code} = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next->fb_chat_plugin_code : ();
 
     return $self->status_ok(
         $c,

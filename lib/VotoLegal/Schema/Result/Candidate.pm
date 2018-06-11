@@ -732,6 +732,13 @@ sub verifiers_specs {
 
 						return 1;
                     }
+                },
+                # Este é o bloco de código HTML que utilizaremos
+                # para abrir o chatbot (caso o candidato tenha integração com o Mandato Aberto)
+                # dentro da página no voto legal
+                fb_chat_plugin_code => {
+                    required => 0,
+                    type     => 'Str'
                 }
             },
         ),
@@ -784,6 +791,12 @@ sub action_specs {
                         );
 
                         die $res->decoded_content unless $res->is_success;
+                }
+
+                # Salvando o bloco de código caso exista
+                if ( my $fb_chat_plugin_code = delete $values{fb_chat_plugin_code} ) {
+                    $self->has_mandatoaberto_integration ? $self->candidate_mandato_aberto_integrations->next->update( { fb_chat_plugin_code => $fb_chat_plugin_code } )
+                        : die \['fb_chat_plugin_code', 'candidate does not have Mandato Aberto integration'];
                 }
 
                 $self = $self->update( \%values );
