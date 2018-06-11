@@ -11,7 +11,7 @@ use MooseX::Types::Moose qw(Int);
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST'; }
 
-__PACKAGE__->config( cep_backends => [qw(Viacep Postmon Correios)] );
+__PACKAGE__->config( cep_backends => [qw(Correios Postmon Viacep)] );
 
 use namespace::autoclean -except => [qw(Int CEP)];
 
@@ -28,8 +28,11 @@ sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
 
     my $candidate;
     foreach my $cepper (@$options) {
+
         if ( my $result = $cepper->find($cep) ) {
             $candidate = { backend => $cepper->name, result => $result };
+
+            die \['CEP', 'CEP was dismembered, check on Correios website'] if $cep ne $result->{cep};
 
             # todos os campos preenchidos
             last if ( grep { length $result->{$_} } @_address_fields ) == @_address_fields;

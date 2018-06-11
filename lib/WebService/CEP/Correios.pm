@@ -19,8 +19,12 @@ sub _find {
     my $street = $r->{street};
     ($street) = $street =~ /^(.*?)(?:\s+-\s+.*)?$/g;
 
+    my $cep = $r->{cep};
+    $cep =~ s/\D//g;
+
     return {
         street   => $street,
+        cep      => $cep,
         city     => $r->{location},
         district => $r->{neighborhood},
         state    => $r->{uf},

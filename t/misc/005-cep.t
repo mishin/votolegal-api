@@ -37,12 +37,19 @@ db_transaction {
             $info,
             {
                 city     => "São Paulo",
+                cep      => '04004030',
                 district => "Paraíso",
                 state    => "SP",
                 street   => "Rua Desembargador Eliseu Guilherme"
             },
             'ok'
         );
+
+		my $info_with_dismembered_cep = rest_get ['/api/cep'],
+		  name    => 'get info about a dismembered cep',
+		  params  => { cep => '50050020' },
+          is_fail => 1,
+          code    => 400;
     }
     else {
         diag('no network, one test skiped');
