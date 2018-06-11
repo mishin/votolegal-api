@@ -25,7 +25,7 @@ sub list_GET {
         {
             columns => [
                 {
-					captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+					captured_at => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
 				},
 				{
 					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
@@ -33,7 +33,7 @@ sub list_GET {
                 { is_pre_campaign      => 'me.is_pre_campaign' },
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
-					amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
+					amount => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
 				},
                 { name             => 'votolegal_donation_immutable.donor_name' },
                 { email            => 'votolegal_donation_immutable.donor_email' },
