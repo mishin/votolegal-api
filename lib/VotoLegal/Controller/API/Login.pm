@@ -63,7 +63,8 @@ sub login_POST {
                         $value = '297.00';
                     }
                     elsif (( $candidate->party_id == 34 && $candidate->political_movement_id != 1 )
-                        || ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5|8)$/ ) )
+                        || ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5|8)$/ )
+                        || $candidate->party_id == 4 )
                     {
                         $value = '396.00';
                     }

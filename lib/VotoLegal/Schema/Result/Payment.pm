@@ -294,7 +294,7 @@ sub get_value {
     my $has_promotion;
     my $value;
 
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ || $candidate->party_id =~ /^(34|26)$/ ) {
+    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ || $candidate->party_id =~ /^(34|26|4)$/ ) {
         $has_promotion = 1;
     }
 
