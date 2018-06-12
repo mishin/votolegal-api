@@ -817,6 +817,18 @@ sub action_specs {
                 }
             }
 
+            if ( $ENV{IUGU_API_TEST_MODE} == 0 ) {
+                my $furl = Furl->new();
+                my $url  = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+
+                my $res = $furl->post(
+                    $url,
+                    [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ]
+                );
+
+                die $res->decoded_content unless $res->is_success;
+            }
+
             # Não é possível publicar um candidato que não foi aprovado.
             if ( $self->status ne "activated" ) {
                 die \[ 'status', "candidate is not activated." ];
