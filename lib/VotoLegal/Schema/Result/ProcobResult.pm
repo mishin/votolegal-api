@@ -21,6 +21,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     original    => { data_type => "varchar" },
   },
+  "is_dead_person",
+  { data_type => "boolean", is_nullable => 0 },
   "response",
   { data_type => "json", is_nullable => 0 },
   "created_at",
@@ -35,8 +37,8 @@ __PACKAGE__->add_columns(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-08 16:03:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GtGTWzYtdAMxgtfGiKnWAQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-12 11:52:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AsQrPmnYwlGLgrKG/LJ2Rg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
