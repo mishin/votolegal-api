@@ -6,7 +6,7 @@ use Net::Ping;
 my $p = Net::Ping->new("syn");
 
 db_transaction {
-    rest_get '/public-api/cep-states',
+    rest_get '/api/cep-states',
       name  => 'list states',
       stash => 'states';
 
@@ -15,7 +15,7 @@ db_transaction {
 
         is( @{$me}, 27, '27 states' );
 
-        rest_get [ '/public-api/cep-states', $me->[25]->{id} ],
+        rest_get [ '/api/cep-states', $me->[25]->{id} ],
           name  => 'list cities of sao-paulo',
           stash => 'cities_of_sp';
 
@@ -29,7 +29,7 @@ db_transaction {
 
     if ( $p->ping( "8.8.8.8", 1 ) ) {
 
-        my $info = rest_get ['/public-api/cep'],
+        my $info = rest_get ['/api/cep'],
           name   => 'get info about a cep',
           params => { cep => '04004030' };
 
@@ -37,12 +37,19 @@ db_transaction {
             $info,
             {
                 city     => "São Paulo",
+                cep      => '04004030',
                 district => "Paraíso",
                 state    => "SP",
                 street   => "Rua Desembargador Eliseu Guilherme"
             },
             'ok'
         );
+
+		my $info_with_dismembered_cep = rest_get ['/api/cep'],
+		  name    => 'get info about a dismembered cep',
+		  params  => { cep => '50050020' },
+          is_fail => 1,
+          code    => 400;
     }
     else {
         diag('no network, one test skiped');

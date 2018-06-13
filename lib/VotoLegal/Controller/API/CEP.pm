@@ -1,4 +1,4 @@
-package VotoLegal::Controller::PublicAPI::CEP;
+package VotoLegal::Controller::API::CEP;
 use Moose;
 use utf8;
 use JSON::XS;
@@ -11,14 +11,14 @@ use MooseX::Types::Moose qw(Int);
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST'; }
 
-__PACKAGE__->config( cep_backends => [qw(Viacep Postmon Correios)] );
+__PACKAGE__->config( cep_backends => [qw(Correios Postmon Viacep)] );
 
 use namespace::autoclean -except => [qw(Int CEP)];
 
 my $options;
 my @_address_fields = qw(city district state street);
 
-sub cep : Chained('/publicapi/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
+sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
     my ( $self, $c ) = @_;
 
     $options ||= [ map { WebService::CEP->new_with_traits( traits => $_ ) } @{ $self->config->{cep_backends} } ];
@@ -28,8 +28,11 @@ sub cep : Chained('/publicapi/root') Path('cep') Args(0) GET Query( cep => 'Str'
 
     my $candidate;
     foreach my $cepper (@$options) {
+
         if ( my $result = $cepper->find($cep) ) {
             $candidate = { backend => $cepper->name, result => $result };
+
+            die \['CEP', 'CEP was dismembered, check on Correios website'] if $cep ne $result->{cep};
 
             # todos os campos preenchidos
             last if ( grep { length $result->{$_} } @_address_fields ) == @_address_fields;
@@ -57,7 +60,7 @@ sub cep : Chained('/publicapi/root') Path('cep') Args(0) GET Query( cep => 'Str'
     $self->status_not_found( $c, message => 'CEP not found' );
 }
 
-sub state : Chained('/publicapi/root') : PathPart('cep-states') CaptureArgs(0) {
+sub state : Chained('/api/root') : PathPart('cep-states') CaptureArgs(0) {
 }
 
 sub list_states : Chained('state') : PathPart('') Args(0) GET {

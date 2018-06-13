@@ -732,6 +732,13 @@ sub verifiers_specs {
 
 						return 1;
                     }
+                },
+                # Este é o bloco de código HTML que utilizaremos
+                # para abrir o chatbot (caso o candidato tenha integração com o Mandato Aberto)
+                # dentro da página no voto legal
+                fb_chat_plugin_code => {
+                    required => 0,
+                    type     => 'Str'
                 }
             },
         ),
@@ -786,6 +793,12 @@ sub action_specs {
                         die $res->decoded_content unless $res->is_success;
                 }
 
+                # Salvando o bloco de código caso exista
+                if ( my $fb_chat_plugin_code = delete $values{fb_chat_plugin_code} ) {
+                    $self->has_mandatoaberto_integration ? $self->candidate_mandato_aberto_integrations->next->update( { fb_chat_plugin_code => $fb_chat_plugin_code } )
+                        : die \['fb_chat_plugin_code', 'candidate does not have Mandato Aberto integration'];
+                }
+
                 $self = $self->update( \%values );
             }
 
@@ -802,6 +815,18 @@ sub action_specs {
                 if ( $values{$_} eq "_SET_NULL_" ) {
                     $values{$_} = undef;
                 }
+            }
+
+            if ( $ENV{IUGU_API_TEST_MODE} == 0 ) {
+                my $furl = Furl->new();
+                my $url  = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+
+                my $res = $furl->post(
+                    $url,
+                    [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ]
+                );
+
+                die $res->decoded_content unless $res->is_success;
             }
 
             # Não é possível publicar um candidato que não foi aprovado.

@@ -47,12 +47,12 @@ db_transaction {
     stash_test 'get_donations' => sub {
         my $res = shift;
 
-        is ( $res->{donations}->[0]->{amount_human},                 '30,00',      'amount');
+        is ( $res->{donations}->[0]->{amount},                 '30,00',      'amount');
         is ( $res->{donations}->[0]->{payment_lr},                   '00',         'LR code' );
         is ( $res->{donations}->[0]->{payment_succeded},             'true',       'payment succeded' );
         is ( $res->{donations}->[0]->{payment_message},              'Autorizado', 'payment message' );
         ok ( defined( $res->{donations}->[0]->{name} ),              'donor name is defined');
-        ok ( defined( $res->{donations}->[0]->{captured_at_human} ), 'donation captured_at is defined');
+        ok ( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
         ok ( defined( $res->{donations}->[0]->{email} ),             'donor email is defined');
 		ok( !defined( $res->{refunded_donations}->[0] ),             'no refunded donations' );
 		ok( !defined( $res->{non_completed_donations}->[0] ),        'no non completed donations' );
