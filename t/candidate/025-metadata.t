@@ -39,7 +39,7 @@ db_transaction {
 
 	stash_test "get_candidate_metadata" => sub {
 		my $res = shift;
-        use DDP; p $res;
+
 		my $candidate_res = $res->{candidates}->[0];
 
 		ok( exists( $candidate_res->{picture} ), 'picture param exists' );
