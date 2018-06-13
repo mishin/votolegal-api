@@ -38,7 +38,7 @@ db_transaction {
         ok( defined( $candidate->{cpf} ), 'cpf' );
         is( $candidate->{signed_contract}, 0,         'user did not sign contract' );
         is( $candidate->{paid},            0,         'user did not pay' );
-        is( $candidate->{color},           'default', 'default candidate color' );
+        is( $candidate->{color},           'theme--default', 'default candidate color' );
 
         $username = $res->{candidate}->{username};
     };
@@ -218,7 +218,7 @@ db_transaction {
         bank_agency         => "0120",
         bank_account_number => "1234",
         bank_account_dv     => "5",
-        color               => 'yellow'
+        color               => 'theme--default'
       },
       ;
 
@@ -243,7 +243,7 @@ db_transaction {
     is( $candidate->bank_account_number, 1234, 'bank account number' );
     is( $candidate->bank_account_dv,     5,    'bank account dv' );
     is( $candidate->payment_gateway_id,  3,    'expected payment gateway id' );
-    ok( $candidate->color eq 'yellow', 'updated color' );
+    ok( $candidate->color eq 'theme--default', 'updated color' );
     is( $candidate->publish, 0, 'not published' );
 
     # Quando envio um campo em branco no PUT, deve setar NULL.

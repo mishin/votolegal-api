@@ -651,7 +651,14 @@ sub verifiers_specs {
                 color => {
                     required   => 0,
                     max_length => 100,
-                    type       => "Str"
+                    type       => "Str",
+                    post_check => sub {
+                        my $color = $_[0]->get_value("color");
+
+                        die \['color', 'invalid'] unless $color =~ m/^(theme--default|theme--blue|theme--red)$/;
+
+                        return 1;
+                    }
                 },
                 political_movement_id => {
                     required   => 0,
