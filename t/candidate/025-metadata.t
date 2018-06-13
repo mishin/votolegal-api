@@ -39,16 +39,14 @@ db_transaction {
 
 	stash_test "get_candidate_metadata" => sub {
 		my $res = shift;
-
+        use DDP; p $res;
 		my $candidate_res = $res->{candidates}->[0];
 
 		ok( exists( $candidate_res->{picture} ), 'picture param exists' );
 		is( $candidate_res->{name},              $name,         'name' );
 		is( $candidate_res->{slug},              $username,     'slug' );
 		is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
-		is(
-			$candidate_res->{popular_name},      'foobar',       'popular_name'
-		  );
+		is( $candidate_res->{popular_name},      'foobar',       'popular_name' );
 	  }
 };
 

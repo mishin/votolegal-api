@@ -47,8 +47,8 @@ sub candidate_GET {
                         slug            => $c->username,
                         picture         => $c->picture,
                         twitter_profile => $twitter_profile,
-						party_acronym   => $c->party->acronym,
-						party_name      => $c->party->name
+                        address_state   => $c->running_for_address_state ? $c->running_for_address_state : $c->address_state,
+                        office          => $c->office->name
 					}
 				} $c->stash->{collection}->search(
                     {
