@@ -15,6 +15,8 @@ extends 'DBIx::Class::Core';
 __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp", "PassphraseColumn");
 __PACKAGE__->table("procob_result");
 __PACKAGE__->add_columns(
+  "votolegal_donation_id",
+  { data_type => "uuid", is_foreign_key => 1, is_nullable => 1, size => 16 },
   "donor_cpf",
   {
     data_type   => "text",
@@ -35,10 +37,21 @@ __PACKAGE__->add_columns(
   "updated_at",
   { data_type => "timestamp", is_nullable => 1 },
 );
+__PACKAGE__->belongs_to(
+  "votolegal_donation",
+  "VotoLegal::Schema::Result::VotolegalDonation",
+  { id => "votolegal_donation_id" },
+  {
+    is_deferrable => 0,
+    join_type     => "LEFT",
+    on_delete     => "NO ACTION",
+    on_update     => "NO ACTION",
+  },
+);
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-12 11:52:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AsQrPmnYwlGLgrKG/LJ2Rg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-13 10:09:14
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8+hB30pnnUh/6KeB9r64OQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

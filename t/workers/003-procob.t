@@ -4,12 +4,11 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
-plan skip_all => 'no dcrtime' unless $ENV{VOTOLEGAL_DCRTIME_API};
-
 my $schema = VotoLegal->model('DB');
 
 my $candidate;
 my $candidate_id;
+my $cpf = random_cpf();
 
 db_transaction {
     use_ok 'VotoLegal::Worker::Procob';
@@ -44,69 +43,69 @@ db_transaction {
 
     my $donation = &mock_donation;
 
-    subtest 'when not anchored' => sub {
+    db_transaction{
+        &setup_mock_procob_success;
+		ok( $worker->run_once(), 'run once' );
 
-        ok( $worker->run_once(), 'run once' );
+        my $procob_rs  = $schema->resultset("ProcobResult");
+        my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next;
 
-        ok( !defined( $donation->decred_merkle_root ),  'decred_merkle_root=undef' );
-        ok( !defined( $donation->decred_capture_txid ), 'decred_capture_txid=undef' );
+        ok ( my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next, 'procob result entry' );
+        is ( $procob_rs->count,           1, 'one result found' );
+        is ( $procob_res->is_dead_person, 0, 'boolean is false' );
+        ok ( $donation = $donation->discard_changes, 'donation discard_changes' );
+        is ( $donation->procob_tested, 1, 'donation is now procob tested' );
     };
 
-    subtest 'when anchored' => sub {
+    db_transaction{
+        &setup_mock_procob_fail;
+		ok( $worker->run_once(), 'run once' );
 
-        $donation->update(
-            {
-                decred_data_raw    => undef,
-                decred_data_digest => '83e99c8f31692ce5910f55be085156451ce48524275119e10ebf3a5c17ff3a6d',
-            }
-        );
+        my $procob_rs  = $schema->resultset("ProcobResult");
+        my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next;
 
-        ok( $worker->run_once(), 'run once' );
-
-        $donation->discard_changes;
-
-        is( $donation->decred_merkle_root,  '49e3800699b87b48d3fdd3ab18cac8ec9b5d891a88914f1178bc7033a1ee734f' );
-        is( $donation->decred_capture_txid, '5d1b364b7e785ddbacba8637fac05daedc9b67dd5b02e557d22e01a96dfaf486' );
-        ok( defined( $donation->decred_merkle_registered_at ) );
-        ok( defined( $donation->decred_capture_registered_at ) );
+        ok ( my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next, 'procob result entry' );
+        is ( $procob_rs->count,           1, 'one result found' );
+        is ( $procob_res->is_dead_person, 1, 'boolean is true' );
+        ok ( $donation = $donation->discard_changes, 'donation discard_changes' );
+        is ( $donation->procob_tested, 1, 'donation is now procob tested' );
     };
+
 };
 
 done_testing();
 
 sub mock_donation {
-    api_auth_as 'nobody';
+	api_auth_as 'nobody';
 
-    generate_device_token;
-    set_current_dev_auth( stash 'test_auth' );
+	generate_device_token;
+	set_current_dev_auth( stash 'test_auth' );
 
-    my $cpf = random_cpf();
+	my $response = rest_post "/api2/donations",
+	  name   => "add donation",
+	  params => {
+		generate_rand_donator_data_cc(),
+		candidate_id                  => stash 'candidate.id',
+		device_authorization_token_id => stash 'test_auth',
+		payment_method                => 'credit_card',
+		cpf                           => $cpf,
+		amount                        => 3000,
+	  };
 
-    my $response = rest_post "/api2/donations",
-      name   => "add donation",
-      params => {
-        generate_rand_donator_data(),
-        candidate_id                  => stash 'candidate.id',
-        device_authorization_token_id => stash 'test_auth',
-        payment_method                => 'credit_card',
-        cpf                           => $cpf,
-        amount                        => 3000,
-      };
+	setup_sucess_mock_iugu;
+	my $donation_id  = $response->{donation}{id};
+	my $donation_url = "/api2/donations/" . $donation_id;
 
-    setup_sucess_mock_iugu;
-    my $donation_id  = $response->{donation}{id};
-    my $donation_url = "/api2/donations/" . $donation_id;
+	$response = rest_post $donation_url,
+	  code   => 200,
+	  params => {
+		device_authorization_token_id => stash 'test_auth',
+		credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95',
+		cc_hash                       => '123456'
+	  };
+	is( messages2str($response), 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos' );
 
-    $response = rest_post $donation_url,
-      code   => 200,
-      params => {
-        device_authorization_token_id => stash 'test_auth',
-        credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95',
-        cc_hash                       => '123456'
-      };
-    is( messages2str($response), 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos' );
+	ok( my $donation = $schema->resultset('VotolegalDonation')->find($donation_id), 'get donation' );
 
-    ok( my $donation = $schema->resultset('VotolegalDonation')->find($donation_id), 'get donation' );
-
-    return $donation;
+	return $donation;
 }

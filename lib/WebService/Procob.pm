@@ -28,13 +28,12 @@ has 'session_token' => ( is => 'rw', );
 sub _build_furl { Furl->new( timeout => 15 ) }
 
 sub examine_cpf {
-    my ($cpf) = @_;
+    my ($self, $cpf) = @_;
 
     my $result;
 
     if ( $ENV{PROCOB_TEST} ) {
-
-        $result = 'fake';
+        $result = $VotoLegal::Test::Further::procob_response;
     }
     else {
         my $res = $self->furl->post(

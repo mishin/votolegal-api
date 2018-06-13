@@ -89,6 +89,8 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "next_gateway_check",
   { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
+  "procob_tested",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -115,6 +117,12 @@ __PACKAGE__->belongs_to(
   { id => "payment_gateway_id" },
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
+__PACKAGE__->has_many(
+  "procob_results",
+  "VotoLegal::Schema::Result::ProcobResult",
+  { "foreign.votolegal_donation_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 __PACKAGE__->might_have(
   "votolegal_donation_immutable",
   "VotoLegal::Schema::Result::VotolegalDonationImmutable",
@@ -134,8 +142,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-04 08:14:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q6iOVOApvu8nTwQOLvfdcQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-13 10:14:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dG/dc1pGOF32+ga45AQdIw
 
 use Carp;
 use JSON::XS;
