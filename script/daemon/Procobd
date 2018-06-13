@@ -1,0 +1,58 @@
+#!/usr/bin/env perl
+package VotoLegal::Daemon::Procobd;
+use common::sense;
+use FindBin qw($RealBin $Script);
+use lib "$RealBin/../../lib";
+
+use AnyEvent;
+use Config::General;
+use Daemon::Generic;
+
+BEGIN {
+    use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/;
+    load_envs_via_dbi();
+
+    require VotoLegal::Logger;
+}
+use VotoLegal::Worker::Procob;
+
+our $verbose = 0;
+
+newdaemon(
+    options => {
+        'verbose!' => \$verbose,
+    },
+    pidfile => "/tmp/$Script.pid",
+);
+
+sub gd_preconfig {
+    my $self = shift;
+
+
+    $0 = "VotoLegal::Daemon::Procobd";
+    $|++;
+
+
+    return ();
+}
+
+sub gd_run {
+    my $self = shift;
+
+    my $cv = AnyEvent->condvar;
+
+    my $worker = VotoLegal::Worker::Procob->new(
+        schema => get_schema(),
+        logger => VotoLegal::Logger::get_logger(),
+    );
+
+    my $w = AnyEvent->timer(
+        after    => 0.0,
+        interval => $worker->timer,
+        cb       => sub { $worker->listen_queue() },
+    );
+
+    $cv->recv;
+}
+
+1;

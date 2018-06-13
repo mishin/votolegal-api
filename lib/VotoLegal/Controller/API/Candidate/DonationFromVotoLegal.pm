@@ -65,18 +65,18 @@ sub list_GET {
     my @refunded_donations = $c->stash->{candidate}->votolegal_donations->search(
         { refunded_at => { '!=' => undef } },
         {
-			columns => [
-				{
-					captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
-				{
-					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
+            columns => [
                 {
-					refunded_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
-				{ is_pre_campaign      => 'me.is_pre_campaign' },
-				{ payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+                    captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    refunded_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                { is_pre_campaign      => 'me.is_pre_campaign' },
+                { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
 				{
 					amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
 				},
@@ -114,18 +114,18 @@ sub list_GET {
             state      => { '!=' => 'created' }
         },
         {
-			columns => [
-				{
-					captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
-				{
-					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
-				{ is_pre_campaign      => 'me.is_pre_campaign' },
-				{ payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
-				{
-					amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
-				},
+            columns => [
+                {
+                    captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                { is_pre_campaign      => 'me.is_pre_campaign' },
+                { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+                {
+                    amount_human => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
+                },
                 { status           => \"case me.state
                                             when 'boleto_authentication'  then 'Aguardando prova de vida'
                                             when 'certificate_refused'    then 'Teste de biometria falhou'

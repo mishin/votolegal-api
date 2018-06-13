@@ -41,3 +41,5 @@ COPY votolegal-email.sh /etc/service/votolegal-email/run
 RUN mkdir /etc/service/votolegal-blockchain
 COPY votolegal-blockchain.sh /etc/service/votolegal-blockchain/run
 
+RUN mkdir /etc/service/votolegal-procob
+COPY votolegal-procob.sh /etc/service/votolegal-procob/run

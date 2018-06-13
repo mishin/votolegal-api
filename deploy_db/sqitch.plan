@@ -135,3 +135,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0129-next-gateway-check [0128-add-amounts-on-payment] 2018-06-04T11:12:29Z renato,,, <renato@renato-MS-7A34> # next-gateway-check
 0130-add-political-movement [0129-next-gateway-check] 2018-06-04T13:28:52Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding a political movement
 0131-add-fb_chat_plugin_code [0130-add-political-movement] 2018-06-11T18:47:21Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'fb_chat_plugin_code' column to the 'candidate_mandato_aberto_integration' table
+0132-procob [0131-add-fb_chat_plugin_code] 2018-06-13T13:38:36Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding procob related data

@@ -26,6 +26,8 @@ our $certiface_get_token_information;
 
 our $paid_at_further = DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00';
 
+our $procob_response;
+
 my $inc = 0;
 sub inc_paid_at_seconds {
     $inc++;
@@ -1016,6 +1018,83 @@ sub setup_sucess_mock_iugu_boleto_success {
         'payable_with'            => 'bank_slip'
     };
 
+}
+
+sub setup_mock_procob_success {
+    $procob_response = {
+        "code" => "000",
+        "message" => "Consulta de testes com dados fictícios.",
+        "date" => "2016-10-17",
+        "hour" => "09:55:51",
+        "revision" => "11399",
+        "server" => "3",
+        "saldo"  => '98.00',
+        "content" => {
+            "nome" => {
+                "existe_informacao" => "SIM",
+                "conteudo" => {
+                    "documento" => "99999999999",
+                    "tipo_documento" => "PF",
+                    "nome" => "JOÃO DA SILVA",
+                    "outras_grafias" => [
+                        "JOÃO D SILVA",
+                        "JOÃO SILVA"
+                    ],
+                    "data_nascimento:" => "15/06/1979",
+                    "outras_datas_nascimento" => [
+                        "25/06/1979"
+                    ],
+                    "idade" => "26",
+                    "signo" => "Gêmeos",
+                    "obito" => "NAO",
+                    "sexo" => "M",
+                    "uf" => "RS,CE,",
+                    "situacao_receita" => "REGULAR",
+                    "situacao_receita_data" => "2016-10-17",
+                    "situacao_receita_hora" => "11:02:49"
+                }
+            }
+        }
+    }
+}
+
+sub setup_mock_procob_fail {
+
+    $procob_response = {
+        "code" => "000",
+        "message" => "Consulta de testes com dados fictícios.",
+        "date" => "2016-10-17",
+        "hour" => "09:55:51",
+        "revision" => "11399",
+        "saldo"  => '96.00',
+        "server" => "3",
+        "content" => {
+            "nome" => {
+                "existe_informacao" => "SIM",
+                "conteudo" => {
+                    "documento" => "99999999999",
+                    "tipo_documento" => "PF",
+                    "nome" => "JOÃO DA SILVA",
+                    "outras_grafias" => [
+                        "JOÃO D SILVA",
+                        "JOÃO SILVA"
+                    ],
+                    "data_nascimento" => "15/06/1979",
+                    "outras_datas_nascimento" => [
+                        "25/06/1979"
+                    ],
+                    "idade" => "26",
+                    "signo" => "Gêmeos",
+                    "obito" => "SIM",
+                    "sexo" => "M",
+                    "uf" => "RS,CE,",
+                    "situacao_receita" => "REGULAR",
+                    "situacao_receita_data" => "2016-10-17",
+                    "situacao_receita_hora" => "11:02:49"
+                }
+            }
+        }
+    }
 }
 
 1;
