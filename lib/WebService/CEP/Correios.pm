@@ -16,14 +16,11 @@ sub _find {
       && exists $r->{status}
       && $r->{status} =~ /erro/i;
 
-    my $street = $r->{street};
-    ($street) = $street =~ /^(.*?)(?:\s+-\s+.*)?$/g;
-
     my $cep = $r->{cep};
-    $cep =~ s/\D//g;
+    $cep =~ s/[^0-9]//g;
 
     return {
-        street   => $street,
+        street   => $r->{street},
         cep      => $cep,
         city     => $r->{location},
         district => $r->{neighborhood},

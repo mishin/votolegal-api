@@ -16,7 +16,7 @@ __PACKAGE__->config( cep_backends => [qw(Correios Postmon Viacep)] );
 use namespace::autoclean -except => [qw(Int CEP)];
 
 my $options;
-my @_address_fields = qw(city district state street);
+my @_address_fields = qw(city state);
 
 sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
     my ( $self, $c ) = @_;
@@ -28,6 +28,7 @@ sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
 
     my $candidate;
     foreach my $cepper (@$options) {
+        $cep =~ s/[^0-9]//go;
 
         if ( my $result = $cepper->find($cep) ) {
             $candidate = { backend => $cepper->name, result => $result };

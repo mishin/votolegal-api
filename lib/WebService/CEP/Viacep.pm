@@ -22,10 +22,13 @@ sub _find {
     return if exists $r->{erro} && $r->{erro};
 
     my $street = $r->{logradouro};
-    ($street) = $street =~ /^(.*?)(?:\s+-\s+.*)?$/g;
+    my $complement = $r->{complemento};
+    if ($complement) {
+        $street .= ' - ' . $complement;
+    }
 
     return {
-        street   => $r->{logradouro},
+        street   => $street,
         city     => $r->{localidade},
         district => $r->{bairro},
         state    => $r->{uf},

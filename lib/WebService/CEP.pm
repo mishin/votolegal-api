@@ -19,7 +19,7 @@ has cache => ( is => 'ro', required => 0, predicate => 'has_cache' );
 sub find {
     my ( $self, $cep ) = @_;
 
-    $cep =~ s/D+//g;
+    $cep =~ s/[^0-9]//go;
 
     return $self->cache->compute(
         $cep, undef,

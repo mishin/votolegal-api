@@ -19,7 +19,6 @@ sub _find {
     my $r = eval { decode_json( $res->content ) } or return;
 
     my $street = $r->{logradouro} || '';
-    ($street) = $street =~ /^(.*?)(?:\s+-\s+.*)?$/g;
 
     return {
         street   => $street,
