@@ -63,10 +63,11 @@ sub candidate_GET {
 							'me.name'     => { 'NOT ILIKE' => '%Evelyn Perez%' },
 							'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
 							'me.username' => { 'NOT ILIKE' => '%campanharede%' },
-							'me.username' => { 'NOT ILIKE' => '%campanhapsol%' }
+							'me.username' => { 'NOT ILIKE' => '%campanhapsol%' },
+                            'candidate_donation_summary.amount_donation_by_votolegal' => { '>' => 0 }
 						  ]
                     },
-                    { prefetch => [qw/ user /] }
+                    { prefetch => [qw/ user candidate_donation_summary /] }
                   )->all()
 			],
 			generated_at => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()

@@ -30,6 +30,8 @@ db_transaction {
 		}
 	);
 
+    $candidate->candidate_donation_summary->update( { amount_donation_by_votolegal => '100' } );
+
 	api_auth_as user_id => 1;
 
 	rest_get "/api/candidate-metadata",
