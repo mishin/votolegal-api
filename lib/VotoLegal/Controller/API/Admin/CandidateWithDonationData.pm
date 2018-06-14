@@ -28,7 +28,6 @@ sub list_GET {
         entity => {
             candidates => [
                 map {
-
                     my $raising_goal = $_->raising_goal;
                     $raising_goal =~ s/\./,/g;
 
@@ -44,7 +43,9 @@ sub list_GET {
                         donation_count         => $_->donation_count,
                         amount_raised          => $_->amount_raised,
                         avg_donation_amount    => $_->avg_donation_amount,
-                        goal_raised_percentage => $goal_raised_percentage
+                        goal_raised_percentage => $goal_raised_percentage,
+                        amount_boleto          => $_->amount_boleto,
+                        amount_credit_card     => $_->amount_credit_card
 
                         # Deactivating these columns for now
                         # days_fund_raising => $_->days_fundraising,
