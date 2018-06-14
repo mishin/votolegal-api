@@ -52,7 +52,8 @@ db_transaction {
         is ( $res->{donations}->[0]->{payment_succeded},             'true',       'payment succeded' );
         is ( $res->{donations}->[0]->{payment_message},              'Autorizado', 'payment message' );
         ok ( defined( $res->{donations}->[0]->{name} ),              'donor name is defined');
-        ok ( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
+		ok( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
+		ok( exists( $res->{donations}->[0]->{refunded_at} ), 'donation refunded_at exists');
         ok ( defined( $res->{donations}->[0]->{email} ),             'donor email is defined');
     };
 };
