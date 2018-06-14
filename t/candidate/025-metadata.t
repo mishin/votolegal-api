@@ -30,14 +30,13 @@ db_transaction {
 		}
 	);
 
-    $candidate->candidate_donation_summary->update( { amount_donation_by_votolegal => '100' } );
-
 	api_auth_as user_id => 1;
 
 	rest_get "/api/candidate-metadata",
 	  name  => 'get candidates with metadata',
 	  list  => 1,
-	  stash => 'get_candidate_metadata';
+	  stash => 'get_candidate_metadata',
+      [ donations => 0 ];
 
 	stash_test "get_candidate_metadata" => sub {
 		my $res = shift;

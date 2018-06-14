@@ -25,6 +25,11 @@ sub candidate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {
 sub candidate_GET {
 	my ( $self, $c ) = @_;
 
+    my $donations = 1;
+    if (exists $c->req->params->{donations} ) {
+        $donations = $c->req->params->{donations};
+    }
+    use DDP; p $donations;
 	return $self->status_ok(
 		$c,
 		entity => {
@@ -64,7 +69,7 @@ sub candidate_GET {
 							'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
 							'me.username' => { 'NOT ILIKE' => '%campanharede%' },
 							'me.username' => { 'NOT ILIKE' => '%campanhapsol%' },
-                            'candidate_donation_summary.amount_donation_by_votolegal' => { '>' => 0 }
+                            ( $donations ? ('candidate_donation_summary.amount_donation_by_votolegal' => { '>' => $donations }) : () )
 						  ]
                     },
                     { prefetch => [qw/ user candidate_donation_summary /] }
