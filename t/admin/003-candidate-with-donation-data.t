@@ -64,7 +64,7 @@ db_transaction {
         is ($res_candidate->{raising_goal},           '100,00',       'candidate raising goal');
 		is($res_candidate->{donation_count},           1,              'candidate donation count');
 		is($res_candidate->{donation_count},           1,              'candidate donation count');
-		is($res_candidate->{amount_boleto},           undef,              'candidate donation count');
+		is($res_candidate->{amount_boleto},           '0',              'candidate donation count');
         is ($res_candidate->{amount_credit_card},     '30',              'candidate donation count');
         is ($res_candidate->{amount_raised},          '30',           'candidate amount raised');
         is ($res_candidate->{avg_donation_amount},    '30',           'candidate average donation amount');
