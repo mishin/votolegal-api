@@ -29,7 +29,7 @@ sub candidate_GET {
     if (exists $c->req->params->{donations} ) {
         $donations = $c->req->params->{donations};
     }
-    use DDP; p $donations;
+
 	return $self->status_ok(
 		$c,
 		entity => {
