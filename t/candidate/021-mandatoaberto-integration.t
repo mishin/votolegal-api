@@ -150,7 +150,10 @@ db_transaction {
                 <!-- Your customer chat code -->
                 <div class="fb-customerchat"
                 attribution="setup_tool"
-                page_id="136021913750928">
+                page_id="136021913750928"
+                theme_color="#fa3c4c"
+				logged_in_greeting="Foo"
+  				logged_out_greeting="Bar">
                 </div>'
         ]
     ;
@@ -164,6 +167,10 @@ db_transaction {
 		my $res = shift;
 
 		is( $res->{candidate}->{has_mandatoaberto_integration}, 1, 'candidate has mandato aberto integration' );
+        is( $res->{candidate}->{chat}->{page_id}, '136021913750928', 'page_id' );
+		is( $res->{candidate}->{chat}->{theme_color}, '#fa3c4c', 'theme_color' );
+		is( $res->{candidate}->{chat}->{logged_in_greeting}, 'Foo', 'logged_in_greeting' );
+		is( $res->{candidate}->{chat}->{logged_out_greeting}, 'Bar', 'logged_out_greeting' );
 		ok( defined( $res->{candidate}->{fb_chat_plugin_code} ), 'fb_chat_plugin_code is defined' );
 	};
 };
