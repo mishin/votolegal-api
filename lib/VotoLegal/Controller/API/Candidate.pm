@@ -85,7 +85,7 @@ sub candidate_GET {
               id name popular_name status reelection party_id office_id status username picture color publish
               video_url facebook_url twitter_url website_url summary biography instagram_url cnpj cpf
               raising_goal public_email spending_spreadsheet address_city address_state payment_gateway_id
-              political_movement_id google_analytics collect_donor_phone collect_donor_address
+              political_movement_id google_analytics collect_donor_phone collect_donor_address campaign_donation_type
               )
         };
     }
