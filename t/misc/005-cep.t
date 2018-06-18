@@ -50,6 +50,11 @@ db_transaction {
 		  params  => { cep => '50050020' },
           is_fail => 1,
           code    => 400;
+
+		my $info_with_street_with_aditional_info = rest_get ['/api/cep'],
+		  name    => 'get info about a dismembered cep',
+		  params  => { cep => '05021001' },
+		  code    => 200;
     }
     else {
         diag('no network, one test skiped');

@@ -35,6 +35,13 @@ sub cep : Chained('/api/root') Path('cep') Args(0) GET Query( cep => 'Str' ) {
 
             die \['CEP', 'CEP was dismembered, check on Correios website'] if $cep ne $result->{cep};
 
+            # Tratando caso de o campo rua retornar mais dados além de só a rua
+            my $street_aditional_info;
+            if ( $result->{street} =~ m/(\s-.*)/gm ) {
+                $street_aditional_info = $1;
+                $result->{street} =~ s/(\s-.*)//g;
+            }
+
             # todos os campos preenchidos
             last if ( grep { length $result->{$_} } @_address_fields ) == @_address_fields;
         }
