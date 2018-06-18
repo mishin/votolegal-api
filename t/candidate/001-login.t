@@ -45,6 +45,7 @@ db_transaction {
 
         is( $res->{candidate_id},   $candidate_id,    'candidate id' );
         is( $res->{candidate_name}, $candidate->name, 'candidate name' );
+        is( $res->{campaign_donation_type}, 'pre-campaign', 'campaign_donation_type' );
         is( length $res->{api_key}, 14,               'api key' );
     };
 
