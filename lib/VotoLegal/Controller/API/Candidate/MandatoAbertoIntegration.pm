@@ -34,12 +34,16 @@ sub list_POST {
     my $mandatoaberto_id = $c->req->params->{mandatoaberto_id};
     die \[ 'mandatoaberto_id', 'missing' ] unless $mandatoaberto_id;
 
+    my $page_id = $c->req->params->{page_id};
+    die \['page_id', 'missing'] unless $page_id;
+
     my $mandatoaberto_integration = $c->stash->{collection}->execute(
         $c,
         for  => 'create',
         with => {
             candidate_id     => $candidate->id,
-            mandatoaberto_id => $mandatoaberto_id
+            mandatoaberto_id => $mandatoaberto_id,
+            page_id          => $page_id
         }
     );
 

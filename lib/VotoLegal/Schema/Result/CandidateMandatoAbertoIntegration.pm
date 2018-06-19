@@ -26,8 +26,6 @@ __PACKAGE__->add_columns(
     is_nullable   => 1,
     original      => { default_value => \"now()" },
   },
-  "fb_chat_plugin_code",
-  { data_type => "text", is_nullable => 1 },
   "id",
   {
     data_type         => "integer",
@@ -35,6 +33,8 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "candidate_mandato_aberto_integration_id_seq",
   },
+  "page_id",
+  { data_type => "text", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -45,8 +45,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-11 16:22:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0UHXi0wnTskRf5s5VG11KA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-19 10:33:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CI1XMtRr7zUFCXtdwE67Iw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

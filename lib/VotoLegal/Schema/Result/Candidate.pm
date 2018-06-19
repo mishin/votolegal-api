@@ -107,7 +107,11 @@ __PACKAGE__->add_columns(
   "crawlable",
   { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "color",
-  { data_type => "text", default_value => "default", is_nullable => 0 },
+  {
+    data_type     => "text",
+    default_value => "theme--default",
+    is_nullable   => 0,
+  },
   "political_movement_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "birth_date",
@@ -266,8 +270,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-25 09:50:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mtVzvjzlZ7Is0OpTTys/jw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-19 10:20:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qUVvJbbZ6/+ymE/StahXRA
 
 use File::Temp q(:seekable);
 use Data::Verifier;

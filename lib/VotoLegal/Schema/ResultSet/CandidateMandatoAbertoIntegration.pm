@@ -24,6 +24,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => 'Int',
                 },
+                page_id => {
+                    required => 1,
+                    type     => 'Str'
+                }
             },
         ),
     };
@@ -39,7 +43,19 @@ sub action_specs {
             my %values = $r->valid_values;
             not defined $values{$_} and delete $values{$_} for keys %values;
 
-            return $self->create( \%values );
+            my $existent_candidate_mandatoaberto_integration = $self->search(
+                { candidate_id => $values{candidate_id} }
+            )->next;
+
+            if (!defined $existent_candidate_mandatoaberto_integration) {
+                my $candidate_mandatoaberto_integration = $self->create(\%values);
+
+                return $candidate_mandatoaberto_integration;
+            } else {
+                my $updated_candidate_mandatoaberto_integration = $existent_candidate_mandatoaberto_integration->update(\%values);
+
+                return $updated_candidate_mandatoaberto_integration;
+            }
         },
     };
 }

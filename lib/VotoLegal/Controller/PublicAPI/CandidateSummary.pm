@@ -100,17 +100,12 @@ sub candidate_GET {
 	$candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
 
 	if ($has_mandatoaberto_integration) {
-		$candidate->{fb_chat_plugin_code} = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next->fb_chat_plugin_code;
+        my $integration = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next;
 
-		if ( $c->stash->{candidate}->candidate_mandato_aberto_integrations->next->fb_chat_plugin_code =~ m/(page_id="(\d{0,15})")\s{0,100}(theme_color="(#\S{0,6})")?\s{0,100}?(logged_in_greeting="(...)")?\s{0,100}?(logged_out_greeting="(...)")?/ ) {
-
-			$candidate->{chat} = {
-				page_id             => $2,
-				theme_color         => $4,
-				logged_in_greeting  => $6,
-				logged_out_greeting => $8
-			};
-		}
+        $candidate->{chat} = {
+            page_id     => $integration,
+            theme_color => $c->stash->{candidate}->color
+        };
 	}
 
 
