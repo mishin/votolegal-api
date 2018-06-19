@@ -51,7 +51,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
                 { name        => 'votolegal_donation_immutable.donor_name' },
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
                 { hash        => 'me.decred_capture_txid' },
-                { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
+                { transaction_link => \"case when me.decred_capture_txid is not null then concat('https://mainnet.decred.org/tx/', me.decred_capture_txid) end" },
                 { id      => 'me.id' },
                 { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 
