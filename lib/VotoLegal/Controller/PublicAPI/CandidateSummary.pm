@@ -103,8 +103,7 @@ sub candidate_GET {
         my $integration = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next;
 
         $candidate->{chat} = {
-            page_id     => $integration,
-            theme_color => $c->stash->{candidate}->color
+            page_id     => $integration
         };
 	}
 
