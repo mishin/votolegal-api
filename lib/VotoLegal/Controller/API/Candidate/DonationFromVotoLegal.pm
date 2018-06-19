@@ -58,7 +58,7 @@ sub list_GET {
             join         => 'votolegal_donation_immutable',
             order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
             page         => 1,
-            rows         => 100,
+            rows         => 1000,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
     )->all();
