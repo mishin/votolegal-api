@@ -22,17 +22,17 @@ sub list_GET {
         {
             columns => [
                 {
-					captured_at => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
-				{
-					created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
-				},
+                    captured_at => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
                 { refunded_at => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')" },
                 { is_pre_campaign      => 'me.is_pre_campaign' },
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
-					amount => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
-				},
+                    amount => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
+                },
                 {
                     status => \"case when me.captured_at is not null then 'captured' when me.refunded_at is not null then 'refunded' else 'non_completed' end"
                 },
@@ -46,8 +46,8 @@ sub list_GET {
                 { address_house_number => 'votolegal_donation_immutable.address_house_number' },
                 { address_street       => 'votolegal_donation_immutable.billing_address_street' },
                 { address_complement   => 'votolegal_donation_immutable.address_complement' },
-				{ address_zipcode      => 'votolegal_donation_immutable.billing_address_zipcode' },
-				{ address_district     => 'votolegal_donation_immutable.billing_address_district' },
+                { address_zipcode      => 'votolegal_donation_immutable.billing_address_zipcode' },
+                { address_district     => 'votolegal_donation_immutable.billing_address_district' },
                 { transaction_hash     => 'me.decred_capture_txid' },
                 { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
                 { id                   => 'me.id' },
@@ -73,8 +73,8 @@ sub list_GET {
                     label => 'capturadas'
                 },
                 {
-					name  => 'refunded',
-					label => 'estornadas'
+                    name  => 'refunded',
+                    label => 'estornadas'
                 },
                 {
                     name  => 'non_completed',

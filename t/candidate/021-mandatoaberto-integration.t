@@ -53,7 +53,7 @@ db_transaction {
         mandatoaberto_id => 42,
         email            => 'foobar@email.com',
         security_token   => $security_token,
-		page_id          => $page_id
+        page_id          => $page_id
       ];
 
     rest_post "/api/candidate/mandatoaberto_integration",
@@ -64,7 +64,7 @@ db_transaction {
         mandatoaberto_id => 42,
         email            => 'juniorfvox@gmail.com',
         security_token   => $security_token,
-		page_id          => $page_id
+        page_id          => $page_id
       ];
 
     rest_post "/api/candidate/mandatoaberto_integration",
@@ -74,7 +74,7 @@ db_transaction {
       [
         mandatoaberto_id => 42,
         email            => $email,
-		page_id          => $page_id
+        page_id          => $page_id
       ];
 
     rest_post "/api/candidate/mandatoaberto_integration",
@@ -85,30 +85,30 @@ db_transaction {
         mandatoaberto_id => 42,
         email            => $email,
         security_token   => 'foobar',
-		page_id          => $page_id
+        page_id          => $page_id
       ];
 
-	rest_post "/api/candidate/mandatoaberto_integration",
-	  name    => 'Integration without page_id',
-	  is_fail => 1,
-	  code    => 400,
-	  [
-		mandatoaberto_id => 42,
-		email            => $email,
+    rest_post "/api/candidate/mandatoaberto_integration",
+      name    => 'Integration without page_id',
+      is_fail => 1,
+      code    => 400,
+      [
+        mandatoaberto_id => 42,
+        email            => $email,
         security_token   => $security_token
-	  ];
+      ];
 
-	rest_post "/api/candidate/mandatoaberto_integration",
-	  name    => 'Integration with greeting greater than 80 chars',
-	  is_fail => 1,
-	  code    => 400,
-	  [
-		mandatoaberto_id => 42,
-		email            => $email,
-		security_token   => $security_token,
+    rest_post "/api/candidate/mandatoaberto_integration",
+      name    => 'Integration with greeting greater than 80 chars',
+      is_fail => 1,
+      code    => 400,
+      [
+        mandatoaberto_id => 42,
+        email            => $email,
+        security_token   => $security_token,
         page_id          => $page_id,
         greeting         => 'This is just a large phrase repeated over and over. This is just a large phrase repeated over and over.'
-	  ];
+      ];
 
     rest_post "/api/candidate/mandatoaberto_integration",
       name  => 'successful integration',
@@ -118,7 +118,7 @@ db_transaction {
         mandatoaberto_id => 42,
         email            => $email,
         security_token   => $security_token,
-		page_id          => $page_id,
+        page_id          => $page_id,
         greeting         => 'fake greeting'
       ];
 

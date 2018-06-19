@@ -108,7 +108,7 @@ sub candidate_GET {
     $candidate->{people_donated}                = $c->stash->{candidate}->people_donated();
     $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
     $candidate->{paid}                          = $c->stash->{candidate}->candidate_has_paid();
-	$candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
+    $candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
 
     if ($has_mandatoaberto_integration) {
         my $integration = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next;
@@ -117,7 +117,7 @@ sub candidate_GET {
             page_id            => $integration->page_id,
             logged_in_greeting => $integration->greeting
         };
-	}
+    }
 
     return $self->status_ok(
         $c,

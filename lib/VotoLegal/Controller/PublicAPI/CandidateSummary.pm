@@ -95,18 +95,18 @@ sub candidate_GET {
 
     # nao sei o que eh isso, acho que nao aparece mais na tela
     # $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
-	my $has_mandatoaberto_integration = $c->stash->{candidate}->has_mandatoaberto_integration();
+    my $has_mandatoaberto_integration = $c->stash->{candidate}->has_mandatoaberto_integration();
 
-	$candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
+    $candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
 
-	if ($has_mandatoaberto_integration) {
+    if ($has_mandatoaberto_integration) {
         my $integration = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next;
 
         $candidate->{chat} = {
             page_id            => $integration->page_id,
             logged_in_greeting => $integration->greeting
         };
-	}
+    }
 
 
     $candidate->{projects} = [

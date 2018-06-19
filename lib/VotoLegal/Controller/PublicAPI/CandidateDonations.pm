@@ -47,11 +47,11 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
                 { captured_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
                 { refunded_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at))" },
                 { amount      => 'votolegal_donation_immutable.amount' },
-				{ payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
+                { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 { name        => 'votolegal_donation_immutable.donor_name' },
                 { cpf         => 'votolegal_donation_immutable.donor_cpf' },
                 { hash        => 'me.decred_capture_txid' },
-				{ transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
+                { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
                 { id      => 'me.id' },
                 { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 

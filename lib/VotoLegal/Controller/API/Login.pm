@@ -72,9 +72,9 @@ sub login_POST {
                 elsif ( $candidate->party_id == 26 ) {
                     $value = '297.00';
                 }
-				elsif ( $candidate->party_id == 4 ) {
-					$value = '396.00';
-				}
+                elsif ( $candidate->party_id == 4 ) {
+                    $value = '396.00';
+                }
                 else {
                     $value = '495.00';
                 }

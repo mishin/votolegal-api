@@ -10,45 +10,45 @@ my $schema = VotoLegal->model('DB');
 
 db_transaction {
 
-	my $name          = fake_name()->();
-	my $username      = 'foobar';
+    my $name          = fake_name()->();
+    my $username      = 'foobar';
 
-	create_candidate(
-		name          => $name,
-		username      => $username,
-		popular_name  => 'foobar'
-	);
+    create_candidate(
+        name          => $name,
+        username      => $username,
+        popular_name  => 'foobar'
+    );
 
-	my $candidate_id = stash "candidate.id";
-	my $candidate    = $schema->resultset("Candidate")->find($candidate_id);
+    my $candidate_id = stash "candidate.id";
+    my $candidate    = $schema->resultset("Candidate")->find($candidate_id);
 
-	$candidate->update(
-		{
-			status       => 'activated',
-			is_published => 1,
-			twitter_url  => 'https://twitter.com/lucas_ansei'
-		}
-	);
+    $candidate->update(
+        {
+            status       => 'activated',
+            is_published => 1,
+            twitter_url  => 'https://twitter.com/lucas_ansei'
+        }
+    );
 
-	api_auth_as user_id => 1;
+    api_auth_as user_id => 1;
 
-	rest_get "/api/candidate-metadata",
-	  name  => 'get candidates with metadata',
-	  list  => 1,
-	  stash => 'get_candidate_metadata',
+    rest_get "/api/candidate-metadata",
+      name  => 'get candidates with metadata',
+      list  => 1,
+      stash => 'get_candidate_metadata',
       [ donations => 0 ];
 
-	stash_test "get_candidate_metadata" => sub {
-		my $res = shift;
+    stash_test "get_candidate_metadata" => sub {
+        my $res = shift;
 
-		my $candidate_res = $res->{candidates}->[0];
+        my $candidate_res = $res->{candidates}->[0];
 
-		ok( exists( $candidate_res->{picture} ), 'picture param exists' );
-		is( $candidate_res->{name},              $name,         'name' );
-		is( $candidate_res->{slug},              $username,     'slug' );
-		is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
-		is( $candidate_res->{popular_name},      'foobar',       'popular_name' );
-	  }
+        ok( exists( $candidate_res->{picture} ), 'picture param exists' );
+        is( $candidate_res->{name},              $name,         'name' );
+        is( $candidate_res->{slug},              $username,     'slug' );
+        is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
+        is( $candidate_res->{popular_name},      'foobar',       'popular_name' );
+      }
 };
 
 done_testing();
