@@ -22,7 +22,8 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
     $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
         {
             candidate_id => $c->stash->{candidate}->id,
-            captured_at  => \'IS NOT NULL'
+            captured_at  => \'IS NOT NULL',
+            refunded_at  => \'IS NULL'
         },
         {
             join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
