@@ -138,3 +138,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0132-procob [0131-add-fb_chat_plugin_code] 2018-06-13T13:38:36Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding procob related data
 0133-default-theme [0132-procob] 2018-06-13T17:18:50Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Updating default theme
 0134-add-page_id [0133-default-theme] 2018-06-19T13:20:03Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'page_id' column on the 'candidate_mandato_aberto_integration' table
+0135-mandatoaberto_integration-greeting [0134-add-page_id] 2018-06-19T19:13:13Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'greeting' column to the 'candidate_mandatoaberto_integration' table

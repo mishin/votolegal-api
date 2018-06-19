@@ -27,6 +27,11 @@ sub verifiers_specs {
                 page_id => {
                     required => 1,
                     type     => 'Str'
+                },
+                greeting => {
+                    required   => 0,
+                    type       => 'Str',
+                    max_length => 80
                 }
             },
         ),

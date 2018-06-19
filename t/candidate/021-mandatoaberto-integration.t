@@ -98,6 +98,18 @@ db_transaction {
         security_token   => $security_token
 	  ];
 
+	rest_post "/api/candidate/mandatoaberto_integration",
+	  name    => 'Integration with greeting greater than 80 chars',
+	  is_fail => 1,
+	  code    => 400,
+	  [
+		mandatoaberto_id => 42,
+		email            => $email,
+		security_token   => $security_token,
+        page_id          => $page_id,
+        greeting         => 'This is just a large phrase repeated over and over. This is just a large phrase repeated over and over.'
+	  ];
+
     rest_post "/api/candidate/mandatoaberto_integration",
       name  => 'successful integration',
       code  => 200,
@@ -106,7 +118,8 @@ db_transaction {
         mandatoaberto_id => 42,
         email            => $email,
         security_token   => $security_token,
-		page_id          => $page_id
+		page_id          => $page_id,
+        greeting         => 'fake greeting'
       ];
 
     stash_test "i1" => sub {
@@ -114,6 +127,19 @@ db_transaction {
 
         is( $res->{username}, 'teste.votolegal', 'username' );
     };
+
+    rest_get "/api/candidate/$candidate_id",
+        name  => 'get candidate data',
+        list  => 1,
+        stash => 'get_candidate_data'
+    ;
+
+    stash_test 'get_candidate_data' => sub {
+        my $res = shift;
+
+        is ( $res->{candidate}->{chat}->{page_id},            'foobar',        'page id' );
+        is ( $res->{candidate}->{chat}->{logged_in_greeting}, 'fake greeting', 'greeting' );
+    }
 
 };
 

@@ -43,7 +43,8 @@ sub list_POST {
         with => {
             candidate_id     => $candidate->id,
             mandatoaberto_id => $mandatoaberto_id,
-            page_id          => $page_id
+            page_id          => $page_id,
+            greeting         => $c->req->params->{greeting}
         }
     );
 
