@@ -57,7 +57,7 @@ sub interface {
 
         # em alguns estados, precisa escrever no banco durante um GET
         # entao precisa chamar o _apply
-        for my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment/) {
+        for my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment wait_for_compensation/) {
 
             if ( $opts{donation}->state() eq $apply_on_get_state && $last_applied_state ne $apply_on_get_state ) {
                 undef @messages;
@@ -329,8 +329,18 @@ sub _process_state {
         &_process_certificate_refused(@params);
 
     }
+    elsif ( $state eq 'wait_for_compensation' ) {
+        &_process_wait_for_compensation(@params);
+
+    }
 
     return $stash;
+}
+
+sub _process_wait_for_compensation {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    $donation = $donation->sync_gateway_status();
 }
 
 sub _process_certificate_refused {
