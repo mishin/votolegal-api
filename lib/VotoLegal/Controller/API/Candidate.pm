@@ -110,6 +110,14 @@ sub candidate_GET {
     $candidate->{paid}                          = $c->stash->{candidate}->candidate_has_paid();
 	$candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
 
+    if ($has_mandatoaberto_integration) {
+        my $integration = $c->stash->{candidate}->candidate_mandato_aberto_integrations->next;
+
+        $candidate->{chat} = {
+            page_id     => $integration->page_id
+        };
+	}
+
     return $self->status_ok(
         $c,
         entity => {
