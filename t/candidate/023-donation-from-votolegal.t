@@ -36,26 +36,55 @@ db_transaction {
       },
       ;
 
-    my $donation = &mock_donation;
+    my $first_donation  = &mock_donation;
+	inc_paid_at_seconds;
+	&mock_donation;
 
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name    => 'invalid order_by_created_at',
+        is_fail => 1,
+        code    => 400,
+        [ order_by_created_at => 'foo' ]
+    ;
+
+    $ENV{MAX_DONATIONS_ROWS} = 2;
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
         name  => 'get donations from voto legal',
         list  => 1,
-        stash => 'get_donations'
+        stash => 'get_donations',
+		[ order_by_created_at => 'asc' ]
     ;
 
-    stash_test 'get_donations' => sub {
-        my $res = shift;
+	subtest 'pagination tests' => sub {
+		$ENV{MAX_DONATIONS_ROWS} = 1;
+		rest_get "/api/candidate/$candidate_id/votolegal-donations",
+		  code  => 200,
+		  stash => 'res',
+		  name  => 'list last donations with MAX_DONATIONS_ROWS=1';
 
-        is ( $res->{donations}->[0]->{amount},                 '30,00',      'amount');
-        is ( $res->{donations}->[0]->{payment_lr},                   '00',         'LR code' );
-        is ( $res->{donations}->[0]->{payment_succeded},             'true',       'payment succeded' );
-        is ( $res->{donations}->[0]->{payment_message},              'Autorizado', 'payment message' );
-        ok ( defined( $res->{donations}->[0]->{name} ),              'donor name is defined');
-        ok( defined( $res->{donations}->[0]->{captured_at} ), 'donation captured_at is defined');
-        ok( exists( $res->{donations}->[0]->{refunded_at} ), 'donation refunded_at exists');
-        ok ( defined( $res->{donations}->[0]->{email} ),             'donor email is defined');
-    };
+		my $next;
+		stash_test 'res', sub {
+			my ($me) = @_;
+
+			is $me->{has_more}, 1, 'has second page';
+			is $me->{donations}[0]{amount}, '30,00', 'amount ok';
+
+			$next = $me->{donations}[0]{_marker};
+		};
+
+		rest_get [ "/api/candidate/$candidate_id/votolegal-donations", $next ],
+		  code  => 200,
+		  stash => 'res',
+		  name  => 'list donations before ' . $next;
+		stash_test 'res', sub {
+			my ($me) = @_;
+
+			is $me->{has_more}, 0, 'end of page';
+			is $me->{donations}[0]{amount}, '30,00', 'amount ok';
+
+		};
+
+	};
 };
 
 done_testing();
