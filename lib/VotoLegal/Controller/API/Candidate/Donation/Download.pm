@@ -17,6 +17,9 @@ sub base : Chained('root') : PathPart('download') : CaptureArgs(0) { }
 sub csv : Chained('base') : PathPart('csv') : Args(0) {
     my ( $self, $c ) = @_;
 
+	my $order_by_created_at = delete $c->req->params->{order_by_created_at} || 'desc';
+	die \['order_by_created_at', 'invalid'] unless $order_by_created_at =~ m/(asc|desc)/;
+
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
@@ -28,6 +31,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         {
             join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+			order_by     => { "-$order_by_created_at" => "created_at" },
 
             columns => [
 
@@ -79,6 +83,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         $fh,
         [
             qw(
+                ID_DA_DOACAO
                 DOACAO_DE_PRE_CAMPANHA
                 METODO
                 NOME
@@ -94,8 +99,6 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 COMPLEMENTO
                 VALOR
                 NASCIMENTO
-                DECRED_MERKLE_ROOT
-                DECRED_CAPTURE_TXID
                 DATA_DE_CRIAÇÃO
                 DATA_DE_CAPTURA
                 DATA_DE_ESTORNO
@@ -108,6 +111,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         $csv->print(
             $fh,
             [
+                $votolegal_donation->{id},
                 $votolegal_donation->{is_pre_campaign},
                 $votolegal_donation->{payment_method_human},
                 $votolegal_donation->{donor_name},
@@ -123,8 +127,6 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 $votolegal_donation->{donor_billing_address_complement},
                 $votolegal_donation->{amount_human},
                 $votolegal_donation->{donor_birthdate},
-                $votolegal_donation->{decred_merkle_root},
-                $votolegal_donation->{decred_capture_txid},
                 $votolegal_donation->{created_at_human},
                 $votolegal_donation->{captured_at_human},
                 $votolegal_donation->{refunded_at_human},

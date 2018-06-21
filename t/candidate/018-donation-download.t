@@ -40,6 +40,13 @@ db_transaction {
     ok( my $api_key = $schema->resultset('UserSession')->search( { user_id => $candidate->user_id } )->next->api_key,
         'api_key', );
 
+    rest_get "/api/candidate/$candidate_id/donate/download/csv?api_key=$api_key",
+        name    => 'invalid order_by_created_at',
+        is_fail => 1,
+        code    => 400,
+        [ order_by_created_at => 'foo' ]
+    ;
+
     # Enviando a request.
     my $req = request("/api/candidate/$candidate_id/donate/download/csv?api_key=$api_key");
     ok( $req->is_success(), 'download' );
