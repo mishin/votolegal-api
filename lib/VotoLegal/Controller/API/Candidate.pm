@@ -6,7 +6,6 @@ use namespace::autoclean;
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 use File::MimeInfo;
-use Image::Resize;
 use VotoLegal::Uploader;
 use Crypt::PRNG qw(random_string);
 
