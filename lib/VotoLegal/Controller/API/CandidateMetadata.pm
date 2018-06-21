@@ -53,7 +53,11 @@ sub candidate_GET {
                         picture         => $c->picture,
                         twitter_profile => $twitter_profile,
                         address_state   => $c->running_for_address_state ? $c->running_for_address_state : $c->address_state,
-                        office          => $c->office->name
+                        office          => $c->office->name,
+
+                        # A implementação do avatar foi feita no dia 21/06/2018. Nem todos os candidatos estão
+                        # com essa coluna preenchida ainda.
+                        ( $c->avatar ? ( avatar => $c->avatar ) : () )
                     }
                 } $c->stash->{collection}->search(
                     {

@@ -26,7 +26,8 @@ db_transaction {
         {
             status       => 'activated',
             is_published => 1,
-            twitter_url  => 'https://twitter.com/lucas_ansei'
+            twitter_url  => 'https://twitter.com/lucas_ansei',
+            avatar       => 'https://f24-user-media-dev.s3.amazonaws.com/votolegal/picture/CiN/1521813860//tmp/0ky1vQLNr1_resized.jpg'
         }
     );
 
@@ -44,6 +45,7 @@ db_transaction {
         my $candidate_res = $res->{candidates}->[0];
 
         ok( exists( $candidate_res->{picture} ), 'picture param exists' );
+		ok( exists( $candidate_res->{avatar} ),  'avatar param exists' );
         is( $candidate_res->{name},              $name,         'name' );
         is( $candidate_res->{slug},              $username,     'slug' );
         is( $candidate_res->{twitter_profile},   '@lucas_ansei', 'twitter profile' );
