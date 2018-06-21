@@ -6,6 +6,7 @@ use namespace::autoclean;
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 use File::MimeInfo;
+use Image::Resize;
 use VotoLegal::Uploader;
 use Crypt::PRNG qw(random_string);
 
@@ -136,6 +137,7 @@ sub candidate_PUT {
 
     my $picture;
     if ( my $upload = $c->req->upload("picture") ) {
+
         $picture = $self->_upload_picture($upload);
     }
 
@@ -159,7 +161,8 @@ sub candidate_PUT {
         for  => 'update',
         with => {
             %{ $c->req->params },
-            picture              => $picture,
+            picture              => $picture->{normal},
+            avatar               => $picture->{avatar},
             spending_spreadsheet => $spending_spreadsheet,
             payment_gateway_id   => $payment_gateway_id,
             roles                => [ $c->user->roles ],
@@ -173,21 +176,43 @@ sub _upload_picture {
     my ( $self, $upload ) = @_;
 
     my $mimetype = mimetype( $upload->tempname );
+    my $tempname = $upload->tempname;
+
+    my $avatar_tempname = $tempname;
+    if ( $tempname =~ m/(\.(jpg|jpeg|png))/ ) {
+        my $extension = $1;
+
+        $avatar_tempname =~ s/$extension/_resized$extension/;
+    }
+
+    my $avatar = `convert $tempname -resize 180x180 $avatar_tempname`;
 
     die \[ 'picture', 'empty file' ]    unless $upload->size > 0;
     die \[ 'picture', 'invalid image' ] unless $mimetype =~ m{^image\/};
 
-    my $path = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $upload->tempname;
+    my $path        = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $tempname;
+    my $avatar_path = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $avatar_tempname;
 
-    my $url = $self->uploader->upload(
+    my $normal_url = $self->uploader->upload(
         {
             path => $path,
-            file => $upload->tempname,
+            file => $tempname,
             type => $mimetype,
         }
     );
 
-    return $url->as_string;
+    my $avatar_url = $self->uploader->upload(
+        {
+            path => $avatar_path,
+            file => $avatar_tempname,
+            type => $mimetype,
+        }
+    );
+
+    return {
+        normal => $normal_url->as_string,
+        avatar => $avatar_url->as_string
+    }
 }
 
 sub _upload_spreadsheet {

@@ -148,6 +148,8 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", is_nullable => 1 },
   "unpublished_at",
   { data_type => "timestamp", is_nullable => 1 },
+  "avatar",
+  { data_type => "text", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -270,8 +272,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-19 10:20:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qUVvJbbZ6/+ymE/StahXRA
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-21 16:13:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u9+lkUNqimiynv6rxVKQyw
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -480,6 +482,12 @@ sub verifiers_specs {
                     max_length => 1024,
                     type       => "Str",
                     post_check => sub { is_web_uri $_[0]->get_value('picture') },
+                },
+                avatar => {
+                    required   => 0,
+                    max_length => 1024,
+                    type       => "Str",
+                    post_check => sub { is_web_uri $_[0]->get_value('avatar') },
                 },
                 video_url => {
                     required   => 0,
