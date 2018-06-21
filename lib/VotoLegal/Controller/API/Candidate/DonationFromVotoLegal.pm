@@ -57,7 +57,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 				{ id                   => 'me.id' },
 				{ payment_succeded     => \"me.payment_info->'_charge_response_'->>'success'" },
 				{ payment_lr           => \"me.payment_info->'_charge_response_'->>'LR'" },
-				{ payment_message      => \"me.payment_info->'_charge_response_'->>'message'" },
+				{ payment_message      => \"case when me.payment_info->'_charge_response_'->>'message' = 'Transaction declined' then 'Transação negada' else me.payment_info->'_charge_response_'->>'message' end" },
 				{ _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 			],
 			join         => 'votolegal_donation_immutable',
