@@ -144,6 +144,8 @@ sub api_auth_as {
 sub create_candidate {
     my (%opts) = @_;
 
+    my $schema = VotoLegal->model('DB');
+
     my $name     = fake_name()->();
     my $username = lc $name;
     $username =~ s/\s+/_/g;
@@ -167,12 +169,62 @@ sub create_candidate {
         %opts,
     );
 
-    return $obj->rest_post(
-        '/api/register',
-        name  => 'add candidate',
-        stash => 'candidate',
-        [%params],
+
+	my $candidate = $obj->rest_post(
+		'/api/register',
+		name  => 'add candidate',
+		stash => 'candidate',
+		[%params],
+	);
+
+    my $candidate_result = $schema->resultset('Candidate')->find($candidate->{id});
+    $candidate_result->update(
+        {
+            video_url    => 'https://www.youtube.com/watch?v=uZRL-nBwl1k',
+            summary      => 'foobar',
+            biography    => 'foobar',
+            public_email => 'email@foobar.com',
+            picture      => 'picture.jpg'
+        }
     );
+
+    return $candidate
+}
+
+sub create_candidate_with_incomplete_data {
+	my (%opts) = @_;
+
+	my $schema = VotoLegal->model('DB');
+
+	my $name     = fake_name()->();
+	my $username = lc $name;
+	$username =~ s/\s+/_/g;
+
+	my %params = (
+		username             => $username,
+		password             => "foobarquux1",
+		name                 => fake_name()->(),
+		popular_name         => fake_surname()->(),
+		email                => fake_email()->(),
+		cpf                  => random_cpf(),
+		address_state        => 'SP',
+		address_city         => 'Iguape',
+		address_zipcode      => '11920-000',
+		address_street       => "Rua Tiradentes",
+		address_house_number => 1 + int( rand(2000) ),
+		office_id            => 4,
+		birth_date           => '11/05/1998',
+		party_id             => fake_int( 1, 35 )->(),
+		reelection           => fake_int( 0, 1 )->(),
+		%opts,
+	);
+
+	return $obj->rest_post(
+		'/api/register',
+		name  => 'add candidate',
+		stash => 'candidate',
+		[%params],
+	);
 }
 
 sub lorem_words {

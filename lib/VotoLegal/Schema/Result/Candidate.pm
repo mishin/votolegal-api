@@ -283,7 +283,7 @@ use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
-use Furl;
+use HTTP::Async;
 
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
@@ -793,22 +793,22 @@ sub action_specs {
                      $values{twitter_url}
                     )
                    ) {
-                        my $furl = Furl->new();
-                        my $url  = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+                        my $async  = HTTP::Async->new;
+                        my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+                        my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
 
-                        my $res = $furl->post(
-                            $url,
-                            [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ]
-                        );
-
-                        die $res->decoded_content unless $res->is_success;
+                        my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
                 }
 
-                # Salvando o bloco de código caso exista
-                if ( my $fb_chat_plugin_code = delete $values{fb_chat_plugin_code} ) {
-                    $self->has_mandatoaberto_integration ? $self->candidate_mandato_aberto_integrations->next->update( { fb_chat_plugin_code => $fb_chat_plugin_code } )
-                        : die \['fb_chat_plugin_code', 'candidate does not have Mandato Aberto integration'];
-                }
+				my @required = qw(
+				  video_url summary biography public_email picture
+				);
+
+				for (@required) {
+					if ( !$values{$_ } && !$self->$_ ) {
+						die \[ $_, "missing" ];
+					}
+				}
 
                 $self = $self->update( \%values );
             }
@@ -829,15 +829,11 @@ sub action_specs {
             }
 
             if ( $ENV{IUGU_API_TEST_MODE} == 0 ) {
-                my $furl = Furl->new();
-                my $url  = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+				my $async  = HTTP::Async->new;
+				my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+				my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
 
-                my $res = $furl->post(
-                    $url,
-                    [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ]
-                );
-
-                die $res->decoded_content unless $res->is_success;
+				my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
             }
 
             # Não é possível publicar um candidato que não foi aprovado.

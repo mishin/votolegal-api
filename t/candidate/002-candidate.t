@@ -7,7 +7,7 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
-    create_candidate;
+    create_candidate_with_incomplete_data;
     my $candidate_id = stash 'candidate.id';
 
     # Testando o GET.
@@ -56,7 +56,9 @@ db_transaction {
       ;
 
     rest_put "/api/candidate/${candidate_id}",
-      name   => 'edit candidate',
+      name    => 'must edit all required fields',
+      is_fail => 1,
+      code    => 400,
       params => {
         name                 => "Junior Moraes",
         popular_name         => "Junior do VotoLegal",
@@ -84,54 +86,102 @@ db_transaction {
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid video url",
       is_fail => 1,
-      params  => { video_url => "this_is_not_a_video_url", },
+      params  => [
+          video_url    => "this_is_not_a_video_url",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          picture      => "$Bin/picture.jpg"
+      ]
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid video url",
       is_fail => 1,
-      params  => { video_url => "www.google.com", },
-      ;
-
-    rest_put "/api/candidate/${candidate_id}",
-      name   => "video url",
-      params => { video_url => "https://www.youtube.com/watch?v=49J9g5gCcWM", },
+      params  => [
+          video_url    => "www.google.com",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+      ],
+      files => { picture => "$Bin/picture.jpg" }
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid video url",
       is_fail => 1,
-      params  => { video_url => "www.vimeo.com", },
-      ;
-
-    rest_put "/api/candidate/${candidate_id}",
-      name   => "video url",
-      params => { video_url => "https://vimeo.com/267554980", },
+      params  => [
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          video_url    => "www.vimeo.com"
+      ],
+      files => { picture => "$Bin/picture.jpg" }
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid facebook url",
       is_fail => 1,
-      params  => { facebook_url => "/juniorfvox", },
+      params  => [
+          video_url    => "www.google.com",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          facebook_url => "/juniorfvox"
+      ],
+      files => { picture => "$Bin/picture.jpg" }
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid twitter url",
       is_fail => 1,
-      params  => { twitter_url => '@fvox', },
+      params  => [
+          video_url    => "www.google.com",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          twitter_url => '@fvox'
+      ],
+      files => { picture => "$Bin/picture.jpg" }
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't add invalid website url",
       is_fail => 1,
-      params  => { website_url => "httttttttp://eokoe.com/", },
+      params  => [
+          video_url    => "www.google.com",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          picture      => "$Bin/picture.jpg",
+          website_url => "httttttttp://eokoe.com/"
+      ],
+      files => { picture => "$Bin/picture.jpg" }
       ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't upload empty image",
       is_fail => 1,
+      params  => [
+          video_url    => "www.google.com",
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+      ],
       files   => { picture => "$Bin/empty.jpg", },
       ;
+
+    rest_put "/api/candidate/${candidate_id}",
+      name    => "edit candidate",
+      params  => [
+          summary      => 'foobar',
+          biography    => 'foobar',
+          public_email => 'foobar@email.com',
+          video_url    => 'https://www.youtube.com/watch?v=fw3UYy02lSI'
+      ],
+      files   => { picture => "$Bin/picture.jpg", },
+      ;
+
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't upload invalid spreadsheet",
