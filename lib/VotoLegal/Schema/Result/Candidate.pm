@@ -805,6 +805,8 @@ sub action_specs {
 				);
 
 				for (@required) {
+                    last if $values{raising_goal};
+
 					if ( !$values{$_ } && !$self->$_ ) {
 						die \[ $_, "missing" ];
 					}
