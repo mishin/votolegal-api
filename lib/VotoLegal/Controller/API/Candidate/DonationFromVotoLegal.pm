@@ -61,7 +61,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 				{ _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
 			],
 			join         => 'votolegal_donation_immutable',
-			order_by     => { "-$order_by_created_at" => "created_at" },
+			order_by     => [ { "-$order_by_created_at" => "captured_at" }, { "-$order_by_created_at" => "created_at" } ],
 			rows         => $c->stash->{max_rows} + 1,
 			result_class => "DBIx::Class::ResultClass::HashRefInflator",
 		}
