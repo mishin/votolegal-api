@@ -8,7 +8,6 @@ use namespace::autoclean;
 
 use File::MimeInfo;
 use LWP::Simple;
-use Imager;
 
 use VotoLegal::SchemaConnected;
 use VotoLegal::Uploader;

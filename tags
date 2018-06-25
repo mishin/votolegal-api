@@ -196,6 +196,7 @@ _process_credit_card_form	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _pr
 _process_start_cc_payment	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_start_cc_payment {$/;"	s
 _process_state	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_state {$/;"	s
 _process_validate_payment	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_validate_payment {$/;"	s
+_process_wait_for_compensation	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_wait_for_compensation {$/;"	s
 _process_waiting_boleto_payment	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_waiting_boleto_payment {$/;"	s
 _refuse_duplicate	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _refuse_duplicate {$/;"	s
 _supports	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub _supports {$/;"	s
@@ -237,7 +238,7 @@ base	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^sub base : Chained('
 base	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^sub base : Chained('root') : PathPart('download') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^sub base : Chained('root') : PathPart('export') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^sub base : Chained('root') : PathPart('vote') : CaptureArgs(0) { }$/;"	s
-base	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^sub base : Chained('root') : PathPart('expenditure') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub base : Chained('root') : PathPart('mandatoaberto_integration') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^sub base : Chained('root') : PathPart('payment') : CaptureArgs(0) { }$/;"	s
@@ -416,6 +417,8 @@ list_POST	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list_POS
 list_POST	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^sub list_POST {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub list_POST {$/;"	s
 list_cities	./lib/VotoLegal/Controller/API/CEP.pm	/^sub list_cities : Chained('state') : PathPart('') Args('Int') GET {$/;"	s
+list_more	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_more : Chained('base') : PathPart('') : Args(1) : ActionClass('REST') { }$/;"	s
+list_more_GET	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_more_GET {$/;"	s
 list_states	./lib/VotoLegal/Controller/API/CEP.pm	/^sub list_states : Chained('state') : PathPart('') Args(0) GET {$/;"	s
 listen_queue	./lib/VotoLegal/Worker/Blockchain.pm	/^sub listen_queue {$/;"	s
 listen_queue	./lib/VotoLegal/Worker/Email.pm	/^sub listen_queue {$/;"	s
@@ -477,6 +480,7 @@ register_POST	./lib/VotoLegal/Controller/API/Register.pm	/^sub register_POST {$/
 remote_notify	./lib/VotoLegal/Utils.pm	/^sub remote_notify {$/;"	s
 reset_password	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub reset_password : Chained('base') : PathPart('reset') : Args(1) : ActionClass('REST') { }$/;"	s
 reset_password_POST	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub reset_password_POST {$/;"	s
+resize_image	./script/get-candidate-avatar.pl	/^sub resize_image {$/;"	s
 result	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {$/;"	s
 result_GET	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result_GET {$/;"	s
 result_POST	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result_POST {$/;"	s
@@ -572,6 +576,7 @@ unpublish	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub unpublish : 
 unpublish_POST	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub unpublish_POST {$/;"	s
 update_code	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub update_code {$/;"	s
 upload	./lib/VotoLegal/Uploader.pm	/^sub upload {$/;"	s
+upload_picture	./script/get-candidate-avatar.pl	/^sub upload_picture {$/;"	s
 upsert_decred_data	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub upsert_decred_data {$/;"	s
 uri_for	./lib/WebService/IuguForReal.pm	/^sub uri_for {$/;"	s
 validate_donation_fp	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub validate_donation_fp {$/;"	s
