@@ -20,10 +20,9 @@ my $candidate_rs = $schema->resultset("Candidate")->search( { avatar => \'IS NUL
 for my $candidate ( $candidate_rs->next() ) {
     my $picture = $candidate->picture;
 
-    my $tmp_pic = '/tmp/' . $candidate->id . '_resized';
+    my $tmp_pic = '/tmp/' . $candidate->id . '_avatar.jpg';
 
     getstore($picture, $tmp_pic);
-
     resize_image($tmp_pic);
 
     my $avatar = upload_picture($tmp_pic);
