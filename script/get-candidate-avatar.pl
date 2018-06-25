@@ -24,7 +24,6 @@ my $candidate_rs = $schema->resultset("Candidate")->search(
 
 while ( my $candidate = $candidate_rs->next() ) {
     my $picture = $candidate->picture;
-
     my $tmp_pic = '/tmp/' . $candidate->id . '_avatar.jpg';
 
     getstore($picture, $tmp_pic);
@@ -33,7 +32,7 @@ while ( my $candidate = $candidate_rs->next() ) {
 
     my $avatar = upload_picture($uploader, $tmp_pic);
 
-    $candidate->update( { avatar => $avatar } );
+    printf "UPDATE candidate SET avatar = '%s' WHERE id = %d;\n", $avatar, $candidate->id;
 }
 
 sub resize_image {
