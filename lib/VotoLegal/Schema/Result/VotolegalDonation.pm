@@ -145,6 +145,7 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-13 10:14:09
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dG/dc1pGOF32+ga45AQdIw
 
+use Encode;
 use Carp;
 use JSON::XS;
 use JSON qw/to_json from_json/;
@@ -583,7 +584,7 @@ sub upsert_decred_data {
             $candidate->cnpj_formated() || '00.000.000/0000-00',
         );
 
-        $data_digest = sha256_hex($data_raw);
+        $data_digest = sha256_hex( Encode::encode_utf8($data_raw) );
 
         $self->update(
             {
