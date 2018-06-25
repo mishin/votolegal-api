@@ -84,7 +84,7 @@ sub mock_donation {
     my $response = rest_post "/api2/donations",
       name   => "add donation",
       params => {
-        generate_rand_donator_data(),
+        generate_rand_donator_data_cc(),
         candidate_id                  => stash 'candidate.id',
         device_authorization_token_id => stash 'test_auth',
         payment_method                => 'credit_card',
