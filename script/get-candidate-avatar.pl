@@ -15,7 +15,7 @@ use VotoLegal::Uploader;
 my $schema   = get_schema;
 my $uploader = VotoLegal::Uploader->new();
 
-my $candidate_rs = $schema->resultset("Candidate")->search( { avatar => \'IS NULL' } );
+my $candidate_rs = $schema->resultset("Candidate")->search( { avatar => { '!=' => undef } } );
 
 for my $candidate ( $candidate_rs->next() ) {
     my $picture = $candidate->picture;
