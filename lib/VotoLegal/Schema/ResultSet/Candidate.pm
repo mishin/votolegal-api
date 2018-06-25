@@ -254,7 +254,6 @@ sub get_candidates_with_data_for_admin {
                 'me.name'     => { 'NOT ILIKE' => '%Hernani Mattos%' },
                 'me.name'     => { 'NOT ILIKE' => '%Evelyn Perez%' },
                 'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
-                'me.username' => { 'NOT ILIKE' => '%campanharede%' }
             ]
         },
         { prefetch => [qw/ party office political_movement payments user /] }
