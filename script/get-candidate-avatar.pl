@@ -15,17 +15,23 @@ use VotoLegal::Uploader;
 my $schema   = get_schema;
 my $uploader = VotoLegal::Uploader->new();
 
-my $candidate_rs = $schema->resultset("Candidate")->search( { avatar => \'IS NULL' } );
+my $candidate_rs = $schema->resultset("Candidate")->search(
+    {
+        avatar  => \'IS NULL',
+        picture => \'IS NOT NULL'
+    }
+);
 
-for my $candidate ( $candidate_rs->next() ) {
+while ( my $candidate = $candidate_rs->next() ) {
     my $picture = $candidate->picture;
 
     my $tmp_pic = '/tmp/' . $candidate->id . '_avatar.jpg';
 
     getstore($picture, $tmp_pic);
+
     resize_image($tmp_pic);
 
-    my $avatar = upload_picture($tmp_pic);
+    my $avatar = upload_picture($uploader, $tmp_pic);
 
     $candidate->update( { avatar => $avatar } );
 }
