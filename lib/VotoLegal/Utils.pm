@@ -45,6 +45,13 @@ sub left_padding_whitespaces {
     return sprintf( "%0${pos}s", $string );
 }
 
+sub right_padding_whitespaces {
+	my ( $string, $pos ) = @_;
+
+	$pos = $pos + length $string;
+	return sprintf( "%-${pos}s", $string );
+}
+
 sub die_with ($) {
     die { msg_id => shift };
 }
