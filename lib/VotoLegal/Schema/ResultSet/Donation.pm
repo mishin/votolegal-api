@@ -42,17 +42,13 @@ sub export {
 
         # Escrevendo o header.
         if ($writeHeader) {
-            print $fh "1";                     # Registro.
-            print $fh $cnpj;                   # CNPJ.
-            print $fh $data_movimentacao;      # Data da movimentação.
-            print $fh $bank_code;              # Código do banco.
-            print $fh $bank_agency;            # Numero da agência.
-            print $fh $bank_agency_dv;         # Dígito verificador da agência.
-            print $fh $bank_account_number;    # Número da conta.
-            print $fh $bank_account_dv;        # Digito verificador da conta.
-            print $fh "400";                   # Versao do layout.
-            print $fh "DOACINTE";              # Nome do layout.
-            print $fh " " x 93;                # Preencher com espaços em branco.
+            print $fh "1";                                            # Registro.
+            print $fh $cnpj;                                          # CNPJ.
+            print $fh "PAGUE JUNTO TECNOLOGIA DE INTERMEDIACAO LTDA"; # Nome fantasia.
+			print $fh " " x 55;                                       # Preencher com espaços em branco.
+            print $fh '100';                                          # Versão do layout.
+            print $fh 'ATSEFCC';                                      # Nome do layout.
+            print $fh " " x 247;                                      # Preencher com espaços em branco.
             print $fh "\r\n";
 
             $writeHeader = 0;
@@ -72,7 +68,8 @@ sub export {
         $amount =~ s/\.//;
         $amount = left_padding_zeros( $amount, 18 );
 
-        print $fh "2";             # Registro.
+		print $fh "2";             # Registro.
+		print $fh "2";             # Registro.
         print $fh $receipt_id;     # Id do recibo.
         print $fh $doc_number;     # Numero do documento.
         print $fh $auth_number;    # Numero do documento.
