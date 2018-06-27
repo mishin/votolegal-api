@@ -47,9 +47,29 @@ db_transaction {
         [ order_by_created_at => 'foo' ]
     ;
 
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name  => 'get donations from voto legal with captured filter',
+		[ filter => 'captured' ]
+    ;
+
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name  => 'get donations from voto legal with refused filter',
+		[ filter => 'refused' ]
+    ;
+
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name  => 'get donations from voto legal with refunded filter',
+		[ filter => 'refunded' ]
+    ;
+
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+        name  => 'get donations from voto legal with non_completed filter',
+		[ filter => 'non_completed' ]
+    ;
+
     $ENV{MAX_DONATIONS_ROWS} = 2;
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal',
+        name  => 'get donations from voto legal with filter',
         list  => 1,
         stash => 'get_donations',
 		[ order_by_created_at => 'asc' ]
