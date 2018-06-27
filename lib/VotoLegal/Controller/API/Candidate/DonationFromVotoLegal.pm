@@ -19,10 +19,42 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
     my $order_by_created_at = delete $c->req->params->{order_by_created_at} || 'desc';
 	die \['order_by_created_at', 'invalid'] unless $order_by_created_at =~ m/(asc|desc)/;
 
+    # Tratando o filtro
+    my $filter = delete $c->req->params->{filter} || 'captured';
+	die \['filter', 'invalid'] unless $filter =~ m/(captured|refunded|non_completed|refused)/;
+
+    my $cond;
+    if ( $filter eq 'captured' ) {
+        $cond = { captured_at => \'IS NOT NULL' };
+    }
+    elsif ( $filter eq 'refunded' ) {
+		$cond = { refunded_at => \'IS NOT NULL' };
+    }
+	elsif ( $filter eq 'non_completed' ) {
+		$cond = {
+            captured_at => \'IS NULL',
+            -or => [
+                state => 'created',
+				state => 'boleto_authentication',
+				state => 'credit_card_form',
+            ]
+        };
+	}
+    elsif ( $filter eq 'refused' ) {
+		$cond = {
+            -or => [
+                state => 'not_authorized',
+				state => 'boleto_expired',
+				state => 'error_manual_check',
+                state => 'certificate_refused'
+            ]
+        };
+    }
+
 	$c->stash->{max_rows} = $ENV{MAX_DONATIONS_ROWS} || 100;
 
 	$c->stash->{donations_rs} = $c->stash->{candidate}->votolegal_donations->search(
-		{},
+		$cond,
 		{
 			columns => [
 				{
@@ -79,7 +111,11 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 		{
 			name  => 'non_completed',
 			label => 'não concluídas'
-		}
+		},
+        {
+            name  => 'refused',
+            label => 'recusadas'
+        }
 	];
 }
 
