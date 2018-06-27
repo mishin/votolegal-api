@@ -26,7 +26,7 @@ use DateTime::Format::Pg;
 subtype PositiveInt, as Int, where { $_ >= 0 && $_ <= 2147483647 }, message { "Int is not larger than 0" };
 
 subtype CommonLatinText, as Str,
-  where { $_ eq '_SET_NULL_' or $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:()]+$/ },
+  where { $_ eq '_SET_NULL_' or $_ =~ /^[\p{Latin}0-9 '\.\-\,`\:()\/]+$/ },
   message { "Text include non latin scripts" };
 
 subtype CPF, as NonEmptyStr, where {
