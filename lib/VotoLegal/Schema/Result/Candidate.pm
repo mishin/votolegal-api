@@ -150,6 +150,8 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", is_nullable => 1 },
   "avatar",
   { data_type => "text", is_nullable => 1 },
+  "use_certiface",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -272,8 +274,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-06-21 16:13:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u9+lkUNqimiynv6rxVKQyw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-06-27 11:43:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fIdZ+Ym2YvpZ2ksFFkC7xw
 
 use File::Temp q(:seekable);
 use Data::Verifier;

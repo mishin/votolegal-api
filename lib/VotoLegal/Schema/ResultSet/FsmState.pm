@@ -504,7 +504,7 @@ sub _process_credit_card_form {
 sub _process_created {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
-    if ( $donation->is_boleto && $ENV{CERTIFICATE_ENABLED} ) {
+    if ( $donation->is_boleto && $ENV{CERTIFICATE_ENABLED} && $donation->candidate->use_certiface ) {
 
         if ( $donation->device_authorization_token->can_create_boleto_without_certiface ) {
 
