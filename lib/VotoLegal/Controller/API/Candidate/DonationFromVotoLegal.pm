@@ -102,19 +102,19 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 	$c->stash->{statuses} = [
 		{
 			name  => 'captured',
-			label => 'autorizadas'
+			label => 'Autorizadas'
 		},
 		{
 			name  => 'refunded',
-			label => 'estornadas'
+			label => 'Estornadas'
 		},
 		{
 			name  => 'non_completed',
-			label => 'não concluídas'
+			label => 'Não concluídas'
 		},
         {
             name  => 'refused',
-            label => 'recusadas'
+            label => 'Doações não autorizadas ou não compensadas'
         }
 	];
 }
