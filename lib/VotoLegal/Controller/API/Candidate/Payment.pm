@@ -58,6 +58,16 @@ sub payment_POST {
         }
     );
 
+    if ( $method eq 'boleto' ) {
+        $self->status_ok(
+            $c,
+            entity => {
+                mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail para você em breve.'
+            },
+        );
+        $c->detach;
+    }
+
     my $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
 
     if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
