@@ -64,7 +64,7 @@ sub payment_POST {
         $self->status_ok(
             $c,
             entity => {
-                mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail para você em breve.'
+                mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail.'
             },
         );
 
