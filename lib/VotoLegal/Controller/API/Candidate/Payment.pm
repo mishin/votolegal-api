@@ -6,6 +6,8 @@ use namespace::autoclean;
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 
+use JSON;
+
 use XML::Hash::XS qw/ hash2xml xml2hash /;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
@@ -65,6 +67,27 @@ sub payment_POST {
                 mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail para você em breve.'
             },
         );
+
+        if ( $ENV{BOLETO_OFFLINE_SENDMAIL} ) {
+            $c->model('DB::EmaildbQueue')->create(
+                {
+                    config_id => 1,
+                    template  => 'message.html',
+                    to        => $ENV{BOLETO_OFFLINE_SENDMAIL},
+                    subject   => 'Enviar boleto para candidato',
+                    variables => encode_json(
+                        {
+                            message => sprintf "O candidato %s deseja receber um boleto",
+                            $candidate->name
+                              . ' POST= '
+                              . to_json( $c->req->params )
+
+                        }
+                    ),
+                }
+            );
+        }
+
         $c->detach;
     }
 
