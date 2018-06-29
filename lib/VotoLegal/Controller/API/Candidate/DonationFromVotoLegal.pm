@@ -66,7 +66,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
     # Tratando o filtro default aqui vai ser o captured
-    $c->req->params->{filter} || 'captured';
+    $c->req->params->{filter} ||= 'captured';
 
     my $candidate_id = $c->stash->{candidate}->id;
     $c->stash->{candidate_id} = $candidate_id;
