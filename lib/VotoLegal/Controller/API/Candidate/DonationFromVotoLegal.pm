@@ -49,6 +49,7 @@ sub _filter_donation : Private {
     elsif ( $filter eq 'pending_payment' ) {
         $cond = {
             candidate_id => $candidate_id,
+            captured_at  => undef,
 
             state => { 'in' => [qw/waiting_boleto_payment boleto_expired/] },
         };
@@ -56,6 +57,7 @@ sub _filter_donation : Private {
     elsif ( $filter eq 'not_finalized' ) {
         $cond = {
             candidate_id => $candidate_id,
+            captured_at  => undef,
 
             state => { 'in' => [qw/certificate_refused boleto_authentication credit_card_form error_manual_check /] },
         };
@@ -191,7 +193,7 @@ sub list_GET {
     foreach my $row (@donations) {
         ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
 
-        delete $row->{$_} for @keys_to_remove;
+        #delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(
@@ -239,7 +241,7 @@ sub list_more_GET {
     foreach my $row (@donations) {
         ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
 
-        delete $row->{$_} for @keys_to_remove;
+        #delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(
