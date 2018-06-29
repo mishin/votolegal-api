@@ -694,6 +694,8 @@ sub verifiers_specs {
                     post_check => sub {
                         my $google_analytics = $_[0]->get_value('google_analytics');
 
+                        return 1 if $google_analytics eq "_SET_NULL_";
+
                         die \[ 'google_analytics', 'invalid id' ] unless $google_analytics =~ /^UA-\d{1,30}-\d{1}$/;
 
                         return 1;
@@ -787,7 +789,7 @@ sub action_specs {
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             for ( keys %values ) {
-                if ( $values{$_} eq "_SET_NULL_" ) {
+                if ( $values{$_} eq "'" ) {
                     $values{$_} = undef;
                 }
             }
