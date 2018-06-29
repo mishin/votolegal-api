@@ -19,50 +19,11 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
 
     my $candidate_id = $c->stash->{candidate}->id;
 
-	my $order_by_created_at = delete $c->req->params->{order_by_created_at} || 'desc';
-	die \['order_by_created_at', 'invalid'] unless $order_by_created_at =~ m/(asc|desc)/;
+    $c->stash->{candidate_id} = $candidate_id;
+    $c->forward('/api/candidate/donationfromvotolegal/_filter_donation');
 
-    my $filter = delete $c->req->params->{filter} || 'all';
-	die \['filter', 'invalid'] unless $filter =~ m/(captured|refunded|non_completed|refused|all|)/;
-
-    my $cond;
-    if ( $filter eq 'captured' ) {
-        $cond = {
-            captured_at  => \'IS NOT NULL',
-            candidate_id => $candidate_id
-        };
-    }
-    elsif ( $filter eq 'refunded' ) {
-		$cond = {
-            refunded_at  => \'IS NOT NULL',
-			candidate_id => $candidate_id
-        };
-    }
-	elsif ( $filter eq 'non_completed' ) {
-		$cond = {
-            captured_at => \'IS NULL',
-            candidate_id => $candidate_id
-            -or => [
-                state => 'created',
-				state => 'boleto_authentication',
-				state => 'credit_card_form',
-            ]
-        };
-	}
-    elsif ( $filter eq 'refused' ) {
-		$cond = {
-			candidate_id => $candidate_id,
-            -or => [
-                state => 'not_authorized',
-				state => 'boleto_expired',
-				state => 'error_manual_check',
-                state => 'certificate_refused'
-            ]
-        };
-    }
-    else {
-        $cond = {};
-    }
+    my $cond                = $c->stash->{cond}     or die 'must have cond';
+    my $order_by_created_at = $c->stash->{order_by} or die 'must have order_by';
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
@@ -71,7 +32,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         {
             join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-			order_by     => { "-$order_by_created_at" => "created_at" },
+            order_by => { "-$order_by_created_at" => "created_at" },
 
             columns => [
 
@@ -95,13 +56,16 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 },
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
                 {
-                    captured_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                    captured_at_human => \
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
-                    created_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                    created_at_human => \
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
-                    refunded_at_human => \"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                    refunded_at_human => \
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
             ]
         }
@@ -123,25 +87,25 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
         $fh,
         [
             qw(
-                ID_DA_DOACAO
-                DOACAO_DE_PRE_CAMPANHA
-                METODO
-                NOME
-                CPF
-                EMAIL
-                TELEFONE
-                ESTADO
-                CIDADE
-                CEP
-                BAIRRO
-                RUA
-                NUMERO
-                COMPLEMENTO
-                VALOR
-                NASCIMENTO
-                DATA_DE_CRIAÇÃO
-                DATA_DE_CAPTURA
-                DATA_DE_ESTORNO
+              ID_DA_DOACAO
+              DOACAO_DE_PRE_CAMPANHA
+              METODO
+              NOME
+              CPF
+              EMAIL
+              TELEFONE
+              ESTADO
+              CIDADE
+              CEP
+              BAIRRO
+              RUA
+              NUMERO
+              COMPLEMENTO
+              VALOR
+              NASCIMENTO
+              DATA_DE_CRIAÇÃO
+              DATA_DE_CAPTURA
+              DATA_DE_ESTORNO
               )
         ]
     );
