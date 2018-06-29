@@ -669,7 +669,7 @@ sub verifiers_specs {
                     post_check => sub {
                         my $color = $_[0]->get_value("color");
 
-                        die \['color', 'invalid'] unless $color =~ m/^(theme--default|theme--blue|theme--red)$/;
+                        die \[ 'color', 'invalid' ] unless $color =~ m/^(theme--default|theme--blue|theme--red)$/;
 
                         return 1;
                     }
@@ -715,8 +715,8 @@ sub verifiers_specs {
                     post_check => sub {
                         my $address_state = $_[0]->get_value('running_for_address_state');
 
-                        my $state = $self->result_source->schema->resultset('State')
-                          ->search( { name => $address_state } )->next;
+                        my $state =
+                          $self->result_source->schema->resultset('State')->search( { name => $address_state } )->next;
 
                         die \[ 'running_for_address_state', 'could not find state with that name' ]
                           unless $state;
@@ -756,6 +756,7 @@ sub verifiers_specs {
                         return 1;
                     }
                 },
+
                 # Este é o bloco de código HTML que utilizaremos
                 # para abrir o chatbot (caso o candidato tenha integração com o Mandato Aberto)
                 # dentro da página no voto legal
@@ -789,7 +790,7 @@ sub action_specs {
             not defined $values{$_} and delete $values{$_} for keys %values;
 
             for ( keys %values ) {
-                if ( $values{$_} eq "'" ) {
+                if ( $values{$_} eq "'" || $values{$_} eq "_SET_NULL_" ) {
                     $values{$_} = undef;
                 }
             }
@@ -799,30 +800,30 @@ sub action_specs {
             delete $values{issue_priorities};
 
             if (%values) {
-                if ( $ENV{IUGU_API_TEST_MODE} == 0 && (
-                     $values{popular_name} ||
-                     $values{username}     ||
-                     $values{twitter_url}
-                    )
-                   ) {
-                        my $async  = HTTP::Async->new;
-                        my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
-                        my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
+                if (
+                    $ENV{IUGU_API_TEST_MODE} == 0
+                    && (   $values{popular_name}
+                        || $values{username}
+                        || $values{twitter_url} )
+                  ) {
+                    my $async  = HTTP::Async->new;
+                    my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+                    my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
 
-                        my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
+                    my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
                 }
 
-				my @required = qw(
-				  video_url summary biography public_email picture
-				);
+                my @required = qw(
+                  video_url summary biography public_email picture
+                );
 
-				for (@required) {
+                for (@required) {
                     last if $values{raising_goal};
 
-					if ( !$values{$_ } && !$self->$_ ) {
-						die \[ $_, "missing" ];
-					}
-				}
+                    if ( !$values{$_} && !$self->$_ ) {
+                        die \[ $_, "missing" ];
+                    }
+                }
 
                 $self = $self->update( \%values );
             }
@@ -843,11 +844,11 @@ sub action_specs {
             }
 
             if ( $ENV{IUGU_API_TEST_MODE} == 0 ) {
-				my $async  = HTTP::Async->new;
-				my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
-				my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
+                my $async  = HTTP::Async->new;
+                my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+                my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
 
-				my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
+                my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
             }
 
             # Não é possível publicar um candidato que não foi aprovado.
@@ -874,10 +875,10 @@ sub action_specs {
             }
 
             return $self->update(
-              {
-                is_published => 1,
-                published_at => \'coalesce(published_at, NOW())'
-              }
+                {
+                    is_published => 1,
+                    published_at => \'coalesce(published_at, NOW())'
+                }
             );
         },
 
