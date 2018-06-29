@@ -1,0 +1,294 @@
+{
+  "10": [
+    "Não é permitido o envio do cartão",
+    "Adquirente está com os serviços instáveis, caso o erro continue ocorrendo entre em contato com nosso suporte técnico"
+  ],
+  "11": [
+    "Transação Internacional Autorizada com sucesso",
+    "N/A"
+  ],
+  "12": [
+    "Transação inválida",
+    "Venda não autorizada pelo banco emissor do cartão. Cartão informado no momento da compra está incorreto"
+  ],
+  "13": [
+    "Valor inválido",
+    "Verifique valor mínimo de R$5,00 para parcelamento"
+  ],
+  "14": [
+    "Cartão inválido",
+    "N/A"
+  ],
+  "15": [
+    "Emissor inválido",
+    "Emissor sem comunicação."
+  ],
+  "19": [
+    "Refaça a transação ou tente novamente mais tarde.",
+    "Não foi possível processar a transação. Refaça a transação ou tente novamente mais tarde."
+  ],
+  "21": [
+    "Cancelamento não efetuado.",
+    "Não foi possível processar o cancelamento."
+  ],
+  "22": [
+    "Parcelamento inválido. Número de parcelas inválidas.",
+    "Não foi possível processar a transação. Valor inválido. Refazer a transação confirmando os dados informados."
+  ],
+  "24": [
+    "Quantidade de parcelas inválido",
+    "Não foi possível processar a transação. Quantidade de parcelas inválido"
+  ],
+  "30": [
+    "Não foi possível processar a transação. Solicite ao portador que reveja os dados e tente novamente.",
+    "Não foi possível processar a transação. Reveja os dados e tente novamente. Se o erro persistir, entre em contato com a loja virtual."
+  ],
+  "39": [
+    "Transação não autorizada. Erro no banco emissor.",
+    "Transação não autorizada. Entre em contato com seu banco emissor."
+  ],
+  "41": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão (Problemas com o cartão)"
+  ],
+  "43": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão (Problemas com o cartão)"
+  ],
+  "51": [
+    "Saldo insuficiente",
+    "Cliente deve entrar em contato com o banco"
+  ],
+  "52": [
+    "Cartão com dígito de controle inválido",
+    "Não foi possível processar a transação. Cartão com dígito de controle inválido"
+  ],
+  "54": [
+    "Cartão vencido",
+    "Caso os dados informados estejam corretos, cliente deve entrar em contato com o banco para verificar se cartão ainda é valido"
+  ],
+  "55": [
+    "Senha Inválida",
+    "Senha informada está errada"
+  ],
+  "57": [
+    "Transação não permitida ou não autorizada",
+    "Venda não autorizada pelo emissor do cartão, pois o cartão utilizado não faz parte da rede  Verified by Visa ou o sistema de prevenção do banco não autorizou a compra, neste caso o cliente deverá realizar contato com banco emissor do cartão e informar que está tentando realizar uma compra no valor R$XXX e não está sendo autorizada."
+  ],
+  "58": [
+    "Transação não permitida",
+    "N/A"
+  ],
+  "60": [
+    "Transação não autorizada",
+    "Oriente o portador a contatar o emissor do cartão"
+  ],
+  "61": [
+    "Banco emissor Visa indisponível.",
+    "Transação não autorizada. Tente novamente. Se o erro persistir, entre em contato com seu banco emissor."
+  ],
+  "62": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão. Cartão com algum bloqueio para transações online."
+  ],
+  "63": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão. Possível erro de segurança ao tentar processar"
+  ],
+  "65": [
+    "Cartão com restrição",
+    "Transação Negada. Oriente o portador a contatar o emissor do cartão (Problemas com o cartão)"
+  ],
+  "67": [
+    "Transação não autorizada",
+    "Transação não autorizada. Cartão bloqueado para compras hoje. Bloqueio pode ter ocorrido por excesso de tentativas inválidas"
+  ],
+  "70": [
+    "Transação não autorizada. Limite excedido/sem saldo.",
+    "Transação não autorizada. Entre em contato com seu banco emissor."
+  ],
+  "74": [
+    "Transação não autorizada",
+    "Transação não autorizada. A senha está vencida."
+  ],
+  "77": [
+    "Cancelamento não efetuado",
+    "Cancelamento não efetuado. Não foi localizado a transação original"
+  ],
+  "78": [
+    "Cartão não foi desbloqueado pelo portador",
+    "Cartão bloqueado. Oriente o portador a desbloqueá-lo junto ao emissor do cartão."
+  ],
+  "80": [
+    "Transação não autorizada.",
+    "Transação não autorizada. Data da transação ou data do primeiro pagamento inválida. Refazer confirmando os dados"
+  ],
+  "81": [
+    "Transação negada",
+    "N/A"
+  ],
+  "82": [
+    "Transação inválida",
+    "Provável Código de Segurança Incorreto ou Inválido"
+  ],
+  "85": [
+    "Transação não permitida. Falha da operação",
+    "Transação não permitida. Houve um erro no processamento.Solicite ao portador que digite novamente os dados do cartão."
+  ],
+  "88": [
+    "Erro na transação.",
+    "Transação não autorizada. Erro na transação. O portador deve tentar novamente e se o erro persistir, entrar em contato com o banco emissor."
+  ],
+  "90": [
+    "Transação não permitida. Falha da operação",
+    "Transação não permitida. Houve um erro no processamento.Solicite ao portador que digite novamente os dados do cartão"
+  ],
+  "91": [
+    "Banco indisponível",
+    "Emissor sem comunicação. Oriente cliente a aguardar alguns minutos e tente novamente."
+  ],
+  "92": [
+    "Transação não autorizada. Tempo de comunicação excedido",
+    "Transação não autorizada. Tempo de comunicação excedido"
+  ],
+  "94": [
+    "Transação não autorizada. ",
+    "Transação desfeita pela bandeira"
+  ],
+  "96": [
+    "Tente novamente",
+    "Provável venda abaixo de R$ 1,00. Falha no envio da autorização."
+  ],
+  "99": [
+    "Sistema do banco temporariamente fora de operação.",
+    "Tente novamente mais tarde"
+  ],
+  "00": [
+    "Transação Nacional Autorizada com sucesso",
+    "N/A"
+  ],
+  "01": [
+    "Transação referida pelo emissor",
+    "Oriente o portador a contatar o emissor do cartão"
+  ],
+  "02": [
+    "Transação referida pelo emissor",
+    "Oriente o portador a contatar o emissor do cartão"
+  ],
+  "03": [
+    "Não foi encontrada a transação",
+    "Este erro pode ser: * número de parcelas ultrapassa o permitido.* código de segurança inválido* número do cartão inválido* instabilidade no sistema da adquirente"
+  ],
+  "04": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão (Problemas com o cartão)"
+  ],
+  "05": [
+    "Transação não autorizada",
+    "Oriente o portador a contatar o emissor do cartão (não autorizada pelo emissor)"
+  ],
+  "06": [
+    "Tente novamente",
+    "Problemas ocorridos na transação eletrônica, instabilidade da adquirente."
+  ],
+  "07": [
+    "Cartão com restrição",
+    "Oriente o portador a contatar o emissor do cartão (Problemas com o cartão)"
+  ],
+  "08": [
+    "Código de segurança inválido",
+    "O código de segurança foi informado errado no momento da compra"
+  ],
+  "75": [
+    "Cartão com restrição",
+    "Motivo provável, Bloqueio de senha. Oriente o portador a contatar o emissor do cartão."
+  ],
+  "76": [
+    "Tente novamente",
+    "N/A"
+  ],
+  "AA": [
+    "Tempo Excedido",
+    "Tempo excedido na comunicação com o banco emissor. Oriente o portador a tentar novamente, se o erro persistir será necessário que o portador contate seu banco emissor."
+  ],
+  "AC": [
+    "Cartão de débito sendo usado com crédito.",
+    "Cartão de débito sendo usado com crédito. Portador deve usar um cartão de Crédito"
+  ],
+  "AE": [
+    "Tente Mais Tarde",
+    "Tempo excedido na comunicação com o banco emissor. Oriente o portador a tentar novamente"
+  ],
+  "AF": [
+    "Transação não permitida. Falha da operação.",
+    "Transação não permitida. Houve um erro no processamento.Solicite ao portador que digite novamente os dados do cartão."
+  ],
+  "AG": [
+    "Transação não permitida. Falha da operação.",
+    "Houve um erro no processamento. Solicite ao portador que digite novamente os dados do cartão"
+  ],
+  "AI": [
+    "Transação não autorizada. Autenticação não foi realizada.",
+    "Transação não autorizada. Autenticação não foi realizada. O portador não concluiu a autenticação."
+  ],
+  "AV": [
+    "Transação não autorizada. Dados Inválidos",
+    "Falha na validação dos dados da transação. Oriente o portador a rever os dados e tentar novamente."
+  ],
+  "BD": [
+    "Transação não permitida. Falha da operação.",
+    "Transação não permitida. Houve um erro no processamento.Solicite ao portador que digite novamente os dados do cartão."
+  ],
+  "BL": [
+    "Transação não autorizada. Limite diário excedido.",
+    "Transação não autorizada. Limite diário excedido. Solicite ao portador que entre em contato com seu banco emissor."
+  ],
+  "BM": [
+    "Transação não autorizada. Cartão Inválido",
+    "Transação não autorizada. Cartão inválido. Pode ser bloqueio do cartão no banco emissor."
+  ],
+  "BN": [
+    "Transação não autorizada. Cartão ou conta bloqueado.",
+    "Transação não autorizada. O cartão ou a conta do portador está bloqueada. Solicite ao portador que entre em contato com seu banco emissor."
+  ],
+  "BV": [
+    "Transação não autorizada. Cartão vencido",
+    "Transação não autorizada. Cartão vencido."
+  ],
+  "CF": [
+    "Transação não autorizada. Falha na validação dos dados.",
+    "Transação não autorizada. Falha na validação dos dados. Solicite ao portador que entre em contato com o banco emissor."
+  ],
+  "EE": [
+    "Transação não permitida. Valor da parcela inferior ao mínimo permitido.",
+    "Transação não permitida. Valor da parcela inferior ao mínimo permitido. Não é permitido parcelas inferiores a R$ 5,00. Necessário rever calculo para parcelas."
+  ],
+  "FA": [
+    "Transação não autorizada",
+    "Transação não autorizada AMEX"
+  ],
+  "FC": [
+    "Transação não autorizada. Ligue Emissor",
+    "Transação não autorizada. Oriente o portador a entrar em contato com o banco emissor."
+  ],
+  "GA": [
+    "Transação não autorizada",
+    "Referida pela Cielo. Oriente o portador a aguardar alguns instantes e tentar novamente."
+  ],
+  "GD": [
+    "Transação não permitida",
+    "Transação não é possível ser processada no estabelecimento. Entre em contato com a administradora do cartão para obter mais detalhes."
+  ],
+  "KA": [
+    "Transação não permitida. Falha na validação dos dados.",
+    "Transação não permitida. Houve uma falha na validação dos dados. Solicite ao portador que reveja os dados e tente novamente."
+  ],
+  "KE": [
+    "Transação não autorizada. Falha na validação dos dados.",
+    "Transação não autorizada. Falha na validação dos dados."
+  ],
+  "N7": [
+    "Transação não autorizada. Código de segurança inválido.",
+    "Transação não autorizada. Código de segurança inválido. Oriente o portador corrigir os dados e tentar novamente."
+  ]
+}

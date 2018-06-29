@@ -1,6 +1,10 @@
 use common::sense;
 use FindBin qw($Bin);
-use lib "$Bin/../lib";
+
+BEGIN {
+    use lib "$Bin/../lib";
+    $ENV{LR_CODE_JSON_FILE} = $Bin . '/../../lr_code.json';
+}
 
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
@@ -32,7 +36,7 @@ db_transaction {
     # Não consigo testar a doação efetivamente com o PagSeguro porque o senderHash é gerado no
     # front-end. Então vou mockar algumas doações.
     for ( 1 .. 3 ) {
-        &mock_donation
+        &mock_donation;
     }
 
     # Obtendo a api_key do candidate.
@@ -41,14 +45,14 @@ db_transaction {
         'api_key', );
 
     rest_get "/api/candidate/$candidate_id/donate/download/csv?api_key=$api_key",
-        name    => 'invalid order_by_created_at',
-        is_fail => 1,
-        code    => 400,
-        [ order_by_created_at => 'foo' ]
-    ;
+      name    => 'invalid order_by_created_at',
+      is_fail => 1,
+      code    => 400,
+      [ order_by_created_at => 'foo' ];
 
     # Enviando a request.
     my $req = request("/api/candidate/$candidate_id/donate/download/csv?api_key=$api_key");
+
     ok( $req->is_success(), 'download' );
 };
 

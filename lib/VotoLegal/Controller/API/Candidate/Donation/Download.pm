@@ -22,12 +22,14 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
     $c->stash->{candidate_id} = $candidate_id;
     $c->forward('/api/candidate/donationfromvotolegal/_filter_donation');
 
-    my $cond                = $c->stash->{cond}     or die 'must have cond';
-    my $order_by_created_at = $c->stash->{order_by} or die 'must have order_by';
+    my $cond                = $c->stash->{cond}       or die 'must have cond';
+    my $order_by_created_at = $c->stash->{order_by}   or die 'must have order_by';
+    my $extra_cols          = $c->stash->{extra_cols} or die 'must have extra_cols';
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
-    $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
+    my $don_rs = $c->model("DB::VotoLegalDonation");
+    $c->stash->{collection} = $don_rs->search(
         $cond,
         {
             join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
@@ -67,6 +69,9 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                     refunded_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
+
+                @$extra_cols
+
             ]
         }
     );
@@ -106,11 +111,16 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
               DATA_DE_CRIAÇÃO
               DATA_DE_CAPTURA
               DATA_DE_ESTORNO
+              STATUS
+              MOTIVO
               )
         ]
     );
 
     while ( my $votolegal_donation = $c->stash->{collection}->next() ) {
+
+        ( $votolegal_donation->{status}, $votolegal_donation->{motive} ) =
+          $don_rs->_get_status_and_motive($votolegal_donation);
 
         $csv->print(
             $fh,
@@ -134,6 +144,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 $votolegal_donation->{created_at_human},
                 $votolegal_donation->{captured_at_human},
                 $votolegal_donation->{refunded_at_human},
+                $votolegal_donation->{motive},
             ]
         );
     }

@@ -1,6 +1,10 @@
 use common::sense;
 use FindBin qw($Bin);
-use lib "$Bin/../lib";
+
+BEGIN {
+    use lib "$Bin/../lib";
+    $ENV{LR_CODE_JSON_FILE} = $Bin . '/../../lr_code.json';
+}
 
 use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
@@ -36,75 +40,73 @@ db_transaction {
       },
       ;
 
-    my $first_donation  = &mock_donation;
-	inc_paid_at_seconds;
-	&mock_donation;
+    my $first_donation = &mock_donation;
+    inc_paid_at_seconds;
+    &mock_donation;
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name    => 'invalid order_by_created_at',
-        is_fail => 1,
-        code    => 400,
-        [ order_by_created_at => 'foo' ]
-    ;
+      name    => 'invalid order_by_created_at',
+      is_fail => 1,
+      code    => 400,
+      [ order_by_created_at => 'foo' ];
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal with captured filter',
-		[ filter => 'captured' ]
-    ;
+      name => 'get donations from voto legal with captured filter',
+      [ filter => 'captured' ];
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal with refused filter',
-		[ filter => 'refused' ]
-    ;
+      name => 'get donations from voto legal with not_authorized filter',
+      [ filter => 'not_authorized' ];
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal with refunded filter',
-		[ filter => 'refunded' ]
-    ;
+      name => 'get donations from voto legal with refunded filter',
+      [ filter => 'refunded' ];
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal with non_completed filter',
-		[ filter => 'non_completed' ]
-    ;
+      name => 'get donations from voto legal with pending_payment filter',
+      [ filter => 'pending_payment' ];
+
+    rest_get "/api/candidate/$candidate_id/votolegal-donations",
+      name => 'get donations from voto legal with not_finalized filter',
+      [ filter => 'not_finalized' ];
 
     $ENV{MAX_DONATIONS_ROWS} = 2;
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
-        name  => 'get donations from voto legal with filter',
-        list  => 1,
-        stash => 'get_donations',
-		[ order_by_created_at => 'asc' ]
-    ;
+      name  => 'get donations from voto legal with filter',
+      list  => 1,
+      stash => 'get_donations',
+      [ order_by_created_at => 'asc' ];
 
-	subtest 'pagination tests' => sub {
-		$ENV{MAX_DONATIONS_ROWS} = 1;
-		rest_get "/api/candidate/$candidate_id/votolegal-donations",
-		  code  => 200,
-		  stash => 'res',
-		  name  => 'list last donations with MAX_DONATIONS_ROWS=1';
+    subtest 'pagination tests' => sub {
+        $ENV{MAX_DONATIONS_ROWS} = 1;
+        rest_get "/api/candidate/$candidate_id/votolegal-donations",
+          code  => 200,
+          stash => 'res',
+          name  => 'list last donations with MAX_DONATIONS_ROWS=1';
 
-		my $next;
-		stash_test 'res', sub {
-			my ($me) = @_;
+        my $next;
+        stash_test 'res', sub {
+            my ($me) = @_;
 
-			is $me->{has_more}, 1, 'has second page';
-			is $me->{donations}[0]{amount}, '30,00', 'amount ok';
+            is $me->{has_more}, 1, 'has second page';
+            is $me->{donations}[0]{amount}, '30,00', 'amount ok';
 
-			$next = $me->{donations}[0]{_marker};
-		};
+            $next = $me->{donations}[0]{_marker};
+        };
 
-		rest_get [ "/api/candidate/$candidate_id/votolegal-donations", $next ],
-		  code  => 200,
-		  stash => 'res',
-		  name  => 'list donations before ' . $next;
-		stash_test 'res', sub {
-			my ($me) = @_;
+        rest_get [ "/api/candidate/$candidate_id/votolegal-donations", $next ],
+          code  => 200,
+          stash => 'res',
+          name  => 'list donations before ' . $next;
+        stash_test 'res', sub {
+            my ($me) = @_;
 
-			is $me->{has_more}, 0, 'end of page';
-			is $me->{donations}[0]{amount}, '30,00', 'amount ok';
+            is $me->{has_more}, 0, 'end of page';
+            is $me->{donations}[0]{amount}, '30,00', 'amount ok';
 
-		};
+        };
 
-	};
+    };
 };
 
 done_testing();

@@ -22,7 +22,6 @@ sub _filter_donation : Private {
     die \[ 'order_by_created_at', 'invalid' ] unless $sort_dir =~ m/(asc|desc)/;
 
     my $filter = delete $c->req->params->{filter} || 'all';
-    die \[ 'filter', 'invalid' ] unless $filter =~ m/(captured|refunded|non_completed|refused|all|)/;
 
     my $cond;
     if ( $filter eq 'captured' ) {
@@ -35,28 +34,47 @@ sub _filter_donation : Private {
     }
     elsif ( $filter eq 'refunded' ) {
         $cond = {
-            refunded_at  => { '!=' => undef },
+            refunded_at => { '!=' => undef },
+
             candidate_id => $candidate_id
         };
     }
-    elsif ( $filter eq 'non_completed' ) {
+    elsif ( $filter eq 'not_authorized' ) {
         $cond = {
             captured_at  => undef,
             candidate_id => $candidate_id,
-            state        => { 'in' => [qw/created boleto_authentication credit_card_form certificate_refused/] },
+            state        => { 'in' => [qw/not_authorized/] },
         };
     }
-    elsif ( $filter eq 'refused' ) {
+    elsif ( $filter eq 'pending_payment' ) {
         $cond = {
             candidate_id => $candidate_id,
 
-            state => { 'in' => [qw/not_authorized boleto_expired/] },
+            state => { 'in' => [qw/waiting_boleto_payment boleto_expired/] },
         };
     }
+    elsif ( $filter eq 'not_finalized' ) {
+        $cond = {
+            candidate_id => $candidate_id,
+
+            state => { 'in' => [qw/certificate_refused boleto_authentication credit_card_form error_manual_check /] },
+        };
+    }
+    elsif ( $filter eq 'all' ) {
+        $cond = { candidate_id => $candidate_id, };
+    }
     else {
-        $cond = {};
+        die \[ 'filter', 'invalid' ];
     }
 
+    $c->stash->{extra_cols} = [
+
+        { _lr          => \"me.payment_info->'_charge_response_'->>'LR'" },
+        { _state       => \"me.state" },
+        { _refunded_at => \"me.refunded_at" },
+        { _captured_at => \"me.captured_at" },
+
+    ];
     $c->stash->{cond}     = $cond;
     $c->stash->{order_by} = $sort_dir;
 
@@ -72,12 +90,15 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
     $c->stash->{candidate_id} = $candidate_id;
     $c->forward('/api/candidate/donationfromvotolegal/_filter_donation');
 
-    my $cond                = $c->stash->{cond}     or die 'must have cond';
-    my $order_by_created_at = $c->stash->{order_by} or die 'must have order_by';
+    my $cond                = $c->stash->{cond}       or die 'must have cond';
+    my $order_by_created_at = $c->stash->{order_by}   or die 'must have order_by';
+    my $extra_cols          = $c->stash->{extra_cols} or die 'must have extra_cols';
 
     $c->stash->{max_rows} = $ENV{MAX_DONATIONS_ROWS} || 100;
 
-    $c->stash->{donations_rs} = $c->stash->{candidate}->votolegal_donations->search(
+    my $don_rs = $c->stash->{candidate}->votolegal_donations;
+
+    $c->stash->{donations_rs} = $don_rs->search(
         $cond,
         {
             columns => [
@@ -98,10 +119,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 {
                     amount => \"replace((votolegal_donation_immutable.amount/100)::numeric(7, 2)::text, '.', ',')"
                 },
-                {
-                    status => \
-"case when me.captured_at is not null then 'captured' when me.refunded_at is not null then 'refunded' else 'non_completed' end"
-                },
+
                 { name                 => 'votolegal_donation_immutable.donor_name' },
                 { email                => 'votolegal_donation_immutable.donor_email' },
                 { phone                => 'votolegal_donation_immutable.donor_phone' },
@@ -117,13 +135,11 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { transaction_hash     => 'me.decred_capture_txid' },
                 { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
                 { id                   => 'me.id' },
-                { payment_succeded     => \"me.payment_info->'_charge_response_'->>'success'" },
-                { payment_lr           => \"me.payment_info->'_charge_response_'->>'LR'" },
-                {
-                    payment_message => \
-"case when me.payment_info->'_charge_response_'->>'message' = 'Transaction declined' then 'Transação negada' else me.payment_info->'_charge_response_'->>'message' end"
-                },
+
                 { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
+
+                @$extra_cols,
+
             ],
             join     => 'votolegal_donation_immutable',
             order_by => [ { "-$order_by_created_at" => "captured_at" }, { "-$order_by_created_at" => "created_at" } ],
@@ -138,16 +154,20 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
             label => 'Autorizadas'
         },
         {
+            name  => 'not_authorized',
+            label => 'Negadas'
+        },
+        {
             name  => 'refunded',
             label => 'Estornadas'
         },
         {
-            name  => 'non_completed',
-            label => 'Não concluídas'
+            name  => 'pending_payment',
+            label => 'Pagamento não efetuado'
         },
         {
-            name  => 'refused',
-            label => 'Doações não autorizadas ou não compensadas'
+            name  => 'not_finalized',
+            label => 'Doação não finalizada'
         }
     ];
 }
@@ -163,6 +183,15 @@ sub list_GET {
     if ( @donations == $c->stash->{max_rows} + 1 ) {
         $has_more++;
         pop @donations;
+    }
+
+    my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };
+
+    my $don_rs = $c->stash->{candidate}->votolegal_donations;
+    foreach my $row (@donations) {
+        ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
+
+        delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(
@@ -202,6 +231,15 @@ sub list_more_GET {
     if ( @donations == $c->stash->{max_rows} + 1 ) {
         $has_more++;
         pop @donations;
+    }
+
+    my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };
+
+    my $don_rs = $c->stash->{candidate}->votolegal_donations;
+    foreach my $row (@donations) {
+        ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
+
+        delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(

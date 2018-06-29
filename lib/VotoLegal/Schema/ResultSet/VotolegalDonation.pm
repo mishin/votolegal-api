@@ -2,7 +2,7 @@ package VotoLegal::Schema::ResultSet::VotolegalDonation;
 use common::sense;
 use Moose;
 use namespace::autoclean;
-
+use File::Slurper 'read_text';
 extends 'DBIx::Class::ResultSet';
 
 with 'VotoLegal::Role::Verification';
@@ -21,6 +21,8 @@ use File::Temp ':seekable';
 use Time::HiRes;
 
 use UUID::Tiny qw/is_uuid_string/;
+
+my $lr_code_table;
 
 sub resultset {
     my $self = shift;
@@ -633,7 +635,7 @@ sub export_tse {
         my $candidate_cnpj = $candidate->cnpj;
 
         $candidate_cnpj =~ s/\D+//g;
-		$candidate_cnpj = left_padding_zeros( $candidate_cnpj, 14 );
+        $candidate_cnpj = left_padding_zeros( $candidate_cnpj, 14 );
 
         my $data_movimentacao = DateTime->now( time_zone => "America/Sao_Paulo" )->strftime("%d%m%Y%H%M");
         my $bank_code           = left_padding_zeros( $donation->candidate->bank_code,           3 );
@@ -644,13 +646,13 @@ sub export_tse {
 
         # Escrevendo o header.
         if ($writeHeader) {
-            print $fh "1";                                            # Registro.
-            print $fh '30217474000150';                               # CNPJ.
-            print $fh "PAGUE JUNTO TECNOLOGIA DE INTERMEDIACAO LTDA"; # Nome fantasia.
-			print $fh " " x 56;                                       # Preencher com espaços em branco.
-            print $fh '100';                                          # Versão do layout.
-            print $fh 'ATSEFCC';                                      # Nome do layout.
-            print $fh " " x 247;                                      # Preencher com espaços em branco.
+            print $fh "1";                                               # Registro.
+            print $fh '30217474000150';                                  # CNPJ.
+            print $fh "PAGUE JUNTO TECNOLOGIA DE INTERMEDIACAO LTDA";    # Nome fantasia.
+            print $fh " " x 56;                                          # Preencher com espaços em branco.
+            print $fh '100';                                             # Versão do layout.
+            print $fh 'ATSEFCC';                                         # Nome do layout.
+            print $fh " " x 247;                                         # Preencher com espaços em branco.
             print $fh "\r\n";
 
             $writeHeader = 0;
@@ -674,18 +676,18 @@ sub export_tse {
         # A url provavelmente será modificada para uma URL específica da doação
         $candidate_url = right_padding_whitespaces( $candidate_url, ( 255 - length $candidate_url ) );
 
-		print $fh "2";             # Registro.
-		print $fh $candidate_cnpj; # CNPJ.
-		print $fh $candidate_url;  # Página web.
-        print $fh $receipt_id;     # Id do recibo.
-        print $fh $doc_number;     # Numero do documento.
-        print $fh $auth_number;    # Numero do documento.
-        print $fh "01";            # Tipo da doação. TODO Duvida.
-        print $fh "02";            # Espécie do recurso: cartão de crédito.
-        print $fh $cpf;            # CPF do doador.
-        print $fh "F";             # Pessoa física.
-        print $fh $captured_at;    # Data da doação.
-        print $fh $amount;         # Valor da doação.
+        print $fh "2";                # Registro.
+        print $fh $candidate_cnpj;    # CNPJ.
+        print $fh $candidate_url;     # Página web.
+        print $fh $receipt_id;        # Id do recibo.
+        print $fh $doc_number;        # Numero do documento.
+        print $fh $auth_number;       # Numero do documento.
+        print $fh "01";               # Tipo da doação. TODO Duvida.
+        print $fh "02";               # Espécie do recurso: cartão de crédito.
+        print $fh $cpf;               # CPF do doador.
+        print $fh "F";                # Pessoa física.
+        print $fh $captured_at;       # Data da doação.
+        print $fh $amount;            # Valor da doação.
 
         # Fim da doação.
         print $fh "\r\n";
@@ -695,11 +697,73 @@ sub export_tse {
     }
 
     # Trailer.
-    print $fh "3";                 # Registro.
+    print $fh "3";                    # Registro.
     print $fh left_padding_zeros( $count, 9 );    # Total de doações presentes neste arquivo.
     print $fh " " x 154;                          # Espaços em branco.
 
     return $fh;
+}
+
+sub _load_lr {
+    my ($self) = @_;
+
+    die 'Cannot find lr_code.json [$ENV{LR_CODE_JSON_FILE}]' unless -e $ENV{LR_CODE_JSON_FILE};
+
+    $lr_code_table = from_json( read_text( $ENV{LR_CODE_JSON_FILE} ) );
+}
+
+sub _get_status_and_motive {
+    my ( $self, $row ) = @_;
+
+    my $state       = $row->{_state};
+    my $lr          = $row->{_lr};
+    my $is_refunded = $row->{_refunded_at};
+    my $is_captured = $row->{_captured_at};
+
+    if ( !$lr_code_table ) {
+        $self->_load_lr();
+    }
+
+    my ( $status, $motive );
+
+    if ($is_refunded) {
+        $status = 'Estornada';
+        $motive = 'Doador solicitou chargeback';
+    }
+    elsif ($is_captured) {
+        $status = 'Recebida';
+        $motive = '';
+    }
+    elsif ( $state eq 'not_authorized' ) {
+        $status = 'Negada';
+
+        $motive = $lr_code_table->{$lr}[0] . ' - ' . $lr_code_table->{$lr}[1];
+    }
+    elsif ( $state =~ /waiting_boleto_payment|boleto_expired/ ) {
+        $status = 'Pagamento não efetuado';
+
+        $motive = 'Aguardando pagmaento boleto' if $state eq 'waiting_boleto_payment';
+        $motive = 'Boleto vencido' if $state eq 'boleto_expired';
+    }
+    else {
+
+        $status = 'Doação não finalizada';
+
+        if ( $state eq 'certificate_refused' ) {
+            $motive = 'Reconhecimento facial negado';
+        }
+        elsif ( $state eq 'boleto_authentication' ) {
+            $motive = 'Cadastro não finalizado';
+        }
+        elsif ( $state eq 'credit_card_form' ) {
+            $motive = 'Aguardando informar cartão de crédito';
+        }
+        else {
+            $motive = "Erro: " . $state;
+        }
+    }
+
+    return ( $status, $motive );
 }
 
 1;
