@@ -731,7 +731,7 @@ sub _get_status_and_motive {
         $motive = 'Doador solicitou chargeback';
     }
     elsif ($is_captured) {
-        $status = 'Recebida';
+        $status = 'Autorizada';
         $motive = '';
     }
     elsif ( $state eq 'not_authorized' ) {
