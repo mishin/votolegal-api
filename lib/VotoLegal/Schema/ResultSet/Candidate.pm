@@ -92,6 +92,21 @@ sub verifiers_specs {
                     max_length => 100,
                     type       => CommonLatinText,
                 },
+
+                running_for_address_state => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $address_state = $_[0]->get_value('running_for_address_state');
+
+                        my $state =
+                          $self->result_source->schema->resultset('State')->search( { name => $address_state } )->next;
+
+                        die \[ 'running_for_address_state', 'could not find state with that name' ]
+                          unless $state;
+                    }
+                },
+
                 party_id => {
                     required   => 1,
                     type       => PositiveInt,
@@ -223,6 +238,10 @@ sub action_specs {
             not defined $values{$_} and delete $values{$_} for keys %values;
             $values{status} = 'pending';
 
+            if ( $values{office_id} != 4 ) {
+                $values{running_for_address_state} ||= $values{address_state};
+            }
+
             # Creating user.
             my %user;
             $user{$_} = delete $values{$_} for qw(email password);
@@ -246,14 +265,14 @@ sub get_candidates_with_data_for_admin {
     return $self->search(
         {
             -and => [
-                'user.email'  => { 'NOT ILIKE' => '%eokoe%' },
-                'user.email'  => { 'NOT ILIKE' => '%appcivico%' },
-                'user.email'  => { 'NOT ILIKE' => '%+%' },
-                'me.name'     => { 'NOT ILIKE' => '%Thiago Rondon%' },
-                'me.name'     => { 'NOT ILIKE' => '%Lucas Ansei%' },
-                'me.name'     => { 'NOT ILIKE' => '%Hernani Mattos%' },
-                'me.name'     => { 'NOT ILIKE' => '%Evelyn Perez%' },
-                'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
+                'user.email' => { 'NOT ILIKE' => '%eokoe%' },
+                'user.email' => { 'NOT ILIKE' => '%appcivico%' },
+                'user.email' => { 'NOT ILIKE' => '%+%' },
+                'me.name'    => { 'NOT ILIKE' => '%Thiago Rondon%' },
+                'me.name'    => { 'NOT ILIKE' => '%Lucas Ansei%' },
+                'me.name'    => { 'NOT ILIKE' => '%Hernani Mattos%' },
+                'me.name'    => { 'NOT ILIKE' => '%Evelyn Perez%' },
+                'me.name'    => { 'NOT ILIKE' => '%Edgard Lobo%' },
             ]
         },
         { prefetch => [qw/ party office political_movement payments user /] }
