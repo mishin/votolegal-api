@@ -193,7 +193,7 @@ sub list_GET {
     foreach my $row (@donations) {
         ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
 
-        #delete $row->{$_} for @keys_to_remove;
+        delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(
@@ -241,7 +241,7 @@ sub list_more_GET {
     foreach my $row (@donations) {
         ( $row->{status}, $row->{motive} ) = $don_rs->_get_status_and_motive($row);
 
-        #delete $row->{$_} for @keys_to_remove;
+        delete $row->{$_} for @keys_to_remove;
     }
 
     return $self->status_ok(
