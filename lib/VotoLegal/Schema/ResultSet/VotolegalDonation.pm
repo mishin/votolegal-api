@@ -742,7 +742,7 @@ sub _get_status_and_motive {
     elsif ( $state =~ /waiting_boleto_payment|boleto_expired/ ) {
         $status = 'Pagamento não efetuado';
 
-        $motive = 'Aguardando pagamento boleto' if $state eq 'waiting_boleto_payment';
+        $motive = 'Boleto aguardando pagamento' if $state eq 'waiting_boleto_payment';
         $motive = 'Boleto vencido' if $state eq 'boleto_expired';
     }
     else {
