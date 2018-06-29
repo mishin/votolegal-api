@@ -16,7 +16,7 @@ sub root : Chained('/publicapi/root') : PathPart('candidate-summary') : CaptureA
         },
         {
             '+columns' => {
-                address_state_name            => \'(select name from state x where x.code = me.address_state limit 1)',
+                address_state_name            => \'(select name from state x where x.code = COALESCE( me.running_for_address_state, me.address_state ) limit 1)',
                 has_mandatoaberto_integration => \
                   'EXISTS (select 1 from candidate_mandato_aberto_integration x where x.candidate_id = me.id)'
             },
@@ -76,9 +76,9 @@ sub candidate_GET {
           )
     };
 
-    if ( $c->stash->{candidate}->running_for_address_state ) {
-        $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
-    }
+    #if ( $c->stash->{candidate}->running_for_address_state ) {
+    #    $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
+    #}
 
     # fix para ficar igual os oturos valores
     if ( $candidate->{raising_goal} ) {

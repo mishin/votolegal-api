@@ -717,7 +717,7 @@ sub verifiers_specs {
                         my $address_state = $_[0]->get_value('running_for_address_state');
 
                         my $state =
-                          $self->result_source->schema->resultset('State')->search( { name => $address_state } )->next;
+                          $self->result_source->schema->resultset('State')->search( { code => $address_state } )->next;
 
                         die \[ 'running_for_address_state', 'could not find state with that name' ]
                           unless $state;

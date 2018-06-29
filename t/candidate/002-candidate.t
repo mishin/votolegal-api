@@ -229,7 +229,7 @@ db_transaction {
 
     rest_put "/api/candidate/${candidate_id}",
       name => "Adding political movement",
-      [ running_for_address_state => 'Amazonas' ],
+      [ running_for_address_state => 'SP' ],
       ;
 
       rest_get "/api/candidate/$username",
@@ -239,7 +239,7 @@ db_transaction {
     stash_test "get_candidate" => sub {
         my $res = shift;
 
-        is( $res->{candidate}->{address_state_name}, 'Amazonas', 'address state name' );
+        is( $res->{candidate}->{address_state_name}, 'São Paulo', 'address state name' );
     };
 
     rest_put "/api/candidate/${candidate_id}",

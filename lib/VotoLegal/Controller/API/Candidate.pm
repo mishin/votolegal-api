@@ -21,6 +21,11 @@ sub root : Chained('/api/root') : PathPart('') : CaptureArgs(0) {
     $c->stash->{collection} = $c->model('DB::Candidate')->search(
         undef,
         {
+            '+columns' => {
+                address_state_name => \
+'(select name from state x where x.code = COALESCE( me.running_for_address_state, me.address_state ) limit 1)',
+            },
+
             prefetch =>
               [ 'party', 'candidate_donation_summary', { 'candidate_issue_priorities' => 'issue_priority' }, ],
         },
@@ -90,14 +95,14 @@ sub candidate_GET {
         };
     }
 
-
-    if ( $c->stash->{candidate}->running_for_address_state ) {
-        $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
-    }
+    #if ( $c->stash->{candidate}->running_for_address_state ) {
+    #    $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
+    #}
 
     if ( my $political_movement_id = $c->stash->{candidate}->political_movement_id ) {
 
-        $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name if $political_movement_id !~ /^(6|7)$/
+        $candidate->{political_movement_name} = $c->stash->{candidate}->political_movement->name
+          if $political_movement_id !~ /^(6|7)$/;
     }
 
     my $has_mandatoaberto_integration = $c->stash->{candidate}->has_mandatoaberto_integration();
@@ -211,7 +216,7 @@ sub _upload_picture {
     return {
         normal => $normal_url->as_string,
         avatar => $avatar_url->as_string
-    }
+    };
 }
 
 sub _upload_spreadsheet {
