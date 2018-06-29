@@ -17,17 +17,57 @@ sub base : Chained('root') : PathPart('download') : CaptureArgs(0) { }
 sub csv : Chained('base') : PathPart('csv') : Args(0) {
     my ( $self, $c ) = @_;
 
+    my $candidate_id = $c->stash->{candidate}->id;
+
 	my $order_by_created_at = delete $c->req->params->{order_by_created_at} || 'desc';
 	die \['order_by_created_at', 'invalid'] unless $order_by_created_at =~ m/(asc|desc)/;
+
+    my $filter = delete $c->req->params->{filter} || 'all';
+	die \['filter', 'invalid'] unless $filter =~ m/(captured|refunded|non_completed|refused|all|)/;
+
+    my $cond;
+    if ( $filter eq 'captured' ) {
+        $cond = {
+            captured_at  => \'IS NOT NULL',
+            candidate_id => $candidate_id
+        };
+    }
+    elsif ( $filter eq 'refunded' ) {
+		$cond = {
+            refunded_at  => \'IS NOT NULL',
+			candidate_id => $candidate_id
+        };
+    }
+	elsif ( $filter eq 'non_completed' ) {
+		$cond = {
+            captured_at => \'IS NULL',
+            candidate_id => $candidate_id
+            -or => [
+                state => 'created',
+				state => 'boleto_authentication',
+				state => 'credit_card_form',
+            ]
+        };
+	}
+    elsif ( $filter eq 'refused' ) {
+		$cond = {
+			candidate_id => $candidate_id,
+            -or => [
+                state => 'not_authorized',
+				state => 'boleto_expired',
+				state => 'error_manual_check',
+                state => 'certificate_refused'
+            ]
+        };
+    }
+    else {
+        $cond = {};
+    }
 
     $c->forward("/api/forbidden") unless $c->stash->{is_me};
 
     $c->stash->{collection} = $c->model("DB::VotoLegalDonation")->search(
-        {
-            candidate_id => $c->stash->{candidate}->id,
-            captured_at  => \'IS NOT NULL',
-            refunded_at  => \'IS NULL'
-        },
+        $cond,
         {
             join         => [ 'votolegal_donation_immutable', { 'candidate' => 'party' } ],
             result_class => 'DBIx::Class::ResultClass::HashRefInflator',
