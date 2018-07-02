@@ -134,6 +134,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { email                => 'votolegal_donation_immutable.donor_email' },
                 { phone                => 'votolegal_donation_immutable.donor_phone' },
                 { birthdate            => 'votolegal_donation_immutable.donor_birthdate' },
+				{ birthdate_human      => \"TO_CHAR( donor_birthdate, 'DD/MM/YYYY')" },
                 { cpf                  => 'votolegal_donation_immutable.donor_cpf' },
                 { address_state        => 'votolegal_donation_immutable.billing_address_state' },
                 { address_city         => 'votolegal_donation_immutable.billing_address_city' },
