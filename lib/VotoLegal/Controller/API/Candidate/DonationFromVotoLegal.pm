@@ -109,11 +109,19 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
+                    captured_at_human => \
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.captured_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
                     created_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.created_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 {
                     refunded_at => \
+"to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
+                },
+                {
+                    refunded_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
                 { is_pre_campaign      => 'me.is_pre_campaign' },

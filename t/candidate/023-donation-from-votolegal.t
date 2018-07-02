@@ -90,6 +90,9 @@ db_transaction {
 
             is $me->{has_more}, 1, 'has second page';
             is $me->{donations}[0]{amount}, '30,00', 'amount ok';
+			ok defined( $me->{donations}[0]{created_at_human} ),  'created_at on human format';
+			ok defined( $me->{donations}[0]{captured_at_human} ), 'captured_at on human format';
+			ok exists(  $me->{donations}[0]{refunded_at_human} ), 'refunded_at on human format';
 
             $next = $me->{donations}[0]{_marker};
         };

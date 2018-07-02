@@ -178,6 +178,7 @@ _create_invoice	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub _create
 _decode_json_fields	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _decode_json_fields {$/;"	s
 _draw_machine	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _draw_machine {$/;"	s
 _encode	./lib/VotoLegal/Uploader.pm	/^sub _encode {$/;"	s
+_filter_donation	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub _filter_donation : Private {$/;"	s
 _filter_value	./lib/Data/Verifier.pm	/^sub _filter_value {$/;"	s
 _find	./lib/WebService/CEP/Correios.pm	/^sub _find {$/;"	s
 _find	./lib/WebService/CEP/Postmon.pm	/^sub _find {$/;"	s
@@ -186,6 +187,8 @@ _generate_auth_uri	./lib/VotoLegal/Uploader.pm	/^sub _generate_auth_uri {$/;"	s
 _generate_payment_credit_card	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub _generate_payment_credit_card {$/;"	s
 _get_candidate_config	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _get_candidate_config {$/;"	s
 _get_fms_simple	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _get_fms_simple {$/;"	s
+_get_status_and_motive	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _get_status_and_motive {$/;"	s
+_load_lr	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _load_lr {$/;"	s
 _messages_of_state	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _messages_of_state {$/;"	s
 _next_day_rand_str	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub _next_day_rand_str() {$/;"	s
 _process_boleto_authentication	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_boleto_authentication {$/;"	s
@@ -350,6 +353,7 @@ expenditure	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^sub expend
 expenditure_GET	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^sub expenditure_GET {$/;"	s
 export	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^sub export : Chained('base') : PathPart('') : Args(0) {$/;"	s
 export	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^sub export {$/;"	s
+export_tse	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub export_tse {$/;"	s
 find	./lib/WebService/CEP.pm	/^sub find {$/;"	s
 forbidden	./lib/VotoLegal/Controller/API.pm	/^sub forbidden : Private {$/;"	s
 forgot_password	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub forgot_password : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
@@ -491,6 +495,7 @@ resultset	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub resultset 
 resultset	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^sub resultset {$/;"	s
 resultset_find	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^sub resultset_find {$/;"	s
 resultset_search	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^sub resultset_search {$/;"	s
+right_padding_whitespaces	./lib/VotoLegal/Utils.pm	/^sub right_padding_whitespaces {$/;"	s
 root	./lib/VotoLegal/Controller/API.pm	/^sub root : Chained('\/') : PathPart('api') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/Admin.pm	/^sub root : Chained('\/api\/logged') : PathPart('admin') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub root : Chained('\/api\/admin\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
