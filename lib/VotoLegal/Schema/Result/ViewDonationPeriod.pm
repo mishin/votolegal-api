@@ -37,9 +37,9 @@ SELECT
     ( ( ( s.amount_donation_by_votolegal / 100 ) / c.raising_goal ) * 100 )::numeric(11, 3) as goal_raised_percentage,
     ( select sum(amount) from votolegal_donation_immutable i, votolegal_donation d where d.is_boleto = true and d.captured_at is not null and d.id = i.votolegal_donation_id and d.candidate_id = c.id  and d.refunded_at is null) / 100 as amount_boleto,
     ( select sum(amount) from votolegal_donation_immutable i, votolegal_donation d where d.is_boleto = false and d.captured_at is not null and d.id = i.votolegal_donation_id and d.candidate_id = c.id and d.refunded_at is null ) / 100 as amount_credit_card
-FROM candidate AS c, candidate_donation_summary AS s, party AS p, votolegal_donation AS d
+FROM candidate AS c, candidate_donation_summary AS s, party AS p
 WHERE c.party_id = p.id AND s.candidate_id = c.id AND c.is_published = true
     AND c.name NOT ILIKE '%Edgard%' AND c.name NOT ILIKE '%Lucas Ansei%'
-    AND c.name NOT ILIKE '%demais%' AND d.refunded_at IS NULL
+    AND c.name NOT ILIKE '%demais%'
 SQL_QUERY
 1;
