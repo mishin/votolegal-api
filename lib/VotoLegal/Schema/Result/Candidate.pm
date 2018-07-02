@@ -192,6 +192,12 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 __PACKAGE__->has_many(
+  "candidate_service_donations",
+  "VotoLegal::Schema::Result::CandidateServiceDonation",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+__PACKAGE__->has_many(
   "donations",
   "VotoLegal::Schema::Result::Donation",
   { "foreign.candidate_id" => "self.id" },
@@ -274,8 +280,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-06-27 11:43:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fIdZ+Ym2YvpZ2ksFFkC7xw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-02 17:42:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+i+jIrBy2StcDNlth6+Rug
 
 use File::Temp q(:seekable);
 use Data::Verifier;
