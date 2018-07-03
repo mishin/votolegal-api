@@ -10,6 +10,8 @@ use MIME::Base64 qw(encode_base64);
 use JSON::MaybeXS qw(encode_json decode_json);
 use Carp 'croak';
 
+has is_votolegal_payment => ( is => 'rw', isa => 'Bool', required => 0, default => 0 );
+
 BEGIN {
     use VotoLegal::Utils qw/is_test/;
 
