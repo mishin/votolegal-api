@@ -61,7 +61,7 @@ sub candidate_GET {
 						( $c->avatar ? ( avatar => $c->avatar ) : () )
 					  }
 				  } $c->stash->{collection}->search(
-					{ undef },
+					undef,
 					{ prefetch => [qw/ user candidate_donation_summary /] }
 				  )->all()
 			],
