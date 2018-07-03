@@ -76,9 +76,9 @@ sub candidate_GET {
           )
     };
 
-    #if ( $c->stash->{candidate}->running_for_address_state ) {
-    #    $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
-    #}
+    if ( $c->stash->{candidate}->running_for_address_state ) {
+       $candidate->{address_state_name} = $c->stash->{candidate}->running_for_address_state;
+    }
 
     # fix para ficar igual os oturos valores
     if ( $candidate->{raising_goal} ) {
