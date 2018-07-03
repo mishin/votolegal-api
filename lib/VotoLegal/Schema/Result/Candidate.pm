@@ -811,7 +811,8 @@ sub action_specs {
                     $ENV{IUGU_API_TEST_MODE} == 0
                     && (   $values{popular_name}
                         || $values{username}
-                        || $values{twitter_url} )
+                        || $values{twitter_url}
+                        || $values{image} )
                   ) {
                     my $async  = HTTP::Async->new;
                     my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
