@@ -73,7 +73,7 @@ sub candidate_GET {
                             'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
                             'me.username' => { 'NOT ILIKE' => '%campanharede%' },
                             'me.username' => { 'NOT ILIKE' => '%campanhapsol%' },
-                            ( $donations ? ('candidate_donation_summary.amount_donation_by_votolegal' => { '>=' => $donations }) : () )
+                            ( $donations ? ('candidate_donation_summary.amount_donation_by_votolegal' => { '>' => $donations }) : () )
                           ]
                     },
                     { prefetch => [qw/ user candidate_donation_summary /] }
