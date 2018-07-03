@@ -126,6 +126,9 @@ db_transaction {
       code    => 400,
       [
         method               => 'creditCard',
+        email                => $email,
+        name                 => $name,
+		credit_card_token    => $fake_credit_card_token,
         sender_hash          => $fake_sender_hash,
         address_state        => $address_state,
         address_city         => $address_city,

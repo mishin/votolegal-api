@@ -86,6 +86,8 @@ __PACKAGE__->has_many(
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
+use WebService::IuguForReal;
+
 use JSON::MaybeXS;
 use XML::Hash::XS qw/ hash2xml /;
 
@@ -126,7 +128,7 @@ sub send_pagseguro_transaction {
     };
 
     $payment_args = $xs->hash2xml( $payment_args, root => 'payment' );
-
+    $self->send_iugu_transaction;
     # Criando entrada no log
     $self->result_source->schema->resultset("PaymentLog")->create(
         {
@@ -138,6 +140,14 @@ sub send_pagseguro_transaction {
     my $payment = $pagseguro->transaction($payment_args);
 
     return $payment;
+}
+
+sub send_iugu_transaction {
+    my ($self) = @_;
+
+    my $gateway = WebService::IuguForReal->new( is_votolegal_payment => 1 );
+    use DDP; p $gateway;
+
 }
 
 sub build_callback_url {

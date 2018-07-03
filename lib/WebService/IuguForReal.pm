@@ -33,6 +33,8 @@ BEGIN {
 
 has ua => ( is => "rw", isa => "Furl", builder => '_build_ua', lazy => 1, );
 
+has is_votolegal_payment => ( is => 'rw', isa => 'Bool', required => 0, default => 0 );
+
 my $domain = URI->new( $ENV{IUGU_API_URL} );
 
 sub _build_ua {
