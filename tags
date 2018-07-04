@@ -39,6 +39,7 @@ VotoLegal::Controller::API::Candidate::Payment::Callback	./lib/VotoLegal/Control
 VotoLegal::Controller::API::Candidate::Payment::Session	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^package VotoLegal::Controller::API::Candidate::Payment::Session;$/;"	p
 VotoLegal::Controller::API::Candidate::Projects	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^package VotoLegal::Controller::API::Candidate::Projects;$/;"	p
 VotoLegal::Controller::API::Candidate::Publish	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^package VotoLegal::Controller::API::Candidate::Publish;$/;"	p
+VotoLegal::Controller::API::CandidateForPreRender	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^package VotoLegal::Controller::API::CandidateForPreRender;$/;"	p
 VotoLegal::Controller::API::CandidateMetadata	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^package VotoLegal::Controller::API::CandidateMetadata;$/;"	p
 VotoLegal::Controller::API::Certiface2DonationRedirect	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^package VotoLegal::Controller::API::Certiface2DonationRedirect;$/;"	p
 VotoLegal::Controller::API::Contact	./lib/VotoLegal/Controller/API/Contact.pm	/^package VotoLegal::Controller::API::Contact;$/;"	p
@@ -82,6 +83,9 @@ VotoLegal::Schema::Result::CandidateCampaignConfig	./lib/VotoLegal/Schema/Result
 VotoLegal::Schema::Result::CandidateDonationSummary	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^package VotoLegal::Schema::Result::CandidateDonationSummary;$/;"	p
 VotoLegal::Schema::Result::CandidateIssuePriority	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^package VotoLegal::Schema::Result::CandidateIssuePriority;$/;"	p
 VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^package VotoLegal::Schema::Result::CandidateMandatoAbertoIntegration;$/;"	p
+VotoLegal::Schema::Result::CandidateServiceDonation	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^package VotoLegal::Schema::Result::CandidateServiceDonation;$/;"	p
+VotoLegal::Schema::Result::CandidateServiceDonationInscription	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^package VotoLegal::Schema::Result::CandidateServiceDonationInscription;$/;"	p
+VotoLegal::Schema::Result::CandidateServiceDonor	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^package VotoLegal::Schema::Result::CandidateServiceDonor;$/;"	p
 VotoLegal::Schema::Result::CertifaceReturnUrl	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^package VotoLegal::Schema::Result::CertifaceReturnUrl;$/;"	p
 VotoLegal::Schema::Result::CertifaceToken	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^package VotoLegal::Schema::Result::CertifaceToken;$/;"	p
 VotoLegal::Schema::Result::City	./lib/VotoLegal/Schema/Result/City.pm	/^package VotoLegal::Schema::Result::City;$/;"	p
@@ -249,6 +253,7 @@ base	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub base : C
 base	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub base : Chained('root') : PathPart('projects') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^sub base : Chained('\/api\/root') : PathPart('certiface2donation-redirect') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Contact.pm	/^sub base : Chained('root') : PathPart('contact') : CaptureArgs(0) { }$/;"	s
@@ -287,9 +292,11 @@ callback_GET	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub callback_GET {$/
 callback_POST	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub callback_POST {$/;"	s
 callback_POST	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub callback_POST {$/;"	s
 candidate	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+candidate	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub candidate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 candidate	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub candidate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 candidate	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 candidate_GET	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub candidate_GET {$/;"	s
+candidate_GET	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub candidate_GET {$/;"	s
 candidate_GET	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub candidate_GET {$/;"	s
 candidate_GET	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub candidate_GET {$/;"	s
 candidate_PUT	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub candidate_PUT {$/;"	s
@@ -309,6 +316,7 @@ count_GET	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub count_GET {$/;
 cpf_formated	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub cpf_formated {$/;"	s
 createSession	./lib/VotoLegal/Payment/PagSeguro.pm	/^sub createSession {$/;"	s
 createSession	./lib/WebService/PagSeguro.pm	/^sub createSession {$/;"	s
+create_and_capture_iugu_invoice	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub create_and_capture_iugu_invoice {$/;"	s
 create_invoice	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub create_invoice {$/;"	s
 create_invoice	./lib/WebService/IuguForReal.pm	/^sub create_invoice {$/;"	s
 csv	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^sub csv : Chained('base') : PathPart('csv') : Args(0) {$/;"	s
@@ -383,13 +391,13 @@ get_git_hash	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub get_git
 get_human_like_method	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_human_like_method {$/;"	s
 get_invoice	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub get_invoice {$/;"	s
 get_invoice	./lib/WebService/IuguForReal.pm	/^sub get_invoice {$/;"	s
+get_license_value	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_license_value {$/;"	s
 get_most_recent_log	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_most_recent_log {$/;"	s
 get_most_recent_payment	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub get_most_recent_payment {$/;"	s
 get_pagseguro_data	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_pagseguro_data {$/;"	s
 get_phone_number_and_area_code	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub get_phone_number_and_area_code {$/;"	s
 get_schema	./lib/VotoLegal/SchemaConnected.pm	/^sub get_schema {$/;"	s
 get_token_information	./lib/WebService/Certiface.pm	/^sub get_token_information {$/;"	s
-get_value	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_value {$/;"	s
 has_amount_data	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub has_amount_data {$/;"	s
 has_log	./lib/VotoLegal/Worker.pm	/^sub has_log {$/;"	s
 has_mandatoaberto_integration	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub has_mandatoaberto_integration {$/;"	s
@@ -491,6 +499,7 @@ result_POST	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result_POST {$/;"	
 resultset	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub resultset {$/;"	s
 resultset	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub resultset { shift->result_source->resultset }$/;"	s
 resultset	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^sub resultset {$/;"	s
+resultset	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^sub resultset {$/;"	s
 resultset	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub resultset {$/;"	s
 resultset	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^sub resultset {$/;"	s
 resultset_find	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^sub resultset_find {$/;"	s
@@ -518,6 +527,7 @@ root	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub root : C
 root	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub root : Chained('\/api\/candidate\/payment\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub root : Chained('\/api\/candidate\/object') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub root : Chained('\/api\/candidate\/object') : PathPart('') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub root : Chained('\/api\/root') : PathPart('candidates-for-prerender') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub root : Chained('\/api\/root') : PathPart('candidate-metadata') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/Contact.pm	/^sub root : Chained('\/api\/root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^sub root : Chained('\/api\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
