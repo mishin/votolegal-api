@@ -195,11 +195,22 @@ sub create_and_capture_iugu_invoice {
 		}
 	);
 
-    my $payment_execution = $gateway->capture_invoice(
-        id           => $invoice->{id},
-        candidate_id => $self->candidate_id
-    );
+    my $payment_execution;
+    if ( !$is_boleto ) {
+		$payment_execution = $gateway->capture_invoice(
+			id           => $invoice->{id},
+			candidate_id => $self->candidate_id
+		);
 
+        if ($payment_execution->{paid}) {
+            $candidate->update(
+                {
+                    status         => 'activated',
+                    payment_status => 'paid'
+                }
+            );
+        }
+    }
 
     return $payment_execution;
 }
