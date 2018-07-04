@@ -58,6 +58,7 @@ db_transaction {
       is_fail => 1,
       code    => 400,
       [
+        payment_gateway      => 'pagseguro',
         sender_hash          => $fake_sender_hash,
         credit_card_token    => $fake_credit_card_token,
         address_state        => $address_state,
@@ -74,6 +75,7 @@ db_transaction {
       is_fail => 1,
       code    => 400,
       [
+        payment_gateway      => 'pagseguro',
         method               => 'creditCard',
         credit_card_token    => $fake_credit_card_token,
         credit_card_token    => $fake_credit_card_token,
@@ -91,6 +93,7 @@ db_transaction {
       is_fail => 1,
       code    => 400,
       [
+        payment_gateway      => 'pagseguro',
         method               => 'foobar',
         sender_hash          => $fake_sender_hash,
         credit_card_token    => $fake_credit_card_token,
@@ -108,6 +111,7 @@ db_transaction {
       is_fail => 1,
       code    => 400,
       [
+        payment_gateway      => 'pagseguro',
         method               => 'boleto',
         sender_hash          => $fake_sender_hash,
         credit_card_token    => $fake_credit_card_token,
@@ -120,10 +124,10 @@ db_transaction {
         phone                => $phone
       ];
 
+    &setup_sucess_mock_iugu;
     rest_post "/api/candidate/$candidate_id/payment",
-      name    => 'payment with creditCard method but without credit_card_token',
-      is_fail => 1,
-      code    => 400,
+      name    => 'payment with Iugu with credit card',
+      code    => 200,
       [
         method               => 'creditCard',
         email                => $email,
@@ -139,6 +143,23 @@ db_transaction {
         phone                => $phone
       ];
 
+	&setup_sucess_mock_iugu_boleto_success;
+	rest_post "/api/candidate/$candidate_id/payment",
+	  name    => 'payment with boleto with Iugu',
+	  code    => 200,
+	  [
+		method               => 'boleto',
+		email                => $email,
+		name                 => $name,
+		sender_hash          => $fake_sender_hash,
+		address_state        => $address_state,
+		address_city         => $address_city,
+		address_zipcode      => $address_zipcode,
+		address_street       => $address_street,
+		address_district     => $address_district,
+		address_house_number => $address_house_number,
+		phone                => $phone
+	  ];
 };
 
 done_testing();

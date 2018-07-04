@@ -43,6 +43,7 @@ sub payment_POST {
     my ( $self, $c ) = @_;
 
     my $gateway = $c->req->params->{payment_gateway} || 'iugu';
+    die \['gateway', 'invalid'] unless $gateway =~ m/(iugu|pagseguro)/;
 
     my $candidate = $c->stash->{candidate};
 
@@ -101,37 +102,64 @@ sub payment_POST {
         $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
     }
 
-    if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
 
-        # Criando entrada no log
-        $c->model("DB::PaymentLog")->create(
-            {
-                payment_id => $payment->id,
-                status     => 'failed'
-            }
-        );
+    my ( $payment_link, $payment_code );
+    if ( $gateway eq 'pagseguro' ) {
+		if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
 
-        $c->stash->{candidate}->send_payment_not_approved_email();
+			# Criando entrada no log
+			$c->model("DB::PaymentLog")->create(
+				{
+					payment_id => $payment->id,
+					status     => 'failed'
+				}
+			);
 
-        die \[ 'Pagseguro: ', $payment_execution ];
+			$c->stash->{candidate}->send_payment_not_approved_email();
+
+			die \[ 'Pagseguro: ', $payment_execution ];
+		}
+
+		$candidate->send_payment_in_analysis_email();
+
+		$c->model("DB::PaymentLog")->create(
+			{
+				payment_id => $payment->id,
+				status     => 'analysis'
+			}
+		);
+
+		$payment->update( { code => $payment_execution->{code} } );
+
+        $payment_link = $payment_execution->{paymentLink};
+        $payment_code = $payment_execution->{code};
     }
+    else {
+		if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{id} ) ) {
 
-    $candidate->send_payment_in_analysis_email();
+			# Criando entrada no log
+			$c->model("DB::PaymentLog")->create(
+				{
+					payment_id => $payment->id,
+					status     => 'failed'
+				}
+			);
 
-    $c->model("DB::PaymentLog")->create(
-        {
-            payment_id => $payment->id,
-            status     => 'analysis'
-        }
-    );
+			$c->stash->{candidate}->send_payment_not_approved_email();
 
-    $payment->update( { code => $payment_execution->{code} } );
+			die 'invalid gateway response';
+		}
+
+
+        $payment_link = $payment_execution->{secure_url} unless $method eq 'creditCard';
+        $payment_code = $payment_execution->{id};
+    }
 
     return $self->status_ok(
         $c,
         entity => {
-            url  => $payment_execution->{paymentLink},
-            code => $payment_execution->{code}
+            url  => $payment_link,
+            code => $payment_code
         },
     );
 }

@@ -128,7 +128,7 @@ sub send_pagseguro_transaction {
     };
 
     $payment_args = $xs->hash2xml( $payment_args, root => 'payment' );
-    $self->send_iugu_transaction;
+
     # Criando entrada no log
     $self->result_source->schema->resultset("PaymentLog")->create(
         {
@@ -164,7 +164,7 @@ sub create_and_capture_iugu_invoice {
 			]
 		}
 	)->next;
-    use DDP; p $candidate_due_date;
+
 	my $due_date = $candidate_due_date->get_column('due_date');
 
     my $invoice = $gateway->create_invoice(
@@ -188,7 +188,20 @@ sub create_and_capture_iugu_invoice {
 		}
     );
 
-    use DDP; p $invoice;
+	$self->result_source->schema->resultset("PaymentLog")->create(
+		{
+			payment_id => $self->id,
+			status     => 'sent'
+		}
+	);
+
+    my $payment_execution = $gateway->capture_invoice(
+        id           => $invoice->{id},
+        candidate_id => $self->candidate_id
+    );
+
+
+    return $payment_execution;
 }
 
 sub build_callback_url {
@@ -345,7 +358,7 @@ sub get_license_value {
     my $has_promotion;
     my $value;
 
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ || $candidate->party_id =~ /^(34|26|4)$/ ) {
+    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ ) || $candidate->party_id =~ /^(34|26|4)$/ ) {
         $has_promotion = 1;
     }
 
@@ -380,7 +393,7 @@ sub get_license_value {
         }
         else {
 
-            if ( $candidate->political_movement_id == 1 ) {
+            if ( $candidate->political_movement_id && $candidate->political_movement_id == 1 ) {
                 $value = '247.50';
             }
             elsif ( $candidate->party_id == 26 ) {
