@@ -20,7 +20,7 @@ __PACKAGE__->add_columns(
   "candidate_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "sender_hash",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "text", is_nullable => 1 },
   "created_at",
   {
     data_type     => "timestamp",
@@ -79,8 +79,8 @@ __PACKAGE__->has_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-28 10:30:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OdKFIoPo4fPmL1cL2Mh6Qw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-04 16:32:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IY+L/P+Wh7htgFVknzKjhw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 
