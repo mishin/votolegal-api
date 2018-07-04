@@ -142,12 +142,53 @@ sub send_pagseguro_transaction {
     return $payment;
 }
 
-sub send_iugu_transaction {
-    my ($self) = @_;
+sub create_and_capture_iugu_invoice {
+    my ($self, $credit_card_token) = @_;
 
     my $gateway = WebService::IuguForReal->new( is_votolegal_payment => 1 );
-    use DDP; p $gateway;
 
+    my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
+    my $candidate = $self->candidate;
+    my $document  = $candidate->campaign_donation_type eq 'pre-campaign' ? $candidate->cpf : $candidate->cnpj;
+
+	my $candidate_due_date = $self->result_source->schema->resultset('Candidate')->search(
+		{
+			id => $self->candidate_id
+
+		},
+		{
+			'+columns' => [
+				{
+					due_date => \"timezone('America/Sao_Paulo', now())::date + '5 days'::interval"
+				}
+			]
+		}
+	)->next;
+    use DDP; p $candidate_due_date;
+	my $due_date = $candidate_due_date->get_column('due_date');
+
+    my $invoice = $gateway->create_invoice(
+        credit_card_token => $credit_card_token,
+        due_date          => $due_date,
+        amount            => $self->get_license_value(),
+        is_boleto         => $is_boleto,
+        description       => 'Pagamento Voto Legal',
+        candidate_id      => $self->candidate_id,
+		payer => {
+			cpf_cnpj => $document,
+			name     => $candidate->name,
+			address  => {
+				state    => $self->address_state,
+				city     => $self->address_city,
+				district => $self->address_district,
+				zip_code => $self->address_zipcode,
+				street   => $self->address_street,
+				number   => $self->address_house_number,
+			}
+		}
+    );
+
+    use DDP; p $invoice;
 }
 
 sub build_callback_url {
@@ -210,7 +251,7 @@ sub build_item_object {
             item => {
                 id          => 1,
                 description => 'Pagamento Voto Legal',
-                amount      => $self->get_value(),
+                amount      => $self->get_license_value(),
                 quantity    => 1
             }
         }
@@ -234,7 +275,7 @@ sub build_credit_card_object {
         token       => $credit_card_token,
         installment => {
             quantity => 1,
-            value    => $self->get_value()
+            value    => $self->get_license_value()
         },
         holder => {
             name      => $self->name,
@@ -292,7 +333,7 @@ sub update_code {
     return $self->update( { code => $code } );
 }
 
-sub get_value {
+sub get_license_value {
     my ($self) = @_;
 
     my $candidate = $self->candidate;

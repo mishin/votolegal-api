@@ -42,6 +42,8 @@ sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub payment_POST {
     my ( $self, $c ) = @_;
 
+    my $gateway = $c->req->params->{payment_gateway} || 'iugu';
+
     my $candidate = $c->stash->{candidate};
 
     my $method = $c->req->params->{method};
@@ -91,7 +93,13 @@ sub payment_POST {
         $c->detach;
     }
 
-    my $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
+    my $payment_execution;
+    if ($gateway eq 'iugu') {
+        $payment_execution = $payment->create_and_capture_iugu_invoice( $credit_card_token );
+    }
+    else {
+        $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
+    }
 
     if ( ( ref $payment_execution ne 'HASH' ) || ( !$payment_execution && !$payment_execution->{paymentLink} ) ) {
 

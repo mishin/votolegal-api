@@ -12,6 +12,12 @@ use VotoLegal::Types qw(CPF EmailAddress);
 
 use Data::Verifier;
 
+sub resultset {
+	my $self = shift;
+
+	return $self->result_source->schema->resultset(@_);
+}
+
 sub verifiers_specs {
     my $self = shift;
 
@@ -45,12 +51,31 @@ sub verifiers_specs {
                     }
                 },
                 sender_hash => {
-                    required => 1,
+                    required => 0,
                     type     => "Str"
                 },
                 name => {
-                    required => 1,
-                    type     => "Str"
+                    required   => 1,
+                    type       => "Str",
+                    max_length => 100,
+                    min_length => 3,
+                    post_check => sub {
+						my $nome = lc $_[0]->get_value('name');
+
+						# tira espaços duplicados
+						$nome =~ s/\s+/\ /go;
+
+						my $reg = qr/^[a-z\-'´]{3,29}\s[a-z\-'´\.]{1,29}(\s[a-z\-'´\.]{1,29})*$/;
+
+						# verifica se precisa tirar os acentos
+						if ( $nome !~ /$reg/io ) {
+							my $f = $self->result_source->schema->unaccent($nome);
+
+							$nome = lc $f->{unaccent};
+						}
+
+						return $nome;
+                    }
                 },
                 email => {
                     required => 1,
@@ -106,7 +131,7 @@ sub verifiers_specs {
                 phone => {
                     required => 1,
                     type     => 'Str'
-                }
+                },
             },
         ),
     };
