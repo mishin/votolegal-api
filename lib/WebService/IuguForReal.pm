@@ -10,18 +10,23 @@ use MIME::Base64 qw(encode_base64);
 use JSON::MaybeXS qw(encode_json decode_json);
 use Carp 'croak';
 
+has is_votolegal_payment => ( is => 'rw', isa => 'Bool', required => 0, default => 0 );
+
 BEGIN {
     use VotoLegal::Utils qw/is_test/;
 
     if ( !is_test() || $ENV{TEST_IUGU} ) {
-        die "Missing IUGU_API_TEST_MODE" unless defined $ENV{IUGU_API_TEST_MODE};
-        die "Missing IUGU_API_KEY"       unless $ENV{IUGU_API_KEY};
-        die "Missing IUGU_ACCOUNT_ID"    unless $ENV{IUGU_ACCOUNT_ID};
-        die "Missing IUGU_API_URL"       unless $ENV{IUGU_API_URL};
+        die "Missing IUGU_API_TEST_MODE"                unless defined $ENV{IUGU_API_TEST_MODE};
+        die "Missing IUGU_API_KEY"                      unless $ENV{IUGU_API_KEY};
+        die "Missing IUGU_ACCOUNT_ID"                   unless $ENV{IUGU_ACCOUNT_ID};
+        die "Missing IUGU_API_URL"                      unless $ENV{IUGU_API_URL};
+		die "Missing VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID" unless $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+		die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
         $ENV{IUGU_MOCK} = 0;
     }
     else {
+
         $ENV{IUGU_MOCK}          = 1;
         $ENV{IUGU_API_TEST_MODE} = 1;
         $ENV{IUGU_API_KEY}       = 'Fooba';
@@ -33,10 +38,16 @@ BEGIN {
 
 has ua => ( is => "rw", isa => "Furl", builder => '_build_ua', lazy => 1, );
 
+has is_votolegal_payment => ( is => 'rw', isa => 'Bool', required => 0, default => 0 );
+
 my $domain = URI->new( $ENV{IUGU_API_URL} );
 
 sub _build_ua {
     my $self = shift;
+
+    if ( $self->is_votolegal_payment ) {
+        $ENV{IUGU_API_KEY} = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+    }
 
     Furl->new(
         timeout => 30,
@@ -56,19 +67,42 @@ sub create_invoice {
     my ( $self, %opts ) = @_;
     my $logger = get_logger;
 
-    defined $opts{$_} or croak "missing $_" for qw/
-      due_date
-      donation_id
-      is_boleto
-      payer
-      description
-      amount
-      /;
+    # Caso seja um pagamento de licença o account_id é diferente
+    # E alguns dados obrigatórios também são diferentes
+    my @required_opts;
+    if ( $self->is_votolegal_payment ) {
+        $ENV{IUGU_ACCOUNT_ID} = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+
+		@required_opts = qw/
+		  candidate_id
+          due_date
+		  is_boleto
+		  payer
+		  description
+		  amount
+		/;
+    }
+    else {
+		@required_opts = qw/
+		  due_date
+		  donation_id
+		  is_boleto
+		  payer
+		  description
+		  amount
+		/;
+    }
+
+    defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
-    Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
+    if ($self->is_votolegal_payment) {
+		Log::Log4perl::NDC->push( "create_invoice votolegal_license candidate_id=" . $opts{candidate_id} . '  ' );
+    } else {
+        Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
+    }
 
     if ( !$ENV{IUGU_MOCK} ) {
 
@@ -88,9 +122,10 @@ sub create_invoice {
 
     }
 
+    my $invoice_email = $self->is_votolegal_payment ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
     $post_url = $self->uri_for('invoices');
     $data     = {
-        email        => $opts{donation_id} . '@no-email.com',
+        email        => $invoice_email,
         payer        => $opts{payer},
         due_date     => $opts{due_date},
         payable_with => $opts{is_boleto} ? 'bank_slip' : 'credit_card',
@@ -159,15 +194,33 @@ sub capture_invoice {
     my ( $self, %opts ) = @_;
     my $logger = get_logger;
 
-    defined $opts{$_} or croak "missing $_" for qw/
-      id
-      donation_id
-      /;
+    # Caso seja um pagamento de licença alguns dados obrigatórios também são diferentes
+    my @required_opts;
+    if ( $self->is_votolegal_payment ) {
+
+		@required_opts = qw/
+		    id
+            candidate_id
+        /;
+    }
+    else {
+		@required_opts = qw/
+		    id
+            donation_id
+        /;
+    }
+
+    defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
-    Log::Log4perl::NDC->push( "capture_invoice donation_id=" . $opts{donation_id} . '  ' );
+    if ( $self->is_votolegal_payment ) {
+		Log::Log4perl::NDC->push( "capture_invoice votolegal license candidate_id=" . $opts{candidate_id} . '  ' );
+    }
+    else {
+        Log::Log4perl::NDC->push( "capture_invoice donation_id=" . $opts{donation_id} . '  ' );
+    }
 
     $post_url = $self->uri_for('invoices') . '/' . $opts{id} . '/capture';
     $data     = {};

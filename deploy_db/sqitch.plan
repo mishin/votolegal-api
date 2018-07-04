@@ -142,3 +142,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0136-add-avatar [0135-mandatoaberto_integration-greeting] 2018-06-21T19:13:08Z Lucas Ansei,,, <lucas@lucas-G750JX> # Adding the 'avatar' column on the 'candidate' table
 0137-certiface-per-candidate [0136-add-avatar] 2018-06-27T14:42:47Z renato,,, <renato@renato-MS-7A34> # certiface-per-candidate
 0138-service_donation [0137-certiface-per-candidate] 2018-07-02T20:44:17Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the service_donation required tables
+0139-license-envs [0138-service_donation] 2018-07-04T18:45:49Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding lincenses env

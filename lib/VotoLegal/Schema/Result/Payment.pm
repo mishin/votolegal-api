@@ -86,6 +86,8 @@ __PACKAGE__->has_many(
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
+use WebService::IuguForReal;
+
 use JSON::MaybeXS;
 use XML::Hash::XS qw/ hash2xml /;
 
@@ -138,6 +140,68 @@ sub send_pagseguro_transaction {
     my $payment = $pagseguro->transaction($payment_args);
 
     return $payment;
+}
+
+sub create_and_capture_iugu_invoice {
+    my ($self, $credit_card_token) = @_;
+
+    my $gateway = WebService::IuguForReal->new( is_votolegal_payment => 1 );
+
+    my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
+    my $candidate = $self->candidate;
+    my $document  = $candidate->campaign_donation_type eq 'pre-campaign' ? $candidate->cpf : $candidate->cnpj;
+
+	my $candidate_due_date = $self->result_source->schema->resultset('Candidate')->search(
+		{
+			id => $self->candidate_id
+
+		},
+		{
+			'+columns' => [
+				{
+					due_date => \"timezone('America/Sao_Paulo', now())::date + '5 days'::interval"
+				}
+			]
+		}
+	)->next;
+
+	my $due_date = $candidate_due_date->get_column('due_date');
+
+    my $invoice = $gateway->create_invoice(
+        credit_card_token => $credit_card_token,
+        due_date          => $due_date,
+        amount            => $self->get_license_value(),
+        is_boleto         => $is_boleto,
+        description       => 'Pagamento Voto Legal',
+        candidate_id      => $self->candidate_id,
+		payer => {
+			cpf_cnpj => $document,
+			name     => $candidate->name,
+			address  => {
+				state    => $self->address_state,
+				city     => $self->address_city,
+				district => $self->address_district,
+				zip_code => $self->address_zipcode,
+				street   => $self->address_street,
+				number   => $self->address_house_number,
+			}
+		}
+    );
+
+	$self->result_source->schema->resultset("PaymentLog")->create(
+		{
+			payment_id => $self->id,
+			status     => 'sent'
+		}
+	);
+
+    my $payment_execution = $gateway->capture_invoice(
+        id           => $invoice->{id},
+        candidate_id => $self->candidate_id
+    );
+
+
+    return $payment_execution;
 }
 
 sub build_callback_url {
@@ -200,7 +264,7 @@ sub build_item_object {
             item => {
                 id          => 1,
                 description => 'Pagamento Voto Legal',
-                amount      => $self->get_value(),
+                amount      => $self->get_license_value(),
                 quantity    => 1
             }
         }
@@ -224,7 +288,7 @@ sub build_credit_card_object {
         token       => $credit_card_token,
         installment => {
             quantity => 1,
-            value    => $self->get_value()
+            value    => $self->get_license_value()
         },
         holder => {
             name      => $self->name,
@@ -282,7 +346,7 @@ sub update_code {
     return $self->update( { code => $code } );
 }
 
-sub get_value {
+sub get_license_value {
     my ($self) = @_;
 
     my $candidate = $self->candidate;
@@ -294,7 +358,7 @@ sub get_value {
     my $has_promotion;
     my $value;
 
-    if ( $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ || $candidate->party_id =~ /^(34|26|4)$/ ) {
+    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ ) || $candidate->party_id =~ /^(34|26|4)$/ ) {
         $has_promotion = 1;
     }
 
@@ -329,7 +393,7 @@ sub get_value {
         }
         else {
 
-            if ( $candidate->political_movement_id == 1 ) {
+            if ( $candidate->political_movement_id && $candidate->political_movement_id == 1 ) {
                 $value = '247.50';
             }
             elsif ( $candidate->party_id == 26 ) {
