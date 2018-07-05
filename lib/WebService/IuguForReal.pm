@@ -105,7 +105,7 @@ sub create_invoice {
         # checando se credit_card.two_step_transaction está habilitado
         if ( !$opts{is_boleto} ) {
             $logger->info("validating two_step_transaction...");
-            Log::Log4perl::NDC->push( "account_id= $ENV{IUGU_ACCOUNT_ID}");
+
             my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ), $headers );
 
             my $json = decode_json( $res->decoded_content )

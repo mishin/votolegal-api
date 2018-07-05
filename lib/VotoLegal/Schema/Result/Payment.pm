@@ -171,7 +171,7 @@ sub create_and_capture_iugu_invoice {
         is_votolegal_payment => 1,
         credit_card_token    => $credit_card_token,
         due_date             => $due_date,
-        amount               => $self->get_license_value(),
+        amount               => $self->get_license_value_in_cents(),
         is_boleto            => $is_boleto,
         description          => 'Pagamento Voto Legal',
         candidate_id         => $self->candidate_id,
@@ -421,6 +421,73 @@ sub get_license_value {
     }
     else {
         $value = $is_boleto ? '494.00' : '495.00';
+    }
+
+    return $value;
+}
+
+sub get_license_value_in_cents {
+    my ($self) = @_;
+
+    my $candidate = $self->candidate;
+
+    my $has_political_movement = $candidate->political_movement_id ? 1 : 0;
+
+    my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
+
+    my $has_promotion;
+    my $value;
+
+    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ ) || $candidate->party_id =~ /^(34|26|4)$/ ) {
+        $has_promotion = 1;
+    }
+
+    if ($has_promotion) {
+
+        if ($is_boleto) {
+
+            if ($has_political_movement) {
+
+                if ( $candidate->political_movement_id == 1 ) {
+                    $value = 24650;
+                }
+                elsif ( $candidate->party_id == 26 ) {
+                    $value = 29600;
+                }
+                else {
+                    $value = 39500;
+                }
+
+            }
+            else {
+
+                if ( $candidate->party_id == 26 ) {
+                    $value = 29600;
+                }
+                else {
+                    $value = 39500;
+                }
+
+            }
+
+        }
+        else {
+
+            if ( $candidate->political_movement_id && $candidate->political_movement_id == 1 ) {
+                $value = 24750;
+            }
+            elsif ( $candidate->party_id == 26 ) {
+                $value = 29700;
+            }
+            else {
+                $value = 39600;
+            }
+
+        }
+
+    }
+    else {
+        $value = $is_boleto ? 49400 : 49500;
     }
 
     return $value;
