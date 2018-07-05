@@ -145,7 +145,7 @@ sub send_pagseguro_transaction {
 sub create_and_capture_iugu_invoice {
     my ($self, $credit_card_token) = @_;
 
-    my $gateway = WebService::IuguForReal->new( is_votolegal_payment => 1 );
+    my $gateway = WebService::IuguForReal->instance();
 
     my $is_boleto = $self->method eq 'boleto' ? 1 : 0;
     my $candidate = $self->candidate;
@@ -168,12 +168,13 @@ sub create_and_capture_iugu_invoice {
 	my $due_date = $candidate_due_date->get_column('due_date');
 
     my $invoice = $gateway->create_invoice(
-        credit_card_token => $credit_card_token,
-        due_date          => $due_date,
-        amount            => $self->get_license_value(),
-        is_boleto         => $is_boleto,
-        description       => 'Pagamento Voto Legal',
-        candidate_id      => $self->candidate_id,
+        is_votolegal_payment => 1,
+        credit_card_token    => $credit_card_token,
+        due_date             => $due_date,
+        amount               => $self->get_license_value(),
+        is_boleto            => $is_boleto,
+        description          => 'Pagamento Voto Legal',
+        candidate_id         => $self->candidate_id,
 		payer => {
 			cpf_cnpj => $document,
 			name     => $candidate->name,
@@ -198,8 +199,9 @@ sub create_and_capture_iugu_invoice {
     my $payment_execution;
     if ( !$is_boleto ) {
 		$payment_execution = $gateway->capture_invoice(
-			id           => $invoice->{id},
-			candidate_id => $self->candidate_id
+            is_votolegal_payment => 1,
+			id                   => $invoice->{id},
+			candidate_id         => $self->candidate_id
 		);
 
         if ($payment_execution->{paid}) {

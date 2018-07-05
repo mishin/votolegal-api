@@ -38,20 +38,14 @@ BEGIN {
 
 has ua => ( is => "rw", isa => "Furl", builder => '_build_ua', lazy => 1, );
 
-has is_votolegal_payment => ( is => 'rw', isa => 'Bool', required => 0, default => 0 );
-
 my $domain = URI->new( $ENV{IUGU_API_URL} );
 
 sub _build_ua {
     my $self = shift;
 
-    if ( $self->is_votolegal_payment ) {
-        $ENV{IUGU_API_KEY} = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
-    }
-
     Furl->new(
         timeout => 30,
-        headers => [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ) ]
+        # headers => [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ) ]
     );
 
 }
@@ -70,8 +64,10 @@ sub create_invoice {
     # Caso seja um pagamento de licença o account_id é diferente
     # E alguns dados obrigatórios também são diferentes
     my @required_opts;
-    if ( $self->is_votolegal_payment ) {
+    my $headers;
+    if ( $opts{is_votolegal_payment} ) {
         $ENV{IUGU_ACCOUNT_ID} = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        $ENV{IUGU_API_KEY}    = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
 		@required_opts = qw/
 		  candidate_id
@@ -93,12 +89,14 @@ sub create_invoice {
 		/;
     }
 
+    $headers = [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ), 'Content-Type' => "application/json" ];
+
     defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
-    if ($self->is_votolegal_payment) {
+    if ($opts{is_votolegal_payment}) {
 		Log::Log4perl::NDC->push( "create_invoice votolegal_license candidate_id=" . $opts{candidate_id} . '  ' );
     } else {
         Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
@@ -109,8 +107,7 @@ sub create_invoice {
         # checando se credit_card.two_step_transaction está habilitado
         if ( !$opts{is_boleto} ) {
             $logger->info("validating two_step_transaction...");
-            my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ),
-                [ 'Content-Type' => "application/json", ] );
+            my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ), $headers );
 
             my $json = decode_json( $res->decoded_content )
               or croak 'create_invoice failed';
@@ -122,7 +119,7 @@ sub create_invoice {
 
     }
 
-    my $invoice_email = $self->is_votolegal_payment ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
+    my $invoice_email = $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
     $post_url = $self->uri_for('invoices');
     $data     = {
         email        => $invoice_email,
@@ -148,7 +145,7 @@ sub create_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->post( $post_url, [ 'Content-Type' => "application/json", ], $body );
+        my $res = $self->ua->post( $post_url, $headers, $body );
         $logger->info( "Iugu response: " . $res->decoded_content );
 
         $invoice = decode_json( $res->decoded_content )
@@ -175,7 +172,7 @@ sub create_invoice {
             # nothing to do here
         }
         else {
-            my $res = $self->ua->post( $post_url, [ 'Content-Type' => "application/json", ], $body );
+            my $res = $self->ua->post( $post_url, $headers, $body );
 
             $logger->info( "Iugu response: " . $res->decoded_content );
 
@@ -196,7 +193,10 @@ sub capture_invoice {
 
     # Caso seja um pagamento de licença alguns dados obrigatórios também são diferentes
     my @required_opts;
-    if ( $self->is_votolegal_payment ) {
+    my $headers;
+
+    if ( $opts{is_votolegal_payment} ) {
+		$ENV{IUGU_API_KEY} = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
 		@required_opts = qw/
 		    id
@@ -210,12 +210,14 @@ sub capture_invoice {
         /;
     }
 
+	$headers = [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ), 'Content-Type' => "application/json" ];
+
     defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
-    if ( $self->is_votolegal_payment ) {
+    if ( $opts{is_votolegal_payment} ) {
 		Log::Log4perl::NDC->push( "capture_invoice votolegal license candidate_id=" . $opts{candidate_id} . '  ' );
     }
     else {
@@ -234,7 +236,7 @@ sub capture_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response_capture;
     }
     else {
-        my $res = $self->ua->post( $post_url, [ 'Content-Type' => "application/json", ], $body );
+        my $res = $self->ua->post( $post_url, $headers, $body );
         $logger->info( "Iugu response: " . $res->decoded_content );
 
         $invoice = decode_json( $res->decoded_content )
@@ -282,4 +284,3 @@ sub get_invoice {
 
     return $invoice;
 }
-
