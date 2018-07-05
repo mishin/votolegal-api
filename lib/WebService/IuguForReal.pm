@@ -144,7 +144,6 @@ sub create_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-		$logger->info( "headers: " . $headers );
         my $res = $self->ua->post( $post_url, $headers, $body );
         $logger->info( "Iugu response: " . $res->decoded_content );
 
