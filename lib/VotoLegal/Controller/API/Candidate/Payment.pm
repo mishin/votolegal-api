@@ -63,36 +63,36 @@ sub payment_POST {
         }
     );
 
-    if ( $method eq 'boleto' ) {
-        $self->status_ok(
-            $c,
-            entity => {
-                mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail.'
-            },
-        );
+    # if ( $method eq 'boleto' ) {
+    #     $self->status_ok(
+    #         $c,
+    #         entity => {
+    #             mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail.'
+    #         },
+    #     );
 
-        if ( $ENV{BOLETO_OFFLINE_SENDMAIL} ) {
-            $c->model('DB::EmaildbQueue')->create(
-                {
-                    config_id => 1,
-                    template  => 'message.html',
-                    to        => $ENV{BOLETO_OFFLINE_SENDMAIL},
-                    subject   => 'Enviar boleto para candidato',
-                    variables => encode_json(
-                        {
-                            message => sprintf "O candidato %s deseja receber um boleto",
-                            $candidate->name
-                              . ' POST= '
-                              . to_json( $c->req->params )
+    #     if ( $ENV{BOLETO_OFFLINE_SENDMAIL} ) {
+    #         $c->model('DB::EmaildbQueue')->create(
+    #             {
+    #                 config_id => 1,
+    #                 template  => 'message.html',
+    #                 to        => $ENV{BOLETO_OFFLINE_SENDMAIL},
+    #                 subject   => 'Enviar boleto para candidato',
+    #                 variables => encode_json(
+    #                     {
+    #                         message => sprintf "O candidato %s deseja receber um boleto",
+    #                         $candidate->name
+    #                           . ' POST= '
+    #                           . to_json( $c->req->params )
 
-                        }
-                    ),
-                }
-            );
-        }
+    #                     }
+    #                 ),
+    #             }
+    #         );
+    #     }
 
-        $c->detach;
-    }
+    #     $c->detach;
+    # }
 
     my $payment_execution;
     if ($gateway eq 'iugu') {
@@ -101,7 +101,6 @@ sub payment_POST {
     else {
         $payment_execution = $payment->send_pagseguro_transaction( $credit_card_token, $c->log );
     }
-
 
     my ( $payment_link, $payment_code );
     if ( $gateway eq 'pagseguro' ) {

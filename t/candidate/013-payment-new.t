@@ -151,7 +151,6 @@ db_transaction {
 		method               => 'boleto',
 		email                => $email,
 		name                 => $name,
-		sender_hash          => $fake_sender_hash,
 		address_state        => $address_state,
 		address_city         => $address_city,
 		address_zipcode      => $address_zipcode,
@@ -159,7 +158,20 @@ db_transaction {
 		address_district     => $address_district,
 		address_house_number => $address_house_number,
 		phone                => $phone
-	  ];
+	  ]
+    ;
+
+    rest_post "/api3/iugu",
+        name => 'iugu callback',
+        code => 200,
+        [
+            event          => 'invoice.status_changed',
+            'data[id]'     => '8ED8E2A0FF4E452BB7B2987699AB835D',
+            'data[status]' => 'paid'
+        ]
+    ;
+
+    is ($candidate->discard_changes->payment_status, 'paid', 'payment ok');
 };
 
 done_testing();

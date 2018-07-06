@@ -113,7 +113,7 @@ sub send_pagseguro_transaction {
     my $item         = $self->build_item_object();
     my $shipping     = $self->build_shipping_object();
     my $creditCard   = $self->build_credit_card_object($credit_card_token);
-    my $callback_url = $self->build_callback_url();
+    my $callback_url = $self->build_callback_url('pagseguro');
     my $payment_args = {
         mode            => "default",
         currency        => 'BRL',
@@ -186,8 +186,12 @@ sub create_and_capture_iugu_invoice {
 				street   => $self->address_street,
 				number   => $self->address_house_number,
 			}
-		}
+		},
+
+        ( $is_boleto ? ( notification_url => $self->build_callback_url('iugu') ) : () )
     );
+
+    $self->update( { code => $invoice->{id} } );
 
 	$self->result_source->schema->resultset("PaymentLog")->create(
 		{
@@ -197,12 +201,14 @@ sub create_and_capture_iugu_invoice {
 	);
 
     my $payment_execution;
+    my $ret;
     if ( !$is_boleto ) {
 		$payment_execution = $gateway->capture_invoice(
             is_votolegal_payment => 1,
 			id                   => $invoice->{id},
 			candidate_id         => $self->candidate_id
 		);
+
 
         if ($payment_execution->{paid}) {
             $candidate->update(
@@ -212,17 +218,31 @@ sub create_and_capture_iugu_invoice {
                 }
             );
         }
+
+        $ret = $payment_execution;
+    }
+    else {
+        $ret = $invoice;
     }
 
-    return $payment_execution;
+    return $ret;
 }
 
 sub build_callback_url {
-    my ($self) = @_;
+    my ($self, $gateway) = @_;
 
-    my $callback_url = $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL};
-    $callback_url .= "/" unless $callback_url =~ m{\/$};
-    $callback_url .= "api3/pagseguro";
+    my $callback_url;
+    if ($gateway eq 'pagseguro') {
+        $callback_url = $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL};
+        $callback_url .= "/" unless $callback_url =~ m{\/$};
+        $callback_url .= "api3/pagseguro";
+    }
+    else {
+		$callback_url = $ENV{VOTOLEGAL_PAGSEGURO_CALLBACK_URL};
+		$callback_url .= "/" unless $callback_url =~ m{\/$};
+		$callback_url .= "api3/iugu";
+    }
+
 
     return $callback_url;
 }
@@ -571,6 +591,18 @@ sub has_amount_data {
     # Pagseguro.
 
     return $self->gross_amount ? 1 : 0;
+}
+
+sub create_log_success {
+    my ($self) = @_;
+
+    return $self->payment_logs->create( { status => 'captured' } );
+}
+
+sub create_log_refused {
+	my ($self) = @_;
+
+	return $self->payment_logs->create( { status => 'refused' } );
 }
 
 __PACKAGE__->meta->make_immutable;
