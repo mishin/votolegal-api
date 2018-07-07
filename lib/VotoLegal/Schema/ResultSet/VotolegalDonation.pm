@@ -187,9 +187,10 @@ sub verifiers_specs {
                         my $date = $_[0]->get_value('birthdate');
                         return 1 if !$date;
 
-                        return 0 if $date !~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+                        return 0 if $date !~ /^(19|20)[0-9]{2}-[0-9]{2}-[0-9]{2}$/;
 
-                        my $dt = DateTime::Format::Pg->parse_datetime($date);
+                        my $dt = eval{DateTime::Format::Pg->parse_datetime($date)};
+                        return 0 if $@;
 
                         my $duration = DateTime->now->subtract_datetime($dt);
 
