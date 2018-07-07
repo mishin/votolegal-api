@@ -18,8 +18,8 @@ BEGIN {
         die "Missing IUGU_API_KEY"                      unless $ENV{IUGU_API_KEY};
         die "Missing IUGU_ACCOUNT_ID"                   unless $ENV{IUGU_ACCOUNT_ID};
         die "Missing IUGU_API_URL"                      unless $ENV{IUGU_API_URL};
-		die "Missing VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID" unless $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
-		die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+        die "Missing VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID" unless $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
         $ENV{IUGU_MOCK} = 0;
     }
@@ -43,6 +43,7 @@ sub _build_ua {
 
     Furl->new(
         timeout => 30,
+
         # headers => [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ) ]
     );
 
@@ -63,40 +64,46 @@ sub create_invoice {
     # E alguns dados obrigatórios também são diferentes
     my @required_opts;
     my $headers;
+    my ( $acc, $pass );
     if ( $opts{is_votolegal_payment} ) {
-        $ENV{IUGU_ACCOUNT_ID} = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
-        $ENV{IUGU_API_KEY}    = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+        $acc  = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        $pass = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
-		@required_opts = qw/
-		  candidate_id
+        @required_opts = qw/
+          candidate_id
           due_date
-		  is_boleto
-		  payer
-		  description
-		  amount
-		/;
+          is_boleto
+          payer
+          description
+          amount
+          /;
     }
     else {
-		@required_opts = qw/
-		  due_date
-		  donation_id
-		  is_boleto
-		  payer
-		  description
-		  amount
-		/;
+
+        $acc  = $ENV{IUGU_ACCOUNT_ID};
+        $pass = $ENV{IUGU_API_KEY};
+
+        @required_opts = qw/
+          due_date
+          donation_id
+          is_boleto
+          payer
+          description
+          amount
+          /;
     }
 
-    $headers = [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ), 'Content-Type' => "application/json" ];
+    $headers = [ Authorization => 'Basic ' . encode_base64( $pass . ':' ), 'Content-Type' => "application/json" ];
 
     defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
-    if ($opts{is_votolegal_payment}) {
-		Log::Log4perl::NDC->push( "create_invoice votolegal_license candidate_id=" . $opts{candidate_id} . '  ' );
-    } else {
+    if ( $opts{is_votolegal_payment} ) {
+        Log::Log4perl::NDC->push( "create_invoice votolegal_license candidate_id=" . $opts{candidate_id} . '  ' );
+    }
+    else {
         Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
     }
 
@@ -106,7 +113,7 @@ sub create_invoice {
         if ( !$opts{is_boleto} ) {
             $logger->info("validating two_step_transaction...");
 
-            my $res = $self->ua->get( $self->uri_for( 'accounts', $ENV{IUGU_ACCOUNT_ID} ), $headers );
+            my $res = $self->ua->get( $self->uri_for( 'accounts', $acc ), $headers );
 
             my $json = decode_json( $res->decoded_content )
               or croak 'create_invoice failed';
@@ -118,7 +125,8 @@ sub create_invoice {
 
     }
 
-    my $invoice_email = $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
+    my $invoice_email =
+      $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
     $post_url = $self->uri_for('invoices');
     $data     = {
         email        => $invoice_email,
@@ -194,22 +202,29 @@ sub capture_invoice {
     my @required_opts;
     my $headers;
 
-    if ( $opts{is_votolegal_payment} ) {
-		$ENV{IUGU_API_KEY} = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+    my ( $acc, $pass );
 
-		@required_opts = qw/
-		    id
-            candidate_id
-        /;
+    if ( $opts{is_votolegal_payment} ) {
+        $acc  = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        $pass = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+
+        @required_opts = qw/
+          id
+          candidate_id
+          /;
     }
     else {
-		@required_opts = qw/
-		    id
-            donation_id
-        /;
+
+        $acc  = $ENV{IUGU_ACCOUNT_ID};
+        $pass = $ENV{IUGU_API_KEY};
+
+        @required_opts = qw/
+          id
+          donation_id
+          /;
     }
 
-	$headers = [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ), 'Content-Type' => "application/json" ];
+    $headers = [ Authorization => 'Basic ' . encode_base64( $pass . ':' ), 'Content-Type' => "application/json" ];
 
     defined $opts{$_} or croak "missing $_" for @required_opts;
 
@@ -217,7 +232,7 @@ sub capture_invoice {
     Log::Log4perl::NDC->remove();
 
     if ( $opts{is_votolegal_payment} ) {
-		Log::Log4perl::NDC->push( "capture_invoice votolegal license candidate_id=" . $opts{candidate_id} . '  ' );
+        Log::Log4perl::NDC->push( "capture_invoice votolegal license candidate_id=" . $opts{candidate_id} . '  ' );
     }
     else {
         Log::Log4perl::NDC->push( "capture_invoice donation_id=" . $opts{donation_id} . '  ' );
@@ -257,6 +272,20 @@ sub get_invoice {
       donation_id
       /;
 
+    my ( $acc, $pass );
+
+    if ( $opts{is_votolegal_payment} ) {
+        $acc  = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        $pass = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+
+    }
+    else {
+        $acc  = $ENV{IUGU_ACCOUNT_ID};
+        $pass = $ENV{IUGU_API_KEY};
+    }
+
+    my $headers = [ Authorization => 'Basic ' . encode_base64( $pass . ':' ), 'Content-Type' => "application/json" ];
+
     my ( $data, $body, $post_url );
     Log::Log4perl::NDC->remove();
 
@@ -271,7 +300,7 @@ sub get_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->get($post_url);
+        my $res = $self->ua->get( $post_url, $headers );
         $logger->info( "Iugu response: " . $res->decoded_content );
 
         croak 'get_invoice failed' unless $res->code == 200;
