@@ -209,7 +209,6 @@ sub create_and_capture_iugu_invoice {
 			candidate_id         => $self->candidate_id
 		);
 
-
         if ($payment_execution->{paid}) {
             $candidate->update(
                 {
@@ -217,11 +216,32 @@ sub create_and_capture_iugu_invoice {
                     payment_status => 'paid'
                 }
             );
+
+			$self->result_source->schema->resultset("PaymentLog")->create(
+				{
+					payment_id => $self->id,
+					status     => 'captured'
+				}
+			);
+        } else {
+			$self->result_source->schema->resultset("PaymentLog")->create(
+				{
+					payment_id => $self->id,
+					status     => 'failed'
+				}
+			);
         }
 
         $ret = $payment_execution;
     }
     else {
+		$self->result_source->schema->resultset("PaymentLog")->create(
+			{
+				payment_id => $self->id,
+				status     => 'analysis'
+			}
+		);
+
         $ret = $invoice;
     }
 
