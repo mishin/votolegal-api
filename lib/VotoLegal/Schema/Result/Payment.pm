@@ -192,6 +192,10 @@ sub create_and_capture_iugu_invoice {
         ( $is_boleto ? ( notification_url => $self->build_callback_url('iugu') ) : () )
     );
 
+    if ( $invoice->{_charge_response_} && $invoice->{_charge_response_}->{success} eq 'false' ) {
+        die_with 'could not create charge right now';
+    }
+
     $self->update( { code => $invoice->{id} } );
 
 	$self->result_source->schema->resultset("PaymentLog")->create(
