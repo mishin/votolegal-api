@@ -184,7 +184,9 @@ sub create_invoice {
             $logger->info( "Iugu response: " . $res->decoded_content );
 
             my $json = decode_json( $res->decoded_content ) or croak "$post_url decode failed";
-            croak "cannot create charge right now" if keys %{ $json->{errors} || {} };
+            if ( ( keys %{ $json->{errors} || {} } ) || $json->{success} eq 'false' ) {
+                croak "cannot create charge right now";
+            }
 
             $invoice->{_charge_response_} = $json;
         }
