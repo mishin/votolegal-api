@@ -86,6 +86,7 @@ __PACKAGE__->has_many(
 
 use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
+use VotoLegal::Dieable;
 use WebService::IuguForReal;
 
 use JSON::MaybeXS;
@@ -230,6 +231,8 @@ sub create_and_capture_iugu_invoice {
 					status     => 'failed'
 				}
 			);
+
+            die_with 'payment not authorized';
         }
 
         $ret = $payment_execution;
