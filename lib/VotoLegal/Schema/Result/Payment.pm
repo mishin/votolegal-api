@@ -209,8 +209,9 @@ sub create_and_capture_iugu_invoice {
 			id                   => $invoice->{id},
 			candidate_id         => $self->candidate_id
 		);
+        die_with 'payment not authorized' unless $payment_execution->{status} eq 'paid';
 
-        if ($payment_execution->{paid}) {
+        if ( $payment_execution->{status} eq 'paid' ) {
             $candidate->update(
                 {
                     status         => 'activated',
@@ -232,7 +233,6 @@ sub create_and_capture_iugu_invoice {
 				}
 			);
 
-            die_with 'payment not authorized';
         }
 
         $ret = $payment_execution;
