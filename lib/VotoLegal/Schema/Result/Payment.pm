@@ -193,7 +193,7 @@ sub create_and_capture_iugu_invoice {
     );
 
     if ( $invoice->{_charge_response_} && $invoice->{_charge_response_}{'success'} eq 'false' ) {
-        die \['message', 'could not create charge right now'] ;
+        die \['message', 'transaction not authorized, check your data.'] ;
     }
 
     $self->update( { code => $invoice->{id} } );
