@@ -293,10 +293,14 @@ use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Mailer::Template;
 use MooseX::Types::CNPJ qw(CNPJ);
 use Data::Section::Simple qw(get_data_section);
-use HTTP::Async;
+use Furl;
 
 with 'VotoLegal::Role::Verification';
 with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
+
+has furl => ( is => "rw", isa => "Furl", builder => '_build_furl', lazy => 1, );
+
+sub _build_furl { Furl->new( headers => [ 'user' => $ENV{JENKINS_AUTH} ] ) }
 
 sub address_state_code {
     my $self = shift;
@@ -814,11 +818,8 @@ sub action_specs {
                         || $values{twitter_url}
                         || $values{image} )
                   ) {
-                    my $async  = HTTP::Async->new;
-                    my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
-                    my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
-
-                    my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
+                    my $url = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
+                    my $res = $self->furl->post( $url );
                 }
 
                 my @required = qw(
@@ -852,11 +853,9 @@ sub action_specs {
             }
 
             if ( $ENV{IUGU_API_TEST_MODE} == 0 ) {
-                my $async  = HTTP::Async->new;
                 my $url    = 'http://ourjenkins.eokoe.com/job/votolegal.com.br/build';
-                my $header = [ 'user' => "automatizador:7ac6d76bf245feab610f8cb1b2a59bde" ];
 
-                my $res = $async->add( HTTP::Request->new( 'POST', $url, $header ) );
+                my $res = $self->furl->post($url);
             }
 
             # Não é possível publicar um candidato que não foi aprovado.
