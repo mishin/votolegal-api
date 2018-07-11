@@ -78,6 +78,9 @@ sub register_POST {
     elsif ( $candidate->party_id == 4 ) {
         $value = '396.00';
     }
+	elsif ( $candidate->party_id == 15 ) {
+		$value = '346.50';
+	}
     else {
         $value = '495.00';
     }
