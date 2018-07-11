@@ -318,7 +318,7 @@ __DATA__
 <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse:separate; border-radius:7px; margin:0">
 <tbody>
 <tr>
-<td align="center" valign="middle"><a href="https://gallery.mailchimp.com/d3a90e0e7418b8c4e14997e44/files/e8e9b6f1-5dd8-41ea-812f-1794f4d2c022/contract_v2_2018_21_05.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
+<td align="center" valign="middle"><a href="https://participe.votolegal.com.br/files/ContratoentreVotoLegaleCandidato.pdf" target="_blank" class="x_btn" style="background:#4ab957; border-radius:8px; color:#ffffff; font-family:'Montserrat',Arial,sans-serif; font-size:15px; padding:16px 24px 15px 24px; text-decoration:none; text-transform:uppercase"><strong>BAIXAR CONTRATO</strong></a></td>
 </tr>
 </tbody>
 </table>
