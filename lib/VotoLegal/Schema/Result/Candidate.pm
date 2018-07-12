@@ -255,6 +255,12 @@ __PACKAGE__->has_many(
   { "foreign.candidate_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+__PACKAGE__->has_many(
+  "testimonies",
+  "VotoLegal::Schema::Result::Testimony",
+  { "foreign.candidate_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 __PACKAGE__->belongs_to(
   "use_certiface_return_url",
   "VotoLegal::Schema::Result::CertifaceReturnUrl",
@@ -280,8 +286,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-02 17:42:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+i+jIrBy2StcDNlth6+Rug
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-12 11:41:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ATmtWwx0iRbEKEqJ+m9ugg
 
 use File::Temp q(:seekable);
 use Data::Verifier;
@@ -1232,6 +1238,23 @@ sub approve_payment {
             payment_status => 'paid'
         }
     );
+}
+
+sub get_testimonies {
+    my ($self) = @_;
+
+    return [
+        map {
+            my $t = $_;
+
+			+{
+                id               => $t->id,
+                reviewer_name    => $t->reviewer_name,
+                reviewer_picture => $t->reviewer_picture,
+                reviewer_text    => $t->reviewer_text,
+			}
+        } $self->testimonies->search( { active => 1 } )->all()
+    ]
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

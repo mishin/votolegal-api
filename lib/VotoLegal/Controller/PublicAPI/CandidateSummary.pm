@@ -96,6 +96,7 @@ sub candidate_GET {
     $candidate->{total_donated}              = $c->stash->{candidate}->total_donated();
     $candidate->{total_donated_by_votolegal} = $c->stash->{candidate}->total_donated_by_votolegal();
     $candidate->{people_donated}             = $c->stash->{candidate}->people_donated();
+    $candidate->{testimonies}                = $c->stash->{candidate}->get_testimonies();
 
     # nao sei o que eh isso, acho que nao aparece mais na tela
     # $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
