@@ -46,11 +46,20 @@ sub donate_GET {
     my $candidate = $c->stash->{candidate};
     my $summary   = $candidate->candidate_donation_summary;
 
+    my $raising_goal = $candidate->raising_goal;
+
+	if ( $raising_goal ) {
+		$raising_goal *= 100;
+	}
+    else {
+		$raising_goal = 100000;
+	}
+
 	return $self->status_ok(
 		$c,
 		entity => {
             candidate => {
-				raising_goal               => $candidate->raising_goal,
+				raising_goal               => $raising_goal,
 				total_donated_by_votolegal => $summary->amount_donation_by_votolegal,
 				count_donated_by_votolegal => $summary->count_donation_by_votolegal,
                 generated_at               => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
