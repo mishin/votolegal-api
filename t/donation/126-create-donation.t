@@ -155,6 +155,18 @@ db_transaction {
         is @{ $me->{names} }, '2', '2 names';
     };
 
+	rest_get [ '/public-api/candidate-donations-summary/' . stash 'candidate.id' ],
+	  code  => 200,
+	  stash => 'res';
+
+	stash_test 'res', sub {
+		my ($me) = @_;
+
+		is( $me->{candidate}->{count_donated_by_votolegal}, 2,    '2 donations' );
+		is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
+		ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
+	};
+
 };
 
 done_testing();
