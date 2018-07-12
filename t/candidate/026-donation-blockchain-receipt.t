@@ -43,7 +43,6 @@ db_transaction {
     ok(
         $donation->update(
             {
-                decred_data_raw    => undef,
                 decred_data_digest => 'f66840734ffb8d2cbee837754ae150a4ba378391a15036bf6b81298b1e8a3f26',
             }
         ),

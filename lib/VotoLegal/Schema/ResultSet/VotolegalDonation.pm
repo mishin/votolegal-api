@@ -360,6 +360,8 @@ sub action_specs {
 
             my $donation = $self->_create_donation( config => $config, values => \%values, fp => $fingerprint );
 
+            $donation->upsert_decred_data();
+
             return $donation;
         },
 
