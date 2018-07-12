@@ -3,8 +3,6 @@ use common::sense;
 use Moose;
 use namespace::autoclean;
 
-use WebService::Dcrtime;
-
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 sub root : Chained('/publicapi/candidate/object') : PathPart('') : CaptureArgs(0) {
