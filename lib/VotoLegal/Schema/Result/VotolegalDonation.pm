@@ -334,7 +334,7 @@ sub _create_invoice {
             $subject = 'Voto Legal - Boleto gerado';
         }
         elsif ( $emaildb_config_id == 2 ) {
-            $subject = 'Somos Rede - Boleto gerado';
+            $subject = 'Pré-Campanha Marina Silva - Boleto gerado';
         }
         else {
             $subject = 'Campanha PSOL - Boleto gerado';
@@ -469,6 +469,33 @@ sub set_boleto_paid {
         {
             config_id => $self->candidate->emaildb_config_id,
             template  => 'captured.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $subject,
+            variables => encode_json( $self->as_row_for_email_variable() ),
+        }
+    );
+}
+
+sub send_boleto_expired_email {
+	my ($self) = @_;
+
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Boleto expirado';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+        $subject = 'Pr&#xE9;-campanha - Boleto expirado';
+    }
+    else {
+        $subject = 'Campanha PSOL - Boleto expirado';
+    }
+
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'boleto_expired.html',
             to        => $self->votolegal_donation_immutable->donor_email,
             subject   => $subject,
             variables => encode_json( $self->as_row_for_email_variable() ),
@@ -624,6 +651,33 @@ sub send_decred_email {
         }
     );
 
+}
+
+sub send_cc_refused_email {
+    my ($self) = @_;
+
+	my $emaildb_config_id = $self->candidate->emaildb_config_id;
+	my $subject;
+
+    if ( $emaildb_config_id == 1 ) {
+        $subject = 'Voto Legal - Doação não autorizada';
+    }
+    elsif ( $emaildb_config_id == 2 ) {
+		$subject = 'Pré-campanha Marina Silva - Pagamento rejeitado';
+    }
+    else {
+        $subject = 'Campanha PSOL - Doação não autorizada';
+    }
+
+	$self->result_source->schema->resultset('EmaildbQueue')->create(
+		{
+			config_id => $self->candidate->emaildb_config_id,
+			template  => 'cc_refused.html',
+			to        => $self->votolegal_donation_immutable->donor_email,
+			subject   => $subject,
+			variables => encode_json( $self->as_row_for_email_variable() ),
+		}
+	);
 }
 
 __PACKAGE__->meta->make_immutable;
