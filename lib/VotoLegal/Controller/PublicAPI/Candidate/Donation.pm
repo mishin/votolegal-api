@@ -44,7 +44,6 @@ sub result_GET {
     my $donation = $c->stash->{donation};
     my $donation_immutable = $donation->votolegal_donation_immutable;
 
-    # TODO  Data da doação; forma de pagamento; dados do candidato (nome, partido, cpf e cnpj);
     return $self->status_ok(
         $c,
         entity => {
@@ -64,7 +63,7 @@ sub result_GET {
                 candidate => {
                     (
                         map { $_ => $donation->candidate->get_column($_) }
-                        qw/ id popular_name party_id cpf cnpj /
+                        qw/ id popular_name party_id cpf cnpj picture avatar /
                     ),
                     party => {
                         map { $_ => $donation->candidate->party->get_column($_) }
