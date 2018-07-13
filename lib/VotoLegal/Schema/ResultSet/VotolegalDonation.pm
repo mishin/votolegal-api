@@ -2,10 +2,11 @@ package VotoLegal::Schema::ResultSet::VotolegalDonation;
 use common::sense;
 use Moose;
 use namespace::autoclean;
-use File::Slurper 'read_text';
-extends 'DBIx::Class::ResultSet';
 
+extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Role::Verification';
+
+use File::Slurper 'read_text';
 use Email::Valid;
 use Data::Verifier;
 use Business::BR::CEP qw(test_cep);
@@ -13,13 +14,13 @@ use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 use VotoLegal::Utils;
 use DateTime::Format::Pg;
 use DateTime;
-
+use FindBin qw($RealBin);
 use JSON qw/to_json from_json/;
 use MIME::Base64;
 use Text::CSV;
 use File::Temp ':seekable';
 use Time::HiRes;
-
+use Cwd qw(chdir);
 use UUID::Tiny qw/is_uuid_string/;
 
 my $lr_code_table;
@@ -532,6 +533,7 @@ sub _create_donation {
 }
 
 sub get_git_hash {
+    chdir $RealBin;
     my $git_hash = `git rev-parse HEAD`;
     $git_hash =~ s/^\s+|\s+$//g;
 
