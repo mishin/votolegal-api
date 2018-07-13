@@ -55,6 +55,23 @@ sub donate_GET {
 		$raising_goal = 100000;
 	}
 
+    my $today_donations = $candidate->votolegal_donations->search(
+        {
+            created_at  => { '>=' => \'current_date::timestamp' },
+            captured_at => { '!=' => undef },
+            refunded_at => undef,
+        },
+        {
+            columns => [
+                { count_donated_by_votolegal => \'count(1)' },
+                { total_donated_by_votolegal => \'sum( votolegal_donation_immutable.amount )' },
+            ],
+            join         => 'votolegal_donation_immutable',
+            result_class => "DBIx::Class::ResultClass::HashRefInflator",
+
+        }
+    )->next;
+
 	return $self->status_ok(
 		$c,
 		entity => {
@@ -63,6 +80,11 @@ sub donate_GET {
 				total_donated_by_votolegal => $summary->amount_donation_by_votolegal,
 				count_donated_by_votolegal => $summary->count_donation_by_votolegal,
                 generated_at               => DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime()
+            },
+            today => {
+				raising_goal               => $raising_goal,
+				total_donated_by_votolegal => $today_donations->{total_donated_by_votolegal},
+				count_donated_by_votolegal => $today_donations->{count_donated_by_votolegal}
             }
 		}
 	);
