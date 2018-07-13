@@ -280,7 +280,22 @@ sub verifiers_specs {
                         $_[0]->get_value('payment_method') =~ /^(credit_card|boleto)$/;
                     },
                 },
+                referral_code => {
+                    required   => 0,
+                    type       => 'Str',
+                    post_check => sub {
+                        my $referral_code = $_[0]->get_value('referral_code');
 
+                        my $referral = $self->resultset('Referral')->find_or_create(
+                            {
+                                candidate_id => $_[0]->get_value('candidate_id'),
+                                code         => $referral_code
+                            }
+                        );
+
+                        return 1 if $referral;
+                    }
+                }
             },
         ),
     };

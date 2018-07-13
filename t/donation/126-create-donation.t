@@ -49,6 +49,7 @@ db_transaction {
         payment_method                => 'credit_card',
         cpf                           => $cpf,
         amount                        => 3000,
+        referral_code                 => 'foobar'
       };
     my $id_donation_of_3k = $response->{donation}{id};
 
