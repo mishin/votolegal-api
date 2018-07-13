@@ -100,7 +100,7 @@ sub donations_more_GET {
 
     my ( $captured_at, $created_at ) = split /\*/, $timestamps;
 
-    my $op = is_test() ? '<' : '<=';
+    my $op = '<';
     my @donations = $c->stash->{donations_rs}->search(
         {
             # capture precisao de segundos, entao pode trazer os que sao iguais
