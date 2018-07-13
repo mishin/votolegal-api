@@ -11,7 +11,7 @@ sub root : Chained('/publicapi/candidate/object') : PathPart('') : CaptureArgs(0
     $c->stash->{collection} = $c->model('DB::VotolegalDonation')->search(
         { 'me.refunded_at' => undef },
         {
-            prefetch   => [ 'votolegal_donation_immutable', { candidate => 'party' } ],
+            prefetch   => [ 'votolegal_donation_immutable', { candidate => 'party' }, { candidate => 'office' } ],
             '+columns' => [
                 { captured_at_human => \"TIMEZONE('America/Sao_Paulo', TIMEZONE('UTC', me.captured_at))" },
                 { payment_method_human => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
@@ -68,6 +68,10 @@ sub result_GET {
                     party => {
                         map { $_ => $donation->candidate->party->get_column($_) }
                         qw/ id name acronym /
+                    },
+                    office => {
+                        map { $_ => $donation->candidate->office->get_column($_) }
+                        qw/ id name /
                     },
                 },
             },

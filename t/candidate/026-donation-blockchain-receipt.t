@@ -58,8 +58,9 @@ db_transaction {
     stash_test 'donation' => sub {
         my $res = shift;
 
-        is( ref $res->{donation}->{candidate},          'HASH', 'candidate' );
-        is( ref $res->{donation}->{candidate}->{party}, 'HASH', 'party'     );
+        is( ref $res->{donation}->{candidate},           'HASH', 'candidate' );
+        is( ref $res->{donation}->{candidate}->{party},  'HASH', 'party'     );
+        is( ref $res->{donation}->{candidate}->{office}, 'HASH', 'office'    );
 
         is( $res->{donation}->{amount}, 3000, 'amount=3000' );
         ok( defined $res->{donation}->{payment_method_human}, 'payment method' );
