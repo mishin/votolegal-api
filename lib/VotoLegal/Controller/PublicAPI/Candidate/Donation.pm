@@ -44,6 +44,8 @@ sub result_GET {
     my $donation = $c->stash->{donation};
     my $donation_immutable = $donation->votolegal_donation_immutable;
 
+    my $git_hash = $donation_immutable->get_column('git_hash');
+
     return $self->status_ok(
         $c,
         entity => {
@@ -58,7 +60,7 @@ sub result_GET {
                     qw/ donor_name donor_cpf git_hash amount /
                 ),
 
-                git_url => 'https://github.com/AppCivico/votolegal-api/tree/' . $donation_immutable->get_column('git_hash'),
+                git_url => defined($git_hash) ? 'https://github.com/AppCivico/votolegal-api/tree/' . $git_hash : undef,
 
                 candidate => {
                     (
