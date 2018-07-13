@@ -189,10 +189,10 @@ sub _upload_picture {
         $avatar_tempname =~ s/$extension/_resized$extension/;
     }
 
-    my $avatar = `convert $tempname -resize 180x180 $avatar_tempname`;
-
     die \[ 'picture', 'empty file' ]    unless $upload->size > 0;
     die \[ 'picture', 'invalid image' ] unless $mimetype =~ m{^image\/};
+
+    my $avatar = `convert $tempname -resize 180x180 $avatar_tempname`;
 
     my $path        = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $tempname;
     my $avatar_path = join "/", "votolegal", "picture", random_string(3), DateTime->now->epoch, $avatar_tempname;
