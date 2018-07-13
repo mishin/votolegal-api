@@ -147,6 +147,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 $votolegal_donation->{created_at_human},
                 $votolegal_donation->{captured_at_human},
                 $votolegal_donation->{refunded_at_human},
+                $votolegal_donation->{status},
                 $votolegal_donation->{motive},
                 $votolegal_donation->{referral_code}
             ]
