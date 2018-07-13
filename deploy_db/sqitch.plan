@@ -148,3 +148,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0142-add-jenkins_auth-env [0141-sender_hash-set-not-null] 2018-07-11T20:09:40Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'JENKINS_AUTH' env
 0143-add-testimony [0142-add-jenkins_auth-env] 2018-07-12T18:27:41Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the testimony table
 0144-adding-one-more-movement [0143-add-testimony] 2018-07-13T16:16:28Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding one row on the 'political_movement' table
+0145-add-referral-table [0144-adding-one-more-movement] 2018-07-13T19:11:01Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'referral' table
