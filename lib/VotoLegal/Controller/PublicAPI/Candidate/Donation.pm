@@ -63,7 +63,7 @@ sub result_GET {
                 candidate => {
                     (
                         map { $_ => $donation->candidate->get_column($_) }
-                        qw/ id popular_name party_id cpf cnpj picture avatar /
+                        qw/ id popular_name party_id cpf cnpj picture avatar color /
                     ),
                     party => {
                         map { $_ => $donation->candidate->party->get_column($_) }
