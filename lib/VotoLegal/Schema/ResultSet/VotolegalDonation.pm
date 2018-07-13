@@ -482,6 +482,7 @@ sub _create_donation {
                     device_authorization_token_id => $values{device_authorization_token_id},
                     is_pre_campaign               => $config->{is_pre_campaign} ? 1 : 0,
                     payment_gateway_id            => $config->{payment_gateway_id},
+                    referral_code                 => $values{referral_code},
 
                     votolegal_fp => $fp->id,
 
