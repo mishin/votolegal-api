@@ -418,7 +418,7 @@ sub get_license_value {
     my $has_promotion;
     my $value;
 
-    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ ) || $candidate->party_id =~ /^(34|26|4|15)$/ ) {
+    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8|9)$/ ) || $candidate->party_id =~ /^(34|26|4|15)$/ ) {
         $has_promotion = 1;
     }
 
@@ -433,6 +433,9 @@ sub get_license_value {
                 }
                 elsif ( $candidate->party_id == 26 ) {
                     $value = '296.00';
+                }
+                elsif ( $candidate->political_movement_id == 9 ) {
+                    $value = '346.50'
                 }
                 else {
                     $value = '395.00';
@@ -488,7 +491,7 @@ sub get_license_value_in_cents {
     my $has_promotion;
     my $value;
 
-    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8)$/ ) || $candidate->party_id =~ /^(34|26|4|15)$/ ) {
+    if ( ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(1|2|3|4|5|8|9)$/ ) || $candidate->party_id =~ /^(34|26|4|15)$/ ) {
         $has_promotion = 1;
     }
 
@@ -503,6 +506,9 @@ sub get_license_value_in_cents {
                 }
                 elsif ( $candidate->party_id == 26 ) {
                     $value = 29600;
+                }
+                elsif ( $candidate->political_movement_id == 9 ) {
+					$value = 34650;
                 }
                 else {
                     $value = 39500;

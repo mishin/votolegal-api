@@ -60,6 +60,9 @@ sub login_POST {
                     if ( $candidate->political_movement_id == 1 ) {
                         $value = '247.50';
                     }
+                    elsif ( $candidate->political_movement_id == 9 ) {
+                        $value = '246.50';
+                    }
                     elsif ( $candidate->party_id == 26 ) {
                         $value = '297.00';
                     }
