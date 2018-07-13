@@ -115,7 +115,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
               DATA_DE_ESTORNO
               STATUS
               MOTIVO
-              COD_REFERRAL
+              REF
               )
         ]
     );
