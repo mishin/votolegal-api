@@ -91,8 +91,6 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
   "procob_tested",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
-  "referral_code",
-  { data_type => "text", is_foreign_key => 1, is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -125,17 +123,6 @@ __PACKAGE__->has_many(
   { "foreign.votolegal_donation_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
-__PACKAGE__->belongs_to(
-  "referral_code",
-  "VotoLegal::Schema::Result::Referral",
-  { code => "referral_code" },
-  {
-    is_deferrable => 0,
-    join_type     => "LEFT",
-    on_delete     => "NO ACTION",
-    on_update     => "NO ACTION",
-  },
-);
 __PACKAGE__->might_have(
   "votolegal_donation_immutable",
   "VotoLegal::Schema::Result::VotolegalDonationImmutable",
@@ -155,8 +142,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 15:50:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dyFYzk6lBgJG+Q69sgAzOw
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 16:45:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1+YHK+MEW95tBwtKGZSNcQ
 
 use Encode;
 use Carp;

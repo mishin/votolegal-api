@@ -35,15 +35,15 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 __PACKAGE__->has_many(
-  "votolegal_donations",
-  "VotoLegal::Schema::Result::VotolegalDonation",
+  "votolegal_donation_immutables",
+  "VotoLegal::Schema::Result::VotolegalDonationImmutable",
   { "foreign.referral_code" => "self.code" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 15:50:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OHL05NApIv2rYs4piDkUjg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 16:45:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:crDJGRvELadELkq9Ru+k1Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
