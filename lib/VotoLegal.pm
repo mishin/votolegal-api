@@ -5,6 +5,7 @@ use namespace::autoclean;
 use Catalyst::Runtime 5.80;
 use Data::Dumper qw/Dumper/;
 use VotoLegal::Utils qw/remote_notify/;
+use Storable qw/dclone/;
 
 BEGIN {
     use VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/;
@@ -91,6 +92,25 @@ sub build_api_error {
     $err{reason}     = $args{reason}     if exists $args{reason};
 
     return \%err;
+}
+
+sub log_request_parameters {
+    my $c = shift;
+    my %params = @_;
+
+    if ( !exists($c->req->params->{password}) ) {
+        return $c->SUPER::log_request_parameters(@_);
+    }
+
+    my $params = dclone(\%params) || {};
+
+    for (qw/ body query /) {
+        if (ref $params->{$_} && exists( $params->{$_}->{password} )) {
+            $params->{$_}->{password} = '***********';
+        }
+    }
+
+    return $c->SUPER::log_request_parameters( %{ $params } );
 }
 
 1;
