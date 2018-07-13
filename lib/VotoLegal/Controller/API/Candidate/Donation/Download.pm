@@ -69,7 +69,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                     refunded_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
-				{ referral_code        => 'me.referral_code' },
+				{ referral_code        => 'votolegal_donation_immutable.referral_code' },
 
 
                 @$extra_cols

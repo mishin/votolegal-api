@@ -145,7 +145,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { address_district     => 'votolegal_donation_immutable.billing_address_district' },
                 { transaction_hash     => 'me.decred_capture_txid' },
                 { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
-                { referral_code        => 'me.referral_code' },
+                { referral_code        => 'votolegal_donation_immutable.referral_code' },
                 { id                   => 'me.id' },
 
                 { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
