@@ -392,11 +392,12 @@ sub _process_waiting_boleto_payment {
     if ( $info->{status} eq 'paid' ) {
         $stash->{value} = 'boleto_paid';
     }
-    elsif ( $info->{status} eq 'expired' ) {
-        $stash->{value} = 'boleto_expired';
+    # TOOD testar
+    #elsif ( $info->{status} eq 'expired' ) {
+    #    $stash->{value} = 'boleto_expired';
 
-        $donation->send_boleto_expired_email();
-    }
+     #   $donation->send_boleto_expired_email();
+    #}
 
 }
 
