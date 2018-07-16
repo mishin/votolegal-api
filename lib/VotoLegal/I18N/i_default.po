@@ -180,3 +180,15 @@ msgstr "donation_id invalido"
 
 msgid "msg_refunded_message"
 msgstr "Esta doação foi devolvida"
+
+msgid "msg_boleto_2_message"
+msgstr "Obrigado pela sua doação! Esse sonho só é possível com você!<br>Assim que o pagamento for confirmado pelo banco, seu nome aparecerá entre os doadores e te enviaremos por e-mail um recibo provisório e algumas informações importantes. Compartilhe seu gesto com os amigos. Vamos trazer cada vez mais pessoas para essa campanha. Enquanto isso, queremos saber mais sobre você e o que você quer para a cidade. Isso vai nos ajudar muito e leva poucos minutos."
+
+msgid "feedback_form_text_2"
+msgstr "RESPONDER PESQUISA"
+
+msgid "feedback_form_url_2"
+msgstr "https://eokoe2.typeform.com/to/iyaBER"
+
+msgid "msg_cc_paid_message_2"
+msgstr ""
