@@ -16,7 +16,8 @@ db_transaction {
     create_candidate(
         name          => $name,
         username      => $username,
-        popular_name  => 'foobar'
+        popular_name  => 'foobar',
+        office_id     => fake_int(5, 6)->()
     );
 
     my $candidate_id = stash "candidate.id";

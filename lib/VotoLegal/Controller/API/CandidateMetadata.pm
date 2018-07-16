@@ -73,6 +73,7 @@ sub candidate_GET {
                             'me.name'     => { 'NOT ILIKE' => '%Edgard Lobo%' },
                             'me.username' => { 'NOT ILIKE' => '%campanharede%' },
                             'me.username' => { 'NOT ILIKE' => '%campanhapsol%' },
+                            'me.office_id' => { '!=' => '4' },
                             ( $donations ? ('candidate_donation_summary.amount_donation_by_votolegal' => { '>' => $donations }) : () )
                           ]
                     },
