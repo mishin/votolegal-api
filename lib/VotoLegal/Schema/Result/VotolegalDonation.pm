@@ -486,7 +486,7 @@ sub send_boleto_expired_email {
         $subject = 'Voto Legal - Boleto expirado';
     }
     elsif ( $emaildb_config_id == 2 ) {
-        $subject = 'Pr&#xE9;-campanha - Boleto expirado';
+        $subject = 'Pr&#xE9;-campanha Marina Silva - Boleto expirado';
     }
     else {
         $subject = 'Campanha PSOL - Boleto expirado';

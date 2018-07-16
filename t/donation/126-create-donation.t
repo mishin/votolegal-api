@@ -231,6 +231,17 @@ sub test_boleto {
     is links2str $response,    'msg_boleto_link',    'there is a link';
     assert_current_step('waiting_boleto_payment');
 
+    # Testando boleto expirado
+    db_transaction {
+        setup_failed_mock_iugu_boleto;
+		$response = rest_get $donation_url,
+		  name   => "get donation boleto",
+		  params => { device_authorization_token_id => stash 'test_auth', };
+        assert_current_step('boleto_expired');
+
+    	is($schema->resultset("EmaildbQueue")->count, 3, 'Boleto created and expired are queued');
+    };
+
     setup_sucess_mock_iugu_boleto_success;
 
     is ($schema->resultset("EmaildbQueue")->count, 2, 'Boleto created and captured emails are queued');
