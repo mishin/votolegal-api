@@ -318,15 +318,15 @@ sub _messages_of_state {
                 type => 'msg',
                 text => $donation->is_boleto ? $loc->('msg_boleto_paid_message') : ( $candidate_config_id == 2 ? $loc->('msg_cc_paid_message_2') : $loc->('msg_cc_paid_message') ),
             },
-            # ( $candidate_config_id == 2 ?
-            #   (
-            #       {
-            #           type => 'link',
-            #           text => $loc->('feedback_form_text_2'),
-            #           href => $loc->('feedback_form_url_2')
-            #       }
-            #   ) : ( )
-            # )
+            ( $candidate_config_id == 2 ?
+              (
+                  {
+                      type => 'link',
+                      text => $loc->('feedback_form_text_2'),
+                      href => $loc->('feedback_form_url_2')
+                  }
+              ) : ( )
+            )
         );
 
     }
