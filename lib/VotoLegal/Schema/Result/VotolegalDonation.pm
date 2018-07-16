@@ -168,7 +168,7 @@ sub as_row {
 
     my $immu = $donation->votolegal_donation_immutable;
     my $ret  = {
-        ( map { $_ => $donation->$_ } qw/id/ ),
+        ( map { $_ => $donation->$_ } qw/id state/ ),
         donor => {
             name => $immu->donor_name,
             cpf  => $immu->get_column('donor_cpf'),
