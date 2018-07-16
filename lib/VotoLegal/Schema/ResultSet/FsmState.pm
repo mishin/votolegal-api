@@ -492,6 +492,8 @@ sub _process_start_cc_payment {
 
         $stash->{value} = 'cc_not_authorized';
 
+        $donation->send_cc_refused_email();
+
         $stash->{messages} = [
             {
                 type => 'msg',
