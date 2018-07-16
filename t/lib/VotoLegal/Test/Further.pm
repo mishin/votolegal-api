@@ -884,6 +884,12 @@ sub setup_sucess_mock_iugu {
 
 }
 
+sub setup_sucess_mock_iugu_chargeback {
+    setup_sucess_mock_iugu();
+
+    $iugu_invoice_response->{status} = 'chargeback';
+}
+
 sub setup_sucess_mock_iugu_boleto_success {
 
     $iugu_invoice_response = {

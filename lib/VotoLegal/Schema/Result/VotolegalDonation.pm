@@ -406,7 +406,7 @@ sub sync_gateway_status {
         $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 
         # se foi paga, nao precisamos mais ficar verificando todo dia
-        if ( $payment_info->{status} =~ /paid/ ) {
+        if ( $payment_info->{status} =~ /(paid|chargeback|refunded|canceled)/ ) {
             $next_check = 'infinity';
         }
 

@@ -89,6 +89,19 @@ db_transaction {
       code   => 200,
       params => { device_authorization_token_id => stash 'test_auth', };
     is messages2str $response, 'msg_cc_paid_message', 'apenas msg final';
+
+    db_transaction {
+        setup_sucess_mock_iugu_chargeback;
+
+
+        $response = rest_get $donation_url,
+          code   => 200,
+          params => { device_authorization_token_id => stash 'test_auth', };
+        is messages2str $response, 'msg_refunded_message', 'msg_refunded_message';
+
+        assert_current_step('refunded');
+
+    };
     inc_paid_at_seconds;
     &test_boleto;
 

@@ -181,6 +181,15 @@ sub on_state_enter {
 
         $donation->generate_certiface_link();
     }
+    elsif ( $entering_state eq 'refunded' ) {
+
+        my $info = $donation->payment_info_parsed;
+
+        $donation->update({
+            refunded_at => $info->{updated_at_iso}
+        });
+
+    }
 
     else {
         return undef;
@@ -272,6 +281,16 @@ sub _messages_of_state {
         );
 
     }
+    elsif ( $donation->refunded_at ) {
+
+        @messages = (
+            {
+                type => 'msg',
+                text => $loc->('msg_refunded_message'),
+            },
+        );
+
+    }
     elsif ( $donation->captured_at ) {
 
         my $info = $donation->payment_info_parsed;
@@ -341,6 +360,12 @@ sub _process_wait_for_compensation {
     my ( $state, $loc, $donation, $params, $stash ) = @_;
 
     $donation = $donation->sync_gateway_status();
+
+    my $info = $donation->payment_info_parsed;
+
+    if ( $info->{status} eq 'chargeback' ) {
+        $stash->{value} = 'refunded';
+    }
 }
 
 sub _process_certificate_refused {
