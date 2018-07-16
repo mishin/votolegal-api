@@ -191,5 +191,4 @@ msgid "feedback_form_url_2"
 msgstr "https://eokoe2.typeform.com/to/iyaBER"
 
 msgid "msg_cc_paid_message_2"
-msgstr "Obrigado pela sua doação! Esse sonho só é possível com você! Compartilhe seu gesto com os amigos. Vamos trazer cada vez mais pessoas para essa campanha.
-Fique atento ao seu e-mail. Enviaremos um recibo provisório e algumas informações importantes. Enquanto isso, queremos saber mais sobre você e o que você quer para o país. Isso vai nos ajudar muito e leva poucos minutos."
+msgstr "Obrigado pela sua doação! Esse sonho só é possível com você! Compartilhe seu gesto com os amigos. Vamos trazer cada vez mais pessoas para essa campanha. Fique atento ao seu e-mail. Enviaremos um recibo provisório e algumas informações importantes. Enquanto isso, queremos saber mais sobre você e o que você quer para o país. Isso vai nos ajudar muito e leva poucos minutos."
