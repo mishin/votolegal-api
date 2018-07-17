@@ -144,7 +144,12 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { address_zipcode      => 'votolegal_donation_immutable.billing_address_zipcode' },
                 { address_district     => 'votolegal_donation_immutable.billing_address_district' },
                 { transaction_hash     => 'me.decred_capture_txid' },
-                { transaction_link     => \"concat('https://mainnet.decred.org/tx/', me.decred_capture_txid)" },
+                {
+                    transaction_link     => \"concat(
+                        ( SELECT value FROM config WHERE name = 'FRONT_URL' ), '/em/', candidate.username,
+                          '/recibo/', me.decred_data_digest
+                      )"
+                },
                 { referral_code        => 'votolegal_donation_immutable.referral_code' },
                 { id                   => 'me.id' },
 
@@ -153,7 +158,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 @$extra_cols,
 
             ],
-            join     => 'votolegal_donation_immutable',
+            join     => [ 'votolegal_donation_immutable', 'candidate' ],
             order_by => [ { "-$order_by_created_at" => "captured_at" }, { "-$order_by_created_at" => "created_at" } ],
             rows     => $c->stash->{max_rows} + 1,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
@@ -180,6 +185,10 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
         {
             name  => 'not_finalized',
             label => 'Doação não finalizada'
+        },
+        {
+            name  => 'all',
+            label => 'Todas as doaçoes'
         }
     ];
 }
