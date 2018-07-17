@@ -31,7 +31,6 @@ sub timestamp {
     eval {
         retry {
             $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/timestamp/', $headers, encode_json( \%opts ) );
-            use DDP; p $res;
             die $res->decoded_content unless $res->is_success;
         }
         retry_if { shift() < 3 } catch { die $_; };
