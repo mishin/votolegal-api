@@ -4,10 +4,796 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+"CatalystX::Eta::Controller::AutoBase"	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^with "CatalystX::Eta::Controller::AutoBase";$/;"	w
+"CatalystX::Eta::Controller::AutoBase"	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^with "CatalystX::Eta::Controller::AutoBase";$/;"	w
+"CatalystX::Eta::Controller::AutoResultPUT"	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^with "CatalystX::Eta::Controller::AutoResultPUT";$/;"	w
+"CatalystX::Eta::Controller::TypesValidation"	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^with "CatalystX::Eta::Controller::TypesValidation";$/;"	w
+"CatalystX::Eta::Controller::TypesValidation"	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^with "CatalystX::Eta::Controller::TypesValidation";$/;"	w
+"CatalystX::Eta::Controller::TypesValidation"	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^with "CatalystX::Eta::Controller::TypesValidation";$/;"	w
+"CatalystX::Eta::Controller::TypesValidation"	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^with "CatalystX::Eta::Controller::TypesValidation";$/;"	w
+"CatalystX::Eta::Controller::TypesValidation"	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^with "CatalystX::Eta::Controller::TypesValidation";$/;"	w
+'CatalystX::Eta::Controller::Order'	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^with 'CatalystX::Eta::Controller::Order';$/;"	w
+'CatalystX::Eta::Controller::Search'	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^with 'CatalystX::Eta::Controller::Search';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API/Login.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API3/Iugu.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'CatalystX::Eta::Controller::TypesValidation'	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^with 'CatalystX::Eta::Controller::TypesValidation';$/;"	w
+'MooseX::Traits'	./lib/WebService/CEP.pm	/^with 'MooseX::Traits';$/;"	w
+'VotoLegal::Payment'	./lib/VotoLegal/Payment/Cielo.pm	/^with 'VotoLegal::Payment';$/;"	w
+'VotoLegal::Payment'	./lib/VotoLegal/Payment/PagSeguro.pm	/^with 'VotoLegal::Payment';$/;"	w
+'VotoLegal::Payment'	./lib/WebService/PagSeguro.pm	/^with 'VotoLegal::Payment';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/Result/Candidate.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/Result/Project.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/Result/Testimony.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/User.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification'	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^with 'VotoLegal::Role::Verification';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions'	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/Result/Candidate.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/Result/Project.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/Result/Testimony.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Role::Verification::TransactionalActions::DBIC'	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';$/;"	w
+'VotoLegal::Schema::Role::FsmLoader'	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^with 'VotoLegal::Schema::Role::FsmLoader';$/;"	w
+'VotoLegal::Schema::Role::ResultsetFind'	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^with 'VotoLegal::Schema::Role::ResultsetFind';$/;"	w
+'VotoLegal::Schema::Role::ResultsetFind'	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^with 'VotoLegal::Schema::Role::ResultsetFind';$/;"	w
+'VotoLegal::Worker'	./lib/VotoLegal/Worker/Blockchain.pm	/^with 'VotoLegal::Worker';$/;"	w
+'VotoLegal::Worker'	./lib/VotoLegal/Worker/Email.pm	/^with 'VotoLegal::Worker';$/;"	w
+'VotoLegal::Worker'	./lib/VotoLegal/Worker/Procob.pm	/^with 'VotoLegal::Worker';$/;"	w
+'VotoLegal::Worker'	./lib/VotoLegal/Worker/Slack.pm	/^with 'VotoLegal::Worker';$/;"	w
+'amount_invalid' if $values{amount} < $config->{min_donation_value}	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^            die_with 'amount_invalid' if $values{amount} < $config->{min_donation_value};$/;"	w
+'donation-daily-reached'	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^        die_with 'donation-daily-reached';$/;"	w
+'donation-not-found' unless $donation	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^            die_with 'donation-not-found' unless $donation;$/;"	w
+'donation-repeated'	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^        die_with 'donation-repeated';$/;"	w
+'email_domain_invalid' unless $addr	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^            die_with 'email_domain_invalid' unless $addr;$/;"	w
+'fp-invalid-contact-support' if !$fp || $fp !~ /^{/ || $fp !~ /}$/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^    die_with 'fp-invalid-contact-support' if !$fp || $fp !~ \/^{\/ || $fp !~ \/}$\/;$/;"	w
+'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id}	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^        die_with 'fp-invalid-contact-support' if !$fp->{ms} || !$fp->{id};$/;"	w
+'fp-invalid-contact-support' if exists $fp->{$_} && $fp->{$_} !~ /^[0-9]+$/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^            die_with 'fp-invalid-contact-support' if exists $fp->{$_} && $fp->{$_} !~ \/^[0-9]+$\/;$/;"	w
+'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048	./lib/VotoLegal/Controller/API2/DeviceAuthentication.pm	/^    die_with 'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048;$/;"	w
+'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048	./lib/VotoLegal/Controller/API2/Donation.pm	/^    die_with 'invalid-user-agent' if length $ua_str < 5 || length $ua_str > 2048;$/;"	w
+'need_birthdate_for_boleto' for qw/birthdate/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^                $values{$_} or die_with 'need_birthdate_for_boleto' for qw\/birthdate\/;$/;"	w
+'need_birthdate_for_psol' for qw/birthdate/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^                $values{$_} or die_with 'need_birthdate_for_psol' for qw\/birthdate\/;$/;"	w
+'need_phone_for_boleto'     for qw/phone/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^                $values{$_} or die_with 'need_phone_for_boleto'     for qw\/phone\/;$/;"	w
+'need_phone_for_psol'     for qw/phone/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^                $values{$_} or die_with 'need_phone_for_psol'     for qw\/phone\/;$/;"	w
+'payment not authorized' unless $payment_execution->{status} eq 'paid'	./lib/VotoLegal/Schema/Result/Payment.pm	/^        die_with 'payment not authorized' unless $payment_execution->{status} eq 'paid';$/;"	w
+'state-not-found' unless $state	./lib/VotoLegal/Controller/API/CEP.pm	/^        die_with 'state-not-found' unless $state;$/;"	w
+-- action	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 action$/;"	p
+-- address_city	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_city$/;"	p
+-- address_complement	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_complement$/;"	p
+-- address_district	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_district$/;"	p
+-- address_house_number	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_house_number$/;"	p
+-- address_state	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_state$/;"	p
+-- address_street	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_street$/;"	p
+-- address_zipcode	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 address_zipcode$/;"	p
+-- code	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 code$/;"	p
+-- cpf	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 cpf$/;"	p
+-- created_at	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 created_at$/;"	p
+-- default	./lib/VotoLegal/Controller/Root.pm	/^=head2 default$/;"	p
+-- discount_type	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 discount_type$/;"	p
+-- donation	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head2 donation$/;"	p
+-- donation_id	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head2 donation_id$/;"	p
+-- email	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 email$/;"	p
+-- end	./lib/VotoLegal/Controller/Root.pm	/^=head2 end$/;"	p
+-- id	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 id$/;"	p
+-- id	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 id$/;"	p
+-- is_test()	./lib/VotoLegal/Utils.pm	/^=head2 is_test()$/;"	p
+-- method	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 method$/;"	p
+-- name	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 name$/;"	p
+-- party	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 party$/;"	p
+-- party_id	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 party_id$/;"	p
+-- phone	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 phone$/;"	p
+-- political_movement	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 political_movement$/;"	p
+-- political_movement_id	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 political_movement_id$/;"	p
+-- sender_hash	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head2 sender_hash$/;"	p
+-- status	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head2 status$/;"	p
+-- status_updated_at	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head2 status_updated_at$/;"	p
+-- valid_from	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 valid_from$/;"	p
+-- valid_until	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 valid_until$/;"	p
+-- value	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head2 value$/;"	p
+=> {} )	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^    $c->stash->{candidate}->execute( $c, for => "publish", with => {} );$/;"	w
+=> {} )	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^    $c->stash->{candidate}->execute( $c, for => "unpublish", with => {} );$/;"	w
+ACCESSORS	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head1 ACCESSORS$/;"	p
+ACCESSORS	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 ACCESSORS$/;"	p
+ACCESSORS	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head1 ACCESSORS$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Admin.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Bank.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Contact.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Login.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Office.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Party.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Register.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Search.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Stats.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Controller/Root.pm	/^=head1 AUTHOR$/;"	p
+AUTHOR	./lib/VotoLegal/Model/DB.pm	/^=head1 AUTHOR$/;"	p
+AUTHORS	./script/votolegal_cgi.pl	/^=head1 AUTHORS$/;"	p
+AUTHORS	./script/votolegal_create.pl	/^=head1 AUTHORS$/;"	p
+AUTHORS	./script/votolegal_fastcgi.pl	/^=head1 AUTHORS$/;"	p
+AUTHORS	./script/votolegal_server.pl	/^=head1 AUTHORS$/;"	p
+AUTHORS	./script/votolegal_test.pl	/^=head1 AUTHORS$/;"	p
 AUTOLOAD	./lib/VotoLegal/Schema.pm	/^sub AUTOLOAD {$/;"	s
+AnyEvent	./script/daemon/Blockchaind	/^use AnyEvent;$/;"	u
+AnyEvent	./script/daemon/Emailsd	/^use AnyEvent;$/;"	u
+AnyEvent	./script/daemon/Slackd	/^use AnyEvent;$/;"	u
+Business::BR::CEP qw(test_cep)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Business::BR::CEP qw(test_cep);$/;"	u
+Business::BR::CEP qw(test_cep)	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use Business::BR::CEP qw(test_cep);$/;"	u
+Business::BR::CEP qw(test_cep)	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use Business::BR::CEP qw(test_cep);$/;"	u
+Business::BR::CEP qw(test_cep)	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Business::BR::CEP qw(test_cep);$/;"	u
+Business::BR::CEP qw(test_cep)	./lib/VotoLegal/Types.pm	/^use Business::BR::CEP qw(test_cep);$/;"	u
+Business::BR::CNPJ qw(test_cnpj)	./lib/VotoLegal/Types.pm	/^use Business::BR::CNPJ qw(test_cnpj);$/;"	u
+Business::BR::CNPJ qw(test_cnpj)	./script/activate-candidates.pl	/^use Business::BR::CNPJ qw(test_cnpj);$/;"	u
+Business::BR::CPF qw(test_cpf)	./lib/VotoLegal/Types.pm	/^use Business::BR::CPF qw(test_cpf);$/;"	u
+COMPONENTS LOADED	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head1 COMPONENTS LOADED$/;"	p
+COMPONENTS LOADED	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 COMPONENTS LOADED$/;"	p
+COMPONENTS LOADED	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head1 COMPONENTS LOADED$/;"	p
+COPYRIGHT	./script/votolegal_cgi.pl	/^=head1 COPYRIGHT$/;"	p
+COPYRIGHT	./script/votolegal_create.pl	/^=head1 COPYRIGHT$/;"	p
+COPYRIGHT	./script/votolegal_fastcgi.pl	/^=head1 COPYRIGHT$/;"	p
+COPYRIGHT	./script/votolegal_server.pl	/^=head1 COPYRIGHT$/;"	p
+COPYRIGHT	./script/votolegal_test.pl	/^=head1 COPYRIGHT$/;"	p
+Carp	./lib/VotoLegal/Payment/PagSeguro.pm	/^use Carp;$/;"	u
+Carp	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use Carp;$/;"	u
+Carp	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use Carp;$/;"	u
+Carp	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use Carp;$/;"	u
+Carp	./lib/WebService/Certiface.pm	/^use Carp;$/;"	u
+Carp	./lib/WebService/PagSeguro.pm	/^use Carp;$/;"	u
+Carp	./lib/WebService/Procob.pm	/^use Carp;$/;"	u
+Carp 'croak'	./lib/WebService/IuguForReal.pm	/^use Carp 'croak';$/;"	u
+Carp qw(croak)	./lib/VotoLegal/Payment/Cielo.pm	/^use Carp qw(croak);$/;"	u
+Catalyst	./lib/VotoLegal.pm	/^extends 'Catalyst';$/;"	e
+Catalyst::Model::DBIC::Schema	./lib/VotoLegal/Model/DB.pm	/^use base 'Catalyst::Model::DBIC::Schema';$/;"	e
+Catalyst::Runtime 5.80	./lib/VotoLegal.pm	/^use Catalyst::Runtime 5.80;$/;"	u
+Catalyst::ScriptRunner	./script/votolegal_cgi.pl	/^use Catalyst::ScriptRunner;$/;"	u
+Catalyst::ScriptRunner	./script/votolegal_create.pl	/^use Catalyst::ScriptRunner;$/;"	u
+Catalyst::ScriptRunner	./script/votolegal_fastcgi.pl	/^use Catalyst::ScriptRunner;$/;"	u
+Catalyst::ScriptRunner	./script/votolegal_server.pl	/^use Catalyst::ScriptRunner;$/;"	u
+Catalyst::ScriptRunner	./script/votolegal_test.pl	/^use Catalyst::ScriptRunner;$/;"	u
+CatalystX::Eta::Controller::REST	./lib/VotoLegal/Controller/API/CEP.pm	/^BEGIN { extends 'CatalystX::Eta::Controller::REST'; }$/;"	e
+CatalystX::Eta::Controller::REST	./lib/VotoLegal/Controller/API/Contact.pm	/^    extends 'CatalystX::Eta::Controller::REST';$/;"	e
+Config::General	./script/daemon/Blockchaind	/^use Config::General;$/;"	u
+Config::General	./script/daemon/Emailsd	/^use Config::General;$/;"	u
+Config::General	./script/daemon/Slackd	/^use Config::General;$/;"	u
+Config::General	./script/donation_stats_slack.pl	/^use Config::General;$/;"	u
+Config::General	./script/general_stats_slack.pl	/^use Config::General;$/;"	u
+Config::General	./script/test_pagseguro.pl	/^use Config::General;$/;"	u
+Crypt::PRNG qw(random_string)	./lib/VotoLegal/Controller/API/Candidate.pm	/^use Crypt::PRNG qw(random_string);$/;"	u
+Crypt::PRNG qw(random_string)	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use Crypt::PRNG qw(random_string);$/;"	u
+Crypt::PRNG qw(random_string)	./lib/VotoLegal/Schema/Result/User.pm	/^use Crypt::PRNG qw(random_string);$/;"	u
+Cwd qw(chdir)	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Cwd qw(chdir);$/;"	u
+DBI	./lib/VotoLegal/SchemaConnected.pm	/^use DBI;$/;"	u
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Bank.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Candidate.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/City.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Config.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Donation.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/DonationType.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/FsmState.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Office.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Party.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Payment.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Project.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Referral.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Role.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/State.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/Testimony.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/User.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/UserRole.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/UserSession.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::Core	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^extends 'DBIx::Class::Core';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/User.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::ResultSet	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^extends 'DBIx::Class::ResultSet';$/;"	e
+DBIx::Class::Schema	./lib/VotoLegal/Schema.pm	/^extends 'DBIx::Class::Schema';$/;"	e
+DDP	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^        use DDP;$/;"	u
+DDP	./script/update-graph.pl	/^use DDP;$/;"	u
+DESCRIPTION	./lib/VotoLegal/Controller/API.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Admin.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Bank.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Office.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Party.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/API/Register.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Controller/Root.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./lib/VotoLegal/Model/DB.pm	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./script/votolegal_cgi.pl	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./script/votolegal_create.pl	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./script/votolegal_fastcgi.pl	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./script/votolegal_server.pl	/^=head1 DESCRIPTION$/;"	p
+DESCRIPTION	./script/votolegal_test.pl	/^=head1 DESCRIPTION$/;"	p
+Daemon::Generic	./script/daemon/Blockchaind	/^use Daemon::Generic;$/;"	u
+Daemon::Generic	./script/daemon/Emailsd	/^use Daemon::Generic;$/;"	u
+Daemon::Generic	./script/daemon/Slackd	/^use Daemon::Generic;$/;"	u
+Data::Diver qw(Dive)	./lib/VotoLegal/Role/Verification.pm	/^use Data::Diver qw(Dive);$/;"	u
+Data::Dumper qw(Dumper)	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use Data::Dumper qw(Dumper);$/;"	u
+Data::Dumper qw/Dumper/	./lib/VotoLegal.pm	/^use Data::Dumper qw\/Dumper\/;$/;"	u
+Data::GUID	./lib/VotoLegal/Payment/Cielo.pm	/^use Data::GUID;$/;"	u
+Data::Manager	./lib/VotoLegal/Data/Manager.pm	/^extends 'Data::Manager';$/;"	e
+Data::Printer	./script/test_pagseguro.pl	/^use Data::Printer;$/;"	u
+Data::Section::Simple qw(get_data_section)	./lib/VotoLegal/Controller/API/Contact.pm	/^use Data::Section::Simple qw(get_data_section);$/;"	u
+Data::Section::Simple qw(get_data_section)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Data::Section::Simple qw(get_data_section);$/;"	u
+Data::Section::Simple qw(get_data_section)	./lib/VotoLegal/Schema/Result/Donation.pm	/^use Data::Section::Simple qw(get_data_section);$/;"	u
+Data::Section::Simple qw(get_data_section)	./lib/VotoLegal/Schema/Result/User.pm	/^use Data::Section::Simple qw(get_data_section);$/;"	u
+Data::Validate::URI qw(is_web_uri)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Data::Validate::URI qw(is_web_uri);$/;"	u
 Data::Verifier	./lib/Data/Verifier.pm	/^package Data::Verifier;$/;"	p
+Data::Verifier	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/Result/Project.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/User.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Data::Verifier;$/;"	u
+Data::Verifier::Field	./lib/Data/Verifier.pm	/^use Data::Verifier::Field;$/;"	u
+Data::Verifier::Filters	./lib/Data/Verifier.pm	/^use Data::Verifier::Filters;$/;"	u
+Data::Verifier::Results	./lib/Data/Verifier.pm	/^use Data::Verifier::Results;$/;"	u
+Data::Visitor	./lib/VotoLegal/Data/Visitor.pm	/^extends 'Data::Visitor';$/;"	e
+Data::Visitor::Callback	./lib/VotoLegal/Role/Verification/TransactionalActions.pm	/^use Data::Visitor::Callback;$/;"	u
+DateTime	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Logger.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use DateTime;$/;"	u
+DateTime	./lib/VotoLegal/Types.pm	/^use DateTime;$/;"	u
+DateTime::Format::Pg	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^use DateTime::Format::Pg;$/;"	u
+DateTime::Format::Pg	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^use DateTime::Format::Pg;$/;"	u
+DateTime::Format::Pg	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use DateTime::Format::Pg;$/;"	u
+DateTime::Format::Pg	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use DateTime::Format::Pg;$/;"	u
+DateTime::Format::Pg	./lib/VotoLegal/Types.pm	/^use DateTime::Format::Pg;$/;"	u
+DateTimeX::Easy qw(parse)	./lib/VotoLegal/Types.pm	/^use DateTimeX::Easy qw(parse);$/;"	u
+Digest::HMAC_SHA1	./lib/VotoLegal/Uploader.pm	/^use Digest::HMAC_SHA1;$/;"	u
+Digest::MD5 qw(md5_hex)	./lib/VotoLegal/Schema/Result/Donation.pm	/^use Digest::MD5 qw(md5_hex);$/;"	u
+Digest::SHA qw(sha1_hex)	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use Digest::SHA qw(sha1_hex);$/;"	u
+Digest::SHA qw/ sha256_hex /	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use Digest::SHA qw\/ sha256_hex \/;$/;"	u
+Digest::SHA1 qw(sha1_hex)	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use Digest::SHA1 qw(sha1_hex);$/;"	u
+EXPORT	./lib/VotoLegal/Dieable.pm	/^our @EXPORT = qw\/die_with die_with_reason\/;$/;"	o
+EXPORT	./lib/VotoLegal/Logger.pm	/^our @EXPORT = qw(log_info log_fatal log_error get_logger);$/;"	o
+EXPORT	./lib/VotoLegal/SchemaConnected.pm	/^our @EXPORT    = qw(get_schema get_connect_info);$/;"	o
+EXPORT_OK	./lib/VotoLegal/SchemaConnected.pm	/^our @EXPORT_OK = qw(load_envs_via_dbi);$/;"	o
+Email::MIME	./script/crontab/admin_report.pl	/^use Email::MIME;$/;"	u
+Email::Sender	./script/crontab/admin_report.pl	/^use Email::Sender;$/;"	u
+Email::Sender::Simple qw(sendmail)	./lib/VotoLegal/Mailer.pm	/^use Email::Sender::Simple qw(sendmail);$/;"	u
+Email::Sender::Simple qw(sendmail)	./script/crontab/admin_report.pl	/^use Email::Sender::Simple qw(sendmail);$/;"	u
+Email::Sender::Transport::SMTP qw()	./script/crontab/admin_report.pl	/^use Email::Sender::Transport::SMTP qw();$/;"	u
+Email::Sender::Transport::SMTP::TLS	./lib/VotoLegal/Mailer.pm	/^use Email::Sender::Transport::SMTP::TLS;$/;"	u
+Email::Valid	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Email::Valid;$/;"	u
+Email::Valid	./lib/VotoLegal/Types.pm	/^use Email::Valid;$/;"	u
+Encode	./lib/VotoLegal/Mailer/Template.pm	/^use Encode;$/;"	u
+Encode	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use Encode;$/;"	u
+Encode qw/decode_utf8/	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use Encode qw\/decode_utf8\/;$/;"	u
+Exporter	./lib/VotoLegal/SchemaConnected.pm	/^require Exporter;$/;"	r
+Exporter 'import'	./lib/VotoLegal/Dieable.pm	/^use Exporter 'import';$/;"	u
+FSM::Simple	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use FSM::Simple;$/;"	u
+File::Basename	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^use File::Basename;$/;"	u
+File::MimeInfo	./lib/VotoLegal/Controller/API/Candidate.pm	/^use File::MimeInfo;$/;"	u
+File::MimeInfo	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use File::MimeInfo;$/;"	u
+File::MimeInfo	./script/get-candidate-avatar.pl	/^use File::MimeInfo;$/;"	u
+File::Slurper 'read_text'	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use File::Slurper 'read_text';$/;"	u
+File::Temp ':seekable'	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^use File::Temp ':seekable';$/;"	u
+File::Temp ':seekable'	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^use File::Temp ':seekable';$/;"	u
+File::Temp ':seekable'	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use File::Temp ':seekable';$/;"	u
+File::Temp ':seekable'	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use File::Temp ':seekable';$/;"	u
+File::Temp q(:seekable)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use File::Temp q(:seekable);$/;"	u
+FindBin qw($RealBin $Script)	./script/activate-candidates.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/crontab/admin_report.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/daemon/Blockchaind	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/daemon/Emailsd	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/daemon/Slackd	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/donation_stats_slack.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/general_stats_slack.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/get-candidate-avatar.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/test_pagseguro.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin $Script)	./script/update-domains.pl	/^use FindBin qw($RealBin $Script);$/;"	u
+FindBin qw($RealBin)	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use FindBin qw($RealBin);$/;"	u
+FindBin qw($RealBin)	./lib/VotoLegal/SchemaConnected.pm	/^use FindBin qw($RealBin);$/;"	u
+Furl	./lib/VotoLegal/Payment/Cielo.pm	/^use Furl;$/;"	u
+Furl	./lib/VotoLegal/Payment/PagSeguro.pm	/^use Furl;$/;"	u
+Furl	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Furl;$/;"	u
+Furl	./lib/VotoLegal/Utils.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/CEP/Postmon.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/CEP/Viacep.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/Certiface.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/Dcrtime.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/IuguForReal.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/PagSeguro.pm	/^use Furl;$/;"	u
+Furl	./lib/WebService/Procob.pm	/^use Furl;$/;"	u
+GENERATED BY	./lib/VotoLegal/Model/DB.pm	/^=head1 GENERATED BY$/;"	p
+IO::Handle	./lib/VotoLegal/Logger.pm	/^use IO::Handle;$/;"	u
+IO::Socket::SSL	./lib/VotoLegal/Payment/Cielo.pm	/^use IO::Socket::SSL;$/;"	u
+IO::Socket::SSL	./lib/VotoLegal/Payment/PagSeguro.pm	/^use IO::Socket::SSL;$/;"	u
+IO::Socket::SSL	./lib/WebService/PagSeguro.pm	/^use IO::Socket::SSL;$/;"	u
+ISA	./lib/VotoLegal/Logger.pm	/^our @ISA = qw(Exporter);$/;"	o
+ISA	./lib/VotoLegal/SchemaConnected.pm	/^our @ISA       = qw(Exporter);$/;"	o
+JSON	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use JSON;$/;"	u
+JSON	./lib/VotoLegal/Payment/Cielo.pm	/^use JSON;$/;"	u
+JSON -support_by_pp	./lib/VotoLegal/SmartContract.pm	/^use JSON -support_by_pp;$/;"	u
+JSON qw(decode_json)	./lib/WebService/CEP/Postmon.pm	/^use JSON qw(decode_json);$/;"	u
+JSON qw(decode_json)	./lib/WebService/CEP/Viacep.pm	/^use JSON qw(decode_json);$/;"	u
+JSON qw/encode_json/	./lib/VotoLegal/Utils.pm	/^use JSON qw\/encode_json\/;$/;"	u
+JSON qw/from_json/	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use JSON qw\/from_json\/;$/;"	u
+JSON qw/to_json from_json/	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use JSON qw\/to_json from_json\/;$/;"	u
+JSON qw/to_json from_json/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use JSON qw\/to_json from_json\/;$/;"	u
+JSON qw/to_json/	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use JSON qw\/to_json\/;$/;"	u
+JSON::MaybeXS	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS	./lib/VotoLegal/Schema/Result/Payment.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS	./lib/VotoLegal/Worker/Procob.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS	./lib/WebService/Certiface.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS	./lib/WebService/Dcrtime.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS	./lib/WebService/Procob.pm	/^use JSON::MaybeXS;$/;"	u
+JSON::MaybeXS qw(encode_json decode_json)	./lib/WebService/IuguForReal.pm	/^use JSON::MaybeXS qw(encode_json decode_json);$/;"	u
+JSON::XS	./lib/VotoLegal/Controller/API/CEP.pm	/^use JSON::XS;$/;"	u
+JSON::XS	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use JSON::XS;$/;"	u
+JSON::XS	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use JSON::XS;$/;"	u
+JSON::XS	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use JSON::XS;$/;"	u
+LICENSE	./lib/VotoLegal/Controller/API.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Admin.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Bank.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Contact.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Login.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Office.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Party.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Search.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Stats.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Controller/Root.pm	/^=head1 LICENSE$/;"	p
+LICENSE	./lib/VotoLegal/Model/DB.pm	/^=head1 LICENSE$/;"	p
+LWP::Simple	./script/get-candidate-avatar.pl	/^use LWP::Simple;$/;"	u
+List::Util qw(shuffle)	./lib/VotoLegal/Controller/API/Search.pm	/^use List::Util qw(shuffle);$/;"	u
+Log::Log4perl qw(:easy)	./lib/VotoLegal/Logger.pm	/^use Log::Log4perl qw(:easy);$/;"	u
+Log::Log4perl qw(:easy)	./script/daemon/Slackd	/^use Log::Log4perl qw(:easy);$/;"	u
+METHODS	./lib/VotoLegal/Controller/API.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Admin.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Bank.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Office.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Party.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/API/Register.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Controller/Root.pm	/^=head1 METHODS$/;"	p
+METHODS	./lib/VotoLegal/Utils.pm	/^=head1 METHODS$/;"	p
+MIME::Base64	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use MIME::Base64;$/;"	u
+MIME::Base64	./lib/WebService/Dcrtime.pm	/^use MIME::Base64;$/;"	u
+MIME::Base64 qw(encode_base64)	./lib/VotoLegal/Uploader.pm	/^use MIME::Base64 qw(encode_base64);$/;"	u
+MIME::Base64 qw(encode_base64)	./lib/WebService/IuguForReal.pm	/^use MIME::Base64 qw(encode_base64);$/;"	u
+MIME::Lite	./lib/VotoLegal/Mailer/Template.pm	/^use MIME::Lite;$/;"	u
+Mojo::Cloudflare	./script/update-domains.pl	/^use Mojo::Cloudflare;$/;"	u
+Moose	./lib/Data/Verifier.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Bank.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/CEP.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Contact.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Login.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Office.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Party.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Register.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Search.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Stats.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API2.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API2/DeviceAuthentication.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API2/Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API3.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API3/Iugu.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Controller/Root.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Data/Manager.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Data/Visitor.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Geth.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Geth/Response.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Mailer.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Mailer/Template.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Payment/Cielo.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Payment/PagSeguro.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Bank.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/City.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Config.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Office.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Party.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Payment.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Project.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Referral.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Role.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/State.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/User.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/User.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/SmartContract.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Worker/Blockchain.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Worker/Email.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Worker/Procob.pm	/^use Moose;$/;"	u
+Moose	./lib/VotoLegal/Worker/Slack.pm	/^use Moose;$/;"	u
+Moose	./lib/WebService/CEP.pm	/^use Moose;$/;"	u
+Moose	./lib/WebService/Dcrtime.pm	/^use Moose;$/;"	u
+Moose	./script/get-candidate-avatar.pl	/^use Moose;$/;"	u
+Moose::Role	./lib/VotoLegal/Payment.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Role/Verification.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Role/Verification/TransactionalActions.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/VotoLegal/Worker.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/WebService/CEP/Correios.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/WebService/CEP/Postmon.pm	/^use Moose::Role;$/;"	u
+Moose::Role	./lib/WebService/CEP/Viacep.pm	/^use Moose::Role;$/;"	u
+Moose::Util::TypeConstraints	./lib/Data/Verifier.pm	/^use Moose::Util::TypeConstraints;$/;"	u
+Moose::Util::TypeConstraints	./lib/VotoLegal/Types.pm	/^use Moose::Util::TypeConstraints;$/;"	u
+Moose::Util::TypeConstraints qw(duck_type)	./lib/WebService/CEP.pm	/^use Moose::Util::TypeConstraints qw(duck_type);$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Bank.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/City.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Config.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Donation.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Office.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Party.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Payment.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Project.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Referral.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Role.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/State.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/User.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::MarkAsMethods autoclean => 1	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use MooseX::MarkAsMethods autoclean => 1;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Bank.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/City.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Config.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Donation.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Office.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Party.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Payment.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Project.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Referral.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Role.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/State.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/User.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::NonMoose	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use MooseX::NonMoose;$/;"	u
+MooseX::Singleton	./lib/VotoLegal/Uploader.pm	/^use MooseX::Singleton;$/;"	u
+MooseX::Singleton	./lib/WebService/Certiface.pm	/^use MooseX::Singleton;$/;"	u
+MooseX::Singleton	./lib/WebService/IuguForReal.pm	/^use MooseX::Singleton;$/;"	u
+MooseX::Singleton	./lib/WebService/PagSeguro.pm	/^use MooseX::Singleton;$/;"	u
+MooseX::Singleton	./lib/WebService/Procob.pm	/^use MooseX::Singleton;$/;"	u
+MooseX::Types::CNPJ qw(CNPJ)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use MooseX::Types::CNPJ qw(CNPJ);$/;"	u
+MooseX::Types::Common::String qw(NonEmptySimpleStr NonEmptyStr)	./lib/VotoLegal/Types.pm	/^use MooseX::Types::Common::String qw(NonEmptySimpleStr NonEmptyStr);$/;"	u
+MooseX::Types::DateTime::MoreCoercions qw( DateTime )	./lib/VotoLegal/Types.pm	/^use MooseX::Types::DateTime::MoreCoercions qw( DateTime );$/;"	u
+MooseX::Types::Moose qw(Int)	./lib/VotoLegal/Controller/API/CEP.pm	/^use MooseX::Types::Moose qw(Int);$/;"	u
+MooseX::Types::Moose qw(Str Int ArrayRef ScalarRef Num)	./lib/VotoLegal/Types.pm	/^use MooseX::Types::Moose qw(Str Int ArrayRef ScalarRef Num);$/;"	u
+MooseX::Types::Structured qw(Dict Tuple Optional)	./lib/VotoLegal/Types.pm	/^use MooseX::Types::Structured qw(Dict Tuple Optional);$/;"	u
+NAME	./lib/VotoLegal/Controller/API.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Admin.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Bank.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Office.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Party.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/API/Register.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Controller/Root.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Model/DB.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 NAME$/;"	p
+NAME	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head1 NAME$/;"	p
+NAME	./script/votolegal_cgi.pl	/^=head1 NAME$/;"	p
+NAME	./script/votolegal_create.pl	/^=head1 NAME$/;"	p
+NAME	./script/votolegal_fastcgi.pl	/^=head1 NAME$/;"	p
+NAME	./script/votolegal_server.pl	/^=head1 NAME$/;"	p
+NAME	./script/votolegal_test.pl	/^=head1 NAME$/;"	p
+Net::Amazon::S3	./lib/VotoLegal/Uploader.pm	/^use Net::Amazon::S3;$/;"	u
+PRIMARY KEY	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 PRIMARY KEY$/;"	p
+PRIMARY KEY	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head1 PRIMARY KEY$/;"	p
+Proc::ProcessTable	./lib/VotoLegal/SmartContract.pm	/^use Proc::ProcessTable;$/;"	u
+RELATIONS	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head1 RELATIONS$/;"	p
+RELATIONS	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 RELATIONS$/;"	p
 REPEAT	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^      REPEAT:$/;"	l
 RETRY	./lib/WebService/Certiface.pm	/^      RETRY:$/;"	l
+Readonly	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use Readonly;$/;"	u
+SYNOPSIS	./lib/VotoLegal/Model/DB.pm	/^=head1 SYNOPSIS$/;"	p
+SYNOPSIS	./script/votolegal_cgi.pl	/^=head1 SYNOPSIS$/;"	p
+SYNOPSIS	./script/votolegal_create.pl	/^=head1 SYNOPSIS$/;"	p
+SYNOPSIS	./script/votolegal_fastcgi.pl	/^=head1 SYNOPSIS$/;"	p
+SYNOPSIS	./script/votolegal_server.pl	/^=head1 SYNOPSIS$/;"	p
+SYNOPSIS	./script/votolegal_test.pl	/^=head1 SYNOPSIS$/;"	p
+Scalar::Util qw(blessed)	./lib/Data/Verifier.pm	/^use Scalar::Util qw(blessed);$/;"	u
+Storable qw/dclone/	./lib/VotoLegal.pm	/^use Storable qw\/dclone\/;$/;"	u
+TABLE: C<donation_log>	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^=head1 TABLE: C<donation_log>$/;"	p
+TABLE: C<payment_discount>	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^=head1 TABLE: C<payment_discount>$/;"	p
+TABLE: C<payment_history>	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^=head1 TABLE: C<payment_history>$/;"	p
+Template	./lib/VotoLegal/Mailer/Template.pm	/^use Template;$/;"	u
+Template	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use Template;$/;"	u
+Test::More	./script/update-graph.pl	/^use Test::More;$/;"	u
+Text::CSV	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use Text::CSV;$/;"	u
+Text::CSV	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Text::CSV;$/;"	u
+Time::HiRes	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use Time::HiRes;$/;"	u
+Time::HiRes	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use Time::HiRes;$/;"	u
+Time::HiRes	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use Time::HiRes;$/;"	u
+Try::Tiny	./script/crontab/admin_report.pl	/^use Try::Tiny;$/;"	u
+Try::Tiny::Retry	./lib/WebService/Dcrtime.pm	/^use Try::Tiny::Retry;$/;"	u
+URI	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^use URI;$/;"	u
+URI	./lib/VotoLegal/Uploader.pm	/^use URI;$/;"	u
+URI	./lib/VotoLegal/Utils.pm	/^use URI;$/;"	u
+URI	./lib/WebService/IuguForReal.pm	/^use URI;$/;"	u
+URI::Escape	./lib/VotoLegal/Uploader.pm	/^use URI::Escape;$/;"	u
+URI::Escape	./lib/VotoLegal/Utils.pm	/^use URI::Escape;$/;"	u
+URI::Escape	./lib/WebService/Dcrtime.pm	/^use URI::Escape;$/;"	u
+URI::QueryParam	./lib/VotoLegal/Utils.pm	/^use URI::QueryParam;$/;"	u
+UUID::Tiny qw/is_uuid_string/	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^use UUID::Tiny qw\/is_uuid_string\/;$/;"	u
+UUID::Tiny qw/is_uuid_string/	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use UUID::Tiny qw\/is_uuid_string\/;$/;"	u
+Unix::Whereis	./lib/VotoLegal/Geth.pm	/^use Unix::Whereis;$/;"	u
+VERSION	./lib/VotoLegal.pm	/^our $VERSION = '0.01';$/;"	o
 VotoLegal	./lib/VotoLegal.pm	/^package VotoLegal;$/;"	p
 VotoLegal::Controller::API	./lib/VotoLegal/Controller/API.pm	/^package VotoLegal::Controller::API;$/;"	p
 VotoLegal::Controller::API2	./lib/VotoLegal/Controller/API2.pm	/^package VotoLegal::Controller::API2;$/;"	p
@@ -16,6 +802,7 @@ VotoLegal::Controller::API2::DeviceAuthentication	./lib/VotoLegal/Controller/API
 VotoLegal::Controller::API2::Donation	./lib/VotoLegal/Controller/API2/Donation.pm	/^package VotoLegal::Controller::API2::Donation;$/;"	p
 VotoLegal::Controller::API2::Role::REST	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^package VotoLegal::Controller::API2::Role::REST;$/;"	p
 VotoLegal::Controller::API3	./lib/VotoLegal/Controller/API3.pm	/^package VotoLegal::Controller::API3;$/;"	p
+VotoLegal::Controller::API3::Iugu	./lib/VotoLegal/Controller/API3/Iugu.pm	/^package VotoLegal::Controller::API3::Iugu;$/;"	p
 VotoLegal::Controller::API3::PagSeguro	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^package VotoLegal::Controller::API3::PagSeguro;$/;"	p
 VotoLegal::Controller::API::Admin	./lib/VotoLegal/Controller/API/Admin.pm	/^package VotoLegal::Controller::API::Admin;$/;"	p
 VotoLegal::Controller::API::Admin::Candidate	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^package VotoLegal::Controller::API::Admin::Candidate;$/;"	p
@@ -39,6 +826,7 @@ VotoLegal::Controller::API::Candidate::Payment::Callback	./lib/VotoLegal/Control
 VotoLegal::Controller::API::Candidate::Payment::Session	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^package VotoLegal::Controller::API::Candidate::Payment::Session;$/;"	p
 VotoLegal::Controller::API::Candidate::Projects	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^package VotoLegal::Controller::API::Candidate::Projects;$/;"	p
 VotoLegal::Controller::API::Candidate::Publish	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^package VotoLegal::Controller::API::Candidate::Publish;$/;"	p
+VotoLegal::Controller::API::Candidate::Testimony	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^package VotoLegal::Controller::API::Candidate::Testimony;$/;"	p
 VotoLegal::Controller::API::CandidateForPreRender	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^package VotoLegal::Controller::API::CandidateForPreRender;$/;"	p
 VotoLegal::Controller::API::CandidateMetadata	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^package VotoLegal::Controller::API::CandidateMetadata;$/;"	p
 VotoLegal::Controller::API::Certiface2DonationRedirect	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^package VotoLegal::Controller::API::Certiface2DonationRedirect;$/;"	p
@@ -55,28 +843,56 @@ VotoLegal::Controller::API::Search	./lib/VotoLegal/Controller/API/Search.pm	/^pa
 VotoLegal::Controller::API::Stats	./lib/VotoLegal/Controller/API/Stats.pm	/^package VotoLegal::Controller::API::Stats;$/;"	p
 VotoLegal::Controller::API::Stats::Depth	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^package VotoLegal::Controller::API::Stats::Depth;$/;"	p
 VotoLegal::Controller::PublicAPI	./lib/VotoLegal/Controller/PublicAPI.pm	/^package VotoLegal::Controller::PublicAPI;$/;"	p
+VotoLegal::Controller::PublicAPI::Candidate	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^package VotoLegal::Controller::PublicAPI::Candidate;$/;"	p
+VotoLegal::Controller::PublicAPI::Candidate::Donation	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^package VotoLegal::Controller::PublicAPI::Candidate::Donation;$/;"	p
 VotoLegal::Controller::PublicAPI::CandidateDonations	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^package VotoLegal::Controller::PublicAPI::CandidateDonations;$/;"	p
+VotoLegal::Controller::PublicAPI::CandidateDonationsSummary	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^package VotoLegal::Controller::PublicAPI::CandidateDonationsSummary;$/;"	p
 VotoLegal::Controller::PublicAPI::CandidateSummary	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^package VotoLegal::Controller::PublicAPI::CandidateSummary;$/;"	p
 VotoLegal::Controller::Root	./lib/VotoLegal/Controller/Root.pm	/^package VotoLegal::Controller::Root;$/;"	p
 VotoLegal::Daemon::Blockchaind	./script/daemon/Blockchaind	/^package VotoLegal::Daemon::Blockchaind;$/;"	p
 VotoLegal::Daemon::Emailsd	./script/daemon/Emailsd	/^package VotoLegal::Daemon::Emailsd;$/;"	p
 VotoLegal::Daemon::Slackd	./script/daemon/Slackd	/^package VotoLegal::Daemon::Slackd;$/;"	p
 VotoLegal::Data::Manager	./lib/VotoLegal/Data/Manager.pm	/^package VotoLegal::Data::Manager;$/;"	p
+VotoLegal::Data::Manager	./lib/VotoLegal/Role/Verification.pm	/^use VotoLegal::Data::Manager;$/;"	u
+VotoLegal::Data::Visitor	./lib/VotoLegal/Data/Manager.pm	/^use VotoLegal::Data::Visitor;$/;"	u
 VotoLegal::Data::Visitor	./lib/VotoLegal/Data/Visitor.pm	/^package VotoLegal::Data::Visitor;$/;"	p
+VotoLegal::Dieable	./lib/VotoLegal/Controller/API/CEP.pm	/^use VotoLegal::Dieable;$/;"	u
 VotoLegal::Dieable	./lib/VotoLegal/Dieable.pm	/^package VotoLegal::Dieable;$/;"	p
+VotoLegal::Dieable	./lib/VotoLegal/Schema/Result/Payment.pm	/^use VotoLegal::Dieable;$/;"	u
 VotoLegal::Geth	./lib/VotoLegal/Geth.pm	/^package VotoLegal::Geth;$/;"	p
+VotoLegal::Geth	./lib/VotoLegal/SmartContract.pm	/^use VotoLegal::Geth;$/;"	u
+VotoLegal::Geth::Response	./lib/VotoLegal/Geth.pm	/^use VotoLegal::Geth::Response;$/;"	u
 VotoLegal::Geth::Response	./lib/VotoLegal/Geth/Response.pm	/^package VotoLegal::Geth::Response;$/;"	p
+VotoLegal::Logger	./lib/VotoLegal.pm	/^    require VotoLegal::Logger;$/;"	r
 VotoLegal::Logger	./lib/VotoLegal/Logger.pm	/^package VotoLegal::Logger;$/;"	p
+VotoLegal::Logger	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use VotoLegal::Logger;$/;"	u
+VotoLegal::Logger	./lib/WebService/IuguForReal.pm	/^use VotoLegal::Logger;$/;"	u
+VotoLegal::Logger	./script/daemon/Blockchaind	/^    require VotoLegal::Logger;$/;"	r
+VotoLegal::Logger	./script/daemon/Emailsd	/^    require VotoLegal::Logger;$/;"	r
 VotoLegal::Mailer	./lib/VotoLegal/Mailer.pm	/^package VotoLegal::Mailer;$/;"	p
+VotoLegal::Mailer	./lib/VotoLegal/Worker/Email.pm	/^use VotoLegal::Mailer;$/;"	u
 VotoLegal::Mailer::Template	./lib/VotoLegal/Mailer/Template.pm	/^package VotoLegal::Mailer::Template;$/;"	p
+VotoLegal::Mailer::Template	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use VotoLegal::Mailer::Template;$/;"	u
 VotoLegal::Model::DB	./lib/VotoLegal/Model/DB.pm	/^package VotoLegal::Model::DB;$/;"	p
 VotoLegal::Payment	./lib/VotoLegal/Payment.pm	/^package VotoLegal::Payment;$/;"	p
 VotoLegal::Payment::Cielo	./lib/VotoLegal/Payment/Cielo.pm	/^package VotoLegal::Payment::Cielo;$/;"	p
+VotoLegal::Payment::Cielo	./lib/VotoLegal/Schema/Result/Donation.pm	/^use VotoLegal::Payment::Cielo;$/;"	u
+VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use VotoLegal::Payment::PagSeguro;$/;"	u
+VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^use VotoLegal::Payment::PagSeguro;$/;"	u
+VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^use VotoLegal::Payment::PagSeguro;$/;"	u
 VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Payment/PagSeguro.pm	/^package VotoLegal::Payment::PagSeguro;$/;"	p
+VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Schema/Result/Donation.pm	/^use VotoLegal::Payment::PagSeguro;$/;"	u
+VotoLegal::Payment::PagSeguro	./lib/VotoLegal/Schema/Result/Payment.pm	/^use VotoLegal::Payment::PagSeguro;$/;"	u
+VotoLegal::Payment::PagSeguro	./script/test_pagseguro.pl	/^use VotoLegal::Payment::PagSeguro;$/;"	u
 VotoLegal::Role::Verification	./lib/VotoLegal/Role/Verification.pm	/^package VotoLegal::Role::Verification;$/;"	p
 VotoLegal::Role::Verification::TransactionalActions	./lib/VotoLegal/Role/Verification/TransactionalActions.pm	/^package VotoLegal::Role::Verification::TransactionalActions;$/;"	p
 VotoLegal::Role::Verification::TransactionalActions::DBIC	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^package VotoLegal::Role::Verification::TransactionalActions::DBIC;$/;"	p
 VotoLegal::Schema	./lib/VotoLegal/Schema.pm	/^package VotoLegal::Schema;$/;"	p
+VotoLegal::Schema	./lib/VotoLegal/SchemaConnected.pm	/^    require VotoLegal::Schema;$/;"	r
+VotoLegal::Schema	./script/activate-candidates.pl	/^use VotoLegal::Schema;$/;"	u
+VotoLegal::Schema	./script/donation_stats_slack.pl	/^use VotoLegal::Schema;$/;"	u
+VotoLegal::Schema	./script/general_stats_slack.pl	/^use VotoLegal::Schema;$/;"	u
+VotoLegal::Schema	./script/test_pagseguro.pl	/^use VotoLegal::Schema;$/;"	u
 VotoLegal::Schema::Result::Bank	./lib/VotoLegal/Schema/Result/Bank.pm	/^package VotoLegal::Schema::Result::Bank;$/;"	p
 VotoLegal::Schema::Result::Candidate	./lib/VotoLegal/Schema/Result/Candidate.pm	/^package VotoLegal::Schema::Result::Candidate;$/;"	p
 VotoLegal::Schema::Result::CandidateCampaignConfig	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^package VotoLegal::Schema::Result::CandidateCampaignConfig;$/;"	p
@@ -121,9 +937,11 @@ VotoLegal::Schema::Result::ProcobBalance	./lib/VotoLegal/Schema/Result/ProcobBal
 VotoLegal::Schema::Result::ProcobResult	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^package VotoLegal::Schema::Result::ProcobResult;$/;"	p
 VotoLegal::Schema::Result::Project	./lib/VotoLegal/Schema/Result/Project.pm	/^package VotoLegal::Schema::Result::Project;$/;"	p
 VotoLegal::Schema::Result::ProjectVote	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^package VotoLegal::Schema::Result::ProjectVote;$/;"	p
+VotoLegal::Schema::Result::Referral	./lib/VotoLegal/Schema/Result/Referral.pm	/^package VotoLegal::Schema::Result::Referral;$/;"	p
 VotoLegal::Schema::Result::Role	./lib/VotoLegal/Schema/Result/Role.pm	/^package VotoLegal::Schema::Result::Role;$/;"	p
 VotoLegal::Schema::Result::SlackQueue	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^package VotoLegal::Schema::Result::SlackQueue;$/;"	p
 VotoLegal::Schema::Result::State	./lib/VotoLegal/Schema/Result/State.pm	/^package VotoLegal::Schema::Result::State;$/;"	p
+VotoLegal::Schema::Result::Testimony	./lib/VotoLegal/Schema/Result/Testimony.pm	/^package VotoLegal::Schema::Result::Testimony;$/;"	p
 VotoLegal::Schema::Result::User	./lib/VotoLegal/Schema/Result/User.pm	/^package VotoLegal::Schema::Result::User;$/;"	p
 VotoLegal::Schema::Result::UserForgotPassword	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^package VotoLegal::Schema::Result::UserForgotPassword;$/;"	p
 VotoLegal::Schema::Result::UserRole	./lib/VotoLegal/Schema/Result/UserRole.pm	/^package VotoLegal::Schema::Result::UserRole;$/;"	p
@@ -140,35 +958,114 @@ VotoLegal::Schema::ResultSet::FsmState	./lib/VotoLegal/Schema/ResultSet/FsmState
 VotoLegal::Schema::ResultSet::Payment	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^package VotoLegal::Schema::ResultSet::Payment;$/;"	p
 VotoLegal::Schema::ResultSet::PaymentNotification	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^package VotoLegal::Schema::ResultSet::PaymentNotification;$/;"	p
 VotoLegal::Schema::ResultSet::Project	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^package VotoLegal::Schema::ResultSet::Project;$/;"	p
+VotoLegal::Schema::ResultSet::Testimony	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^package VotoLegal::Schema::ResultSet::Testimony;$/;"	p
 VotoLegal::Schema::ResultSet::User	./lib/VotoLegal/Schema/ResultSet/User.pm	/^package VotoLegal::Schema::ResultSet::User;$/;"	p
 VotoLegal::Schema::ResultSet::UserForgotPassword	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^package VotoLegal::Schema::ResultSet::UserForgotPassword;$/;"	p
 VotoLegal::Schema::ResultSet::VotolegalDonation	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^package VotoLegal::Schema::ResultSet::VotolegalDonation;$/;"	p
 VotoLegal::Schema::Role::FsmLoader	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^package VotoLegal::Schema::Role::FsmLoader;$/;"	p
 VotoLegal::Schema::Role::ResultsetFind	./lib/VotoLegal/Schema/Role/ResultsetFind.pm	/^package VotoLegal::Schema::Role::ResultsetFind;$/;"	p
 VotoLegal::SchemaConnected	./lib/VotoLegal/SchemaConnected.pm	/^package VotoLegal::SchemaConnected;$/;"	p
+VotoLegal::SchemaConnected	./script/activate-candidates.pl	/^use VotoLegal::SchemaConnected;$/;"	u
+VotoLegal::SchemaConnected	./script/crontab/admin_report.pl	/^use VotoLegal::SchemaConnected;$/;"	u
+VotoLegal::SchemaConnected	./script/get-candidate-avatar.pl	/^use VotoLegal::SchemaConnected;$/;"	u
+VotoLegal::SchemaConnected	./script/update-domains.pl	/^use VotoLegal::SchemaConnected;$/;"	u
+VotoLegal::SchemaConnected qw(get_connect_info)	./lib/VotoLegal/Model/DB.pm	/^use VotoLegal::SchemaConnected qw(get_connect_info);$/;"	u
+VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/	./lib/VotoLegal.pm	/^    use VotoLegal::SchemaConnected qw\/load_envs_via_dbi get_connect_info\/;$/;"	u
+VotoLegal::SchemaConnected qw/load_envs_via_dbi get_connect_info/	./script/votolegal_create.pl	/^    use VotoLegal::SchemaConnected qw\/load_envs_via_dbi get_connect_info\/;$/;"	u
+VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/	./script/daemon/Blockchaind	/^    use VotoLegal::SchemaConnected qw\/load_envs_via_dbi get_schema\/;$/;"	u
+VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/	./script/daemon/Emailsd	/^    use VotoLegal::SchemaConnected qw\/load_envs_via_dbi get_schema\/;$/;"	u
+VotoLegal::SchemaConnected qw/load_envs_via_dbi get_schema/	./script/daemon/Slackd	/^    use VotoLegal::SchemaConnected qw\/load_envs_via_dbi get_schema\/;$/;"	u
+VotoLegal::SmartContract	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use VotoLegal::SmartContract;$/;"	u
 VotoLegal::SmartContract	./lib/VotoLegal/SmartContract.pm	/^package VotoLegal::SmartContract;$/;"	p
+VotoLegal::Test::Further	./script/update-graph.pl	/^use VotoLegal::Test::Further;$/;"	u
 VotoLegal::Types	./lib/VotoLegal/Types.pm	/^package VotoLegal::Types;$/;"	p
+VotoLegal::Types qw(CEP)	./lib/VotoLegal/Controller/API/CEP.pm	/^use VotoLegal::Types qw(CEP);$/;"	u
+VotoLegal::Types qw(CPF EmailAddress)	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use VotoLegal::Types qw(CPF EmailAddress);$/;"	u
+VotoLegal::Types qw(CPF EmailAddress)	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use VotoLegal::Types qw(CPF EmailAddress);$/;"	u
+VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText)	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);$/;"	u
+VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText)	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);$/;"	u
+VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText)	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);$/;"	u
+VotoLegal::Types qw(EmailAddress)	./lib/VotoLegal/Controller/API/Login.pm	/^use VotoLegal::Types qw(EmailAddress);$/;"	u
+VotoLegal::Types qw(EmailAddress)	./lib/VotoLegal/Mailer/Template.pm	/^use VotoLegal::Types qw(EmailAddress);$/;"	u
+VotoLegal::Types qw(EmailAddress)	./lib/VotoLegal/Schema/ResultSet/User.pm	/^use VotoLegal::Types qw(EmailAddress);$/;"	u
+VotoLegal::Types qw(EmailAddress)	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use VotoLegal::Types qw(EmailAddress);$/;"	u
+VotoLegal::Uploader	./lib/VotoLegal/Controller/API/Candidate.pm	/^use VotoLegal::Uploader;$/;"	u
+VotoLegal::Uploader	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use VotoLegal::Uploader;$/;"	u
 VotoLegal::Uploader	./lib/VotoLegal/Uploader.pm	/^package VotoLegal::Uploader;$/;"	p
+VotoLegal::Uploader	./script/get-candidate-avatar.pl	/^use VotoLegal::Uploader;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API/Register.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API3/Iugu.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Payment/PagSeguro.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Schema/Result/Donation.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Schema/Result/Payment.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./lib/VotoLegal/Uploader.pm	/^use VotoLegal::Utils;$/;"	u
 VotoLegal::Utils	./lib/VotoLegal/Utils.pm	/^package VotoLegal::Utils;$/;"	p
+VotoLegal::Utils	./lib/VotoLegal/Worker/Slack.pm	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils	./script/test_pagseguro.pl	/^use VotoLegal::Utils;$/;"	u
+VotoLegal::Utils qw/die_with is_test/	./lib/VotoLegal/Controller/API2.pm	/^use VotoLegal::Utils qw\/die_with is_test\/;$/;"	u
+VotoLegal::Utils qw/die_with is_test/	./lib/VotoLegal/Controller/API2/Donation.pm	/^use VotoLegal::Utils qw\/die_with is_test\/;$/;"	u
+VotoLegal::Utils qw/die_with/	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^use VotoLegal::Utils qw\/die_with\/;$/;"	u
+VotoLegal::Utils qw/die_with/	./lib/VotoLegal/Controller/API2/DeviceAuthentication.pm	/^use VotoLegal::Utils qw\/die_with\/;$/;"	u
+VotoLegal::Utils qw/is_test/	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use VotoLegal::Utils qw\/is_test\/;$/;"	u
+VotoLegal::Utils qw/is_test/	./lib/WebService/Certiface.pm	/^    use VotoLegal::Utils qw\/is_test\/;$/;"	u
+VotoLegal::Utils qw/is_test/	./lib/WebService/IuguForReal.pm	/^    use VotoLegal::Utils qw\/is_test\/;$/;"	u
+VotoLegal::Utils qw/is_test/	./lib/WebService/Procob.pm	/^    use VotoLegal::Utils qw\/is_test\/;$/;"	u
+VotoLegal::Utils qw/remote_notify/	./lib/VotoLegal.pm	/^use VotoLegal::Utils qw\/remote_notify\/;$/;"	u
 VotoLegal::Worker	./lib/VotoLegal/Worker.pm	/^package VotoLegal::Worker;$/;"	p
 VotoLegal::Worker::Blockchain	./lib/VotoLegal/Worker/Blockchain.pm	/^package VotoLegal::Worker::Blockchain;$/;"	p
+VotoLegal::Worker::Blockchain	./script/daemon/Blockchaind	/^use VotoLegal::Worker::Blockchain;$/;"	u
 VotoLegal::Worker::Email	./lib/VotoLegal/Worker/Email.pm	/^package VotoLegal::Worker::Email;$/;"	p
+VotoLegal::Worker::Email	./script/daemon/Emailsd	/^use VotoLegal::Worker::Email;$/;"	u
+VotoLegal::Worker::Email	./script/update-domains.pl	/^use VotoLegal::Worker::Email;$/;"	u
 VotoLegal::Worker::Procob	./lib/VotoLegal/Worker/Procob.pm	/^package VotoLegal::Worker::Procob;$/;"	p
 VotoLegal::Worker::Slack	./lib/VotoLegal/Worker/Slack.pm	/^package VotoLegal::Worker::Slack;$/;"	p
+VotoLegal::Worker::Slack	./script/daemon/Slackd	/^use VotoLegal::Worker::Slack;$/;"	u
+WWW::Correios::CEP	./lib/WebService/CEP/Correios.pm	/^use WWW::Correios::CEP;$/;"	u
+WebService::CEP	./lib/VotoLegal/Controller/API/CEP.pm	/^use WebService::CEP;$/;"	u
 WebService::CEP	./lib/WebService/CEP.pm	/^package WebService::CEP;$/;"	p
 WebService::CEP::Correios	./lib/WebService/CEP/Correios.pm	/^package WebService::CEP::Correios;$/;"	p
 WebService::CEP::Postmon	./lib/WebService/CEP/Postmon.pm	/^package WebService::CEP::Postmon;$/;"	p
 WebService::CEP::Viacep	./lib/WebService/CEP/Viacep.pm	/^package WebService::CEP::Viacep;$/;"	p
+WebService::Certiface	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use WebService::Certiface;$/;"	u
+WebService::Certiface	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use WebService::Certiface;$/;"	u
 WebService::Certiface	./lib/WebService/Certiface.pm	/^package WebService::Certiface;$/;"	p
+WebService::Dcrtime	./lib/VotoLegal/Worker/Blockchain.pm	/^use WebService::Dcrtime;$/;"	u
 WebService::Dcrtime	./lib/WebService/Dcrtime.pm	/^package WebService::Dcrtime;$/;"	p
+WebService::IuguForReal	./lib/VotoLegal/Schema/Result/Payment.pm	/^use WebService::IuguForReal;$/;"	u
+WebService::IuguForReal	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use WebService::IuguForReal;$/;"	u
 WebService::IuguForReal	./lib/WebService/IuguForReal.pm	/^package WebService::IuguForReal;$/;"	p
 WebService::PagSeguro	./lib/WebService/PagSeguro.pm	/^package WebService::PagSeguro;$/;"	p
+WebService::Procob	./lib/VotoLegal/Worker/Procob.pm	/^use WebService::Procob;$/;"	u
 WebService::Procob	./lib/WebService/Procob.pm	/^package WebService::Procob;$/;"	p
+WebService::Slack::IncomingWebHook	./lib/VotoLegal/Controller/API/Register.pm	/^use WebService::Slack::IncomingWebHook;$/;"	u
+WebService::Slack::IncomingWebHook	./lib/VotoLegal/Worker/Slack.pm	/^use WebService::Slack::IncomingWebHook;$/;"	u
+WebService::Slack::IncomingWebHook	./script/donation_stats_slack.pl	/^use WebService::Slack::IncomingWebHook;$/;"	u
+XML::Hash::XS qw/ hash2xml /	./lib/VotoLegal/Payment/PagSeguro.pm	/^use XML::Hash::XS qw\/ hash2xml \/;$/;"	u
+XML::Hash::XS qw/ hash2xml /	./lib/VotoLegal/Schema/Result/Payment.pm	/^use XML::Hash::XS qw\/ hash2xml \/;$/;"	u
+XML::Hash::XS qw/ hash2xml /	./lib/WebService/PagSeguro.pm	/^use XML::Hash::XS qw\/ hash2xml \/;$/;"	u
+XML::Hash::XS qw/ hash2xml xml2hash /	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use XML::Hash::XS qw\/ hash2xml xml2hash \/;$/;"	u
+XML::Simple	./lib/VotoLegal/Payment/PagSeguro.pm	/^use XML::Simple;$/;"	u
+XML::Simple	./lib/WebService/PagSeguro.pm	/^use XML::Simple;$/;"	u
 _apply	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _apply {$/;"	s
 _brand_to_bandeira	./lib/VotoLegal/Payment/Cielo.pm	/^sub _brand_to_bandeira {$/;"	s
 _build__s3	./lib/VotoLegal/Uploader.pm	/^sub _build__s3 {$/;"	s
 _build__transport	./lib/VotoLegal/Mailer.pm	/^sub _build__transport {$/;"	s
 _build_dcrtime	./lib/VotoLegal/Worker/Blockchain.pm	/^sub _build_dcrtime { WebService::Dcrtime->new() }$/;"	s
+_build_furl	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub _build_furl { Furl->new( headers => [ 'user' => $ENV{JENKINS_AUTH} ] ) }$/;"	s
 _build_furl	./lib/WebService/Certiface.pm	/^sub _build_furl { Furl->new( timeout => 15 ) }$/;"	s
 _build_furl	./lib/WebService/Procob.pm	/^sub _build_furl { Furl->new( timeout => 15 ) }$/;"	s
 _build_mailer	./lib/VotoLegal/Worker/Email.pm	/^sub _build_mailer {$/;"	s
@@ -181,6 +1078,7 @@ _create_donation	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _cr
 _create_invoice	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub _create_invoice {$/;"	s
 _decode_json_fields	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _decode_json_fields {$/;"	s
 _draw_machine	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _draw_machine {$/;"	s
+_driver	./lib/VotoLegal/Schema/Result/Donation.pm	/^has _driver => ($/;"	a
 _encode	./lib/VotoLegal/Uploader.pm	/^sub _encode {$/;"	s
 _filter_donation	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub _filter_donation : Private {$/;"	s
 _filter_value	./lib/Data/Verifier.pm	/^sub _filter_value {$/;"	s
@@ -192,6 +1090,8 @@ _generate_payment_credit_card	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm
 _get_candidate_config	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _get_candidate_config {$/;"	s
 _get_fms_simple	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub _get_fms_simple {$/;"	s
 _get_status_and_motive	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _get_status_and_motive {$/;"	s
+_input	./lib/VotoLegal/Data/Manager.pm	/^has _input => ( is => 'ro', isa => 'HashRef', init_arg => 'input' );$/;"	a
+_json	./lib/VotoLegal/SmartContract.pm	/^has _json => ($/;"	a
 _load_lr	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _load_lr {$/;"	s
 _messages_of_state	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _messages_of_state {$/;"	s
 _next_day_rand_str	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub _next_day_rand_str() {$/;"	s
@@ -206,12 +1106,21 @@ _process_validate_payment	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _pr
 _process_wait_for_compensation	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_wait_for_compensation {$/;"	s
 _process_waiting_boleto_payment	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub _process_waiting_boleto_payment {$/;"	s
 _refuse_duplicate	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub _refuse_duplicate {$/;"	s
+_s3	./lib/VotoLegal/Uploader.pm	/^has _s3 => ($/;"	a
 _supports	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub _supports {$/;"	s
+_transactionHash	./lib/VotoLegal/Geth/Response.pm	/^has _transactionHash => ($/;"	a
+_transaction_id	./lib/VotoLegal/Schema/Result/Donation.pm	/^has _transaction_id => ($/;"	a
+_transport	./lib/VotoLegal/Mailer.pm	/^has _transport => ($/;"	a
 _upload_picture	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub _upload_picture {$/;"	s
+_upload_picture	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub _upload_picture {$/;"	s
 _upload_spreadsheet	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub _upload_spreadsheet {$/;"	s
 _wrap_in_transaction	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^sub _wrap_in_transaction {$/;"	s
+abi	./lib/VotoLegal/SmartContract.pm	/^has abi => ($/;"	a
+access_key	./lib/VotoLegal/Uploader.pm	/^has access_key => ($/;"	a
+account	./lib/VotoLegal/SmartContract.pm	/^has account => ($/;"	a
 action_specs	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/Result/Project.pm	/^sub action_specs {$/;"	s
+action_specs	./lib/VotoLegal/Schema/Result/Testimony.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^sub action_specs {$/;"	s
@@ -219,16 +1128,21 @@ action_specs	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^sub action_
 action_specs	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^sub action_specs {$/;"	s
+action_specs	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/User.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^sub action_specs {$/;"	s
 action_specs	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub action_specs {$/;"	s
+actions	./lib/VotoLegal/Data/Manager.pm	/^has actions => ($/;"	a
+actions	./lib/VotoLegal/Role/Verification.pm	/^has actions => ($/;"	a
 activate	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^sub activate : Chained('root') : PathPart('activate') : Args(0) : ActionClass('REST') { }$/;"	s
 activate_PUT	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^sub activate_PUT {$/;"	s
 addDonation	./lib/VotoLegal/SmartContract.pm	/^sub addDonation {$/;"	s
+address	./lib/VotoLegal/SmartContract.pm	/^has address => ($/;"	a
 address_state_code	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub address_state_code {$/;"	s
 append_recalc	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub append_recalc {$/;"	s
 apply	./lib/VotoLegal/Data/Manager.pm	/^sub apply {$/;"	s
 apply_interface	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub apply_interface {$/;"	s
+approve_payment	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub approve_payment {$/;"	s
 as_row	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub as_row {$/;"	s
 as_row_for_email_variable	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub as_row_for_email_variable {$/;"	s
 authorize	./lib/VotoLegal/Schema/Result/Donation.pm	/^sub authorize {$/;"	s
@@ -253,6 +1167,7 @@ base	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub base : C
 base	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub base : Chained('root') : PathPart('session') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub base : Chained('root') : PathPart('projects') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub base : Chained('root') : PathPart('testimony') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^sub base : Chained('\/api\/root') : PathPart('certiface2donation-redirect') : CaptureArgs(0) { }$/;"	s
@@ -273,9 +1188,17 @@ base	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^sub base : Chained(
 base	./lib/VotoLegal/Controller/API2/DeviceAuthentication.pm	/^sub base : Chained('\/api2\/base') : PathPart('device-authentication') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub base : Chained('\/api2\/base') : PathPart('donations') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/API3.pm	/^sub base : Chained('\/') : PathPart('api3') : CaptureArgs(0) {$/;"	s
+base	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub base : Chained('root') : PathPart('iugu') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub base : Chained('root') : PathPart('pagseguro') : CaptureArgs(0) {$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub base : Chained('root') : PathPart('donation') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
+base 'Catalyst::Model::DBIC::Schema'	./lib/VotoLegal/Model/DB.pm	/^use base 'Catalyst::Model::DBIC::Schema';$/;"	u
+base qw(DBIx::Class::Core)	./lib/VotoLegal/Schema/Result/ViewDonationPeriod.pm	/^use base qw(DBIx::Class::Core);$/;"	u
+base qw(DBIx::Class::Core)	./lib/VotoLegal/Schema/Result/ViewProjectValidVote.pm	/^use base qw(DBIx::Class::Core);$/;"	u
+binary	./lib/VotoLegal/Geth.pm	/^has binary => ($/;"	a
 build_api_error	./lib/VotoLegal.pm	/^sub build_api_error {$/;"	s
 build_callback_url	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_callback_url {$/;"	s
 build_credit_card_object	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_credit_card_object {$/;"	s
@@ -285,11 +1208,15 @@ build_iugu_invoice_data	./lib/VotoLegal/Schema/Result/Donation.pm	/^sub build_iu
 build_phone_object	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_phone_object {$/;"	s
 build_sender_object	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_sender_object {$/;"	s
 build_shipping_object	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_shipping_object {$/;"	s
+cache	./lib/WebService/CEP.pm	/^has cache => ( is => 'ro', required => 0, predicate => 'has_cache' );$/;"	a
 callback	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+callback	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 callback	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub callback : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 callback_GET	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub callback_GET {$/;"	s
+callback_GET	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub callback_GET {$/;"	s
 callback_GET	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub callback_GET {$/;"	s
 callback_POST	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub callback_POST {$/;"	s
+callback_POST	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub callback_POST {$/;"	s
 callback_POST	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub callback_POST {$/;"	s
 candidate	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub candidate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 candidate	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub candidate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
@@ -310,6 +1237,70 @@ cep	./lib/VotoLegal/Controller/API/CEP.pm	/^sub cep : Chained('\/api\/root') Pat
 check	./lib/VotoLegal/Role/Verification.pm	/^sub check {$/;"	s
 cnpj_formated	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub cnpj_formated {$/;"	s
 coercion	./lib/Data/Verifier.pm	/^sub coercion {$/;"	s
+common::sense	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Contact.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Register.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Search.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API3/Iugu.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Geth.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Geth/Response.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Mailer.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Payment.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Payment/Cielo.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Payment/PagSeguro.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/Result/Donation.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/Result/ViewDonationPeriod.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/Result/ViewProjectValidVote.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/SmartContract.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Types.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Uploader.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Utils.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Worker/Email.pm	/^use common::sense;$/;"	u
+common::sense	./lib/VotoLegal/Worker/Slack.pm	/^use common::sense;$/;"	u
+common::sense	./lib/WebService/Certiface.pm	/^use common::sense;$/;"	u
+common::sense	./lib/WebService/Dcrtime.pm	/^use common::sense;$/;"	u
+common::sense	./lib/WebService/PagSeguro.pm	/^use common::sense;$/;"	u
+common::sense	./lib/WebService/Procob.pm	/^use common::sense;$/;"	u
+common::sense	./script/activate-candidates.pl	/^use common::sense;$/;"	u
+common::sense	./script/crontab/admin_report.pl	/^use common::sense;$/;"	u
+common::sense	./script/daemon/Blockchaind	/^use common::sense;$/;"	u
+common::sense	./script/daemon/Emailsd	/^use common::sense;$/;"	u
+common::sense	./script/daemon/Slackd	/^use common::sense;$/;"	u
+common::sense	./script/donation_stats_slack.pl	/^use common::sense;$/;"	u
+common::sense	./script/general_stats_slack.pl	/^use common::sense;$/;"	u
+common::sense	./script/get-candidate-avatar.pl	/^use common::sense;$/;"	u
+common::sense	./script/test_pagseguro.pl	/^use common::sense;$/;"	u
+common::sense	./script/update-domains.pl	/^use common::sense;$/;"	u
+config	./lib/VotoLegal/Worker.pm	/^has config => ($/;"	a
+config	./script/daemon/Slackd	/^our %config  = undef;$/;"	o
 contact	./lib/VotoLegal/Controller/API/Contact.pm	/^sub contact : Chained('base') : Args(0) : PathPart('') {$/;"	s
 count	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub count : Chained('base') : PathPart('count') : Args(0) : ActionClass('REST') { }$/;"	s
 count_GET	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub count_GET {$/;"	s
@@ -319,24 +1310,40 @@ createSession	./lib/WebService/PagSeguro.pm	/^sub createSession {$/;"	s
 create_and_capture_iugu_invoice	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub create_and_capture_iugu_invoice {$/;"	s
 create_invoice	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub create_invoice {$/;"	s
 create_invoice	./lib/WebService/IuguForReal.pm	/^sub create_invoice {$/;"	s
+create_log_refused	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub create_log_refused {$/;"	s
+create_log_success	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub create_log_success {$/;"	s
+credit_card_brand	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_brand => ($/;"	a
+credit_card_cvv	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_cvv => ($/;"	a
+credit_card_name	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_name => ($/;"	a
+credit_card_number	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_number => ($/;"	a
+credit_card_token	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_token => ($/;"	a
+credit_card_validity	./lib/VotoLegal/Schema/Result/Donation.pm	/^has credit_card_validity => ($/;"	a
 csv	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^sub csv : Chained('base') : PathPart('csv') : Args(0) {$/;"	s
 current_certiface	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub current_certiface {$/;"	s
+current_path	./lib/VotoLegal/Data/Visitor.pm	/^has current_path => ($/;"	a
+data	./lib/VotoLegal/Geth/Response.pm	/^has data => ($/;"	a
 data_for_credit_card_generation	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub data_for_credit_card_generation {$/;"	s
+dcrtime	./lib/VotoLegal/Worker/Blockchain.pm	/^has 'dcrtime' => ($/;"	a
 deactivate	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^sub deactivate : Chained('root') : PathPart('deactivate') : Args(0) : ActionClass('REST') { }$/;"	s
 deactivate_PUT	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^sub deactivate_PUT {$/;"	s
 default	./lib/VotoLegal/Controller/Root.pm	/^sub default : Path {$/;"	s
 depth	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^sub depth : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 depth_GET	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^sub depth_GET {$/;"	s
+derived	./lib/Data/Verifier.pm	/^has 'derived' => ($/;"	a
 die_with	./lib/VotoLegal/Dieable.pm	/^sub die_with ($) {$/;"	s
 die_with	./lib/VotoLegal/Utils.pm	/^sub die_with ($) {$/;"	s
 die_with_reason	./lib/VotoLegal/Dieable.pm	/^sub die_with_reason ($$) {$/;"	s
 die_with_reason	./lib/VotoLegal/Utils.pm	/^sub die_with_reason ($$) {$/;"	s
+die_with_reason/	./lib/VotoLegal/Dieable.pm	/^our @EXPORT = qw\/die_with die_with_reason\/;$/;"	w
+digest	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub digest : Chained('base') : PathPart('digest') : CaptureArgs(1) {$/;"	s
 do_authorization	./lib/VotoLegal/Payment/Cielo.pm	/^sub do_authorization {$/;"	s
 do_capture	./lib/VotoLegal/Payment/Cielo.pm	/^sub do_capture {$/;"	s
 donate	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^sub donate : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 donate	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub donate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+donate	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub donate : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 donate_GET	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^sub donate_GET {$/;"	s
 donate_GET	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub donate_GET {$/;"	s
+donate_GET	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub donate_GET {$/;"	s
 donation	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub donation : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {$/;"	s
 donation_POST	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub donation_POST {$/;"	s
 donations_more	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub donations_more : Chained('object') : PathPart('') : Args(1) : ActionClass('REST') { }$/;"	s
@@ -362,10 +1369,20 @@ expenditure_GET	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^sub ex
 export	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^sub export : Chained('base') : PathPart('') : Args(0) {$/;"	s
 export	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^sub export {$/;"	s
 export_tse	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub export_tse {$/;"	s
+feature 'state'	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use feature 'state';$/;"	u
+feature 'state'	./lib/WebService/CEP/Correios.pm	/^use feature 'state';$/;"	u
+feature 'state'	./lib/WebService/CEP/Postmon.pm	/^use feature 'state';$/;"	u
+feature 'state'	./lib/WebService/CEP/Viacep.pm	/^use feature 'state';$/;"	u
+filters	./lib/Data/Verifier.pm	/^has 'filters' => ($/;"	a
+final_value	./lib/VotoLegal/Data/Visitor.pm	/^has final_value => ($/;"	a
 find	./lib/WebService/CEP.pm	/^sub find {$/;"	s
 forbidden	./lib/VotoLegal/Controller/API.pm	/^sub forbidden : Private {$/;"	s
 forgot_password	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub forgot_password : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 forgot_password_POST	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub forgot_password_POST {$/;"	s
+from	./lib/VotoLegal/Mailer/Template.pm	/^has from => ($/;"	a
+furl	./lib/VotoLegal/Schema/Result/Candidate.pm	/^has furl => ( is => "rw", isa => "Furl", builder => '_build_furl', lazy => 1, );$/;"	a
+furl	./lib/WebService/Certiface.pm	/^has 'furl' => ( is => 'rw', lazy => 1, builder => '_build_furl' );$/;"	a
+furl	./lib/WebService/Procob.pm	/^has 'furl' => ( is => 'rw', lazy => 1, builder => '_build_furl' );$/;"	a
 gd_preconfig	./script/daemon/Blockchaind	/^sub gd_preconfig {$/;"	s
 gd_preconfig	./script/daemon/Emailsd	/^sub gd_preconfig {$/;"	s
 gd_preconfig	./script/daemon/Slackd	/^sub gd_preconfig {$/;"	s
@@ -392,12 +1409,15 @@ get_human_like_method	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_human_l
 get_invoice	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub get_invoice {$/;"	s
 get_invoice	./lib/WebService/IuguForReal.pm	/^sub get_invoice {$/;"	s
 get_license_value	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_license_value {$/;"	s
+get_license_value_in_cents	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_license_value_in_cents {$/;"	s
 get_most_recent_log	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_most_recent_log {$/;"	s
 get_most_recent_payment	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub get_most_recent_payment {$/;"	s
 get_pagseguro_data	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_pagseguro_data {$/;"	s
 get_phone_number_and_area_code	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub get_phone_number_and_area_code {$/;"	s
 get_schema	./lib/VotoLegal/SchemaConnected.pm	/^sub get_schema {$/;"	s
+get_testimonies	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub get_testimonies {$/;"	s
 get_token_information	./lib/WebService/Certiface.pm	/^sub get_token_information {$/;"	s
+geth	./lib/VotoLegal/SmartContract.pm	/^has geth => ($/;"	a
 has_amount_data	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub has_amount_data {$/;"	s
 has_log	./lib/VotoLegal/Worker.pm	/^sub has_log {$/;"	s
 has_mandatoaberto_integration	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub has_mandatoaberto_integration {$/;"	s
@@ -407,10 +1427,25 @@ isMainnet	./lib/VotoLegal/Geth.pm	/^sub isMainnet {$/;"	s
 isRunning	./lib/VotoLegal/Geth.pm	/^sub isRunning {$/;"	s
 isTestnet	./lib/VotoLegal/Geth.pm	/^sub isTestnet {$/;"	s
 is_test	./lib/VotoLegal/Utils.pm	/^sub is_test {$/;"	s
+is_test/	./lib/VotoLegal/Controller/API2.pm	/^use VotoLegal::Utils qw\/die_with is_test\/;$/;"	w
+is_test/	./lib/VotoLegal/Controller/API2/Donation.pm	/^use VotoLegal::Utils qw\/die_with is_test\/;$/;"	w
 issue_priority	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^sub issue_priority : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 issue_priority_GET	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^sub issue_priority_GET {$/;"	s
 left_padding_whitespaces	./lib/VotoLegal/Utils.pm	/^sub left_padding_whitespaces {$/;"	s
 left_padding_zeros	./lib/VotoLegal/Utils.pm	/^sub left_padding_zeros {$/;"	s
+lib "$RealBin/../../lib"	./script/crontab/admin_report.pl	/^use lib "$RealBin\/..\/..\/lib";$/;"	u
+lib "$RealBin/../../lib"	./script/daemon/Blockchaind	/^use lib "$RealBin\/..\/..\/lib";$/;"	u
+lib "$RealBin/../../lib"	./script/daemon/Emailsd	/^use lib "$RealBin\/..\/..\/lib";$/;"	u
+lib "$RealBin/../../lib"	./script/daemon/Slackd	/^use lib "$RealBin\/..\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/activate-candidates.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/donation_stats_slack.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/general_stats_slack.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/get-candidate-avatar.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/test_pagseguro.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib "$RealBin/../lib"	./script/update-domains.pl	/^use lib "$RealBin\/..\/lib";$/;"	u
+lib '../lib'	./script/votolegal_create.pl	/^    use lib '..\/lib';$/;"	u
+lib 'lib'	./script/update-graph.pl	/^use lib 'lib';$/;"	u
+lib 't/lib'	./script/update-graph.pl	/^use lib 't\/lib';$/;"	u
 list	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub list : Chained('base') : PathPart('list') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
@@ -418,16 +1453,19 @@ list	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list : Chaine
 list	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+list	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_GET {$/;"	s
+list_GET	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^sub list_GET {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list_POST {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^sub list_POST {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub list_POST {$/;"	s
+list_POST	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub list_POST {$/;"	s
 list_cities	./lib/VotoLegal/Controller/API/CEP.pm	/^sub list_cities : Chained('state') : PathPart('') Args('Int') GET {$/;"	s
 list_more	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_more : Chained('base') : PathPart('') : Args(1) : ActionClass('REST') { }$/;"	s
 list_more_GET	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_more_GET {$/;"	s
@@ -440,40 +1478,141 @@ load_envs_via_dbi	./lib/VotoLegal/SchemaConnected.pm	/^sub load_envs_via_dbi {$/
 log_error	./lib/VotoLegal/Logger.pm	/^sub log_error {$/;"	s
 log_fatal	./lib/VotoLegal/Logger.pm	/^sub log_fatal {$/;"	s
 log_info	./lib/VotoLegal/Logger.pm	/^sub log_info {$/;"	s
+log_request_parameters	./lib/VotoLegal.pm	/^sub log_request_parameters {$/;"	s
 logged	./lib/VotoLegal/Controller/API.pm	/^sub logged : Chained('root') : PathPart('') : CaptureArgs(0) {$/;"	s
+logger	./lib/VotoLegal/Payment/Cielo.pm	/^has logger => ( is => "rw", );$/;"	a
+logger	./lib/VotoLegal/Payment/PagSeguro.pm	/^has logger => ( is => "rw", );$/;"	a
+logger	./lib/VotoLegal/Schema/Result/Donation.pm	/^has logger => ( is => "rw", );$/;"	a
+logger	./lib/VotoLegal/Worker.pm	/^has logger => ($/;"	a
+logger	./lib/WebService/PagSeguro.pm	/^has logger => ( is => "rw", );$/;"	a
 login	./lib/VotoLegal/Controller/API/Login.pm	/^sub login : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 login_POST	./lib/VotoLegal/Controller/API/Login.pm	/^sub login_POST {$/;"	s
 lookup	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^sub lookup : Chained('base') : PathPart('') : Args(0) {$/;"	s
 lookup	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^sub lookup : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') {$/;"	s
 lookup_GET	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^sub lookup_GET {$/;"	s
+mailer	./lib/VotoLegal/Worker/Email.pm	/^has mailer => ($/;"	a
+media_bucket	./lib/VotoLegal/Uploader.pm	/^has media_bucket => ($/;"	a
+merchant_id	./lib/VotoLegal/Payment/Cielo.pm	/^has merchant_id => ($/;"	a
+merchant_id	./lib/VotoLegal/Payment/PagSeguro.pm	/^has merchant_id => ($/;"	a
+merchant_id	./lib/WebService/PagSeguro.pm	/^has merchant_id => ($/;"	a
+merchant_key	./lib/VotoLegal/Payment/Cielo.pm	/^has merchant_key => ($/;"	a
+merchant_key	./lib/VotoLegal/Payment/PagSeguro.pm	/^has merchant_key => ($/;"	a
+merchant_key	./lib/WebService/PagSeguro.pm	/^has merchant_key => ($/;"	a
 name	./lib/WebService/CEP/Correios.pm	/^sub name { 'Correios' }$/;"	s
 name	./lib/WebService/CEP/Postmon.pm	/^sub name { 'Postmon' }$/;"	s
 name	./lib/WebService/CEP/Viacep.pm	/^sub name { 'Viacep' }$/;"	s
+namespace::autoclean	./lib/VotoLegal.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin/Candidate/Status.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Bank.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Donation/Download.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Donation/Export.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Expenditure.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Contact.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/IssuePriority.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Login.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Office.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Party.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Register.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Search.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Stats.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API2.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API2/Certiface2Donation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API2/DeviceAuthentication.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API2/Donation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API3.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API3/Iugu.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Controller/Root.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Data/Manager.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Data/Visitor.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Geth.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Geth/Response.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Mailer/Template.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Role/Verification.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Role/Verification/TransactionalActions.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/User.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./lib/VotoLegal/SmartContract.pm	/^use namespace::autoclean;$/;"	u
+namespace::autoclean	./script/get-candidate-avatar.pl	/^use namespace::autoclean;$/;"	u
+namespace::autoclean -except => [qw(Int CEP)]	./lib/VotoLegal/Controller/API/CEP.pm	/^use namespace::autoclean -except => [qw(Int CEP)];$/;"	u
 new_session	./lib/VotoLegal/Schema/Result/User.pm	/^sub new_session {$/;"	s
 new_session	./lib/WebService/Certiface.pm	/^sub new_session {$/;"	s
 notification	./lib/VotoLegal/Payment/PagSeguro.pm	/^sub notification {$/;"	s
 notification	./lib/WebService/PagSeguro.pm	/^sub notification {$/;"	s
+notification_url	./lib/VotoLegal/Schema/Result/Donation.pm	/^has notification_url => ($/;"	a
 object	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API/Candidate.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
+object	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
+object	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
+object	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 obtain_lock	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub obtain_lock {$/;"	s
 office	./lib/VotoLegal/Controller/API/Office.pm	/^sub office : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 office_GET	./lib/VotoLegal/Controller/API/Office.pm	/^sub office_GET {$/;"	s
 on_state_enter	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub on_state_enter {$/;"	s
+open ':locale'	./script/test_pagseguro.pl	/^use open ':locale';$/;"	u
 party	./lib/VotoLegal/Controller/API/Party.pm	/^sub party : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 party_GET	./lib/VotoLegal/Controller/API/Party.pm	/^sub party_GET {$/;"	s
 party_fund	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub party_fund {$/;"	s
+password	./lib/VotoLegal/SmartContract.pm	/^has password => ($/;"	a
 payment	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 payment_POST	./lib/VotoLegal/Controller/API/Candidate/Payment.pm	/^sub payment_POST {$/;"	s
 payment_gateway	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^sub payment_gateway : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 payment_gateway_GET	./lib/VotoLegal/Controller/API/PaymentGateway.pm	/^sub payment_gateway_GET {$/;"	s
+payment_gateway_code	./lib/VotoLegal/Payment/Cielo.pm	/^has payment_gateway_code => ( is => "rw", );$/;"	a
 payment_info_parsed	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub payment_info_parsed {$/;"	s
 people_donated	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub people_donated {$/;"	s
 process_response_and_validate	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^sub process_response_and_validate {$/;"	s
+procob	./lib/VotoLegal/Worker/Procob.pm	/^has 'procob' => ($/;"	a
+profile	./lib/Data/Verifier.pm	/^has 'profile' => ($/;"	a
 project	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub project : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 project_DELETE	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub project_DELETE {$/;"	s
 project_GET	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub project_GET {$/;"	s
@@ -490,12 +1629,17 @@ recalc_summary	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub recalc_summary {
 register	./lib/VotoLegal/Controller/API/Register.pm	/^sub register : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 register_POST	./lib/VotoLegal/Controller/API/Register.pm	/^sub register_POST {$/;"	s
 remote_notify	./lib/VotoLegal/Utils.pm	/^sub remote_notify {$/;"	s
+remote_notify die_with_reason)	./lib/VotoLegal/Utils.pm	/^@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason);$/;"	w
 reset_password	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub reset_password : Chained('base') : PathPart('reset') : Args(1) : ActionClass('REST') { }$/;"	s
 reset_password_POST	./lib/VotoLegal/Controller/API/Login/ForgotPassword.pm	/^sub reset_password_POST {$/;"	s
 resize_image	./script/get-candidate-avatar.pl	/^sub resize_image {$/;"	s
+result	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub result : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {$/;"	s
 result	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') {$/;"	s
+result	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub result : Chained('digest') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 result_GET	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result_GET {$/;"	s
+result_GET	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub result_GET {$/;"	s
 result_POST	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub result_POST {$/;"	s
+result_PUT	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub result_PUT { }$/;"	s
 resultset	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub resultset {$/;"	s
 resultset	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub resultset { shift->result_source->resultset }$/;"	s
 resultset	./lib/VotoLegal/Schema/ResultSet/Donation.pm	/^sub resultset {$/;"	s
@@ -527,6 +1671,7 @@ root	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^sub root : C
 root	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub root : Chained('\/api\/candidate\/payment\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub root : Chained('\/api\/candidate\/object') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub root : Chained('\/api\/candidate\/object') : PathPart('') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub root : Chained('\/api\/candidate\/object') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/CandidateForPreRender.pm	/^sub root : Chained('\/api\/root') : PathPart('candidates-for-prerender') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/CandidateMetadata.pm	/^sub root : Chained('\/api\/root') : PathPart('candidate-metadata') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/Contact.pm	/^sub root : Chained('\/api\/root') : PathPart('') : CaptureArgs(0) { }$/;"	s
@@ -541,17 +1686,32 @@ root	./lib/VotoLegal/Controller/API/Register.pm	/^sub root : Chained('\/api\/roo
 root	./lib/VotoLegal/Controller/API/Search.pm	/^sub root : Chained('\/api\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/API/Stats.pm	/^sub root : Chained('\/api\/root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^sub root : Chained('\/api\/stats\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
+root	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub root : Chained('\/api3\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub root : Chained('\/api3\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI.pm	/^sub root : Chained('\/') : PathPart('public-api') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub root : Chained('\/publicapi\/candidate\/object') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-donations') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-donations-summary') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-summary') : CaptureArgs(0) {$/;"	s
 run_once	./lib/VotoLegal/Worker/Blockchain.pm	/^sub run_once {$/;"	s
 run_once	./lib/VotoLegal/Worker/Email.pm	/^sub run_once {$/;"	s
 run_once	./lib/VotoLegal/Worker/Procob.pm	/^sub run_once {$/;"	s
 run_once	./lib/VotoLegal/Worker/Slack.pm	/^sub run_once {$/;"	s
+sandbox	./lib/VotoLegal/Payment/Cielo.pm	/^has sandbox => ($/;"	a
+sandbox	./lib/VotoLegal/Payment/PagSeguro.pm	/^has sandbox => ($/;"	a
+sandbox	./lib/WebService/PagSeguro.pm	/^has sandbox => ($/;"	a
+schema	./lib/VotoLegal/Role/Verification/TransactionalActions/DBIC.pm	/^has schema => ($/;"	a
+schema	./lib/VotoLegal/Worker/Blockchain.pm	/^has 'schema' => ($/;"	a
+schema	./lib/VotoLegal/Worker/Email.pm	/^has schema => ($/;"	a
+schema	./lib/VotoLegal/Worker/Procob.pm	/^has 'schema' => ($/;"	a
+schema	./lib/VotoLegal/Worker/Slack.pm	/^has schema => ($/;"	a
 search	./lib/VotoLegal/Controller/API/Search.pm	/^sub search : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 search_POST	./lib/VotoLegal/Controller/API/Search.pm	/^sub search_POST {$/;"	s
+secret_key	./lib/VotoLegal/Uploader.pm	/^has secret_key => ($/;"	a
 send	./lib/VotoLegal/Mailer.pm	/^sub send {$/;"	s
+send_boleto_expired_email	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub send_boleto_expired_email {$/;"	s
+send_cc_refused_email	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub send_cc_refused_email {$/;"	s
 send_decred_email	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub send_decred_email {$/;"	s
 send_email	./lib/VotoLegal/Schema/Result/Donation.pm	/^sub send_email {$/;"	s
 send_email_approval	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub send_email_approval {$/;"	s
@@ -564,22 +1724,107 @@ send_pagseguro_transaction	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub send_p
 send_payment_approved_email	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub send_payment_approved_email {$/;"	s
 send_payment_in_analysis_email	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub send_payment_in_analysis_email {$/;"	s
 send_payment_not_approved_email	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub send_payment_not_approved_email {$/;"	s
+sender_hash	./lib/VotoLegal/Schema/Result/Donation.pm	/^has sender_hash => ($/;"	a
 serialize	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^sub serialize : ActionClass('Serialize') {$/;"	s
 session	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub session : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 session_GET	./lib/VotoLegal/Controller/API/Candidate/Payment/Session.pm	/^sub session_GET {$/;"	s
+session_token	./lib/WebService/Certiface.pm	/^has 'session_token' => ( is => 'rw', );$/;"	a
+session_token	./lib/WebService/Procob.pm	/^has 'session_token' => ( is => 'rw', );$/;"	a
 set_boleto_paid	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub set_boleto_paid {$/;"	s
 set_config	./lib/VotoLegal/Schema.pm	/^sub set_config {$/;"	s
 set_new_state	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub set_new_state {$/;"	s
 shift_until_input	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^sub shift_until_input {$/;"	s
+slack	./lib/VotoLegal/Worker/Slack.pm	/^has slack => ($/;"	a
+smtp_password	./lib/VotoLegal/Mailer.pm	/^has smtp_password => ($/;"	a
+smtp_port	./lib/VotoLegal/Mailer.pm	/^has smtp_port => ($/;"	a
+smtp_server	./lib/VotoLegal/Mailer.pm	/^has smtp_server => ($/;"	a
+smtp_timeout	./lib/VotoLegal/Mailer.pm	/^has smtp_timeout => ($/;"	a
+smtp_username	./lib/VotoLegal/Mailer.pm	/^has smtp_username => ($/;"	a
 stash_parsed	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub stash_parsed {$/;"	s
 state	./lib/VotoLegal/Controller/API/CEP.pm	/^sub state : Chained('\/api\/root') : PathPart('cep-states') CaptureArgs(0) {$/;"	s
 state_configuration	./lib/VotoLegal/Schema/Role/FsmLoader.pm	/^sub state_configuration {$/;"	s
 stats	./lib/VotoLegal/Controller/API/Stats.pm	/^sub stats : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 stats_GET	./lib/VotoLegal/Controller/API/Stats.pm	/^sub stats_GET {$/;"	s
+strict	./lib/VotoLegal/Dieable.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Logger.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Model/DB.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Bank.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/City.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Config.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Donation.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Office.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Party.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Payment.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Project.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Referral.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Role.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/State.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/User.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/SchemaConnected.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Worker/Blockchain.pm	/^use strict;$/;"	u
+strict	./lib/VotoLegal/Worker/Procob.pm	/^use strict;$/;"	u
+strict	./lib/WebService/IuguForReal.pm	/^use strict;$/;"	u
+strict	./script/update-graph.pl	/^use strict;$/;"	u
+strict	./script/votolegal_create.pl	/^use strict;$/;"	u
+subject	./lib/VotoLegal/Mailer/Template.pm	/^has subject => ($/;"	a
 sync_gateway_status	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub sync_gateway_status {$/;"	s
 sync_payments	./lib/VotoLegal/Controller/API2.pm	/^sub sync_payments : Chained('base') : PathPart('sync_payments') : Args(0) {$/;"	s
 sync_pending_payments	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub sync_pending_payments {$/;"	s
+template	./lib/VotoLegal/Mailer/Template.pm	/^has template => ($/;"	a
+that code'] unless $payment	./lib/VotoLegal/Controller/API/Candidate/Payment/Callback.pm	/^            die \\['code', 'could not find payment with that code'] unless $payment;$/;"	w
+that email' ] unless $candidate_user	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^    die \\[ 'email', 'could not find user with that email' ] unless $candidate_user;$/;"	w
+that id'] unless $payment	./lib/VotoLegal/Controller/API3/Iugu.pm	/^    die \\['id', 'could not find payment with that id'] unless $payment;$/;"	w
+that transaction code'] unless $payment	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^        die \\['transaction_code', 'could not find payment with that transaction code'] unless $payment;$/;"	w
+timer	./lib/VotoLegal/Worker.pm	/^has timer => ($/;"	a
+timer	./lib/VotoLegal/Worker/Blockchain.pm	/^has 'timer' => ($/;"	a
+timer	./lib/VotoLegal/Worker/Email.pm	/^has timer => ($/;"	a
+timer	./lib/VotoLegal/Worker/Procob.pm	/^has 'timer' => ($/;"	a
+timer	./lib/VotoLegal/Worker/Slack.pm	/^has timer => ($/;"	a
 timestamp	./lib/WebService/Dcrtime.pm	/^sub timestamp {$/;"	s
+to	./lib/VotoLegal/Mailer/Template.pm	/^has to => ($/;"	a
 tokenize	./lib/VotoLegal/Schema/Result/Donation.pm	/^sub tokenize {$/;"	s
 tokenize_credit_card	./lib/VotoLegal/Payment/Cielo.pm	/^sub tokenize_credit_card {$/;"	s
 total_donated	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub total_donated {$/;"	s
@@ -587,17 +1832,103 @@ total_donated_by_votolegal	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub tota
 transaction	./lib/VotoLegal/Payment/PagSeguro.pm	/^sub transaction {$/;"	s
 transaction	./lib/WebService/PagSeguro.pm	/^sub transaction {$/;"	s
 transaction_data	./lib/VotoLegal/Payment/PagSeguro.pm	/^sub transaction_data {$/;"	s
+ua	./lib/VotoLegal/Payment/Cielo.pm	/^has ua => ($/;"	a
+ua	./lib/VotoLegal/Payment/PagSeguro.pm	/^has ua => ($/;"	a
+ua	./lib/WebService/Dcrtime.pm	/^has 'ua' => ($/;"	a
+ua	./lib/WebService/IuguForReal.pm	/^has ua => ( is => "rw", isa => "Furl", builder => '_build_ua', lazy => 1, );$/;"	a
+ua	./lib/WebService/PagSeguro.pm	/^has ua => ($/;"	a
 unpublish	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub unpublish : Chained('base') : PathPart('unpublish') : Args(0) : ActionClass('REST') { }$/;"	s
 unpublish_POST	./lib/VotoLegal/Controller/API/Candidate/Publish.pm	/^sub unpublish_POST {$/;"	s
 update_code	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub update_code {$/;"	s
 upload	./lib/VotoLegal/Uploader.pm	/^sub upload {$/;"	s
 upload_picture	./script/get-candidate-avatar.pl	/^sub upload_picture {$/;"	s
+uploader	./lib/VotoLegal/Controller/API/Candidate.pm	/^has uploader => ($/;"	a
+uploader	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^has uploader => ($/;"	a
 upsert_decred_data	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^sub upsert_decred_data {$/;"	s
 uri_for	./lib/WebService/IuguForReal.pm	/^sub uri_for {$/;"	s
+utf8	./lib/VotoLegal.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Controller/API/CEP.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Controller/API/Certiface2DonationRedirect.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Controller/API2/Role/REST.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Dieable.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Bank.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/City.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Config.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Donation.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Office.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Party.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Payment.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Project.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Referral.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Role.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/State.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/User.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/FsmState.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/Schema/ResultSet/User.pm	/^use utf8;$/;"	u
+utf8	./lib/VotoLegal/SchemaConnected.pm	/^use utf8;$/;"	u
+utf8	./lib/WebService/IuguForReal.pm	/^use utf8;$/;"	u
+utf8	./script/update-graph.pl	/^use utf8;$/;"	u
 validate_donation_fp	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub validate_donation_fp {$/;"	s
 validate_required_information_for_payment	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub validate_required_information_for_payment {$/;"	s
+vars	./lib/VotoLegal/Mailer/Template.pm	/^has vars => ($/;"	a
+vars qw(@ISA @EXPORT)	./lib/VotoLegal/Utils.pm	/^use vars qw(@ISA @EXPORT);$/;"	u
+verbose	./script/daemon/Blockchaind	/^our $verbose = 0;$/;"	o
+verbose	./script/daemon/Emailsd	/^our $verbose = 0;$/;"	o
+verbose	./script/daemon/Slackd	/^our $verbose = 0;$/;"	o
+verifiers	./lib/VotoLegal/Role/Verification.pm	/^has verifiers => ($/;"	a
 verifiers_specs	./lib/VotoLegal/Schema/Result/Candidate.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/Result/Project.pm	/^sub verifiers_specs {$/;"	s
+verifiers_specs	./lib/VotoLegal/Schema/Result/Testimony.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/Candidate.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/CandidateMandatoAbertoIntegration.pm	/^sub verifiers_specs {$/;"	s
@@ -605,6 +1936,7 @@ verifiers_specs	./lib/VotoLegal/Schema/ResultSet/ContractSignature.pm	/^sub veri
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/Payment.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/PaymentNotification.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/Project.pm	/^sub verifiers_specs {$/;"	s
+verifiers_specs	./lib/VotoLegal/Schema/ResultSet/Testimony.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/User.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/UserForgotPassword.pm	/^sub verifiers_specs {$/;"	s
 verifiers_specs	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub verifiers_specs {$/;"	s
@@ -613,3 +1945,64 @@ verify	./lib/WebService/Dcrtime.pm	/^sub verify {$/;"	s
 visit_hash	./lib/VotoLegal/Data/Visitor.pm	/^sub visit_hash {$/;"	s
 vote	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^sub vote : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 vote_POST	./lib/VotoLegal/Controller/API/Candidate/Donation/Vote.pm	/^sub vote_POST {$/;"	s
+warnings	./lib/VotoLegal/Dieable.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Bank.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Candidate.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateCampaignConfig.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateDonationSummary.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateIssuePriority.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateMandatoAbertoIntegration.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateServiceDonation.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateServiceDonationInscription.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CandidateServiceDonor.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CertifaceReturnUrl.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CertifaceToken.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/City.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Config.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/ContractSignature.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/CpfLock.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DeviceAuthorizationToken.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DeviceAuthorizationUa.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Donation.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationFp.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationFpDetail.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationFpKey.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationFpValue.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationLog.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/DonationType.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/EmailQueue.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/EmaildbConfig.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/EmaildbQueue.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Expenditure.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/FsmState.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/FsmTransition.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/IssuePriority.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Office.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Party.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Payment.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PaymentDiscount.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PaymentHistory.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PaymentLog.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PaymentNotification.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/PoliticalMovement.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/ProcobBalance.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/ProcobResult.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Project.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/ProjectVote.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Referral.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Role.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/SlackQueue.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/State.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/Testimony.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/User.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/UserForgotPassword.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/UserRole.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/UserSession.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/VotolegalDonation.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Schema/Result/VotolegalDonationImmutable.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/SchemaConnected.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Worker/Blockchain.pm	/^use warnings;$/;"	u
+warnings	./lib/VotoLegal/Worker/Procob.pm	/^use warnings;$/;"	u
+warnings	./script/votolegal_create.pl	/^use warnings;$/;"	u
+xs	./lib/WebService/PagSeguro.pm	/^has xs => ($/;"	a
