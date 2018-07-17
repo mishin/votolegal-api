@@ -12,7 +12,7 @@ my $candidate_id;
 db_transaction {
     use_ok 'VotoLegal::Worker::Blockchain';
 
-    local $ENV{VOTOLEGAL_DCRTIME_API} = 'https://time-testnet.decred.org:59152/';
+    local $ENV{VOTOLEGAL_DCRTIME_API} = 'https://time-testnet.decred.org:59152';
 
     my $worker = new_ok( 'VotoLegal::Worker::Blockchain', [ schema => $schema ] );
 
