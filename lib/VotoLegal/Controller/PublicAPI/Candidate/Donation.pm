@@ -17,7 +17,6 @@ sub root : Chained('/publicapi/candidate/object') : PathPart('') : CaptureArgs(0
                 { payment_method_human => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
                 { decred_transaction_url => \"CASE WHEN me.decred_capture_txid IS NOT NULL THEN CONCAT('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) END" },
             ],
-			order_by => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
         }
     );
 }

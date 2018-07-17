@@ -139,7 +139,7 @@ sub donators_name_GET {
         {
             columns  => [ { name => 'votolegal_donation_immutable.donor_name' }, ],
             join     => 'votolegal_donation_immutable',
-            order_by => \'1',
+			order_by => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
             group_by => \'1',
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
