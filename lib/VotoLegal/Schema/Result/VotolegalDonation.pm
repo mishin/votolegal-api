@@ -168,7 +168,7 @@ sub as_row {
 
     my $immu = $donation->votolegal_donation_immutable;
     my $ret  = {
-        ( map { $_ => $donation->$_ } qw/id/ ),
+        ( map { $_ => $donation->$_ } qw/id state/ ),
         donor => {
             name => $immu->donor_name,
             cpf  => $immu->get_column('donor_cpf'),
@@ -486,7 +486,7 @@ sub send_boleto_expired_email {
         $subject = 'Voto Legal - Boleto expirado';
     }
     elsif ( $emaildb_config_id == 2 ) {
-        $subject = 'Pr&#xE9;-campanha - Boleto expirado';
+        $subject = 'Pr&#xE9;-campanha Marina Silva - Boleto expirado';
     }
     else {
         $subject = 'Campanha PSOL - Boleto expirado';

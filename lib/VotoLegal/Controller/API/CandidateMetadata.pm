@@ -54,6 +54,7 @@ sub candidate_GET {
                         twitter_profile => $twitter_profile,
                         address_state   => $c->running_for_address_state ? $c->running_for_address_state : $c->address_state,
                         office          => $c->office->name,
+                        url             => $c->custom_url ? $c->custom_url : 'https://www.votolegal.com.br/em/' . $c->username,
 
                         # A implementação do avatar foi feita no dia 21/06/2018. Nem todos os candidatos estão
                         # com essa coluna preenchida ainda.

@@ -231,9 +231,14 @@ sub _messages_of_state {
     }
     elsif ( $state eq 'waiting_boleto_payment' ) {
 
-        my $info = $donation->payment_info_parsed;
+        my $candidate_config_id = $donation->candidate->emaildb_config_id;
 
+        my $info = $donation->payment_info_parsed;
         my $text_boleto = $loc->('msg_boleto_message');
+
+        if ( $candidate_config_id == 2 ) {
+            $text_boleto = $loc->('msg_boleto_2_message');
+        }
 
         my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
         $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
@@ -247,7 +252,16 @@ sub _messages_of_state {
                 type => 'link',
                 text => $loc->('msg_boleto_link'),
                 href => $info->{secure_url},
-            }
+            },
+            ( $candidate_config_id == 2 ?
+              (
+                  {
+                      type => 'link',
+                      text => $loc->('feedback_form_text_2'),
+                      href => $loc->('feedback_form_url_2')
+                  }
+              ) : ( )
+            )
         );
 
     }
@@ -293,13 +307,26 @@ sub _messages_of_state {
     }
     elsif ( $donation->captured_at ) {
 
+		my $candidate_config_id = $donation->candidate->emaildb_config_id;
+
         my $info = $donation->payment_info_parsed;
+
+        my $text;
 
         @messages = (
             {
                 type => 'msg',
-                text => $donation->is_boleto ? $loc->('msg_boleto_paid_message') : $loc->('msg_cc_paid_message'),
+                text => $donation->is_boleto ? $loc->('msg_boleto_paid_message') : ( $candidate_config_id == 2 ? $loc->('msg_cc_paid_message_2') : $loc->('msg_cc_paid_message') ),
             },
+            ( $candidate_config_id == 2 ?
+              (
+                  {
+                      type => 'link',
+                      text => $loc->('feedback_form_text_2'),
+                      href => $loc->('feedback_form_url_2')
+                  }
+              ) : ( )
+            )
         );
 
     }
@@ -417,12 +444,11 @@ sub _process_waiting_boleto_payment {
     if ( $info->{status} eq 'paid' ) {
         $stash->{value} = 'boleto_paid';
     }
-    # TOOD testar
-    #elsif ( $info->{status} eq 'expired' ) {
-    #    $stash->{value} = 'boleto_expired';
+    elsif ( $info->{status} eq 'expired' ) {
+        $stash->{value} = 'due_reached';
 
-     #   $donation->send_boleto_expired_email();
-    #}
+        $donation->send_boleto_expired_email();
+    }
 
 }
 
@@ -465,6 +491,8 @@ sub _process_start_cc_payment {
     else {
 
         $stash->{value} = 'cc_not_authorized';
+
+        $donation->send_cc_refused_email();
 
         $stash->{messages} = [
             {

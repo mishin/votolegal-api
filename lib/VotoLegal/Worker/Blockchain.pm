@@ -9,7 +9,7 @@ use WebService::Dcrtime;
 
 has 'timer' => (
     is      => 'rw',
-    default => 30 * 60,    # 30 min.
+    default => 60 * 5, # 5 min.
 );
 
 has 'schema' => (
@@ -26,22 +26,24 @@ has 'dcrtime' => (
 sub listen_queue {
     my $self = shift;
 
-    $self->logger->info("Buscando itens na fila...") if $self->has_log;
+    $self->logger->info("[Blockchaind] Buscando itens na fila...") if $self->has_log;
 
-    my $queue_rs = $self->queue_rs;
+    $self->schema->txn_do(sub {
+        my $queue_rs = $self->queue_rs;
 
-    my $count = $queue_rs->count;
+        my $count = $queue_rs->count;
 
-    if ( $count > 0 ) {
-        $self->logger->info("Há '$count' itens na fila para serem processados.") if $self->has_log;
+        if ( $count > 0 ) {
+            $self->logger->info("[Blockchaind] Há '$count' itens na fila para serem processados.") if $self->has_log;
 
-        while ( my $donation = $queue_rs->next() ) {
-            $self->exec_item($donation);
+            while ( my $donation = $queue_rs->next() ) {
+                $self->exec_item($donation);
+            }
         }
-    }
-    else {
-        $self->logger->info("Nenhum item na fila.") if $self->has_log;
-    }
+        else {
+            $self->logger->info("[Blockchaind] Nenhum item na fila.") if $self->has_log;
+        }
+    });
 }
 
 sub queue_rs {
@@ -73,74 +75,76 @@ sub run_once {
 sub exec_item {
     my ( $self, $donation ) = @_;
 
-    $self->schema->txn_do(
-        sub {
-            $self->logger->info( "Processando a donation_id=" . $donation->id ) if $self->has_log;
+    eval {
+        $self->logger->info( "[Blockchaind] Processando a donation_id=" . $donation->id ) if $self->has_log;
 
-            my $decred_merkle_root  = $donation->get_column('decred_merkle_root');
-            my $decred_capture_txid = $donation->get_column('decred_capture_txid');
+        my $decred_merkle_root  = $donation->get_column('decred_merkle_root');
+        my $decred_capture_txid = $donation->get_column('decred_capture_txid');
 
-            $donation = $donation->upsert_decred_data;
-            my $decred_data_digest = $donation->get_column('decred_data_digest');
+        $donation = $donation->upsert_decred_data;
+        my $decred_data_digest = $donation->get_column('decred_data_digest');
 
-            # Timestamp.
-            $self->logger->info( "Registrando a doação id=" . $donation->id . '.' ) if $self->has_log;
+        # Timestamp.
+        $self->logger->info( "[Blockchaind] Registrando a doação id=" . $donation->id . '.' ) if $self->has_log;
+        $self->logger->debug(
+            sprintf(
+                "[Blockchaind] [donation_id=%s] [decred_data_digest=%s] Timestamping.",
+                $donation->id,
+                $decred_data_digest
+            )
+        ) if $self->has_log;
+
+        $self->dcrtime->timestamp(
+            id      => 'votolegal',
+            digests => [$decred_data_digest]
+        );
+
+        # Verify.
+        $self->logger->info( "[Blockchaind] Verificando a doação id=" . $donation->id . '...' ) if $self->has_log;
+
+        my $verify = $self->dcrtime->verify(
+            id      => 'votolegal',
+            digests => [$decred_data_digest]
+        );
+
+        my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
+        my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
+        my $empty       = '0' x 64;
+
+        my %update_data;
+        if ( $merkleroot ne $empty ) {
+            $update_data{decred_merkle_root}          = $merkleroot;
+            $update_data{decred_merkle_registered_at} = \'NOW()';
+        }
+
+        if ( $transaction ne $empty ) {
+            $update_data{decred_capture_txid}          = $transaction;
+            $update_data{decred_capture_registered_at} = \'NOW()';
+        }
+
+        if (%update_data) {
+            $self->logger->info( "[Blockchaind] Atualizando a doação id=" . $donation->id . '.' ) if $self->has_log;
             $self->logger->debug(
                 sprintf(
-                    "[donation_id=%s] [decred_data_digest=%s] Timestamping.",
-                    $donation->id,
-                    $decred_data_digest
+                    "[Blockchaind] [donation_id=%s] [decred_merkle_root=%s] [decred_capture_txid=%s]",
+                    $update_data{decred_merkle_root}  || 'undef',
+                    $update_data{decred_capture_txid} || 'undef',
                 )
             ) if $self->has_log;
 
-            $self->dcrtime->timestamp(
-                id      => 'votolegal',
-                digests => [$decred_data_digest]
-            );
-
-            # Verify.
-            $self->logger->info( "Verificando a doação id=" . $donation->id . '...' ) if $self->has_log;
-
-            my $verify = $self->dcrtime->verify(
-                id      => 'votolegal',
-                digests => [$decred_data_digest]
-            );
-
-            my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
-            my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
-            my $empty       = '0' x 64;
-
-            my %update_data;
-            if ( $merkleroot ne $empty ) {
-                $update_data{decred_merkle_root}          = $merkleroot;
-                $update_data{decred_merkle_registered_at} = \'NOW()';
-            }
-
-            if ( $transaction ne $empty ) {
-                $update_data{decred_capture_txid}          = $transaction;
-                $update_data{decred_capture_registered_at} = \'NOW()';
-            }
-
-            if (%update_data) {
-                $self->logger->info( "Atualizando a doação id=" . $donation->id . '.' ) if $self->has_log;
-                $self->logger->debug(
-                    sprintf(
-                        "[donation_id=%s] [decred_merkle_root=%s] [decred_capture_txid=%s]",
-                        $update_data{decred_merkle_root}  || 'undef',
-                        $update_data{decred_capture_txid} || 'undef',
-                    )
-                ) if $self->has_log;
-
-                $donation->update( \%update_data );
-            }
-
-            # Send email.
-            $donation->discard_changes;
-            if ( $donation->get_column('decred_merkle_root') && $donation->get_column('decred_capture_txid') ) {
-                $donation->send_decred_email();
-            }
+            $donation->update( \%update_data );
         }
-    );
+
+        # Send email.
+        $donation->discard_changes;
+        if ( $donation->get_column('decred_merkle_root') && $donation->get_column('decred_capture_txid') ) {
+            #$donation->send_decred_email();
+        }
+    };
+    if ($@) {
+        $self->logger->error(sprintf( "[Blockchaind] Erro ao processar a donation_id=%s: %s", $donation->id, $@ )) if $self->has_log;
+        return 0;
+    }
 
     return 1;
 }
