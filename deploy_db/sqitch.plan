@@ -151,3 +151,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0145-add-referral-table [0144-adding-one-more-movement] 2018-07-13T19:11:01Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Creating the 'referral' table
 0146-moving-referral_code-col [0145-add-referral-table] 2018-07-13T19:38:28Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Moving the referral_code to another table
 0147-add-custom_url [0146-moving-referral_code-col] 2018-07-17T03:19:24Z Lucas Ansei,,, <lucas@lucas-G750JX> # Adding custom_url field on 'candidate'
+0148-add-dcrtime-auth [0147-add-custom_url] 2018-07-17T21:02:56Z Junior Moraes <juniorfvox@gmail.com> # add-dcrtime-auth
