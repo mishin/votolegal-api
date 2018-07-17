@@ -5,6 +5,8 @@ use Moose;
 use JSON::MaybeXS;
 use Furl;
 use Try::Tiny::Retry;
+use URI::Escape;
+use MIME::Base64;
 
 has 'ua' => (
     is      => 'rw',
@@ -17,10 +19,18 @@ BEGIN { defined( $ENV{VOTOLEGAL_DCRTIME_API} ) or die "Missing env 'VOTOLEGAL_DC
 sub timestamp {
     my ( $self, %opts ) = @_;
 
+    my $headers = [];
+    if ($ENV{VOTOLEGAL_DCRTIME_USERNAME} && $ENV{VOTOLEGAL_DCRTIME_PASSWD}) {
+        my $username = uri_unescape($ENV{VOTOLEGAL_DCRTIME_USERNAME});
+        my $passwd   = uri_unescape($ENV{VOTOLEGAL_DCRTIME_PASSWD});
+
+        push @{ $headers }, ( 'Authorization' => 'Basic ' . encode_base64("$username:$passwd") );
+    }
+
     my $res;
     eval {
         retry {
-            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/timestamp/', [], encode_json( \%opts ) );
+            $res = $self->ua->post( $ENV{VOTOLEGAL_DCRTIME_API} . '/v1/timestamp/', $headers, encode_json( \%opts ) );
             die $res->decoded_content unless $res->is_success;
         }
         retry_if { shift() < 3 } catch { die $_; };
