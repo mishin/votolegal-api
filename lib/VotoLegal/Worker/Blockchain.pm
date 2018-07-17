@@ -137,7 +137,7 @@ sub exec_item {
             # Send email.
             $donation->discard_changes;
             if ( $donation->get_column('decred_merkle_root') && $donation->get_column('decred_capture_txid') ) {
-                $donation->send_decred_email();
+                #$donation->send_decred_email();
             }
         }
     );
