@@ -28,20 +28,22 @@ sub listen_queue {
 
     $self->logger->info("Buscando itens na fila...") if $self->has_log;
 
-    my $queue_rs = $self->queue_rs;
+    $self->schema->txn_do(sub {
+        my $queue_rs = $self->queue_rs;
 
-    my $count = $queue_rs->count;
+        my $count = $queue_rs->count;
 
-    if ( $count > 0 ) {
-        $self->logger->info("Há '$count' itens na fila para serem processados.") if $self->has_log;
+        if ( $count > 0 ) {
+            $self->logger->info("Há '$count' itens na fila para serem processados.") if $self->has_log;
 
-        while ( my $donation = $queue_rs->next() ) {
-            $self->exec_item($donation);
+            while ( my $donation = $queue_rs->next() ) {
+                $self->exec_item($donation);
+            }
         }
-    }
-    else {
-        $self->logger->info("Nenhum item na fila.") if $self->has_log;
-    }
+        else {
+            $self->logger->info("Nenhum item na fila.") if $self->has_log;
+        }
+    });
 }
 
 sub queue_rs {
