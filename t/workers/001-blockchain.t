@@ -4,8 +4,6 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
-plan skip_all => 'no dcrtime' unless $ENV{VOTOLEGAL_DCRTIME_API};
-
 my $schema = VotoLegal->model('DB');
 
 my $candidate;
@@ -13,6 +11,8 @@ my $candidate_id;
 
 db_transaction {
     use_ok 'VotoLegal::Worker::Blockchain';
+
+    local $ENV{VOTOLEGAL_DCRTIME_API} = 'https://time-testnet.decred.org:59152/';
 
     my $worker = new_ok( 'VotoLegal::Worker::Blockchain', [ schema => $schema ] );
 
@@ -64,8 +64,8 @@ db_transaction {
 
         $donation->discard_changes;
 
-        is( $donation->decred_merkle_root,  '49e3800699b87b48d3fdd3ab18cac8ec9b5d891a88914f1178bc7033a1ee734f' );
-        is( $donation->decred_capture_txid, '5d1b364b7e785ddbacba8637fac05daedc9b67dd5b02e557d22e01a96dfaf486' );
+        like( $donation->decred_merkle_root,  qr/^[a-f0-9]{64}$/, 'decred_merkle_root'  );
+        like( $donation->decred_capture_txid, qr/^[a-f0-9]{64}$/, 'decred_capture_txid' );
         ok( defined( $donation->decred_merkle_registered_at ) );
         ok( defined( $donation->decred_capture_registered_at ) );
     };
