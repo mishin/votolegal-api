@@ -1,73 +1,59 @@
 use common::sense;
 use FindBin qw($Bin);
-use lib "$Bin/../lib";
 
+BEGIN {
+    use lib "$Bin/../lib";
+    $ENV{LR_CODE_JSON_FILE} = $Bin . '/../../lr_code.json';
+}
+
+use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
 
-my $candidate;
-my $candidate_id;
-
 db_transaction {
-    local $ENV{VOTOLEGAL_DCRTIME_API} = 'https://time-testnet.decred.org:59152';
-
-    use_ok 'VotoLegal::Worker::Blockchain';
-
-    my $worker = new_ok( 'VotoLegal::Worker::Blockchain', [ schema => $schema ] );
-
-    ok( $worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Blockchain does VotoLegal::Worker' );
-
-    $candidate    = create_candidate;
-    $candidate_id = $candidate->{id};
+    create_candidate;
+    my $candidate_id = stash 'candidate.id';
 
     # Aprovando o candidato.
-    ok(
-        $schema->resultset('Candidate')->find($candidate_id)->update(
-            {
-                status         => "activated",
-                payment_status => "paid",
-            }
-        ),
-        'activate',
-    );
+    api_auth_as user_id => 1;
+    rest_put "/api/admin/candidate/$candidate_id/activate",
+      name => 'activate candidate',
+      code => 200,
+    ;
 
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
       name   => 'edit candidate',
       params => {
-        payment_gateway_id => 1,
+        cnpj               => format_cnpj( random_cnpj() ),
+        payment_gateway_id => 2,
         merchant_id        => fake_email->(),
         merchant_key       => random_string(32),
       },
-      ;
+    ;
 
     my $donation = &mock_donation;
-    subtest 'when not anchored' => sub {
 
-        ok( $worker->run_once(), 'run once' );
+    like( my $digest = $donation->get_column('decred_data_digest'), qr/^[a-f0-9]{64}$/, 'digest' );
 
-        ok( !defined( $donation->decred_merkle_root ),  'decred_merkle_root=undef' );
-        ok( !defined( $donation->decred_capture_txid ), 'decred_capture_txid=undef' );
-    };
+    rest_get [ '/public-api/donation/digest', $digest ],
+        name  => 'get donation',
+        stash => 'donation',
+    ;
 
-    subtest 'when anchored' => sub {
+    stash_test 'donation' => sub {
+        my $res = shift;
 
-        $donation->update(
-            {
-                decred_data_raw    => undef,
-                decred_data_digest => '83e99c8f31692ce5910f55be085156451ce48524275119e10ebf3a5c17ff3a6d',
-            }
-        );
+        is( ref $res->{donation}->{candidate},           'HASH', 'candidate' );
+        is( ref $res->{donation}->{candidate}->{party},  'HASH', 'party'     );
+        is( ref $res->{donation}->{candidate}->{office}, 'HASH', 'office'    );
 
-        ok( $worker->run_once(), 'run once' );
+        is( $res->{donation}->{amount}, 3000, 'amount=3000' );
+        ok( defined $res->{donation}->{payment_method_human}, 'payment method' );
 
-        $donation->discard_changes;
-
-        like( $donation->decred_merkle_root,  qr/^[a-f0-9]{64}$/, 'decred_merkle_root'  );
-        like( $donation->decred_capture_txid, qr/^[a-f0-9]{64}$/, 'decred_capture_txid' );
-        ok( defined( $donation->decred_merkle_registered_at ) );
-        ok( defined( $donation->decred_capture_registered_at ) );
+        like( $res->{donation}->{git_hash}, qr/^[a-f0-9]{40}$/, 'git hash' );
+        like( $res->{donation}->{git_url},  qr/^https:\/\/github\.com\/AppCivico/, 'git url' );
     };
 };
 

@@ -390,7 +390,7 @@ sub _process_wait_for_compensation {
 
     my $info = $donation->payment_info_parsed;
 
-    if ( $info->{status} eq 'chargeback' ) {
+    if ( $info->{status} eq 'chargeback' || $info->{status} eq 'refunded' ) {
         $stash->{value} = 'refunded';
     }
 }

@@ -334,13 +334,16 @@ sub action_specs {
                 $values{$_} or die_with 'need_billing_adddress' for qw/
                   billing_address_street
                   billing_address_district
+                  billing_address_house_number
                   billing_address_zipcode
                   billing_address_city
                   billing_address_state
                   /;
 
-                $values{$_} or die_with 'need_phone_for_boleto'     for qw/phone/;
-                $values{$_} or die_with 'need_birthdate_for_boleto' for qw/birthdate/;
+                if ( $candidate->emaildb_config_id != 2 ) {
+					$values{$_} or die_with 'need_phone_for_boleto'     for qw/phone/;
+					$values{$_} or die_with 'need_birthdate_for_boleto' for qw/birthdate/;
+                }
             }
 
             # tira espaços duplicados antes de salvar

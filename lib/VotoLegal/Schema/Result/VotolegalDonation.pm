@@ -334,7 +334,7 @@ sub _create_invoice {
             $subject = 'Voto Legal - Boleto gerado';
         }
         elsif ( $emaildb_config_id == 2 ) {
-            $subject = 'Pré-Campanha Marina Silva - Boleto gerado';
+            $subject = 'Doe Marina - Boleto gerado';
         }
         else {
             $subject = 'Campanha PSOL - Boleto gerado';
@@ -486,7 +486,7 @@ sub send_boleto_expired_email {
         $subject = 'Voto Legal - Boleto expirado';
     }
     elsif ( $emaildb_config_id == 2 ) {
-        $subject = 'Pr&#xE9;-campanha Marina Silva - Boleto expirado';
+        $subject = 'Doe Marina - Boleto expirado';
     }
     else {
         $subject = 'Campanha PSOL - Boleto expirado';
@@ -663,7 +663,7 @@ sub send_cc_refused_email {
         $subject = 'Voto Legal - Doação não autorizada';
     }
     elsif ( $emaildb_config_id == 2 ) {
-		$subject = 'Pré-campanha Marina Silva - Pagamento rejeitado';
+		$subject = 'Doe Marina - Pagamento rejeitado';
     }
     else {
         $subject = 'Campanha PSOL - Doação não autorizada';
