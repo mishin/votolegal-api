@@ -110,7 +110,7 @@ sub donate_GET {
 				total_donated_by_votolegal => $today_donations->{total_donated_by_votolegal},
 				count_donated_by_votolegal => $today_donations->{count_donated_by_votolegal}
             },
-			recent_donor => (
+			recent_donation => (
 				ref $recent_donation
 				? (
 					{
