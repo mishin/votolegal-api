@@ -158,7 +158,7 @@ msgid "email_1_captured_subject"
 msgstr "Voto legal - Recibo provisório"
 
 msgid "email_2_captured_subject"
-msgstr "Somos Rede - Recibo provisório"
+msgstr "Doe Marina - Recibo provisório"
 
 msgid "email_3_captured_subject"
 msgstr "Campanha PSOL - Recibo provisório"
