@@ -180,8 +180,8 @@ db_transaction {
 	    is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
 	    ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
 
-      is( $me->{recent_donor}->{amount}, 3500, 'amount=3500' );
-      like( $me->{recent_donor}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
+      is( $me->{recent_donation}->{amount}, 3500, 'amount=3500' );
+      like( $me->{recent_donation}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
 	};
 
 };
