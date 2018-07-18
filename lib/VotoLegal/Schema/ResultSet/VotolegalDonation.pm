@@ -334,6 +334,7 @@ sub action_specs {
                 $values{$_} or die_with 'need_billing_adddress' for qw/
                   billing_address_street
                   billing_address_district
+                  billing_address_house_number
                   billing_address_zipcode
                   billing_address_city
                   billing_address_state
