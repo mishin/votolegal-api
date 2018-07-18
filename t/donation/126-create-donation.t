@@ -174,11 +174,14 @@ db_transaction {
 	  stash => 'res';
 
 	stash_test 'res', sub {
-		my ($me) = @_;
+	    my ($me) = @_;
 
-		is( $me->{candidate}->{count_donated_by_votolegal}, 2,    '2 donations' );
-		is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
-		ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
+	    is( $me->{candidate}->{count_donated_by_votolegal}, 2,    '2 donations' );
+	    is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
+	    ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
+
+      is( $me->{recent_donor}->{amount}, 3500, 'amount=3500' );
+      like( $me->{recent_donor}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
 	};
 
 };

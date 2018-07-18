@@ -72,6 +72,30 @@ sub donate_GET {
         }
     )->next;
 
+	my $recent_donation = $candidate->votolegal_donations->search(
+		{
+            'me.refunded_at' => undef,
+            'me.captured_at' => { '!=' => undef },
+            'me.created_at'  => { '>=', \"(NOW() - '15 minutes'::interval)" },
+		},
+		{
+	        join     => [ qw/ votolegal_donation_immutable / ],
+            order_by => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
+            rows     => 1,
+            columns => [
+                { id          => 'me.id' },
+                { captured_at => \"TIMEZONE('America/Sao_Paulo', TIMEZONE('UTC', me.captured_at))" },
+                { amount      => 'votolegal_donation_immutable.amount' },
+                { payment_method_human => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
+                { name        => 'votolegal_donation_immutable.donor_name' },
+                { cpf         => 'votolegal_donation_immutable.donor_cpf' },
+                { hash        => 'me.decred_capture_txid' },
+                { digest      => 'me.decred_data_digest' },
+                { transaction_link => \"case when me.decred_capture_txid is not null then concat('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) end" },
+            ],
+		},
+	)->next;
+
 	return $self->status_ok(
 		$c,
 		entity => {
@@ -85,7 +109,17 @@ sub donate_GET {
 				raising_goal               => $raising_goal,
 				total_donated_by_votolegal => $today_donations->{total_donated_by_votolegal},
 				count_donated_by_votolegal => $today_donations->{count_donated_by_votolegal}
-            }
+            },
+			recent_donor => (
+				ref $recent_donation
+				? (
+					{
+						map { $_ => $recent_donation->get_column($_) }
+					  	qw /id captured_at refunded_at amount payment_method_human name cpf hash digest transaction_link /
+					}
+				)
+				: undef
+			),
 		}
 	);
 }
