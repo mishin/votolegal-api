@@ -50,7 +50,7 @@ sub csv : Chained('base') : PathPart('csv') : Args(0) {
                 { donor_address_city         => 'votolegal_donation_immutable.address_city' },
                 { donor_address_zipcode      => 'votolegal_donation_immutable.address_zipcode' },
                 { donor_address_district     => 'votolegal_donation_immutable.address_district' },
-                { donor_address_street       => 'votolegal_donation_immutable.address_district' },
+                { donor_address_street       => 'votolegal_donation_immutable.address_street' },
                 { donor_address_house_number => 'votolegal_donation_immutable.address_house_number' },
                 { donor_address_complement   => 'votolegal_donation_immutable.address_complement' },
                 {
