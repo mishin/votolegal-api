@@ -115,7 +115,7 @@ sub donate_GET {
 				? (
 					{
 						map { $_ => $recent_donation->get_column($_) }
-					  	qw /id captured_at refunded_at amount payment_method_human name cpf hash digest transaction_link /
+					  	qw/ id captured_at amount payment_method_human name cpf hash digest transaction_link /
 					}
 				)
 				: undef
