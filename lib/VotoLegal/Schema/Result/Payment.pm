@@ -497,56 +497,39 @@ sub get_license_value_in_cents {
 
     if ($has_promotion) {
 
-        if ($is_boleto) {
+        if ($has_political_movement) {
 
-            if ($has_political_movement) {
-
-                if ( $candidate->political_movement_id == 1 ) {
-                    $value = 24650;
-                }
-                elsif ( $candidate->party_id == 26 ) {
-                    $value = 29600;
-                }
-                elsif ( $candidate->political_movement_id == 9 ) {
-					$value = 34650;
-                }
-                else {
-                    $value = 39500;
-                }
-
+            if ( $candidate->political_movement_id == 1 ) {
+                $value = 14850;
+            }
+            elsif ( $candidate->party_id == 26 ) {
+                $value = 17820;
+            }
+            elsif ( $candidate->political_movement_id == 9 ) {
+                $value = 20800;
             }
             else {
-
-                if ( $candidate->party_id == 26 ) {
-                    $value = 29600;
-                }
-				elsif( $candidate->party_id == 15 ) {
-					$value = 34650;
-				}
-                else {
-                    $value = 39500;
-                }
-
+                $value = 23760;
             }
 
         }
         else {
 
-            if ( $candidate->political_movement_id && $candidate->political_movement_id == 1 ) {
-                $value = 24750;
+            if ( $candidate->party_id == 26 ) {
+                $value = 17820;
             }
-            elsif ( $candidate->party_id == 26 ) {
-                $value = 29700;
+            elsif( $candidate->party_id == 15 ) {
+                $value = 20800;
             }
             else {
-                $value = 39600;
+                $value = 23760;
             }
 
         }
 
     }
     else {
-        $value = $is_boleto ? 49400 : 49500;
+        $value = 29700;
     }
 
     return $value;
