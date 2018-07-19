@@ -521,6 +521,9 @@ sub get_license_value_in_cents {
             elsif( $candidate->party_id == 15 ) {
                 $value = 20800;
             }
+            elsif( $candidate->party_id == 4 && $candidate->address_state eq 'MT' ) {
+                $value = 14850;
+            }
             else {
                 $value = 23760;
             }
