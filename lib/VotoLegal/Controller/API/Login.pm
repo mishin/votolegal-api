@@ -78,6 +78,9 @@ sub login_POST {
                 elsif ( $candidate->party_id == 4 ) {
                     $value = '237.00';
                 }
+				elsif ( $candidate->party_id == 4 && $candidate->address_state eq 'MT' ) {
+					$value = '237.00';
+				}
                 elsif ( $candidate->party_id == 15 ) {
                     $value = '208.00';
                 }
