@@ -91,6 +91,14 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
   "procob_tested",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "julios_next_check",
+  { data_type => "timestamp", is_nullable => 1 },
+  "julios_erromsg",
+  {
+    data_type   => "text",
+    is_nullable => 1,
+    original    => { data_type => "varchar" },
+  },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -142,8 +150,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 16:45:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1+YHK+MEW95tBwtKGZSNcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-19 02:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0J6U2Mg8aHaDdz3FwLTLSA
 
 use Encode;
 use Carp;
