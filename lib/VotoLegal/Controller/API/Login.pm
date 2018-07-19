@@ -84,6 +84,9 @@ sub login_POST {
                 elsif ( $candidate->party_id == 15 ) {
                     $value = '208.00';
                 }
+				elsif ( $candidate->party_id == 34 ) {
+					$value = '237.60';
+				}
                 else {
                     $value = '297.00';
                 }
