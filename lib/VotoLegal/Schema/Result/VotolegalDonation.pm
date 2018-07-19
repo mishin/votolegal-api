@@ -694,15 +694,20 @@ sub sync_julios {
 
     return unless $ENV{JULIOS_URL};
 
-    my $ws = WebService::Julios->instance;
+    if ( $self->captured_at ) {
 
-    my $res = $ws->put_charge(
-        {
-            cpf         => $self->candidate->split_rule_id,
-            customer_id => $self->julios_customer_id,
-            gateway_tid => $self->gateway_tid,
-        }
-    );
+        my $ws        = WebService::Julios->instance;
+        my $candidate = $self->candidate;
+
+        my $res = $ws->put_charge(
+            {
+                split_rule_id => $candidate->split_rule_id,
+                customer_id   => $candidate->julios_customer_id,
+                gateway_tid   => $self->gateway_tid,
+            }
+        );
+
+    }
 
     $self->update(
         {

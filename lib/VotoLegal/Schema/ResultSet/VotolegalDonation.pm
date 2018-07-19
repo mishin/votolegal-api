@@ -627,7 +627,8 @@ sub sync_julios_payments {
     my $rs = $self->search(
         {
             julios_next_check => { '<=' => \'now()' },
-        }
+        },
+        { rows => 15 }
     );
 
     while ( my $r = $rs->next ) {
