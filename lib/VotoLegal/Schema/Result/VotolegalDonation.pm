@@ -704,6 +704,7 @@ sub sync_julios {
                 split_rule_id => $candidate->split_rule_id,
                 customer_id   => $candidate->julios_customer_id,
                 gateway_tid   => $self->gateway_tid,
+                api_key => $ENV{JULIOS_API_KEY}
             }
         );
 

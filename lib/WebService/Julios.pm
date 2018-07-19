@@ -37,8 +37,7 @@ sub put_charge {
 
         my $retry = 1;
       RETRY:
-        $res = $self->furl->get( $ENV{JULIOS_URL} . '/master/customers-charges',
-            [ 'X-Api-Key', $ENV{JULIOS_API_KEY} ] );
+        $res = $self->furl->get( $ENV{JULIOS_URL} . '/master/customers-charges', [] );
 
         # token expirou, faz login e tenta novamente
         if ( $res->code != 202  ) {
