@@ -154,3 +154,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0148-add-dcrtime-auth [0147-add-custom_url] 2018-07-17T21:02:56Z Junior Moraes <juniorfvox@gmail.com> # add-dcrtime-auth
 0149-add-env [0148-add-dcrtime-auth] 2018-07-17T21:20:44Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding the 'FRONT_URL' env
 0150-julios_col [0149-add-env] 2018-07-19T05:54:27Z renato,,, <renato@notebook> # add info to julios
+0151-split_rule_id [0150-julios_col] 2018-07-19T06:10:55Z renato,,, <renato@notebook> # split_rule_id

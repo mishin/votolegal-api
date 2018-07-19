@@ -190,7 +190,7 @@ sub verifiers_specs {
 
                         return 0 if $date !~ /^(19|20)[0-9]{2}-[0-9]{2}-[0-9]{2}$/;
 
-                        my $dt = eval{DateTime::Format::Pg->parse_datetime($date)};
+                        my $dt = eval { DateTime::Format::Pg->parse_datetime($date) };
                         return 0 if $@;
 
                         my $duration = DateTime->now->subtract_datetime($dt);
@@ -341,8 +341,8 @@ sub action_specs {
                   /;
 
                 if ( $candidate->emaildb_config_id != 2 ) {
-					$values{$_} or die_with 'need_phone_for_boleto'     for qw/phone/;
-					$values{$_} or die_with 'need_birthdate_for_boleto' for qw/birthdate/;
+                    $values{$_} or die_with 'need_phone_for_boleto'     for qw/phone/;
+                    $values{$_} or die_with 'need_birthdate_for_boleto' for qw/birthdate/;
                 }
             }
 
@@ -520,7 +520,7 @@ sub _create_donation {
                     billing_address_state        => $values{billing_address_state},
                     billing_address_complement   => $values{billing_address_complement},
 
-					referral_code => $values{referral_code},
+                    referral_code => $values{referral_code},
 
                     started_ip_address => $values{ip_address},
 
@@ -617,6 +617,26 @@ sub _check_daily_limit {
 
     if ( $sum_donation && $sum_donation > $values{max_donation_value} ) {
         die_with 'donation-daily-reached';
+    }
+
+}
+
+sub sync_julios_payments {
+    my ( $self, %opts ) = @_;
+
+    my $rs = $self->search(
+        {
+            julios_next_check => { '<=' => \'now()' },
+        }
+    );
+
+    while ( my $r = $rs->next ) {
+
+        eval { $r->sync_julios() };
+        if ($@) {
+            $r->discard_changes;
+            $r->update( { julios_erromsg => $@, julios_next_check => \"julios_next_check + '5 minutes'::interval" } );
+        }
     }
 
 }

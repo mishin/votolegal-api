@@ -159,6 +159,7 @@ use JSON::XS;
 use JSON qw/to_json from_json/;
 use Digest::SHA qw/ sha256_hex /;
 use WebService::Certiface;
+use WebService::Julios;
 
 sub resultset { shift->result_source->resultset }
 
@@ -281,7 +282,7 @@ sub payment_info_parsed {
 }
 
 sub _next_day_rand_str() {
-    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval"
+    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval";
 }
 
 sub _create_invoice {
@@ -485,7 +486,7 @@ sub set_boleto_paid {
 }
 
 sub send_boleto_expired_email {
-	my ($self) = @_;
+    my ($self) = @_;
 
     my $emaildb_config_id = $self->candidate->emaildb_config_id;
     my $subject;
@@ -664,29 +665,51 @@ sub send_decred_email {
 sub send_cc_refused_email {
     my ($self) = @_;
 
-	my $emaildb_config_id = $self->candidate->emaildb_config_id;
-	my $subject;
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
 
     if ( $emaildb_config_id == 1 ) {
         $subject = 'Voto Legal - Doação não autorizada';
     }
     elsif ( $emaildb_config_id == 2 ) {
-		$subject = 'Doe Marina - Pagamento rejeitado';
+        $subject = 'Doe Marina - Pagamento rejeitado';
     }
     else {
         $subject = 'Campanha PSOL - Doação não autorizada';
     }
 
-	$self->result_source->schema->resultset('EmaildbQueue')->create(
-		{
-			config_id => $self->candidate->emaildb_config_id,
-			template  => 'cc_refused.html',
-			to        => $self->votolegal_donation_immutable->donor_email,
-			subject   => $subject,
-			variables => encode_json( $self->as_row_for_email_variable() ),
-		}
-	);
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'cc_refused.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $subject,
+            variables => encode_json( $self->as_row_for_email_variable() ),
+        }
+    );
 }
 
+sub sync_julios {
+    my ($self) = @_;
+
+    return unless $ENV{JULIOS_URL};
+
+    my $ws = WebService::Julios->instance;
+
+    my $res = $ws->put_charge(
+        {
+            cpf         => $self->candidate->split_rule_id,
+            customer_id => $self->julios_customer_id,
+            gateway_tid => $self->gateway_tid,
+        }
+    );
+
+    $self->update(
+        {
+            julios_next_check => 'infinity'
+        }
+    );
+
+}
 __PACKAGE__->meta->make_immutable;
 1;

@@ -50,6 +50,24 @@ sub sync_payments : Chained('base') : PathPart('sync_payments') : Args(0) {
 
     $c->res->body("synced");
 }
+
+sub julios_sync : Chained('base') : PathPart('julios_sync') : Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->res->body('disabled');
+
+    $c->detach() unless ( $c->req->params->{secret} || '' ) eq $ENV{SYNC_JULIOS_SECRET};
+
+    $c->model('DB::VotolegalDonation')->sync_julios_payments(
+        loc   => sub {
+            return is_test() ? join( '', @_ ) : $c->loc(@_);
+        },
+    );
+
+    $c->res->body("synced");
+}
+
+
 __PACKAGE__->meta->make_immutable;
 
 1;
