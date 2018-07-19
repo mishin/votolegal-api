@@ -10,8 +10,8 @@ BEGIN {
     use VotoLegal::Utils qw/is_test/;
 
     if ( $ENV{JULIOS_URL} && ( !is_test() || $ENV{JULIOS_ENABLED} ) ) {
-        die "Missing JULIOS_API_KEY"    unless $ENV{JULIOS_API_KEY};
-        die "Missing JULIOS_URL" unless $ENV{JULIOS_URL};
+        die "Missing JULIOS_API_KEY" unless $ENV{JULIOS_API_KEY};
+        die "Missing JULIOS_URL"     unless $ENV{JULIOS_URL};
 
         $ENV{JULIOS_TEST} = 0;
     }
@@ -26,7 +26,7 @@ has 'furl' => ( is => 'rw', lazy => 1, builder => '_build_furl' );
 sub _build_furl { Furl->new( timeout => 60 ) }
 
 sub put_charge {
-    my ( $self, $token_uuid ) = @_;
+    my ( $self, $data ) = @_;
 
     my $res;
 
@@ -37,10 +37,14 @@ sub put_charge {
 
         my $retry = 1;
       RETRY:
-        $res = $self->furl->get( $ENV{JULIOS_URL} . '/master/customers-charges', [] );
+        $res = $self->furl->post(
+            $ENV{JULIOS_URL} . '/master/customers-charges',
+            [ 'Content-type', 'application/json' ],
+            to_json($data)
+        );
 
         # token expirou, faz login e tenta novamente
-        if ( $res->code != 202  ) {
+        if ( $res->code != 202 ) {
             die "Erro ao cadastrar no julios: " . $res->decoded_content;
 
         }
