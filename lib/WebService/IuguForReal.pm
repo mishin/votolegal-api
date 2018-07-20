@@ -109,6 +109,8 @@ sub create_invoice {
 
     if ( !$ENV{IUGU_MOCK} ) {
 
+=pod
+        # comentando ja que a iugu é meio lenta, e isso pode sair daqui e ir pra um crontab
         # checando se credit_card.two_step_transaction está habilitado
         if ( !$opts{is_boleto} ) {
             $logger->info("validating two_step_transaction...");
@@ -122,7 +124,7 @@ sub create_invoice {
               unless $json->{configuration}
               && $json->{configuration}->{credit_card}->{two_step_transaction};
         }
-
+=cut
     }
 
     my $invoice_email =
