@@ -49,6 +49,7 @@ sub login_POST {
                 $session->{phone}                  = $candidate->phone;
                 $session->{email}                  = $candidate->user->email;
                 $session->{campaign_donation_type} = $candidate->campaign_donation_type;
+                $session->{has_custom_site}        = $candidate->has_custom_site;
 
                 if ( my $payment = $candidate->payments->search( undef, { max => 'created_at' } )->next ) {
                     $session->{payment_method} = $payment->method;

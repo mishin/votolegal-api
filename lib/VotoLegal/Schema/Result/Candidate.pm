@@ -158,6 +158,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "julios_customer_id",
   { data_type => "integer", is_nullable => 1 },
+  "has_custom_site",
+  { data_type => "boolean", default_value => \"false", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("candidate_cpf_key", ["cpf"]);
@@ -298,8 +300,8 @@ __PACKAGE__->many_to_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-19 03:12:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mqV9S4Kr5NTZ3AIdGuA8YQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-20 17:01:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Az3z6FDc5PIxgJeeVLVMsw
 
 use File::Temp q(:seekable);
 use Data::Verifier;

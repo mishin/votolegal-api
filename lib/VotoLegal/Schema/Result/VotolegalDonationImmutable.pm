@@ -24,7 +24,7 @@ __PACKAGE__->add_columns(
   "donor_name",
   { data_type => "text", is_nullable => 0 },
   "donor_email",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "text", is_nullable => 0 },
   "donor_cpf",
   {
     data_type   => "text",
@@ -96,8 +96,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-19 02:56:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4mZ/BS7mQNGFIgLiGDUnAQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-20 17:01:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Gdz+tLf2QCJ0fvifrlIsFg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
