@@ -31,6 +31,7 @@ db_transaction {
     );
 
     api_auth_as candidate_id => $candidate_id;
+
     rest_put "/api/candidate/${candidate_id}",
       name   => 'edit candidate',
       params => {
@@ -44,11 +45,22 @@ db_transaction {
     inc_paid_at_seconds;
     &mock_donation;
 
+    api_auth_as candidate_id => $candidate_id;
+
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
       name    => 'invalid order_by_created_at',
       is_fail => 1,
       code    => 400,
       [ order_by_created_at => 'foo' ];
+
+    my $other_candidate = create_candidate;
+    my $other_candidate_id = stash 'candidate.id';
+    rest_get "/api/candidate/$other_candidate_id/votolegal-donations",
+      name    => 'other candidate_id',
+      is_fail => 1,
+      code    => 403,
+      [ filter => 'all' ]
+    ;
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
       name => 'get donations from voto legal with captured filter',

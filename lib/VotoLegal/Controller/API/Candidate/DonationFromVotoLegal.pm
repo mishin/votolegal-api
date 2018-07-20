@@ -11,7 +11,12 @@ BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
 with "CatalystX::Eta::Controller::TypesValidation";
 
-sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) { }
+sub root : Chained('/api/candidate/object') : PathPart('') : CaptureArgs(0) {
+    my ( $self, $c ) = @_;
+
+    $c->forward("/api/logged");
+    $c->forward("/api/forbidden") unless $c->stash->{is_me};
+}
 
 sub _filter_donation : Private {
     my ( $self, $c ) = @_;
@@ -159,7 +164,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
 
             ],
             join     => [ 'votolegal_donation_immutable', 'candidate' ],
-            order_by => [ { "-$order_by_created_at" => "captured_at" }, { "-$order_by_created_at" => "created_at" } ],
+            order_by => [ { "-$order_by_created_at" => "created_at" } ],
             rows     => $c->stash->{max_rows} + 1,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
