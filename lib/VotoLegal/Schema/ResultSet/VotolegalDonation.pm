@@ -628,7 +628,10 @@ sub sync_julios_payments {
         {
             julios_next_check => { '<=' => \'now()' },
         },
-        { rows => 15 }
+        {
+            rows     => 10,
+            order_by => \'random()',
+        }
     );
 
     while ( my $r = $rs->next ) {
@@ -648,6 +651,10 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'now()' },
+        },
+        {
+            rows     => 10,
+            order_by => \'random()',
         }
     );
 
