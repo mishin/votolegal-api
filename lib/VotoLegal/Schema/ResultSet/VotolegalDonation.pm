@@ -631,9 +631,8 @@ sub sync_julios_payments {
             'candidate.julios_customer_id' => { '!=' => undef },
         },
         {
-            rows     => 10,
+            rows     => 30,
             join     => 'candidate',
-            order_by => \'random()',
         }
     );
 
@@ -657,7 +656,6 @@ sub sync_pending_payments {
         },
         {
             rows     => 10,
-            order_by => \'random()',
         }
     );
 
