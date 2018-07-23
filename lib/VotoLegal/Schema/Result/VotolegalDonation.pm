@@ -91,6 +91,14 @@ __PACKAGE__->add_columns(
   { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
   "procob_tested",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "julios_next_check",
+  { data_type => "timestamp", is_nullable => 1 },
+  "julios_erromsg",
+  {
+    data_type   => "text",
+    is_nullable => 1,
+    original    => { data_type => "varchar" },
+  },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -142,8 +150,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 16:45:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1+YHK+MEW95tBwtKGZSNcQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-19 02:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0J6U2Mg8aHaDdz3FwLTLSA
 
 use Encode;
 use Carp;
@@ -151,6 +159,7 @@ use JSON::XS;
 use JSON qw/to_json from_json/;
 use Digest::SHA qw/ sha256_hex /;
 use WebService::Certiface;
+use WebService::Julios;
 
 sub resultset { shift->result_source->resultset }
 
@@ -273,7 +282,7 @@ sub payment_info_parsed {
 }
 
 sub _next_day_rand_str() {
-    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval"
+    \"now() + '1 day'::interval + ( ( random() * 300 )::int || 'seconds')::interval";
 }
 
 sub _create_invoice {
@@ -477,7 +486,7 @@ sub set_boleto_paid {
 }
 
 sub send_boleto_expired_email {
-	my ($self) = @_;
+    my ($self) = @_;
 
     my $emaildb_config_id = $self->candidate->emaildb_config_id;
     my $subject;
@@ -656,29 +665,57 @@ sub send_decred_email {
 sub send_cc_refused_email {
     my ($self) = @_;
 
-	my $emaildb_config_id = $self->candidate->emaildb_config_id;
-	my $subject;
+    my $emaildb_config_id = $self->candidate->emaildb_config_id;
+    my $subject;
 
     if ( $emaildb_config_id == 1 ) {
         $subject = 'Voto Legal - Doação não autorizada';
     }
     elsif ( $emaildb_config_id == 2 ) {
-		$subject = 'Doe Marina - Pagamento rejeitado';
+        $subject = 'Doe Marina - Pagamento rejeitado';
     }
     else {
         $subject = 'Campanha PSOL - Doação não autorizada';
     }
 
-	$self->result_source->schema->resultset('EmaildbQueue')->create(
-		{
-			config_id => $self->candidate->emaildb_config_id,
-			template  => 'cc_refused.html',
-			to        => $self->votolegal_donation_immutable->donor_email,
-			subject   => $subject,
-			variables => encode_json( $self->as_row_for_email_variable() ),
-		}
-	);
+    $self->result_source->schema->resultset('EmaildbQueue')->create(
+        {
+            config_id => $self->candidate->emaildb_config_id,
+            template  => 'cc_refused.html',
+            to        => $self->votolegal_donation_immutable->donor_email,
+            subject   => $subject,
+            variables => encode_json( $self->as_row_for_email_variable() ),
+        }
+    );
 }
 
+sub sync_julios {
+    my ($self) = @_;
+
+    return unless $ENV{JULIOS_URL};
+
+    if ( $self->captured_at ) {
+
+        my $ws        = WebService::Julios->instance;
+        my $candidate = $self->candidate;
+
+        my $res = $ws->put_charge(
+            {
+                split_rule_id => $candidate->split_rule_id,
+                customer_id   => $candidate->julios_customer_id,
+                gateway_tid   => $self->gateway_tid,
+                api_key => $ENV{JULIOS_API_KEY}
+            }
+        );
+
+    }
+
+    $self->update(
+        {
+            julios_next_check => 'infinity'
+        }
+    );
+
+}
 __PACKAGE__->meta->make_immutable;
 1;

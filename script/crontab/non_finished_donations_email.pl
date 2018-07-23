@@ -21,4 +21,3 @@ for my $donation (@donations) {
 			variables => encode_json( { donor_name => $donation->donor_name } ),
 		}
 	);
-}

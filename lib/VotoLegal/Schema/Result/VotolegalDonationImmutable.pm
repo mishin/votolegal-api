@@ -96,8 +96,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-13 16:45:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5VfOtAJZQxE7bQQYLWIGrg
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-20 17:01:01
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Gdz+tLf2QCJ0fvifrlIsFg
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

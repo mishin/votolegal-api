@@ -49,6 +49,7 @@ sub login_POST {
                 $session->{phone}                  = $candidate->phone;
                 $session->{email}                  = $candidate->user->email;
                 $session->{campaign_donation_type} = $candidate->campaign_donation_type;
+                $session->{has_custom_site}        = $candidate->has_custom_site;
 
                 if ( my $payment = $candidate->payments->search( undef, { max => 'created_at' } )->next ) {
                     $session->{payment_method} = $payment->method;
@@ -58,31 +59,37 @@ sub login_POST {
                 my $value;
                 if ( $candidate->political_movement_id ) {
                     if ( $candidate->political_movement_id == 1 ) {
-                        $value = '247.50';
+                        $value = '148.50';
                     }
                     elsif ( $candidate->political_movement_id == 9 ) {
-                        $value = '246.50';
+                        $value = '148.50';
                     }
                     elsif ( $candidate->party_id == 26 ) {
-                        $value = '297.00';
+                        $value = '178.20';
                     }
                     elsif (( $candidate->party_id == 34 && $candidate->political_movement_id != 1 )
                         || ( $candidate->political_movement_id && $candidate->political_movement_id =~ /^(2|3|4|5|8)$/ ) )
                     {
-                        $value = '396.00';
+                        $value = '237.60';
                     }
                 }
                 elsif ( $candidate->party_id == 26 ) {
-                    $value = '297.00';
+                    $value = '178.20';
                 }
                 elsif ( $candidate->party_id == 4 ) {
-                    $value = '396.00';
+                    $value = '237.00';
                 }
+				elsif ( $candidate->party_id == 4 && $candidate->address_state eq 'MT' ) {
+					$value = '237.00';
+				}
                 elsif ( $candidate->party_id == 15 ) {
-                    $value = '346.50';
+                    $value = '208.00';
                 }
+				elsif ( $candidate->party_id == 34 ) {
+					$value = '237.60';
+				}
                 else {
-                    $value = '495.00';
+                    $value = '297.00';
                 }
 
                 $session->{amount} = $value;

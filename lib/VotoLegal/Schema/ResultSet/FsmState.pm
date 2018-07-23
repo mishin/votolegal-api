@@ -258,7 +258,7 @@ sub _messages_of_state {
                   {
                       type => 'link',
                       text => $loc->('feedback_form_text_2'),
-                      href => $loc->('feedback_form_url_2')
+                      href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
                   }
               ) : ( )
             )
@@ -323,7 +323,7 @@ sub _messages_of_state {
                   {
                       type => 'link',
                       text => $loc->('feedback_form_text_2'),
-                      href => $loc->('feedback_form_url_2')
+                      href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
                   }
               ) : ( )
             )
