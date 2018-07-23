@@ -58,7 +58,7 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
 
             ],
             join         => 'votolegal_donation_immutable',
-            order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
+            order_by     => [ { '-desc' => "captured_at" }, 'me.created_at' ],
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
             rows         => $c->stash->{max_rows} + 1
         }
@@ -106,7 +106,7 @@ sub donations_more_GET {
             # capture precisao de segundos, entao pode trazer os que sao iguais
             # durante o teste, preciso ignorar isso
             captured_at => { $op => \[ "to_timestamp(?)", $captured_at ] },
-            created_at  => { '<' => \[ "to_timestamp(?)", $created_at ] },
+            #created_at  => { '<' => \[ "to_timestamp(?)", $created_at ] },
         }
     )->all();
 
