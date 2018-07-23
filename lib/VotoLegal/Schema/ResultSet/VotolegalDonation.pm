@@ -626,10 +626,13 @@ sub sync_julios_payments {
 
     my $rs = $self->search(
         {
-            julios_next_check => { '<=' => \'now()' },
+            julios_next_check              => { '<=' => \'now()' },
+            'candidate.split_rule_id'      => { '!=' => undef },
+            'candidate.julios_customer_id' => { '!=' => undef },
         },
         {
             rows     => 10,
+            join     => 'candidate',
             order_by => \'random()',
         }
     );
