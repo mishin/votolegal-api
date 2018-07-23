@@ -99,6 +99,14 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     original    => { data_type => "varchar" },
   },
+  "julios_status",
+  {
+    data_type   => "text",
+    is_nullable => 1,
+    original    => { data_type => "varchar" },
+  },
+  "julios_updated_at",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -150,8 +158,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-19 02:56:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0J6U2Mg8aHaDdz3FwLTLSA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 08:48:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fi3O2de9AnxJ7yBnF/K/CA
 
 use Encode;
 use Carp;
