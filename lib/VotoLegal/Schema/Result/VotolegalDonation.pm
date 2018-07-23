@@ -107,6 +107,8 @@ __PACKAGE__->add_columns(
   },
   "julios_updated_at",
   { data_type => "timestamp", is_nullable => 1 },
+  "julios_transfer_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -158,8 +160,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 08:48:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fi3O2de9AnxJ7yBnF/K/CA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 15:01:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HJu+W21U/M271sHct9/k5A
 
 use Encode;
 use Carp;
