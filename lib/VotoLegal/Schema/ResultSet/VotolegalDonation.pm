@@ -626,10 +626,13 @@ sub sync_julios_payments {
 
     my $rs = $self->search(
         {
-            julios_next_check => { '<=' => \'now()' },
+            julios_next_check              => { '<=' => \'now()' },
+            'candidate.split_rule_id'      => { '!=' => undef },
+            'candidate.julios_customer_id' => { '!=' => undef },
         },
         {
             rows     => 10,
+            join     => 'candidate',
             order_by => \'random()',
         }
     );
@@ -820,7 +823,7 @@ sub _get_status_and_motive {
 }
 
 sub get_non_finished_donations_on_last_3_days {
-    my ($self, $candidate_id) = @_;
+    my ( $self, $candidate_id ) = @_;
 
     my @where = \[ <<'SQL_QUERY', $candidate_id ];
       state IN ('credit_card_form', 'boleto_authetication')
@@ -835,10 +838,7 @@ sub get_non_finished_donations_on_last_3_days {
       )
 SQL_QUERY
 
-    return $self->search(
-        { '-and' => \@where },
-        { prefetch => 'votolegal_donation_immutable' }
-    )
+    return $self->search( { '-and' => \@where }, { prefetch => 'votolegal_donation_immutable' } );
 }
 
 1;
