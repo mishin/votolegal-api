@@ -714,17 +714,18 @@ sub sync_julios {
                 api_key       => $ENV{JULIOS_API_KEY}
             }
         );
+        my $charge = $res->{charge};
 
-        $cols{julios_status}     = $res->{charge}{status};
+        $cols{julios_status}     = $charge->{status};
         $cols{julios_updated_at} = \'now()';
 
-        if ( $cols{julios_status}{gateway_next_check} ne 'Inf' ) {
+        if ( $charge->{gateway_next_check} ne 'Inf' ) {
 
             # se o julios ainda for atualizar o status mais pra frente
             # vamos buscar 15 minutos depois
 
             $cols{julios_next_check} =
-              \[ "?::timestamp without time zone + '15 minutes'::interval", $cols{julios_status}{gateway_next_check} ];
+              \[ "?::timestamp without time zone + '15 minutes'::interval", $charge->{gateway_next_check} ];
         }
         else {
 
