@@ -84,6 +84,7 @@ sub interface {
     }
 
     if ( !$state_config || !$max_auto_continues ) {
+        remote_notify($@)if $@;
         log_error($@) if $@;
 
         $interface->{messages} = [
@@ -609,6 +610,7 @@ sub apply_interface {
     my $interface_ui;
     my $apply = eval { $self->_apply(%opts) };
     if ($@) {
+        remote_notify($@);
         log_error($@);
         $interface->{ui}{messages} = [
             {

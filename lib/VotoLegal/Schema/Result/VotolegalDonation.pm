@@ -107,6 +107,8 @@ __PACKAGE__->add_columns(
   },
   "julios_updated_at",
   { data_type => "timestamp", is_nullable => 1 },
+  "julios_transfer_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -158,8 +160,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 08:48:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fi3O2de9AnxJ7yBnF/K/CA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 15:01:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HJu+W21U/M271sHct9/k5A
 
 use Encode;
 use Carp;
@@ -700,9 +702,8 @@ sub send_cc_refused_email {
 sub sync_julios {
     my ($self) = @_;
 
-    return unless $ENV{JULIOS_URL};
-
-    if ( $self->captured_at ) {
+    my %cols;
+    if ( $ENV{JULIOS_URL} && $self->captured_at ) {
 
         my $ws        = WebService::Julios->instance;
         my $candidate = $self->candidate;
@@ -712,15 +713,36 @@ sub sync_julios {
                 split_rule_id => $candidate->split_rule_id,
                 customer_id   => $candidate->julios_customer_id,
                 gateway_tid   => $self->gateway_tid,
-                api_key => $ENV{JULIOS_API_KEY}
+                api_key       => $ENV{JULIOS_API_KEY}
             }
         );
+        my $charge = $res->{charge};
 
+        $cols{julios_status}     = $charge->{status};
+        $cols{julios_updated_at} = \'now()';
+
+        if ( $charge->{gateway_next_check} ne 'Inf' ) {
+
+            # se o julios ainda for atualizar o status mais pra frente
+            # vamos buscar 15 minutos depois
+
+            $cols{julios_next_check} =
+              \[ "?::timestamp without time zone + '15 minutes'::interval", $charge->{gateway_next_check} ];
+        }
+        else {
+
+            # se o status for transfer_ready, entao vamos buscar em 1 dia, para verificar se ficou como "transferido"
+            if ( $cols{julios_status} eq 'transfer_ready' ) {
+                $cols{julios_next_check} = \"now() + '1 day'::interval";
+            }
+
+        }
     }
 
     $self->update(
         {
-            julios_next_check => 'infinity'
+            julios_next_check => 'infinity',
+            %cols
         }
     );
 

@@ -7,6 +7,7 @@ use URI;
 use URI::QueryParam;
 use URI::Escape;
 
+use Data::Dumper qw/Dumper/;
 my $alert_used;
 my $furl = Furl->new( timeout => 5 );
 
@@ -46,10 +47,10 @@ sub left_padding_whitespaces {
 }
 
 sub right_padding_whitespaces {
-	my ( $string, $pos ) = @_;
+    my ( $string, $pos ) = @_;
 
-	$pos = $pos + length $string;
-	return sprintf( "%-${pos}s", $string );
+    $pos = $pos + length $string;
+    return sprintf( "%-${pos}s", $string );
 }
 
 sub die_with ($) {
@@ -64,6 +65,10 @@ my $already_notifed;
 
 sub remote_notify {
     my ( $text, %opts ) = @_;
+
+    if ( ref $text ne '' ) {
+        $text = Dumper($text);
+    }
 
     if ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ ) {
         eval('use DDP; p $text');
