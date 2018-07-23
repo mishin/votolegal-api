@@ -5,19 +5,20 @@ use lib "$RealBin/../../lib";
 
 use VotoLegal::SchemaConnected;
 
+use JSON::XS;
+
 my $schema = get_schema;
 
-my $candidate_rs = $schema->resultset('Candidate')->search( { status => 'activated' } );
-my $donation_rs  = $schema->resultset('VotolegalDonation');
+my @donations = $schema->resultset('ViewOpenDonationsWith3DayPeriod')->all();
 
-my $candidate    = $candidate_rs->next();
-my $candidate_id = $candidate->id;
-my $count = 0;
-while ( my $candidate = $candidate_rs->next() ) {
-    my $candidate_id = $candidate->id;
-
-    my $foo = $donation_rs->get_non_finished_donations_on_last_3_days($candidate_id);
-    $count++;
+for my $donation (@donations) {
+	$schema->resultset('EmaildbQueue')->create(
+		{
+			config_id => 2,
+			template  => 'non_finished_donation.html',
+			to        => $donation->donor_email,
+			subject   => 'Doe Marina - Termine sua doação',
+			variables => encode_json( { donor_name => $donation->donor_name } ),
+		}
+	);
 }
-
-use DDP; p $count;
