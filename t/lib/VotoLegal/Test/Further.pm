@@ -95,11 +95,11 @@ sub db_transaction (&) {
         $schema->txn_do(
             sub {
                 $subref->($schema);
-                die 'rollback';
+                die "rollback_XX";
             }
         );
     };
-    die $@ unless $@ =~ /rollback/;
+    die $@ unless $@ =~ /rollback_XX/;
 }
 
 my $auth_user = {};

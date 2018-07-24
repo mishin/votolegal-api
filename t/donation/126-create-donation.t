@@ -93,7 +93,6 @@ db_transaction {
     db_transaction {
         setup_sucess_mock_iugu_chargeback;
 
-
         $response = rest_get $donation_url,
           code   => 200,
           params => { device_authorization_token_id => stash 'test_auth', };
@@ -169,20 +168,23 @@ db_transaction {
         is @{ $me->{names} }, '2', '2 names';
     };
 
-	rest_get [ '/public-api/candidate-donations-summary/' . stash 'candidate.id' ],
-	  code  => 200,
-	  stash => 'res';
+    rest_get [ '/public-api/candidate-donations-summary/' . stash 'candidate.id' ],
+      code  => 200,
+      stash => 'res';
 
-	stash_test 'res', sub {
-	    my ($me) = @_;
+    stash_test 'res', sub {
+        my ($me) = @_;
 
-	    is( $me->{candidate}->{count_donated_by_votolegal}, 2,    '2 donations' );
-	    is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
-	    ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
+        is( $me->{candidate}->{count_donated_by_votolegal}, 2,    '2 donations' );
+        is( $me->{candidate}->{total_donated_by_votolegal}, 6500, 'expected amount' );
+        ok( exists( $me->{candidate}->{raising_goal} ), 'raising goal exists' );
 
-      is( $me->{recent_donation}->{amount}, 3500, 'amount=3500' );
-      like( $me->{recent_donation}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
-	};
+        is( $me->{recent_donation}->{amount}, 3500, 'amount=3500' );
+        like( $me->{recent_donation}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
+    };
+
+    $schema->resultset('VotolegalDonation')->update( { next_gateway_check => '2010-01-01' } );
+    $schema->resultset('VotolegalDonation')->sync_pending_payments( loc => sub { shift() } );
 
 };
 
@@ -237,17 +239,17 @@ sub test_boleto {
     # Testando boleto expirado
     db_transaction {
         setup_failed_mock_iugu_boleto;
-		$response = rest_get $donation_url,
-		  name   => "get donation boleto",
-		  params => { device_authorization_token_id => stash 'test_auth', };
+        $response = rest_get $donation_url,
+          name   => "get donation boleto",
+          params => { device_authorization_token_id => stash 'test_auth', };
         assert_current_step('boleto_expired');
 
-    	is($schema->resultset("EmaildbQueue")->count, 3, 'Boleto created and expired are queued');
+        is( $schema->resultset("EmaildbQueue")->count, 3, 'Boleto created and expired are queued' );
     };
 
     setup_sucess_mock_iugu_boleto_success;
 
-    is ($schema->resultset("EmaildbQueue")->count, 2, 'Boleto created and captured emails are queued');
+    is( $schema->resultset("EmaildbQueue")->count, 2, 'Boleto created and captured emails are queued' );
 
     my $donation_stash = get_current_stash;
     is keys %$donation_stash, 0, 'nothing on stash';
