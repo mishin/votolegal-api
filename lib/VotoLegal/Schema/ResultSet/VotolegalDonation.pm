@@ -22,6 +22,7 @@ use File::Temp ':seekable';
 use Time::HiRes;
 use Cwd qw(chdir);
 use UUID::Tiny qw/is_uuid_string/;
+use Parallel::ForkManager;
 
 my $lr_code_table;
 
@@ -631,8 +632,8 @@ sub sync_julios_payments {
             'candidate.julios_customer_id' => { '!=' => undef },
         },
         {
-            rows     => 30,
-            join     => 'candidate',
+            rows => 30,
+            join => 'candidate',
         }
     );
 
@@ -653,14 +654,19 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'now()' },
-            state => [qw/wait_for_compensation waiting_boleto_payment/]
+            state              => [qw/wait_for_compensation waiting_boleto_payment/]
         },
         {
-            rows     => 35,
+            rows => 35,
         }
     );
 
+    my $pm = Parallel::ForkManager->new( $ENV{SYNC_WORKERS} || 1 );
+
+  DATA_LOOP:
     while ( my $r = $rs->next ) {
+
+        my $pid = $pm->start and next DATA_LOOP;
 
         my $interface = $self->result_source->schema->resultset('FsmState')->interface(
             class    => 'payment',
@@ -669,6 +675,8 @@ sub sync_pending_payments {
 
             supports => {},
         );
+
+        $pm->finish;
 
     }
 }
