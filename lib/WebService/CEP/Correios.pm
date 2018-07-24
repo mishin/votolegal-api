@@ -7,7 +7,11 @@ use feature 'state';
 sub name { 'Correios' }
 
 sub _find {
-    state $cepper = WWW::Correios::CEP->new;
+    state $cepper = WWW::Correios::CEP->new(
+        {
+            post_content => 'tipoCEP=ALL&semelhante=N&relaxation='
+        }
+    );
     my $r = $cepper->find(pop);
 
     return
