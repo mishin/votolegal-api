@@ -8,8 +8,9 @@ use Moose;
 use JSON::XS;
 use JSON qw/from_json/;
 use Carp;
-use VotoLegal::Utils qw/is_test/;
+use VotoLegal::Utils qw/is_test remote_notify/;
 use Digest::SHA qw(sha1_hex);
+
 
 extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Schema::Role::ResultsetFind';
