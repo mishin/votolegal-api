@@ -16,11 +16,12 @@ __PACKAGE__->result_source_instance->is_virtual(1);
 __PACKAGE__->result_source_instance->view_definition(<<'SQL_QUERY');
 WITH open_donations AS (
     SELECT d.id, d.candidate_id, d.state, i.donor_email, i.donor_cpf, d.created_at, i.donor_name
-        FROM votolegal_donation AS d, votolegal_donation_immutable AS i
+        FROM votolegal_donation AS d, votolegal_donation_immutable AS i, candidate AS c
         WHERE d.created_at BETWEEN ( now()::date - interval '3 days' ) AND ( now()::date - interval '2 days' )
             AND state IN ('credit_card_form', 'boleto_authetication')
             AND d.id = i.votolegal_donation_id
-            AND d.candidate_id = 40
+            AND d.candidate_id = c.id
+            AND c.emaildb_config_id = 2
 )
 SELECT o.id,
        o.candidate_id,
