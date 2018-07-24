@@ -85,6 +85,8 @@ sub donate_GET {
     my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
     $donations[-1]{_marker} = $marker if $marker;
 
+    delete $_->{_time_epoch} for @donations;
+
     return $self->status_ok(
         $c,
         entity => {
@@ -120,6 +122,8 @@ sub donations_more_GET {
     }
     my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
     $donations[-1]{_marker} = $marker if $marker;
+
+    delete $_->{_time_epoch} for @donations;
 
     return $self->status_ok(
         $c,
