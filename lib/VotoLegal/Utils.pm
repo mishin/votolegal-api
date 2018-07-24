@@ -6,14 +6,21 @@ use Furl;
 use URI;
 use URI::QueryParam;
 use URI::Escape;
+use MIME::Base64 qw(encode_base64url decode_base64url);
 
+use UUID::Tiny qw/uuid_to_string string_to_uuid/;
+
+use Data::Dumper qw/Dumper/;
 my $alert_used;
 my $furl = Furl->new( timeout => 5 );
 
 use vars qw(@ISA @EXPORT);
 
 @ISA    = (qw(Exporter));
-@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason);
+@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason
+  gen_page_marker
+  parse_page_marker
+);
 
 =head1 METHODS
 
@@ -46,10 +53,10 @@ sub left_padding_whitespaces {
 }
 
 sub right_padding_whitespaces {
-	my ( $string, $pos ) = @_;
+    my ( $string, $pos ) = @_;
 
-	$pos = $pos + length $string;
-	return sprintf( "%-${pos}s", $string );
+    $pos = $pos + length $string;
+    return sprintf( "%-${pos}s", $string );
 }
 
 sub die_with ($) {
@@ -64,6 +71,10 @@ my $already_notifed;
 
 sub remote_notify {
     my ( $text, %opts ) = @_;
+
+    if ( ref $text ne '' ) {
+        $text = Dumper($text);
+    }
 
     if ( $ENV{HARNESS_ACTIVE} || $0 =~ /forkprove/ ) {
         eval('use DDP; p $text');
@@ -96,4 +107,74 @@ sub remote_notify {
     }
 
 }
+
+sub gen_page_marker {
+    my ( $time_col, $id_column, $rows, %opts ) = @_;
+
+    my $compress = $opts{compress_id_from_uuid};
+
+    # 0 rows
+    return undef unless @$rows;
+
+    my $marker = $rows->[-1]{$time_col};
+
+    sub _check_or_die {
+        die 'cannot gen_page_marker because columns have unescaped chars' if $_[0] =~ /(\s|\*)/o;
+    }
+
+    my $last_time = $marker;
+    _check_or_die($marker);
+
+    # reverse loop until find a different time
+    for my $row ( reverse @$rows ) {
+
+        my $row_time = $row->{$time_col};
+
+        if ( $row_time eq $last_time ) {
+
+            my $id = $row->{$id_column};
+
+            if ($compress) {
+
+                $marker .= '*' . encode_base64url( string_to_uuid($id) );
+
+            }
+            else {
+
+                _check_or_die($id);
+                $marker .= ' ' . $id;
+
+            }
+
+        }
+        else {
+            last;
+        }
+
+    }
+
+    return $marker;
+
+}
+
+sub parse_page_marker {
+    my ($str) = @_;
+
+    my ( $time, $id_str, @ids );
+    if ( $str =~ / / ) {
+
+        ( $time, $id_str ) = split / /, $str, 2;
+
+        @ids = split / /, $id_str;
+
+    }
+    else {
+        ( $time, $id_str ) = split /\*/, $str, 2;
+        @ids = map { uuid_to_string( decode_base64url($_) ) } split /\*/, $id_str;
+    }
+
+    return ( $time, @ids );
+
+}
+
 1;

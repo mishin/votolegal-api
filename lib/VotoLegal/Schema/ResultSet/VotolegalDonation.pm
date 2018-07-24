@@ -22,6 +22,7 @@ use File::Temp ':seekable';
 use Time::HiRes;
 use Cwd qw(chdir);
 use UUID::Tiny qw/is_uuid_string/;
+use Parallel::ForkManager;
 
 my $lr_code_table;
 
@@ -629,21 +630,27 @@ sub sync_julios_payments {
             julios_next_check              => { '<=' => \'now()' },
             'candidate.split_rule_id'      => { '!=' => undef },
             'candidate.julios_customer_id' => { '!=' => undef },
+            state                          => [qw/wait_for_compensation/]
         },
         {
-            rows     => 10,
-            join     => 'candidate',
-            order_by => \'random()',
+            rows => 35,
+            join => 'candidate',
         }
     );
 
+    my $pm = Parallel::ForkManager->new( $ENV{SYNC_WORKERS} || 1 );
+
+  DATA_LOOP:
     while ( my $r = $rs->next ) {
+        my $pid = $pm->start and next DATA_LOOP;
 
         eval { $r->sync_julios() };
         if ($@) {
             $r->discard_changes;
             $r->update( { julios_erromsg => $@, julios_next_check => \"julios_next_check + '5 minutes'::interval" } );
         }
+
+        $pm->finish;
     }
 
 }
@@ -654,14 +661,19 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'now()' },
+            state              => [qw/wait_for_compensation waiting_boleto_payment/]
         },
         {
-            rows     => 10,
-            order_by => \'random()',
+            rows => 35,
         }
     );
 
+    my $pm = Parallel::ForkManager->new( $ENV{SYNC_WORKERS} || 1 );
+
+  DATA_LOOP:
     while ( my $r = $rs->next ) {
+
+        my $pid = $pm->start and next DATA_LOOP;
 
         my $interface = $self->result_source->schema->resultset('FsmState')->interface(
             class    => 'payment',
@@ -670,6 +682,8 @@ sub sync_pending_payments {
 
             supports => {},
         );
+
+        $pm->finish;
 
     }
 }

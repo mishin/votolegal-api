@@ -44,21 +44,24 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
         },
         {
             columns => [
-                { captured_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
-                { refunded_at => \"timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at))" },
-                { amount      => 'votolegal_donation_immutable.amount' },
+                { captured_at          => \"timezone('America/Sao_Paulo', timezone('UTC', me.captured_at))" },
+                { refunded_at          => \"timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at))" },
+                { amount               => 'votolegal_donation_immutable.amount' },
                 { payment_method_human => \"case when me.is_boleto then 'Boleto' else 'Cartão de crédito' end" },
-                { name        => 'votolegal_donation_immutable.donor_name' },
-                { cpf         => 'votolegal_donation_immutable.donor_cpf' },
-                { hash        => 'me.decred_capture_txid' },
-                { digest      => 'me.decred_data_digest' },
-                { transaction_link => \"case when me.decred_capture_txid is not null then concat('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) end" },
-                { id      => 'me.id' },
-                { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
+                { name                 => 'votolegal_donation_immutable.donor_name' },
+                { cpf                  => 'votolegal_donation_immutable.donor_cpf' },
+                { hash                 => 'me.decred_capture_txid' },
+                { digest               => 'me.decred_data_digest' },
+                {
+                    transaction_link => \
+"case when me.decred_capture_txid is not null then concat('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) end"
+                },
+                { id          => 'me.id' },
+                { _time_epoch => \" extract (epoch from captured_at )" },
 
             ],
             join         => 'votolegal_donation_immutable',
-            order_by     => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
+            order_by     => [ { '-desc' => "captured_at" }, 'me.created_at' ],
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
             rows         => $c->stash->{max_rows} + 1
         }
@@ -78,6 +81,12 @@ sub donate_GET {
         $has_more++;
         pop @donations;
     }
+
+    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $donations[-1]{_marker} = $marker if $marker;
+
+    delete $_->{_time_epoch} for @donations;
+
     return $self->status_ok(
         $c,
         entity => {
@@ -91,22 +100,18 @@ sub donate_GET {
 sub donations_more : Chained('object') : PathPart('') : Args(1) : ActionClass('REST') { }
 
 sub donations_more_GET {
-    my ( $self, $c, $timestamps ) = @_;
+    my ( $self, $c, $marker ) = @_;
 
-    if ( $timestamps !~ /^[0-9]{10,11}(\.[0-9]{1,5})?\*[0-9]{10,11}(\.[0-9]{1,5})?$/ ) {
+    my ( $time, @ids ) = eval { parse_page_marker($marker) };
+    if ($@) {
         $self->status_not_found( $c, message => 'invalid pagination' );
         $c->detach();
     }
 
-    my ( $captured_at, $created_at ) = split /\*/, $timestamps;
-
-    my $op = '<';
     my @donations = $c->stash->{donations_rs}->search(
         {
-            # capture precisao de segundos, entao pode trazer os que sao iguais
-            # durante o teste, preciso ignorar isso
-            captured_at => { $op => \[ "to_timestamp(?)", $captured_at ] },
-            created_at  => { '<' => \[ "to_timestamp(?)", $created_at ] },
+            captured_at => { '<='     => \[ "to_timestamp(?)", $time ] },
+            id          => { 'not in' => \@ids }
         }
     )->all();
 
@@ -115,6 +120,10 @@ sub donations_more_GET {
         $has_more++;
         pop @donations;
     }
+    $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $donations[-1]{_marker} = $marker if $marker;
+
+    delete $_->{_time_epoch} for @donations;
 
     return $self->status_ok(
         $c,
@@ -137,9 +146,9 @@ sub donators_name_GET {
             refunded_at => undef,
         },
         {
-            columns  => [ { name => 'votolegal_donation_immutable.donor_name' }, ],
-            join     => 'votolegal_donation_immutable',
-			order_by => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
+            columns => [ { name => 'votolegal_donation_immutable.donor_name' }, ],
+            join    => 'votolegal_donation_immutable',
+            order_by => [ { '-desc' => "captured_at" }, { '-desc', 'me.created_at' } ],
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
     )->all();

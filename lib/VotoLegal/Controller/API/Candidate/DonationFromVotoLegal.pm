@@ -80,6 +80,7 @@ sub _filter_donation : Private {
         { _state       => \"me.state" },
         { _refunded_at => \"me.refunded_at" },
         { _captured_at => \"me.captured_at" },
+        { _time_epoch  => \" extract (epoch from captured_at )" },
 
     ];
     $c->stash->{cond}     = $cond;
@@ -139,7 +140,7 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { email                => 'votolegal_donation_immutable.donor_email' },
                 { phone                => 'votolegal_donation_immutable.donor_phone' },
                 { birthdate            => 'votolegal_donation_immutable.donor_birthdate' },
-				{ birthdate_human      => \"TO_CHAR( donor_birthdate, 'DD/MM/YYYY')" },
+                { birthdate_human      => \"TO_CHAR( donor_birthdate, 'DD/MM/YYYY')" },
                 { cpf                  => 'votolegal_donation_immutable.donor_cpf' },
                 { address_state        => 'votolegal_donation_immutable.billing_address_state' },
                 { address_city         => 'votolegal_donation_immutable.billing_address_city' },
@@ -150,22 +151,19 @@ sub base : Chained('root') : PathPart('votolegal-donations') : CaptureArgs(0) {
                 { address_district     => 'votolegal_donation_immutable.billing_address_district' },
                 { transaction_hash     => 'me.decred_capture_txid' },
                 {
-                    transaction_link     => \"concat(
+                    transaction_link => \"concat(
                         ( SELECT value FROM config WHERE name = 'FRONT_URL' ), '/em/', candidate.username,
                           '/recibo/', me.decred_data_digest
                       )"
                 },
-                { referral_code        => 'votolegal_donation_immutable.referral_code' },
-                { id                   => 'me.id' },
-
-                { _marker => \" extract (epoch from captured_at ) || '*' || extract (epoch from created_at )" },
-
+                { referral_code => 'votolegal_donation_immutable.referral_code' },
+                { id            => 'me.id' },
                 @$extra_cols,
 
             ],
-            join     => [ 'votolegal_donation_immutable', 'candidate' ],
-            order_by => [ { "-$order_by_created_at" => "created_at" } ],
-            rows     => $c->stash->{max_rows} + 1,
+            join => [ 'votolegal_donation_immutable', 'candidate' ],
+            order_by     => [ { "-$order_by_created_at" => "created_at" } ],
+            rows         => $c->stash->{max_rows} + 1,
             result_class => "DBIx::Class::ResultClass::HashRefInflator",
         }
     );
@@ -211,6 +209,9 @@ sub list_GET {
         pop @donations;
     }
 
+    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $donations[-1]{_marker} = $marker if $marker;
+
     my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };
 
     my $don_rs = $c->stash->{candidate}->votolegal_donations;
@@ -234,22 +235,18 @@ sub list_GET {
 sub list_more : Chained('base') : PathPart('') : Args(1) : ActionClass('REST') { }
 
 sub list_more_GET {
-    my ( $self, $c, $timestamps ) = @_;
+    my ( $self, $c, $marker ) = @_;
 
-    if ( $timestamps !~ /^[0-9]{10,11}(\.[0-9]{1,5})?\*[0-9]{10,11}(\.[0-9]{1,5})?$/ ) {
+    my ( $time, @ids ) = eval { parse_page_marker($marker) };
+    if ($@) {
         $self->status_not_found( $c, message => 'invalid pagination' );
         $c->detach();
     }
 
-    my ( $captured_at, $created_at ) = split /\*/, $timestamps;
-
-    my $op = is_test() ? '<' : '<=';
     my @donations = $c->stash->{donations_rs}->search(
         {
-            # capture precisao de segundos, entao pode trazer os que sao iguais
-            # durante o teste, preciso ignorar isso
-            captured_at => { $op => \[ "to_timestamp(?)", $captured_at ] },
-            created_at  => { '<' => \[ "to_timestamp(?)", $created_at ] },
+            captured_at => { '<='     => \[ "to_timestamp(?)", $time ] },
+            'me.id'     => { 'not in' => \@ids }
         }
     )->all();
 
@@ -258,6 +255,9 @@ sub list_more_GET {
         $has_more++;
         pop @donations;
     }
+
+    $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $donations[-1]{_marker} = $marker if $marker;
 
     my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };
 
