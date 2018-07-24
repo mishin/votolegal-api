@@ -118,6 +118,8 @@ sub donations_more_GET {
         $has_more++;
         pop @donations;
     }
+    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $donations[-1]{_marker} = $marker if $marker;
 
     return $self->status_ok(
         $c,
