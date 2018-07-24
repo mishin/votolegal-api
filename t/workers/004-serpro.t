@@ -4,8 +4,6 @@ use lib "$Bin/../lib";
 
 use VotoLegal::Test::Further;
 
-plan skip_all => 'Procob is deactivated for now';
-
 my $schema = VotoLegal->model('DB');
 
 my $candidate;
@@ -13,11 +11,11 @@ my $candidate_id;
 my $cpf = random_cpf();
 
 db_transaction {
-    use_ok 'VotoLegal::Worker::Procob';
+    use_ok 'VotoLegal::Worker::Serpro';
 
-    my $worker = new_ok( 'VotoLegal::Worker::Procob', [ schema => $schema ] );
+    my $worker = new_ok( 'VotoLegal::Worker::Serpro', [ schema => $schema ] );
 
-    ok( $worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Procob does VotoLegal::Worker' );
+    ok( $worker->does('VotoLegal::Worker'), 'VotoLegal::Worker::Serpro does VotoLegal::Worker' );
 
     $candidate    = create_candidate;
     $candidate_id = $candidate->{id};
@@ -43,34 +41,34 @@ db_transaction {
       },
       ;
 
-    my $donation = &mock_donation;
+    my $donation  = &mock_donation;
+    my $serpro_rs = $schema->resultset("SerproResult");
+    my $serpro_res;
 
     db_transaction{
-        &setup_mock_procob_success;
+        &setup_mock_serpro_success_regular;
         ok( $worker->run_once(), 'run once' );
 
-        my $procob_rs  = $schema->resultset("ProcobResult");
-        my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next;
+        $serpro_res = $serpro_rs->search( { donor_cpf => $cpf } )->next;
 
-        ok ( my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next, 'procob result entry' );
-        is ( $procob_rs->count,           1, 'one result found' );
-        is ( $procob_res->is_dead_person, 0, 'boolean is false' );
+        ok ( my $serpro_res = $serpro_rs->search( { donor_cpf => $cpf } )->next, 'serpro result entry' );
+        is ( $serpro_rs->count,           1, 'one result found' );
+        is ( $serpro_res->is_dead_person, 0, 'boolean is false' );
         ok ( $donation = $donation->discard_changes, 'donation discard_changes' );
-        is ( $donation->procob_tested, 1, 'donation is now procob tested' );
+        is ( $donation->serpro_tested, 1, 'donation is now serpro tested' );
     };
 
     db_transaction{
-        &setup_mock_procob_fail;
+        &setup_mock_serpro_success_dead_person;
         ok( $worker->run_once(), 'run once' );
 
-        my $procob_rs  = $schema->resultset("ProcobResult");
-        my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next;
+        $serpro_res = $serpro_rs->search( { donor_cpf => $cpf } )->next;
 
-        ok ( my $procob_res = $procob_rs->search( { donor_cpf => $cpf } )->next, 'procob result entry' );
-        is ( $procob_rs->count,           1, 'one result found' );
-        is ( $procob_res->is_dead_person, 1, 'boolean is true' );
+        ok ( my $serpro_res = $serpro_rs->search( { donor_cpf => $cpf } )->next, 'serpro result entry' );
+        is ( $serpro_rs->count,           1, 'one result found' );
+        is ( $serpro_res->is_dead_person, 1, 'boolean is true' );
         ok ( $donation = $donation->discard_changes, 'donation discard_changes' );
-        is ( $donation->procob_tested, 1, 'donation is now procob tested' );
+        is ( $donation->serpro_tested, 1, 'donation is now serpro tested' );
     };
 
 };
