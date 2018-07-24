@@ -110,6 +110,13 @@ sub verifiers_specs {
                 cpf => {
                     required => 1,
                     type     => CPF,
+                    post_check => sub {
+                        my $cpf = $_[0]->get_value('cpf');
+
+                        return 0 if $cpf =~ /^(.)\1.+$/;
+
+                        return 1;
+                    },
                 },
                 amount => {
                     required   => 1,
