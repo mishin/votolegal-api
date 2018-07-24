@@ -113,10 +113,10 @@ sub gen_page_marker {
 
     my $compress = $opts{compress_id_from_uuid};
 
-    my $marker = $rows->[-1]{$time_col};
-
     # 0 rows
-    return undef unless $marker;
+    return undef unless @$rows;
+
+    my $marker = $rows->[-1]{$time_col};
 
     sub _check_or_die {
         die 'cannot gen_page_marker because columns have unescaped chars' if $_[0] =~ /(\s|\*)/o;

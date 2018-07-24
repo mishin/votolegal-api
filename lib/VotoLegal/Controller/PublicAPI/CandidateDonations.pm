@@ -83,7 +83,7 @@ sub donate_GET {
     }
 
     my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
-  $donations[-1]{_marker} = $marker;
+    $donations[-1]{_marker} = $marker if $marker;
 
     return $self->status_ok(
         $c,
