@@ -718,8 +718,9 @@ sub sync_julios {
         );
         my $charge = $res->{charge};
 
-        $cols{julios_status}     = $charge->{status};
-        $cols{julios_updated_at} = \'now()';
+        $cols{julios_status}      = $charge->{status};
+        $cols{julios_transfer_id} = $charge->{transfer_id};
+        $cols{julios_updated_at}  = \'now()';
 
         if ( $charge->{gateway_next_check} ne 'Inf' ) {
 
@@ -736,6 +737,11 @@ sub sync_julios {
                 $cols{julios_next_check} = \"now() + '1 day'::interval";
             }
 
+        }
+
+        # se nao sabe ainda que foi devolvida, manda consultar o gateway
+        if (!$self->refunded_at && $cols{julios_status} eq 'refunded'){
+            $cols{next_gateway_check} = \'now()';
         }
     }
 
