@@ -630,20 +630,27 @@ sub sync_julios_payments {
             julios_next_check              => { '<=' => \'now()' },
             'candidate.split_rule_id'      => { '!=' => undef },
             'candidate.julios_customer_id' => { '!=' => undef },
+            state                          => [qw/wait_for_compensation/]
         },
         {
-            rows => 30,
+            rows => 35,
             join => 'candidate',
         }
     );
 
+    my $pm = Parallel::ForkManager->new( $ENV{SYNC_WORKERS} || 1 );
+
+  DATA_LOOP:
     while ( my $r = $rs->next ) {
+        my $pid = $pm->start and next DATA_LOOP;
 
         eval { $r->sync_julios() };
         if ($@) {
             $r->discard_changes;
             $r->update( { julios_erromsg => $@, julios_next_check => \"julios_next_check + '5 minutes'::interval" } );
         }
+
+        $pm->finish;
     }
 
 }
