@@ -653,9 +653,10 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'now()' },
+            state => [qw/wait_for_compensation waiting_boleto_payment/]
         },
         {
-            rows     => 10,
+            rows     => 35,
         }
     );
 
