@@ -84,8 +84,8 @@ sub interface {
     }
 
     if ( !$state_config || !$max_auto_continues ) {
-        remote_notify($@)if $@;
-        log_error($@) if $@;
+        remote_notify($@) if $@;
+        log_error($@)     if $@;
 
         $interface->{messages} = [
             {
@@ -186,9 +186,12 @@ sub on_state_enter {
 
         my $info = $donation->payment_info_parsed;
 
-        $donation->update({
-            refunded_at => $info->{updated_at_iso}
-        });
+        $donation->update(
+            {
+                refunded_at       => $info->{updated_at_iso},
+                julios_next_check => \'now()'
+            }
+        );
 
     }
 
@@ -234,7 +237,7 @@ sub _messages_of_state {
 
         my $candidate_config_id = $donation->candidate->emaildb_config_id;
 
-        my $info = $donation->payment_info_parsed;
+        my $info        = $donation->payment_info_parsed;
         my $text_boleto = $loc->('msg_boleto_message');
 
         if ( $candidate_config_id == 2 ) {
@@ -254,14 +257,16 @@ sub _messages_of_state {
                 text => $loc->('msg_boleto_link'),
                 href => $info->{secure_url},
             },
-            ( $candidate_config_id == 2 ?
-              (
-                  {
-                      type => 'link',
-                      text => $loc->('feedback_form_text_2'),
-                      href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
-                  }
-              ) : ( )
+            (
+                $candidate_config_id == 2
+                ? (
+                    {
+                        type => 'link',
+                        text => $loc->('feedback_form_text_2'),
+                        href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
+                    }
+                  )
+                : ()
             )
         );
 
@@ -308,7 +313,7 @@ sub _messages_of_state {
     }
     elsif ( $donation->captured_at ) {
 
-		my $candidate_config_id = $donation->candidate->emaildb_config_id;
+        my $candidate_config_id = $donation->candidate->emaildb_config_id;
 
         my $info = $donation->payment_info_parsed;
 
@@ -317,16 +322,19 @@ sub _messages_of_state {
         @messages = (
             {
                 type => 'msg',
-                text => $donation->is_boleto ? $loc->('msg_boleto_paid_message') : ( $candidate_config_id == 2 ? $loc->('msg_cc_paid_message_2') : $loc->('msg_cc_paid_message') ),
+                text => $donation->is_boleto ? $loc->('msg_boleto_paid_message')
+                : ( $candidate_config_id == 2 ? $loc->('msg_cc_paid_message_2') : $loc->('msg_cc_paid_message') ),
             },
-            ( $candidate_config_id == 2 ?
-              (
-                  {
-                      type => 'link',
-                      text => $loc->('feedback_form_text_2'),
-                      href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
-                  }
-              ) : ( )
+            (
+                $candidate_config_id == 2
+                ? (
+                    {
+                        type => 'link',
+                        text => $loc->('feedback_form_text_2'),
+                        href => $loc->('feedback_form_url_2') . $donation->votolegal_donation_immutable->donor_cpf
+                    }
+                  )
+                : ()
             )
         );
 

@@ -256,7 +256,7 @@ sub list_more_GET {
         pop @donations;
     }
 
-    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
     $donations[-1]{_marker} = $marker if $marker;
 
     my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };

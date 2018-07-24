@@ -405,7 +405,7 @@ sub capture_cc {
             payment_info => to_json($payment_info),
 
             # converte para UTC
-            captured_at => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+            captured_at       => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
             julios_next_check => \'now()',
         }
     );
@@ -710,12 +710,19 @@ sub sync_julios {
         my $ws        = WebService::Julios->instance;
         my $candidate = $self->candidate;
 
+        # se ja temos um transfer_id, e estamos fazendo o sync
+        # signfica que o julios precisa ir no gateway novamente
+        # provavelmente acordamos porque rolou um refund
+        my $force_update = $self->transfer_id && $self->refunded_at ? 1 : 0;
+
         my $res = $ws->put_charge(
             {
                 split_rule_id => $candidate->split_rule_id,
                 customer_id   => $candidate->julios_customer_id,
                 gateway_tid   => $self->gateway_tid,
-                api_key       => $ENV{JULIOS_API_KEY}
+                api_key       => $ENV{JULIOS_API_KEY},
+
+                refresh_tx_info => $force_update
             }
         );
         my $charge = $res->{charge};
