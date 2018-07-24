@@ -406,6 +406,7 @@ sub capture_cc {
 
             # converte para UTC
             captured_at => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+            julios_next_check => \'now()',
         }
     );
 }
@@ -457,7 +458,8 @@ sub set_boleto_paid {
     $self->update(
         {
             # converte para UTC
-            captured_at => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+            captured_at       => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
+            julios_next_check => \'now()',
         }
     );
 
@@ -740,7 +742,7 @@ sub sync_julios {
         }
 
         # se nao sabe ainda que foi devolvida, manda consultar o gateway
-        if (!$self->refunded_at && $cols{julios_status} eq 'refunded'){
+        if ( !$self->refunded_at && $cols{julios_status} eq 'refunded' ) {
             $cols{next_gateway_check} = \'now()';
         }
     }
