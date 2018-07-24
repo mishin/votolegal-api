@@ -89,7 +89,7 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 1 },
   "next_gateway_check",
   { data_type => "timestamp", default_value => "infinity", is_nullable => 0 },
-  "procob_tested",
+  "serpro_tested",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
   "julios_next_check",
   { data_type => "timestamp", is_nullable => 1 },
@@ -136,8 +136,8 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 __PACKAGE__->has_many(
-  "procob_results",
-  "VotoLegal::Schema::Result::ProcobResult",
+  "serpro_results",
+  "VotoLegal::Schema::Result::SerproResult",
   { "foreign.votolegal_donation_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -160,8 +160,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-23 15:01:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HJu+W21U/M271sHct9/k5A
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-24 13:55:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lJg/DAHTjnfkLd7cS1mFfw
 
 use Encode;
 use Carp;
