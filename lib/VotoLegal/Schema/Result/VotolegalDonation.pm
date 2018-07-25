@@ -452,7 +452,7 @@ sub set_boleto_paid {
     my ($self) = @_;
 
     die 'cannot set_boleto_paid' unless $self->is_boleto;
-    die 'cannot set_boleto_paid' unless !$self->captured_at;
+    die 'cannot set_boleto_paid' if $self->captured_at;
 
     my $payment_info = $self->payment_info_parsed;
     $self->update(

@@ -387,10 +387,25 @@ sub _process_state {
     }
     elsif ( $state eq 'wait_for_compensation' ) {
         &_process_wait_for_compensation(@params);
-
+    }
+    elsif ( $state eq 'boleto_expired' ) {
+        &_process_boleto_expired(@params);
     }
 
     return $stash;
+}
+
+sub _process_boleto_expired {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    $donation = $donation->sync_gateway_status();
+
+    my $info = $donation->payment_info_parsed;
+
+    # yeah...
+    if ( $info->{status} eq 'paid' ) {
+        $stash->{value} = 'Paid';
+    }
 }
 
 sub _process_wait_for_compensation {
