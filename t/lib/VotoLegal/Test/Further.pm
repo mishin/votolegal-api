@@ -27,6 +27,7 @@ our $certiface_get_token_information;
 our $paid_at_further = DateTime->now( time_zone => 'America/Sao_Paulo' )->datetime . '-03:00';
 
 our $procob_response;
+our $serpro_response;
 
 my $inc = 0;
 sub inc_paid_at_seconds {
@@ -1340,6 +1341,77 @@ sub setup_failed_mock_iugu_boleto {
 		'ignore_due_email'        => undef,
 		'payable_with'            => 'bank_slip'
 	};
+}
+
+sub setup_mock_serpro_success_regular {
+    $serpro_response = {
+        "ni" => "40442820135",
+        "nome" => "Nome do CPF 404.428.201-35",
+        "situacao" => {
+            "codigo" => "0",
+            "descricao" => "Regular"
+        }
+    }
+}
+
+sub setup_mock_serpro_success_suspended {
+
+    $serpro_response = {
+        "ni" => "40532176871",
+        "nome" => "Nome do CPF 405.321.768-71",
+        "situacao" => {
+            "codigo" => "2",
+            "descricao" => "Suspensa"
+        }
+    }
+}
+
+sub setup_mock_serpro_success_pending_regularization {
+
+	$serpro_response = {
+        "ni" => "07691852312",
+        "nome" => "Nome do CPF 076.918.523-12",
+        "situacao" => {
+            "codigo" => "4",
+            "descricao" => "Pendente de Regularização"
+        }
+    }
+}
+
+sub setup_mock_serpro_success_null {
+
+	$serpro_response = {
+        "ni" => "98302514705",
+        "nome" => "Nome do CPF 983.025.147-05",
+        "situacao" => {
+            "codigo" => "8",
+            "descricao" => "Nula"
+        }
+    }
+}
+
+sub setup_mock_serpro_success_cancelled {
+
+	$serpro_response = {
+        "ni" => "64913872591",
+        "nome" => "Nome do CPF 649.138.725-91",
+        "situacao" => {
+            "codigo" => "9",
+            "descricao" => "Cancelada de Oficio"
+        }
+    }
+}
+
+sub setup_mock_serpro_success_dead_person {
+
+	$serpro_response = {
+        "ni" => "05137518743",
+        "nome" => "Nome do CPF 051.375.187-43",
+        "situacao" => {
+            "codigo" => "3",
+            "descricao" => "TITULAR FALECIDO"
+        }
+    }
 }
 
 1;

@@ -113,7 +113,7 @@ sub verifiers_specs {
                     post_check => sub {
                         my $cpf = $_[0]->get_value('cpf');
 
-                        return 0 if $cpf =~ /^(.)\1.+$/;
+                        return 0 if $cpf =~ /^(.)\1+$/;
 
                         return 1;
                     },
@@ -891,6 +891,25 @@ sub _get_status_and_motive {
     }
 
     return ( $status, $motive );
+}
+
+sub get_non_finished_donations_on_last_3_days {
+    my ( $self, $candidate_id ) = @_;
+
+    my @where = \[ <<'SQL_QUERY', $candidate_id ];
+      state IN ('credit_card_form', 'boleto_authetication')
+      AND created_at BETWEEN ( now()::date - interval '3 days' ) AND ( now()::date - interval '2 days' )
+      AND candidate_id = ?
+      AND me.id = votolegal_donation_immutable.votolegal_donation_id
+      AND NOT EXISTS (
+          SELECT 1 FROM votolegal_donation_immutable, votolegal_donation
+            WHERE donor_cpf = votolegal_donation_immutable.donor_cpf
+                AND me.created_at >= now()::date - interval '3 days'
+                AND me.id = votolegal_donation_immutable.votolegal_donation_id
+      )
+SQL_QUERY
+
+    return $self->search( { '-and' => \@where }, { prefetch => 'votolegal_donation_immutable' } );
 }
 
 1;
