@@ -41,11 +41,7 @@ my $domain = URI->new( $ENV{IUGU_API_URL} );
 sub _build_ua {
     my $self = shift;
 
-    Furl->new(
-        timeout => 30,
-
-        # headers => [ Authorization => 'Basic ' . encode_base64( $ENV{IUGU_API_KEY} . ':' ) ]
-    );
+    Furl->new( timeout => 60, );
 
 }
 
@@ -54,6 +50,36 @@ sub uri_for {
     my $uri  = $domain->clone;
     $uri->path_segments( 'v1', @_ );
     return $uri;
+}
+
+sub check_for_two_step {
+    my ( $self, %opts ) = @_;
+    my $logger = get_logger;
+
+    my ( $acc, $pass );
+    if ( $opts{is_votolegal_payment} ) {
+        $acc  = $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
+        $pass = $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+    }
+    else {
+        $acc  = $ENV{IUGU_ACCOUNT_ID};
+        $pass = $ENV{IUGU_API_KEY};
+    }
+
+    my $headers = [ Authorization => 'Basic ' . encode_base64( $pass . ':' ), 'Content-Type' => "application/json" ];
+
+    $logger->info("validating two_step_transaction...");
+
+    my $res = $self->ua->get( $self->uri_for( 'accounts', $acc ), $headers );
+
+    my $json = decode_json( $res->decoded_content )
+      or croak 'create_invoice failed';
+
+    die 'credit_card.two_step_transaction precisa estar habilitada na Iugu'
+      unless $json->{configuration}
+      && $json->{configuration}->{credit_card}->{two_step_transaction};
+    return 1;
+
 }
 
 sub create_invoice {
@@ -107,25 +133,6 @@ sub create_invoice {
         Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
     }
 
-    if ( !$ENV{IUGU_MOCK} ) {
-
-=pod
-        # comentando ja que a iugu é meio lenta, e isso pode sair daqui e ir pra um crontab
-        # checando se credit_card.two_step_transaction está habilitado
-        if ( !$opts{is_boleto} ) {
-            $logger->info("validating two_step_transaction...");
-
-            my $res = $self->ua->get( $self->uri_for( 'accounts', $acc ), $headers );
-
-            my $json = decode_json( $res->decoded_content )
-              or croak 'create_invoice failed';
-
-            die 'credit_card.two_step_transaction precisa estar habilitada na Iugu'
-              unless $json->{configuration}
-              && $json->{configuration}->{credit_card}->{two_step_transaction};
-        }
-=cut
-    }
 
     my $invoice_email =
       $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
