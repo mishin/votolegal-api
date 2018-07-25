@@ -108,8 +108,8 @@ sub verifiers_specs {
                     type       => EmailAddress,
                 },
                 cpf => {
-                    required => 1,
-                    type     => CPF,
+                    required   => 1,
+                    type       => CPF,
                     post_check => sub {
                         my $cpf = $_[0]->get_value('cpf');
 
@@ -667,7 +667,7 @@ sub sync_pending_payments {
 
     my $rs = $self->search(
         {
-            next_gateway_check => { '<=' => \'now()' },
+            next_gateway_check => { '<=' => \'replaceable_now()' },
             state              => [qw/wait_for_compensation waiting_boleto_payment/]
         },
         {
@@ -675,24 +675,74 @@ sub sync_pending_payments {
         }
     );
 
+    my @not_paid;
+    my @is_paid;
     my $pm = Parallel::ForkManager->new( $ENV{SYNC_WORKERS} || 1 );
 
   DATA_LOOP:
     while ( my $r = $rs->next ) {
 
-        my $pid = $pm->start and next DATA_LOOP;
+        # anota todos os ids que ainda não estão pagos, dentro do worker principal
+        if ( !$r->captured_at ) {
+            push @not_paid, $r->id;
+        }
+        else {
+            push @is_paid, $r->id;
+        }
 
-        my $interface = $self->result_source->schema->resultset('FsmState')->interface(
-            class    => 'payment',
-            loc      => $opts{loc},
-            donation => $r,
+        if ( is_test() ) {
 
-            supports => {},
-        );
+            my $interface = $self->result_source->schema->resultset('FsmState')->interface(
+                class    => 'payment',
+                loc      => $opts{loc},
+                donation => $r,
 
-        $pm->finish;
+                supports => {},
+            );
+
+        }
+        else {
+            my $pid = $pm->start and next DATA_LOOP;
+
+            my $interface = $self->result_source->schema->resultset('FsmState')->interface(
+                class    => 'payment',
+                loc      => $opts{loc},
+                donation => $r,
+
+                supports => {},
+            );
+
+            $pm->finish;
+        }
 
     }
+
+    # seleciona todos os candidatos que precisam ter a summary recalculada
+    # se antes nao estava paga, e agora esta, entao precisa recalcular
+    # se antes estava paga, e agora esta refunded, entao precisa recalcular
+    my $as_query = $self->search(
+        {
+            '-or' => [
+                { '-and' => [ { id => { 'in' => [@not_paid] } }, { captured_at => { '!=' => undef }, }, ] },
+                { '-and' => [ { id => { 'in' => [@is_paid] } },  { refunded_at => { '!=' => undef }, } ], },
+
+                # se for testes, roda para todos candidatos
+                ( is_test() ? \'1=1' : () )
+            ]
+        },
+        { select => [qw/candidate_id/] }
+    )->as_query;
+
+    my $rs_can = $self->resultset('Candidate')->search(
+        {
+            'id' => { 'in' => $as_query }
+        }
+    );
+
+    while ( my $candidate = $rs_can->next ) {
+        $candidate->recalc_summary();
+    }
+
 }
 
 sub export_tse {
