@@ -113,7 +113,7 @@ sub verifiers_specs {
                     post_check => sub {
                         my $cpf = $_[0]->get_value('cpf');
 
-                        return 0 if $cpf =~ /^(.)\1.+$/;
+                        return 0 if $cpf =~ /^(.)\1+$/;
 
                         return 1;
                     },
