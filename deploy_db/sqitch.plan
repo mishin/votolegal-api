@@ -159,3 +159,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0153-julios_status [0152-add-has_custom_site] 2018-07-23T11:42:27Z renato,,, <renato@renato-MS-7A34> # julios_payment_status
 0154-transfer_id [0153-julios_status] 2018-07-23T18:00:33Z renato,,, <renato@renato-MS-7A34> # transfer_id
 0155-add-serpro-data [0154-transfer_id] 2018-07-24T17:56:06Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding serpro needed data
+0156-new-transition [0155-add-serpro-data] 2018-07-25T18:23:16Z renato,,, <renato@renato-MS-7A34> # new-transition
