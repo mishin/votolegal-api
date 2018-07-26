@@ -170,7 +170,8 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('address_city');
-                        $self->resultset('City')->search( { name => $city } )->count;
+                        #$self->resultset('City')->search( { name => $city } )->count;
+                        return 1;
                     },
                 },
                 address_state => {
@@ -238,7 +239,8 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('billing_address_city');
-                        $self->resultset('City')->search( { name => $city } )->count;
+                        #$self->resultset('City')->search( { name => $city } )->count;
+                        return 1;
                     },
                 },
                 billing_address_state => {
