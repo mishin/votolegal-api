@@ -131,4 +131,27 @@ CREATE TRIGGER t_candidate_add_campaign_config
   EXECUTE PROCEDURE f_tg_candidate_add_campaign_config();
 
 
+CREATE OR REPLACE FUNCTION audit.candidate_campaign_config_history_func()
+  RETURNS trigger AS
+$BODY$
+DECLARE
+    old_data json;
+BEGIN
+    IF (TG_OP = 'UPDATE') THEN
+        old_data := row_to_json(OLD.*);
+        INSERT INTO audit.candidate_campaign_config_history (candidate_id, data, op) VALUES (OLD.candidate_id, old_data, substring(TG_OP, 1, 1));
+
+        RETURN NEW;
+    ELSIF (TG_OP = 'INSERT') THEN
+        old_data := row_to_json(NEW.*);
+
+        INSERT INTO audit.candidate_campaign_config_history (candidate_id, data, op) VALUES (NEW.candidate_id, old_data, substring(TG_OP, 1, 1));
+
+        RETURN NEW;
+    END IF;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE SECURITY DEFINER
+  COST 100;
+
 COMMIT;
