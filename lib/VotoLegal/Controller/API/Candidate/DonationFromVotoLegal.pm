@@ -80,7 +80,7 @@ sub _filter_donation : Private {
         { _state       => \"me.state" },
         { _refunded_at => \"me.refunded_at" },
         { _captured_at => \"me.captured_at" },
-        { _time_epoch  => \" extract (epoch from captured_at )" },
+        { _time_epoch  => \" extract (epoch from me.created_at )" },
 
     ];
     $c->stash->{cond}     = $cond;
