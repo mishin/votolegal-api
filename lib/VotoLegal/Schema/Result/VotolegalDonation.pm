@@ -340,7 +340,7 @@ sub _create_invoice {
 
     $self->update(
         {
-            gateway_tid  => $invoice->{payment_info}->{invoice_id} || $invoice->{gateway_tid},
+            gateway_tid  => $invoice->{gateway_tid},
             payment_info => to_json($payment_info),
 
             next_gateway_check => $next_check
@@ -398,6 +398,7 @@ sub capture_cc {
     my $gateway = $self->payment_gateway;
 
     my $invoice = $gateway->capture_invoice( donation_id => $self->id, id => $self->gateway_tid );
+
     my $payment_info = $self->payment_info_parsed;
     $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 

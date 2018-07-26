@@ -93,7 +93,7 @@ sub test_credit_card_donation {
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_invalid_cc_token msg_add_credit_card', 'error msg included';
 
-    setup_success_mock_iugu_direct_charge_cc;
+    setup_sucess_mock_iugu;
 
     $response = rest_post $donation_url,
       code   => 200,
