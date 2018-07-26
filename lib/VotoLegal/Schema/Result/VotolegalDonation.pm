@@ -715,7 +715,7 @@ sub sync_julios {
         # se ja temos um transfer_id, e estamos fazendo o sync
         # signfica que o julios precisa ir no gateway novamente
         # provavelmente acordamos porque rolou um refund
-        my $force_update = $self->transfer_id && $self->refunded_at ? 1 : 0;
+        my $force_update = $self->julios_transfer_id && $self->refunded_at ? 1 : 0;
 
         my $res = $ws->put_charge(
             {
