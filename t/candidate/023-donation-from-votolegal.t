@@ -10,6 +10,7 @@ use Digest::MD5 qw(md5_hex);
 use VotoLegal::Test::Further;
 
 my $schema = VotoLegal->model('DB');
+my $timer = DateTime->now( time_zone => 'America/Sao_Paulo' );
 
 my $candidate;
 my $candidate_id;
@@ -41,9 +42,9 @@ db_transaction {
       },
       ;
 
-    my $first_donation = &mock_donation;
+    my $first_donation = &mock_donation(3000);
     inc_paid_at_seconds;
-    &mock_donation;
+    &mock_donation(4000);
 
     api_auth_as candidate_id => $candidate_id;
 
@@ -53,14 +54,13 @@ db_transaction {
       code    => 400,
       [ order_by_created_at => 'foo' ];
 
-    my $other_candidate = create_candidate;
+    my $other_candidate    = create_candidate;
     my $other_candidate_id = stash 'candidate.id';
     rest_get "/api/candidate/$other_candidate_id/votolegal-donations",
       name    => 'other candidate_id',
       is_fail => 1,
       code    => 403,
-      [ filter => 'all' ]
-    ;
+      [ filter => 'all' ];
 
     rest_get "/api/candidate/$candidate_id/votolegal-donations",
       name => 'get donations from voto legal with captured filter',
@@ -101,10 +101,10 @@ db_transaction {
             my ($me) = @_;
 
             is $me->{has_more}, 1, 'has second page';
-            is $me->{donations}[0]{amount}, '30,00', 'amount ok';
-			ok defined( $me->{donations}[0]{created_at_human} ),  'created_at on human format';
-			ok defined( $me->{donations}[0]{captured_at_human} ), 'captured_at on human format';
-			ok exists(  $me->{donations}[0]{refunded_at_human} ), 'refunded_at on human format';
+            is $me->{donations}[0]{amount}, '40,00', 'amount ok';
+            ok defined( $me->{donations}[0]{created_at_human} ),  'created_at on human format';
+            ok defined( $me->{donations}[0]{captured_at_human} ), 'captured_at on human format';
+            ok exists( $me->{donations}[0]{refunded_at_human} ), 'refunded_at on human format';
 
             $next = $me->{donations}[0]{_marker};
         };
@@ -127,10 +127,14 @@ db_transaction {
 done_testing();
 
 sub mock_donation {
+    my $amount = shift;
     api_auth_as 'nobody';
 
     generate_device_token;
     set_current_dev_auth( stash 'test_auth' );
+
+    $timer->add( seconds => 1 );
+    set_relative_time( $timer->datetime );
 
     my $cpf = random_cpf();
 
@@ -142,7 +146,7 @@ sub mock_donation {
         device_authorization_token_id => stash 'test_auth',
         payment_method                => 'credit_card',
         cpf                           => $cpf,
-        amount                        => 3000,
+        amount                        => $amount,
       };
 
     setup_sucess_mock_iugu;

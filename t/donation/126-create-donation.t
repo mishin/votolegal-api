@@ -8,21 +8,20 @@ my ( $response, $donation_url );
 my $schema = VotoLegal->model('DB');
 my $cpf    = '46223869762';
 
+my $candidate_conf;
+my $candidate_id;
+my $id_donation_of_30reais;
+
+my $pre_camp_start = DateTime->now( time_zone => 'America/Sao_Paulo' )->date;
+my $pre_camp_end   = DateTime->now( time_zone => 'America/Sao_Paulo' )->add( days => 1 )->date;
+my $camp_start     = DateTime->now( time_zone => 'America/Sao_Paulo' )->add( days => 2 )->date;
+my $camp_end       = DateTime->now( time_zone => 'America/Sao_Paulo' )->add( days => 4 )->date;
+
 db_transaction {
     create_candidate;
-    my $candidate_id = stash 'candidate.id';
+    $candidate_id = stash 'candidate.id';
 
-    # Aprovando o candidato.
-    ok(
-        $schema->resultset('Candidate')->find($candidate_id)->update(
-            {
-                status         => "activated",
-                payment_status => "paid",
-                is_published   => 1,
-            }
-        ),
-        'activate',
-    );
+    &activate_candidate;
 
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
@@ -35,9 +34,32 @@ db_transaction {
       ;
 
     api_auth_as 'nobody';
-
     generate_device_token;
     set_current_dev_auth( stash 'test_auth' );
+
+    &test_credit_card_donation;
+    inc_paid_at_seconds;
+    &test_boleto;
+
+    &test_listing_stuff;
+
+    &test_sync_stuff;
+
+    &test_campaign_dates;
+};
+
+done_testing();
+
+exit;
+
+sub test_sync_stuff {
+    $schema->resultset('VotolegalDonation')->update( { next_gateway_check => '2010-01-01' } );
+    $schema->resultset('VotolegalDonation')->sync_pending_payments( loc => sub { shift() } );
+}
+
+sub test_credit_card_donation {
+
+    set_relative_time $pre_camp_start . ' 04:00:00';
 
     $response = rest_post "/api2/donations",
       name   => "add donation",
@@ -51,12 +73,15 @@ db_transaction {
         amount                        => 3000,
         referral_code                 => 'foobar'
       };
-    my $id_donation_of_3k = $response->{donation}{id};
+    $id_donation_of_30reais = $response->{donation}{id};
 
-    set_current_donation $id_donation_of_3k;
+    set_current_donation $id_donation_of_30reais;
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_add_credit_card', 'msg add credit card';
     is form2str $response,     'credit_card_token',   'need send credit_card_token to continue';
+
+    my $don = $schema->resultset('VotolegalDonation')->find( $response->{donation}{id} );
+    $don->is_pre_campaign, 1, 'donation has is_pre_campaign=true';
 
     $donation_url = "/api2/donations/" . $response->{donation}{id};
     &test_dup_value;
@@ -101,9 +126,10 @@ db_transaction {
         assert_current_step('refunded');
 
     };
-    inc_paid_at_seconds;
-    &test_boleto;
 
+}
+
+sub test_listing_stuff {
     rest_get '/public-api/candidate-summary/' . stash 'candidate.id', code => 200, stash => 'res';
 
     stash_test 'res', sub {
@@ -124,7 +150,7 @@ db_transaction {
         is $me->{has_more}, 0, 'end of page';
         is $me->{donations}[0]{amount}, 3500, 'amount ok';
         is $me->{donations}[1]{amount}, 3000, 'amount ok';
-        is $me->{donations}[1]{id}, $id_donation_of_3k, 'last donation is the first (reverse order)';
+        is $me->{donations}[1]{id}, $id_donation_of_30reais, 'last donation is the first (reverse order)';
     };
 
     subtest 'pagination tests' => sub {
@@ -183,18 +209,121 @@ db_transaction {
         like( $me->{recent_donation}->{digest}, qr/^[a-f0-9]{64}$/, 'digest' );
     };
 
-    $schema->resultset('VotolegalDonation')->update( { next_gateway_check => '2010-01-01' } );
-    $schema->resultset('VotolegalDonation')->sync_pending_payments( loc => sub { shift() } );
+}
 
-};
+sub test_campaign_dates {
 
-done_testing();
+    # pre campanha acabou
+    set_relative_time $pre_camp_end . ' 04:30:00';
+    $response = rest_post "/api2/donations",
+      name    => "add donation in a date that there is no open campaign",
+      is_fail => 1,
+      stash   => 'err',
+      params  => {
+        generate_rand_donator_data_cc(),
 
-exit;
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'credit_card',
+        cpf                           => $cpf,
+        amount                        => 3000
+      };
+    error_is 'err', 'no_active_campaign';
+
+    # campanha começa nesse dia
+    set_relative_time $camp_start . ' 04:30:00';
+
+    $response = rest_post "/api2/donations",
+      name    => "add donation in campaign but candidate is not approved",
+      is_fail => 1,
+      stash   => 'err',
+      params  => {
+        generate_rand_donator_data_cc(),
+
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'credit_card',
+        cpf                           => $cpf,
+        amount                        => 3000
+      };
+    error_is 'err', 'campaign_not_approved';
+    $candidate_conf->update( { campaign_is_approved => 1 } );
+
+    $response = rest_post "/api2/donations",
+      name   => "add donation in campaign and candidate is approved",
+      stash  => 'noterr',
+      params => {
+        generate_rand_donator_data_cc(),
+
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'credit_card',
+        cpf                           => $cpf,
+        amount                        => 3000
+      };
+
+    my $don = $schema->resultset('VotolegalDonation')->find( $response->{donation}{id} );
+    $don->is_pre_campaign, 0, 'donation has is_pre_campaign=false';
+
+    # acabou campanha
+    set_relative_time $camp_end . ' 04:30:00';
+
+    $response = rest_post "/api2/donations",
+      name    => "add donation in campaign but candidate is not approved",
+      is_fail => 1,
+      stash   => 'err',
+      params  => {
+        generate_rand_donator_data_cc(),
+
+        candidate_id                  => stash 'candidate.id',
+        device_authorization_token_id => stash 'test_auth',
+        payment_method                => 'credit_card',
+        cpf                           => $cpf,
+        amount                        => 3000
+      };
+    error_is 'err', 'no_active_campaign';
+
+}
+
+sub activate_candidate {
+
+    set_config( 'USE_CANDIDATE_CONFIG_TABLE', '1' );
+
+    set_config( 'CANDIDATE_CONFIG_PRE_CAMPAIGN_START_DATE', $pre_camp_start );
+    set_config( 'CANDIDATE_CONFIG_PRE_CAMPAIGN_END_DATE',   $pre_camp_end );
+    set_config( 'CANDIDATE_CONFIG_CAMPAIGN_START_DATE',     $camp_start );
+    set_config( 'CANDIDATE_CONFIG_CAMPAIGN_END_DATE',       $camp_end );
+
+    # ainda nao sao usados, mas deveriam ser usados para validar se o usuario editou certo
+    set_config( 'CANDIDATE_CONFIG_PRE_CAMPAIGN_MIN_DATE', $pre_camp_start );
+    set_config( 'CANDIDATE_CONFIG_PRE_CAMPAIGN_MAX_DATE', $pre_camp_end );
+    set_config( 'CANDIDATE_CONFIG_CAMPAIGN_MIN_DATE',     $camp_start );
+    set_config( 'CANDIDATE_CONFIG_CAMPAIGN_MAX_DATE',     $camp_end );
+
+    # Aprovando o candidato
+    ok(
+        $schema->resultset('Candidate')->find($candidate_id)->update(
+            {
+                status         => "activated",
+                payment_status => "paid",
+                is_published   => 1,
+            }
+        ),
+        'activate',
+    );
+
+    # automaticamente, a trigger deve inserir uma candidate config para ele, usando os valores acima
+    $candidate_conf = $schema->resultset('Candidate')->find($candidate_id)->candidate_campaign_config;
+    ok $candidate_conf, 'candidate_campaign_config found';
+
+}
 
 sub test_dup_value {
 
     db_transaction {
+
+        # 10 seconds after first
+        set_relative_time $pre_camp_start . ' 04:00:10';
         rest_post "/api2/donations",
           name    => "add donation with same value",
           code    => 400,
@@ -217,6 +346,9 @@ sub test_dup_value {
 }
 
 sub test_boleto {
+
+    # 20 minutes after start
+    set_relative_time $pre_camp_start . ' 04:20:10';
 
     $response = rest_post "/api2/donations",
       name   => "add donation with boleto",

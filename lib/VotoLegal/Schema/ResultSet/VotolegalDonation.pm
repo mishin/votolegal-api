@@ -497,7 +497,7 @@ sub _create_donation {
 
                     votolegal_fp => $fp->id,
 
-                    created_at => is_test() ? \'clock_timestamp()' : 'now()',
+                    created_at => \'replaceable_now()',
                 }
             );
 
@@ -554,9 +554,9 @@ sub get_git_hash {
 sub _get_candidate_config {
     my ( $self, %opts ) = @_;
 
-    my $candidate = $self->result_source->schema->resultset('Candidate')->find( $opts{candidate_id} ) or die 'error';
+    my $candidate = $self->resultset('Candidate')->find( $opts{candidate_id} ) or die 'error';
 
-    return {
+    my $default_return = {
         donation_type_id   => 1,                                                      #PF
         is_pre_campaign    => $candidate->campaign_donation_type eq 'pre-campaign',
         payment_gateway_id => 3,
@@ -565,6 +565,49 @@ sub _get_candidate_config {
         max_donation_value => $candidate->campaign_donation_type eq 'party' ? 106400 : 106400,
     };
 
+    if ( $ENV{USE_CANDIDATE_CONFIG_TABLE} ) {
+
+        my $today         = 'timezone( me.timezone, replaceable_now())::date';
+        my $candidate_cfg = $self->resultset('CandidateCampaignConfig')->search(
+            {
+
+                candidate_id => $candidate->id
+
+            },
+            {
+                '+columns' => [
+                    { pre_campaign => \"  $today >= pre_campaign_start and $today < pre_campaign_end " },
+                    { campaign     => \"  $today >= campaign_start and $today < campaign_end " },
+                    { today        => \"  $today" },
+
+                ]
+            }
+        )->next;
+        $candidate_cfg or die 'candidate must have candidate_campaign_config';
+
+        $default_return->{max_donation_value} = $candidate_cfg->max_donation_value;
+        $default_return->{payment_gateway_id} = $candidate_cfg->payment_gateway_id;
+
+        if ( $candidate_cfg->get_column('pre_campaign') ) {
+
+            $default_return->{is_pre_campaign} = 1;
+
+        }
+        elsif ( $candidate_cfg->get_column('campaign') ) {
+            die_with 'campaign-not-approved' unless $candidate_cfg->campaign_is_approved;
+
+            $default_return->{is_pre_campaign} = 0;
+
+        }
+        else {
+
+            die_with 'no-active-campaign';
+
+        }
+
+    }
+
+    return $default_return;
 }
 
 sub _refuse_duplicate {
@@ -576,7 +619,7 @@ sub _refuse_duplicate {
             candidate_id                             => $values{candidate_id},
             'votolegal_donation_immutable.donor_cpf' => $values{cpf},
             'votolegal_donation_immutable.amount'    => $values{amount},
-            created_at                               => { ">=" => \"(now() - '30 seconds'::interval)" },
+            created_at                               => { ">=" => \"(replaceable_now() - '30 seconds'::interval)" },
         },
         {
             join => 'votolegal_donation_immutable'
@@ -668,7 +711,7 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'replaceable_now()' },
-            state              => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
+            state => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
         },
         {
             rows => 35,

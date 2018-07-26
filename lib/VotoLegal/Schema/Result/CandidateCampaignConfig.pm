@@ -20,7 +20,7 @@ __PACKAGE__->add_columns(
   "timezone",
   {
     data_type     => "text",
-    default_value => "America/Brasilia",
+    default_value => "America/Sao_Paulo",
     is_nullable   => 0,
     original      => { data_type => "varchar" },
   },
@@ -72,8 +72,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-25 18:58:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2n7rBjFd1hENlUzRhqwhWQ
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-26 10:31:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7u4KkjWK9DCzHcKlejWbSQ
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

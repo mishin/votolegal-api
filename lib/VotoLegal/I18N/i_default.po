@@ -192,3 +192,13 @@ msgstr "https://eokoe2.typeform.com/to/iyaBER?number="
 
 msgid "msg_cc_paid_message_2"
 msgstr "Obrigado pela sua doação! Enviamos seu recibo para o e-mail informado. Queremos saber mais sobre você que está ajudando a construir essa campanha. Por favor, responda a essa pesquisa rápida. Isso vai nos ajudar muito!"
+
+
+msgid "no_active_campaign"
+msgstr "No momento, não há campanhas ativas para este pre-candidato ou candidato"
+
+msgid "campaign_not_approved"
+msgstr "No momento, esse candidato não pode receber nenhuma doação"
+
+
+

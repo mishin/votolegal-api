@@ -209,7 +209,7 @@ sub list_GET {
         pop @donations;
     }
 
-    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 1 );
+    my $marker = gen_page_marker( '_time_epoch', 'id', \@donations, compress_id_from_uuid => 0 );
     $donations[-1]{_marker} = $marker if $marker;
 
     my @keys_to_remove = map { keys %{$_} } @{ $c->stash->{extra_cols} };
@@ -245,7 +245,7 @@ sub list_more_GET {
 
     my @donations = $c->stash->{donations_rs}->search(
         {
-            captured_at => { '<='     => \[ "to_timestamp(?)", $time ] },
+            created_at => { '<='     => \[ "to_timestamp(?)", $time ] },
             'me.id'     => { 'not in' => \@ids }
         }
     )->all();

@@ -30,10 +30,12 @@ our $procob_response;
 our $serpro_response;
 
 my $inc = 0;
+
 sub inc_paid_at_seconds {
     $inc++;
-    $paid_at_further  = DateTime->now( time_zone => 'America/Sao_Paulo' )->add(seconds => $inc)->datetime . '-03:00';
+    $paid_at_further = DateTime->now( time_zone => 'America/Sao_Paulo' )->add( seconds => $inc )->datetime . '-03:00';
 }
+
 # ugly hack
 sub import {
     strict->import;
@@ -170,15 +172,14 @@ sub create_candidate {
         %opts,
     );
 
+    my $candidate = $obj->rest_post(
+        '/api/register',
+        name  => 'add candidate',
+        stash => 'candidate',
+        [%params],
+    );
 
-	my $candidate = $obj->rest_post(
-		'/api/register',
-		name  => 'add candidate',
-		stash => 'candidate',
-		[%params],
-	);
-
-    my $candidate_result = $schema->resultset('Candidate')->find($candidate->{id});
+    my $candidate_result = $schema->resultset('Candidate')->find( $candidate->{id} );
     $candidate_result->update(
         {
             video_url    => 'https://www.youtube.com/watch?v=uZRL-nBwl1k',
@@ -189,43 +190,43 @@ sub create_candidate {
         }
     );
 
-    return $candidate
+    return $candidate;
 }
 
 sub create_candidate_with_incomplete_data {
-	my (%opts) = @_;
+    my (%opts) = @_;
 
-	my $schema = VotoLegal->model('DB');
+    my $schema = VotoLegal->model('DB');
 
-	my $name     = fake_name()->();
-	my $username = lc $name;
-	$username =~ s/\s+/_/g;
+    my $name     = fake_name()->();
+    my $username = lc $name;
+    $username =~ s/\s+/_/g;
 
-	my %params = (
-		username             => $username,
-		password             => "foobarquux1",
-		name                 => fake_name()->(),
-		popular_name         => fake_surname()->(),
-		email                => fake_email()->(),
-		cpf                  => random_cpf(),
-		address_state        => 'SP',
-		address_city         => 'Iguape',
-		address_zipcode      => '11920-000',
-		address_street       => "Rua Tiradentes",
-		address_house_number => 1 + int( rand(2000) ),
-		office_id            => 4,
-		birth_date           => '11/05/1998',
-		party_id             => fake_int( 1, 35 )->(),
-		reelection           => fake_int( 0, 1 )->(),
-		%opts,
-	);
+    my %params = (
+        username             => $username,
+        password             => "foobarquux1",
+        name                 => fake_name()->(),
+        popular_name         => fake_surname()->(),
+        email                => fake_email()->(),
+        cpf                  => random_cpf(),
+        address_state        => 'SP',
+        address_city         => 'Iguape',
+        address_zipcode      => '11920-000',
+        address_street       => "Rua Tiradentes",
+        address_house_number => 1 + int( rand(2000) ),
+        office_id            => 4,
+        birth_date           => '11/05/1998',
+        party_id             => fake_int( 1, 35 )->(),
+        reelection           => fake_int( 0, 1 )->(),
+        %opts,
+    );
 
-	return $obj->rest_post(
-		'/api/register',
-		name  => 'add candidate',
-		stash => 'candidate',
-		[%params],
-	);
+    return $obj->rest_post(
+        '/api/register',
+        name  => 'add candidate',
+        stash => 'candidate',
+        [%params],
+    );
 }
 
 sub lorem_words {
@@ -249,6 +250,15 @@ sub get_config {
     my %config = $conf->getall;
 
     return \%config;
+}
+
+sub set_config {
+    my ( $key, $value ) = @_;
+
+    $ENV{$key} = $value;
+
+    my $schema = VotoLegal->model('DB');
+    $schema->resultset('Config')->search( { name => $key } )->update( { value => $value } ) or die 'no rows';
 }
 
 sub error_is ($$) {
@@ -319,13 +329,11 @@ sub generate_rand_donator_data_cc {
                 )
             ),
 
-
         }
     )->();
 
     return wantarray ? %$info : $info;
 }
-
 
 sub generate_rand_donator_data_boleto {
     my $info = fake_hash(
@@ -366,9 +374,9 @@ sub generate_rand_donator_data_boleto {
                 )
             ),
 
-
             birthdate => '2000-01-01',
-            phone                        => fake_digits("##########")->(),
+            phone     => fake_digits("##########")->(),
+
             #address_district             => "Centro",
             #address_state                => fake_pick(qw(SP RJ MG RS PR)),
             #address_city                 => "Iguape",
@@ -394,8 +402,8 @@ sub set_current_dev_auth {
     $sessionkey = shift;
 }
 
-
 our $donation_id;
+
 sub set_current_donation {
     $donation_id = shift;
 }
@@ -454,7 +462,8 @@ sub assert_current_step ($) {
             print STDERR $str;
             exit(1);
         }
-    }else{
+    }
+    else {
         fail 'assert_current_step not found';
     }
 }
@@ -1081,337 +1090,355 @@ sub setup_sucess_mock_iugu_boleto_success {
 
 sub setup_mock_procob_success {
     $procob_response = {
-        "code" => "000",
-        "message" => "Consulta de testes com dados fictícios.",
-        "date" => "2016-10-17",
-        "hour" => "09:55:51",
+        "code"     => "000",
+        "message"  => "Consulta de testes com dados fictícios.",
+        "date"     => "2016-10-17",
+        "hour"     => "09:55:51",
         "revision" => "11399",
-        "server" => "3",
-        "saldo"  => '98.00',
-        "content" => {
+        "server"   => "3",
+        "saldo"    => '98.00',
+        "content"  => {
             "nome" => {
                 "existe_informacao" => "SIM",
-                "conteudo" => {
-                    "documento" => "99999999999",
-                    "tipo_documento" => "PF",
-                    "nome" => "JOÃO DA SILVA",
-                    "outras_grafias" => [
-                        "JOÃO D SILVA",
-                        "JOÃO SILVA"
-                    ],
-                    "data_nascimento:" => "15/06/1979",
-                    "outras_datas_nascimento" => [
-                        "25/06/1979"
-                    ],
-                    "idade" => "26",
-                    "signo" => "Gêmeos",
-                    "obito" => "NAO",
-                    "sexo" => "M",
-                    "uf" => "RS,CE,",
-                    "situacao_receita" => "REGULAR",
-                    "situacao_receita_data" => "2016-10-17",
-                    "situacao_receita_hora" => "11:02:49"
+                "conteudo"          => {
+                    "documento"               => "99999999999",
+                    "tipo_documento"          => "PF",
+                    "nome"                    => "JOÃO DA SILVA",
+                    "outras_grafias"          => [ "JOÃO D SILVA", "JOÃO SILVA" ],
+                    "data_nascimento:"        => "15/06/1979",
+                    "outras_datas_nascimento" => ["25/06/1979"],
+                    "idade"                   => "26",
+                    "signo"                   => "Gêmeos",
+                    "obito"                   => "NAO",
+                    "sexo"                    => "M",
+                    "uf"                      => "RS,CE,",
+                    "situacao_receita"        => "REGULAR",
+                    "situacao_receita_data"   => "2016-10-17",
+                    "situacao_receita_hora"   => "11:02:49"
                 }
             }
         }
-    }
+    };
 }
 
 sub setup_mock_procob_fail {
 
     $procob_response = {
-        "code" => "000",
-        "message" => "Consulta de testes com dados fictícios.",
-        "date" => "2016-10-17",
-        "hour" => "09:55:51",
+        "code"     => "000",
+        "message"  => "Consulta de testes com dados fictícios.",
+        "date"     => "2016-10-17",
+        "hour"     => "09:55:51",
         "revision" => "11399",
-        "saldo"  => '96.00',
-        "server" => "3",
-        "content" => {
+        "saldo"    => '96.00',
+        "server"   => "3",
+        "content"  => {
             "nome" => {
                 "existe_informacao" => "SIM",
-                "conteudo" => {
-                    "documento" => "99999999999",
-                    "tipo_documento" => "PF",
-                    "nome" => "JOÃO DA SILVA",
-                    "outras_grafias" => [
-                        "JOÃO D SILVA",
-                        "JOÃO SILVA"
-                    ],
-                    "data_nascimento" => "15/06/1979",
-                    "outras_datas_nascimento" => [
-                        "25/06/1979"
-                    ],
-                    "idade" => "26",
-                    "signo" => "Gêmeos",
-                    "obito" => "SIM",
-                    "sexo" => "M",
-                    "uf" => "RS,CE,",
-                    "situacao_receita" => "REGULAR",
-                    "situacao_receita_data" => "2016-10-17",
-                    "situacao_receita_hora" => "11:02:49"
+                "conteudo"          => {
+                    "documento"               => "99999999999",
+                    "tipo_documento"          => "PF",
+                    "nome"                    => "JOÃO DA SILVA",
+                    "outras_grafias"          => [ "JOÃO D SILVA", "JOÃO SILVA" ],
+                    "data_nascimento"         => "15/06/1979",
+                    "outras_datas_nascimento" => ["25/06/1979"],
+                    "idade"                   => "26",
+                    "signo"                   => "Gêmeos",
+                    "obito"                   => "SIM",
+                    "sexo"                    => "M",
+                    "uf"                      => "RS,CE,",
+                    "situacao_receita"        => "REGULAR",
+                    "situacao_receita_data"   => "2016-10-17",
+                    "situacao_receita_hora"   => "11:02:49"
                 }
             }
         }
-    }
+    };
 }
 
 sub setup_failed_mock_iugu_boleto {
 
-	$iugu_invoice_response = {
-		'occurrence_date'               => '2018-05-14',
-		'total_paid'                    => undef,
-		'customer_ref'                  => undef,
-		'customer_id'                   => undef,
-		'ignore_canceled_email'         => undef,
-		'total_on_occurrence_day_cents' => 3500,
-		'total_cents'                   => 3500,
-		'secure_url'                    => 'https://faturas.iugu.com/8ed8e2a0-ff4e-452b-b7b2-987699ab835d-afe8',
-		'fines_on_occurrence_day_cents' => 0,
-		'custom_variables'              => [],
-		'total_paid_cents'              => undef,
-		'logs'                          => [
-			{
-				'created_at'  => '14 May 10:34',
-				'notes'       => 'Invoice viewed!  ',
-				'id'          => '30D1DCE059284874847A2937479D3539',
-				'description' => 'Invoice viewed!'
-			},
-			{
-				'created_at'  => '14 May 10:34',
-				'notes'       => 'Successfully sent receipt to: 87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
-				'description' => 'Receipt email sent!',
-				'id'          => 'FFCFE17060E246AB9CD867029E53A053'
-			},
-			{
-				'created_at'  => '14 May 10:34',
-				'notes'       => 'Invoice viewed!  ',
-				'description' => 'Invoice viewed!',
-				'id'          => '2A2836B18BEF413994A0F38C9B7B341C'
-			},
-			{
-				'notes'       => 'Invoice viewed!  ',
-				'created_at'  => '14 May 09:39',
-				'id'          => '3333122EAE584E1085BC6814BD028BEE',
-				'description' => 'Invoice viewed!'
-			},
-			{
-				'description' => 'Invoice viewed!',
-				'id'          => '6AE4299E01984A4FAE454712F4EFB550',
-				'created_at'  => '14 May 09:39',
-				'notes'       => 'Invoice viewed!  '
-			},
-			{
-				'notes'       => 'Invoice viewed!  ',
-				'created_at'  => '14 May 09:38',
-				'id'          => 'A9A10ADE0F70443A9475B0E31F95DC7C',
-				'description' => 'Invoice viewed!'
-			},
-			{
-				'notes'       => 'Invoice viewed!  ',
-				'created_at'  => '14 May 09:38',
-				'id'          => '72355DFD147A4679A7551783F68A29C4',
-				'description' => 'Invoice viewed!'
-			},
-			{
-				'id'          => 'A278F69C102047EFADD92FE6FB3B8394',
-				'description' => 'Invoice viewed!',
-				'created_at'  => '14 May 09:38',
-				'notes'       => 'Invoice viewed!  '
-			},
-			{
-				'created_at'  => '14 May 09:38',
-				'notes'       => 'Invoice viewed!  ',
-				'id'          => 'EC0BA5A4BD5D4E12AC2B3611ADCD57EE',
-				'description' => 'Invoice viewed!'
-			},
-			{
-				'id'          => '0A8800BD4C1643F59BF7B13B75E781B5',
-				'description' => 'Reminder email sent!',
-				'notes'       => 'Successfully sent reminder to: 87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
-				'created_at'  => '14 May 09:38'
-			}
-		],
-		'advance_fee_cents'       => undef,
-		'due_date'                => '2018-05-19',
-		'installments'            => undef,
-		'early_payment_discount'  => \0,
-		'early_payment_discounts' => [],
-		'total'                   => '35.00 BRL',
-		'paid_cents'              => undef,
-		'status'                  => 'expired',
-		'items_total_cents'       => 3500,
-		'created_at_iso'          => '2018-05-14T09:37:59-03:00',
-		'user_id'                 => undef,
-		'email'                   => '87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
-		'id'                      => '8ED8E2A0FF4E452BB7B2987699AB835D',
-		'paid'                    => '35.00 BRL',
-		'commission'              => '0.00 BRL',
-		'customer_name'           => undef,
-		'paid_at'                 => undef,
-		'total_overpaid'          => '0.00 BRL',
-		'discount'                => undef,
-		'commission_cents'        => 0,
-		'financial_return_date'   => undef,
-		'secure_id'               => '8ed8e2a0-ff4e-452b-b7b2-987699ab835d-afe8',
-		'notification_url'        => undef,
-		'updated_at'              => '2018-05-14T10:34:08-03:00',
-		'currency'                => 'BRL',
-		'refundable'              => \0,
-		'discount_cents'          => undef,
-		'taxes_paid_cents'        => 128,
-		'advance_fee'             => undef,
-		'tax_cents'               => undef,
-		'interest'                => undef,
-		'overpaid_cents'          => undef,
-		'total_on_occurrence_day' => '35.00 BRL',
-		'updated_at_iso'          => '2018-05-14T10:34:08-03:00',
-		'variables'               => [
-			{
-				'variable' => 'payer.address.city',
-				'id'       => '8A772AA040FD4725B35A4F55BEEBF3C4',
-				'value'    => 'Iguape'
-			},
-			{
-				'value'    => 'Centro',
-				'id'       => '41E7886198A34813B040723EBE42B8A5',
-				'variable' => 'payer.address.district'
-			},
-			{
-				'value'    => '499',
-				'id'       => '1184B77F58B04C56A1400F5663480DE3',
-				'variable' => 'payer.address.number'
-			},
-			{
-				'variable' => 'payer.address.state',
-				'id'       => 'BD5448BAB60E4267920DA68FBF5638C9',
-				'value'    => 'SP'
-			},
-			{
-				'value'    => 'Rua Tiradentes',
-				'variable' => 'payer.address.street',
-				'id'       => '3B45CC7B1F49497D8A26A5F2C007D474'
-			},
-			{
-				'variable' => 'payer.address.zip_code',
-				'id'       => '183648D3DEEB4263A4734A6B27FE5A56',
-				'value'    => '11920-000'
-			},
-			{
-				'value'    => '46223869762',
-				'id'       => '7C85FF2605C047DC97CE51BD2777BE3A',
-				'variable' => 'payer.cpf_cnpj'
-			},
-			{
-				'value'    => 'Kenna Tabitha Taylor',
-				'variable' => 'payer.name',
-				'id'       => '996CC90426D749B082606F54A86634AF'
-			},
-			{
-				'value'    => '1111',
-				'variable' => 'payment_data.transaction_number',
-				'id'       => '31ECE59D95414F7AA61449BDA6F4E525'
-			},
-			{
-				'variable' => 'payment_method',
-				'id'       => '8CE276AAA5D9480BBDBC7D9F1E41C735',
-				'value'    => 'iugu_bank_slip_test'
-			}
-		],
-		'financial_return_dates' => undef,
-		'transaction_number'     => 1111,
-		'created_at'             => '14 May 09:37',
-		'payment_method'         => 'iugu_bank_slip_test',
-		'items'                  => [
-			{
-				'created_at'  => '2018-05-14T09:37:59-03:00',
-				'price_cents' => 3500,
-				'quantity'    => 1,
-				'description' => "Doação para pre-campanha Joseph CPF 24053924960",
-				'id'          => 'E318FDFFB735469BB43C950C79F6DD91',
-				'updated_at'  => '2018-05-14T09:37:59-03:00',
-				'price'       => '35.00 BRL'
-			}
-		],
-		'bank_slip'               => undef,
-		'taxes_paid'              => '1.28 BRL',
-		'cc_emails'               => undef,
-		'return_url'              => undef,
-		'fines_on_occurrence_day' => '0.00 BRL',
-		'ignore_due_email'        => undef,
-		'payable_with'            => 'bank_slip'
-	};
+    $iugu_invoice_response = {
+        'occurrence_date'               => '2018-05-14',
+        'total_paid'                    => undef,
+        'customer_ref'                  => undef,
+        'customer_id'                   => undef,
+        'ignore_canceled_email'         => undef,
+        'total_on_occurrence_day_cents' => 3500,
+        'total_cents'                   => 3500,
+        'secure_url'                    => 'https://faturas.iugu.com/8ed8e2a0-ff4e-452b-b7b2-987699ab835d-afe8',
+        'fines_on_occurrence_day_cents' => 0,
+        'custom_variables'              => [],
+        'total_paid_cents'              => undef,
+        'logs'                          => [
+            {
+                'created_at'  => '14 May 10:34',
+                'notes'       => 'Invoice viewed!  ',
+                'id'          => '30D1DCE059284874847A2937479D3539',
+                'description' => 'Invoice viewed!'
+            },
+            {
+                'created_at'  => '14 May 10:34',
+                'notes'       => 'Successfully sent receipt to: 87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
+                'description' => 'Receipt email sent!',
+                'id'          => 'FFCFE17060E246AB9CD867029E53A053'
+            },
+            {
+                'created_at'  => '14 May 10:34',
+                'notes'       => 'Invoice viewed!  ',
+                'description' => 'Invoice viewed!',
+                'id'          => '2A2836B18BEF413994A0F38C9B7B341C'
+            },
+            {
+                'notes'       => 'Invoice viewed!  ',
+                'created_at'  => '14 May 09:39',
+                'id'          => '3333122EAE584E1085BC6814BD028BEE',
+                'description' => 'Invoice viewed!'
+            },
+            {
+                'description' => 'Invoice viewed!',
+                'id'          => '6AE4299E01984A4FAE454712F4EFB550',
+                'created_at'  => '14 May 09:39',
+                'notes'       => 'Invoice viewed!  '
+            },
+            {
+                'notes'       => 'Invoice viewed!  ',
+                'created_at'  => '14 May 09:38',
+                'id'          => 'A9A10ADE0F70443A9475B0E31F95DC7C',
+                'description' => 'Invoice viewed!'
+            },
+            {
+                'notes'       => 'Invoice viewed!  ',
+                'created_at'  => '14 May 09:38',
+                'id'          => '72355DFD147A4679A7551783F68A29C4',
+                'description' => 'Invoice viewed!'
+            },
+            {
+                'id'          => 'A278F69C102047EFADD92FE6FB3B8394',
+                'description' => 'Invoice viewed!',
+                'created_at'  => '14 May 09:38',
+                'notes'       => 'Invoice viewed!  '
+            },
+            {
+                'created_at'  => '14 May 09:38',
+                'notes'       => 'Invoice viewed!  ',
+                'id'          => 'EC0BA5A4BD5D4E12AC2B3611ADCD57EE',
+                'description' => 'Invoice viewed!'
+            },
+            {
+                'id'          => '0A8800BD4C1643F59BF7B13B75E781B5',
+                'description' => 'Reminder email sent!',
+                'notes'       => 'Successfully sent reminder to: 87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
+                'created_at'  => '14 May 09:38'
+            }
+        ],
+        'advance_fee_cents'       => undef,
+        'due_date'                => '2018-05-19',
+        'installments'            => undef,
+        'early_payment_discount'  => \0,
+        'early_payment_discounts' => [],
+        'total'                   => '35.00 BRL',
+        'paid_cents'              => undef,
+        'status'                  => 'expired',
+        'items_total_cents'       => 3500,
+        'created_at_iso'          => '2018-05-14T09:37:59-03:00',
+        'user_id'                 => undef,
+        'email'                   => '87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
+        'id'                      => '8ED8E2A0FF4E452BB7B2987699AB835D',
+        'paid'                    => '35.00 BRL',
+        'commission'              => '0.00 BRL',
+        'customer_name'           => undef,
+        'paid_at'                 => undef,
+        'total_overpaid'          => '0.00 BRL',
+        'discount'                => undef,
+        'commission_cents'        => 0,
+        'financial_return_date'   => undef,
+        'secure_id'               => '8ed8e2a0-ff4e-452b-b7b2-987699ab835d-afe8',
+        'notification_url'        => undef,
+        'updated_at'              => '2018-05-14T10:34:08-03:00',
+        'currency'                => 'BRL',
+        'refundable'              => \0,
+        'discount_cents'          => undef,
+        'taxes_paid_cents'        => 128,
+        'advance_fee'             => undef,
+        'tax_cents'               => undef,
+        'interest'                => undef,
+        'overpaid_cents'          => undef,
+        'total_on_occurrence_day' => '35.00 BRL',
+        'updated_at_iso'          => '2018-05-14T10:34:08-03:00',
+        'variables'               => [
+            {
+                'variable' => 'payer.address.city',
+                'id'       => '8A772AA040FD4725B35A4F55BEEBF3C4',
+                'value'    => 'Iguape'
+            },
+            {
+                'value'    => 'Centro',
+                'id'       => '41E7886198A34813B040723EBE42B8A5',
+                'variable' => 'payer.address.district'
+            },
+            {
+                'value'    => '499',
+                'id'       => '1184B77F58B04C56A1400F5663480DE3',
+                'variable' => 'payer.address.number'
+            },
+            {
+                'variable' => 'payer.address.state',
+                'id'       => 'BD5448BAB60E4267920DA68FBF5638C9',
+                'value'    => 'SP'
+            },
+            {
+                'value'    => 'Rua Tiradentes',
+                'variable' => 'payer.address.street',
+                'id'       => '3B45CC7B1F49497D8A26A5F2C007D474'
+            },
+            {
+                'variable' => 'payer.address.zip_code',
+                'id'       => '183648D3DEEB4263A4734A6B27FE5A56',
+                'value'    => '11920-000'
+            },
+            {
+                'value'    => '46223869762',
+                'id'       => '7C85FF2605C047DC97CE51BD2777BE3A',
+                'variable' => 'payer.cpf_cnpj'
+            },
+            {
+                'value'    => 'Kenna Tabitha Taylor',
+                'variable' => 'payer.name',
+                'id'       => '996CC90426D749B082606F54A86634AF'
+            },
+            {
+                'value'    => '1111',
+                'variable' => 'payment_data.transaction_number',
+                'id'       => '31ECE59D95414F7AA61449BDA6F4E525'
+            },
+            {
+                'variable' => 'payment_method',
+                'id'       => '8CE276AAA5D9480BBDBC7D9F1E41C735',
+                'value'    => 'iugu_bank_slip_test'
+            }
+        ],
+        'financial_return_dates' => undef,
+        'transaction_number'     => 1111,
+        'created_at'             => '14 May 09:37',
+        'payment_method'         => 'iugu_bank_slip_test',
+        'items'                  => [
+            {
+                'created_at'  => '2018-05-14T09:37:59-03:00',
+                'price_cents' => 3500,
+                'quantity'    => 1,
+                'description' => "Doação para pre-campanha Joseph CPF 24053924960",
+                'id'          => 'E318FDFFB735469BB43C950C79F6DD91',
+                'updated_at'  => '2018-05-14T09:37:59-03:00',
+                'price'       => '35.00 BRL'
+            }
+        ],
+        'bank_slip'               => undef,
+        'taxes_paid'              => '1.28 BRL',
+        'cc_emails'               => undef,
+        'return_url'              => undef,
+        'fines_on_occurrence_day' => '0.00 BRL',
+        'ignore_due_email'        => undef,
+        'payable_with'            => 'bank_slip'
+    };
 }
 
 sub setup_mock_serpro_success_regular {
     $serpro_response = {
-        "ni" => "40442820135",
-        "nome" => "Nome do CPF 404.428.201-35",
+        "ni"       => "40442820135",
+        "nome"     => "Nome do CPF 404.428.201-35",
         "situacao" => {
-            "codigo" => "0",
+            "codigo"    => "0",
             "descricao" => "Regular"
         }
-    }
+    };
 }
 
 sub setup_mock_serpro_success_suspended {
 
     $serpro_response = {
-        "ni" => "40532176871",
-        "nome" => "Nome do CPF 405.321.768-71",
+        "ni"       => "40532176871",
+        "nome"     => "Nome do CPF 405.321.768-71",
         "situacao" => {
-            "codigo" => "2",
+            "codigo"    => "2",
             "descricao" => "Suspensa"
         }
-    }
+    };
 }
 
 sub setup_mock_serpro_success_pending_regularization {
 
-	$serpro_response = {
-        "ni" => "07691852312",
-        "nome" => "Nome do CPF 076.918.523-12",
+    $serpro_response = {
+        "ni"       => "07691852312",
+        "nome"     => "Nome do CPF 076.918.523-12",
         "situacao" => {
-            "codigo" => "4",
+            "codigo"    => "4",
             "descricao" => "Pendente de Regularização"
         }
-    }
+    };
 }
 
 sub setup_mock_serpro_success_null {
 
-	$serpro_response = {
-        "ni" => "98302514705",
-        "nome" => "Nome do CPF 983.025.147-05",
+    $serpro_response = {
+        "ni"       => "98302514705",
+        "nome"     => "Nome do CPF 983.025.147-05",
         "situacao" => {
-            "codigo" => "8",
+            "codigo"    => "8",
             "descricao" => "Nula"
         }
-    }
+    };
 }
 
 sub setup_mock_serpro_success_cancelled {
 
-	$serpro_response = {
-        "ni" => "64913872591",
-        "nome" => "Nome do CPF 649.138.725-91",
+    $serpro_response = {
+        "ni"       => "64913872591",
+        "nome"     => "Nome do CPF 649.138.725-91",
         "situacao" => {
-            "codigo" => "9",
+            "codigo"    => "9",
             "descricao" => "Cancelada de Oficio"
         }
-    }
+    };
 }
 
 sub setup_mock_serpro_success_dead_person {
 
-	$serpro_response = {
-        "ni" => "05137518743",
-        "nome" => "Nome do CPF 051.375.187-43",
+    $serpro_response = {
+        "ni"       => "05137518743",
+        "nome"     => "Nome do CPF 051.375.187-43",
         "situacao" => {
-            "codigo" => "3",
+            "codigo"    => "3",
             "descricao" => "TITULAR FALECIDO"
         }
-    }
+    };
+}
+
+my $_current_time;
+
+sub get_relative_time {
+    $_current_time;
+}
+
+sub set_relative_time {
+    my ( $date, %conf ) = @_;
+    $_current_time = $date;
+    my $schema = VotoLegal->model( exists $conf{model} ? $conf{model} : 'DB' );
+    $schema->storage->dbh_do(
+        sub {
+            shift;
+            my $cn  = shift;
+            my $res = $cn->do(qq{update utils.replaceable_now set the_time = '$date'::timestamp with time zone });
+
+            if ( $res eq '0E0' ) {
+                $cn->do(qq{insert into utils.replaceable_now ( the_time) values ( '$date'::timestamp with time zone )});
+            }
+        }
+    );
+
+}
+
+sub set_relative_time_epoch {
+    set_relative_time( DateTime->from_epoch( epoch => shift )->datetime );
 }
 
 1;
