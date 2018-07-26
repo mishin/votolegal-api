@@ -133,7 +133,6 @@ sub create_invoice {
         Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
     }
 
-
     my $invoice_email =
       $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
     $post_url = $self->uri_for('invoices');
@@ -309,13 +308,29 @@ sub get_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->get( $post_url, $headers );
-        $logger->info( "Iugu response: " . $res->decoded_content );
+        my $tries = 5;
+        while (1) {
+            eval {
+                my $res = $self->ua->get( $post_url, $headers );
+                $logger->info( "Iugu response: " . $res->decoded_content );
 
-        croak 'get_invoice failed' unless $res->code == 200;
+                croak 'get_invoice failed' unless $res->code == 200;
 
-        $invoice = decode_json( $res->decoded_content )
-          or croak 'get_invoice parse json failed';
+                $invoice = decode_json( $res->decoded_content )
+                  or croak 'get_invoice parse json failed';
+            };
+            if ($@) {
+                $tries--;
+                if ( $tries == 0 ) {
+                    die $@;
+                }
+                $logger->info("trying again in 1 sec....");
+                sleep 1;
+            }
+            else {
+                last;
+            }
+        }
     }
     Log::Log4perl::NDC->remove();
 
