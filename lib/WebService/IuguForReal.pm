@@ -174,11 +174,12 @@ sub create_invoice {
 			$logger->info( "Iugu response: " . $res->decoded_content );
 
 			$invoice = decode_json( $res->decoded_content );
-            $invoice->{_charge_response_} = $invoice;
             last if $res->is_success;
         }
+        $invoice->{_charge_response_} = $invoice;
     }
-    croak 'cannot create charge right now' if $invoice->{success} eq 'false';
+
+    croak 'cannot create charge right now' unless $invoice->{id} || $invoice->{invoice_id};
 
     Log::Log4perl::NDC->remove();
 
