@@ -9,7 +9,6 @@ use URI;
 use MIME::Base64 qw(encode_base64);
 use JSON;
 use Carp 'croak';
-use Time::HiRes qw/time/;
 
 BEGIN {
     use VotoLegal::Utils qw/is_test/;
@@ -20,19 +19,17 @@ BEGIN {
         die "Missing IUGU_ACCOUNT_ID"                   unless $ENV{IUGU_ACCOUNT_ID};
         die "Missing IUGU_API_URL"                      unless $ENV{IUGU_API_URL};
         die "Missing VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID" unless $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
-		die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
-		die "Missing MAX_RETRY_WINDOW_IN_SECONDS"       unless $ENV{MAX_RETRY_WINDOW_IN_SECONDS};
+        die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
 
         $ENV{IUGU_MOCK} = 0;
     }
     else {
 
-        $ENV{IUGU_MOCK}                   = 1;
-        $ENV{IUGU_API_TEST_MODE}          = 1;
-        $ENV{IUGU_API_KEY}                = 'Fooba';
-        $ENV{IUGU_ACCOUNT_ID}             = 'Fooba';
-        $ENV{IUGU_API_URL}                = 'http://foobar.com';
-        $ENV{MAX_RETRY_WINDOW_IN_SECONDS} = 2;
+        $ENV{IUGU_MOCK}          = 1;
+        $ENV{IUGU_API_TEST_MODE} = 1;
+        $ENV{IUGU_API_KEY}       = 'Fooba';
+        $ENV{IUGU_ACCOUNT_ID}    = 'Fooba';
+        $ENV{IUGU_API_URL}       = 'http://foobar.com';
 
     }
 }
@@ -138,14 +135,13 @@ sub create_invoice {
 
     my $invoice_email =
       $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
-    $post_url = $self->uri_for('charge');
+    $post_url = $self->uri_for('invoices');
     $data     = {
-        email                   => $invoice_email,
-        payer                   => $opts{payer},
-        due_date                => $opts{due_date},
-        order_id                => $opts{donation_id},
-        restrict_payment_method => \1,
-        items => [
+        email        => $invoice_email,
+        payer        => $opts{payer},
+        due_date     => $opts{due_date},
+        payable_with => $opts{is_boleto} ? 'bank_slip' : 'credit_card',
+        items        => [
             {
                 description => $opts{description},
                 quantity    => 1,
@@ -153,10 +149,10 @@ sub create_invoice {
             }
         ],
 
-        ( $opts{is_boleto} ? ( method => 'bank_slip' ) : ( token => $opts{credit_card_token} ) )
     };
     $body = encode_json($data);
-    $logger->info("creating_direct_charge: POST $post_url\n$body");
+    # to_json para que fique certo o encoding no log
+    $logger->info("create_invoice: POST $post_url\n" . to_json($data));
 
     # criando invoice
     my $invoice;
@@ -165,20 +161,46 @@ sub create_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $start = time();
-        my $now   = time();
+        my $res = $self->ua->post( $post_url, $headers, $body );
+        $logger->info( "Iugu response: " . $res->decoded_content );
 
-        while ( $now - $start < $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
-			my $res = $self->ua->post( $post_url, $headers, $body );
-			$logger->info( "Iugu response: " . $res->decoded_content );
+        $invoice = decode_json( $res->decoded_content )
+          or croak 'create_invoice parse json failed';
 
-			$invoice = decode_json( $res->decoded_content );
-            last if $res->is_success;
-        }
-        $invoice->{_charge_response_} = $invoice;
+        die "Iugu response error: " . $res->decoded_content
+          if $invoice->{errors} && keys %{ $invoice->{errors} };
     }
 
-    croak 'cannot create charge right now' unless $invoice->{id} || $invoice->{invoice_id};
+    croak "cannot create charge right now" unless $invoice->{id};
+
+    # em caso de cartao, inicia-se o pagamento
+
+    if ( !$opts{is_boleto} ) {
+        $data = {
+            token                   => $opts{credit_card_token},
+            restrict_payment_method => \1,
+            invoice_id              => $invoice->{id},
+        };
+        $body = encode_json($data);
+
+        $post_url = $self->uri_for('charge');
+        $logger->info("POST $post_url\n$body");
+
+        if ( $ENV{IUGU_MOCK} ) {
+
+            # nothing to do here
+        }
+        else {
+            my $res = $self->ua->post( $post_url, $headers, $body );
+
+            $logger->info( "Iugu response: " . $res->decoded_content );
+
+            my $json = decode_json( $res->decoded_content ) or croak "$post_url decode failed";
+            croak "cannot create charge right now" if keys %{ $json->{errors} || {} };
+
+            $invoice->{_charge_response_} = $json;
+        }
+    }
 
     Log::Log4perl::NDC->remove();
     return $invoice;
