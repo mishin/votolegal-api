@@ -245,7 +245,7 @@ sub as_row_for_email_variable {
                     refunded_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
-                { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
+                { boleto_url => \"case when me.is_boleto then me.payment_info->>'url' end" },
               ]
 
         }
