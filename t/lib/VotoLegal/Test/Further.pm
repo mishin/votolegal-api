@@ -611,6 +611,7 @@ sub setup_sucess_mock_iugu {
         financial_return_dates        => undef,
         fines_on_occurrence_day       => undef,
         fines_on_occurrence_day_cents => undef,
+        invoice_id                    => '688E8415E2D744C0BA819F6BC1D2092C',
         id                            => "688E8415E2D744C0BA819F6BC1D2092C",
         ignore_canceled_email         => undef,
         ignore_due_email              => undef,
@@ -1439,6 +1440,225 @@ sub set_relative_time {
 
 sub set_relative_time_epoch {
     set_relative_time( DateTime->from_epoch( epoch => shift )->datetime );
+}
+
+sub setup_success_mock_iugu_direct_charge_cc {
+
+    $iugu_invoice_response = {
+        "message" => "Autorizado",
+        "errors" => {},
+        "success" => 'true',
+        "url" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a",
+        "pdf" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a.pdf",
+        "identification" => undef,
+        "invoice_id" => "03937A3532084080B551F7307B581BD8",
+        "LR" => "00",
+    };
+
+	$iugu_invoice_response_capture = {
+		'early_payment_discount' => \0,
+		'updated_at_iso'         => '2018-05-14T11:06:38-03:00',
+		'currency'               => 'BRL',
+		'total_overpaid'         => '0.00 BRL',
+		'logs'                   => [
+			{
+				'id'          => 'A0BB0AA5FAB8449BA4B7F3724420F716',
+				'description' => 'Receipt email sent!',
+				'notes'       => 'Successfully sent receipt to: 1b7f9734-f24c-4c52-935e-c7fe4af78386@no-email.com',
+				'created_at'  => '14 May 11:06'
+			},
+			{
+				'created_at'  => '14 May 11:06',
+				'notes'       => 'Invoice paid using credit card by:  , , , LR: 00',
+				'description' => 'Invoice successfully paid!',
+				'id'          => '2A5323DB34FE4BB5B5CAD5B542FB1329'
+			},
+			{
+				'id'          => 'E157E8D4D23949B69BEC4B78BD514ED9',
+				'description' => 'Invoice viewed!',
+				'notes'       => 'Invoice viewed!  ',
+				'created_at'  => '14 May 10:17'
+			},
+			{
+				'description' => 'Invoice viewed!',
+				'id'          => '3C53076E0F574822A959813435744166',
+				'created_at'  => '12 May 14:40',
+				'notes'       => 'Invoice viewed!  '
+			},
+			{
+				'description' => 'Payment authorized!',
+				'id'          => '3F3311C1884F437B8E41A6349D8CA0F7',
+				'created_at'  => '12 May 14:36',
+				'notes'       => 'Payment authorized using credit card by: LR: 00'
+			},
+			{
+				'created_at'  => '12 May 14:36',
+				'notes'       => 'Successfully sent reminder to: 1b7f9734-f24c-4c52-935e-c7fe4af78386@no-email.com',
+				'description' => 'Reminder email sent!',
+				'id'          => 'FB5AB9BB478F4DAA996DCF7891522AA4'
+			}
+		],
+		'created_at_iso'   => '2018-05-12T14:36:14-03:00',
+		'commission_cents' => 0,
+		'payment_method'   => 'iugu_credit_card_test',
+		'overpaid_cents'   => undef,
+		'items'            => [
+			{
+				'description' => "Doaçao para pre-campanha Conley CPF 25991717923",
+				'quantity'    => 1,
+				'id'          => 'E16AEC8787B844469C56F20C0C5144E8',
+				'price'       => '30.00 BRL',
+				'created_at'  => '2018-05-12T14:36:14-03:00',
+				'updated_at'  => '2018-05-12T14:36:14-03:00',
+				'price_cents' => 3000
+			}
+		],
+		'taxes_paid'              => '0.75 BRL',
+		'due_date'                => '2018-05-17',
+		'customer_id'             => undef,
+		'cc_emails'               => undef,
+		'id'                      => '688E8415E2D744C0BA819F6BC1D2092C',
+		'early_payment_discounts' => [],
+		'bank_slip'               => undef,
+		'variables'               => [
+			{
+				'id'       => 'B883534D6E2C43C4802EB56AEE442F78',
+				'variable' => 'payer.address.city',
+				'value'    => 'Iguape'
+			},
+			{
+				'value'    => 'Centro',
+				'variable' => 'payer.address.district',
+				'id'       => 'F313AB046939443996099499245DE18F'
+			},
+			{
+				'value'    => '419',
+				'variable' => 'payer.address.number',
+				'id'       => '887E691DC9C64B32815BE03B403477BD'
+			},
+			{
+				'value'    => 'SP',
+				'variable' => 'payer.address.state',
+				'id'       => 'CE862B059E6F4692981DF694D6A3CABD'
+			},
+			{
+				'variable' => 'payer.address.street',
+				'value'    => 'Rua Tiradentes',
+				'id'       => 'E3A8874151B64325B5C269887A6073E8'
+			},
+			{
+				'value'    => '11920-000',
+				'variable' => 'payer.address.zip_code',
+				'id'       => 'C459FF174A794C338D41A8590E8DD083'
+			},
+			{
+				'id'       => '951AB9DE8E104F35AFCE88270EA8F302',
+				'value'    => '46223869762',
+				'variable' => 'payer.cpf_cnpj'
+			},
+			{
+				'variable' => 'payer.name',
+				'value'    => 'Ashlynn Destinee Sullivan',
+				'id'       => '288E352ADD3F439F95F13DA9EF283F90'
+			},
+			{
+				'variable' => 'payment_data.arp',
+				'value'    => '00000',
+				'id'       => 'CF484150E1C8490C91D59B54316D134A'
+			},
+			{
+				'value'    => '1',
+				'variable' => 'payment_data.installments',
+				'id'       => '0675D60A9DC54B3AB4890D7032286A7A'
+			},
+			{
+				'value'    => '00000',
+				'variable' => 'payment_data.nsu',
+				'id'       => 'E0D9866AE2774D9CA4FC5512745FD155'
+			},
+			{
+				'id'       => 'A8B688479BB14D9EAAC483949A4FC0BD',
+				'value'    => '00000000000000000001',
+				'variable' => 'payment_data.transaction_id'
+			},
+			{
+				'id'       => '7EC745F3EA194132974AB2B9240A918B',
+				'variable' => 'payment_data.transaction_number',
+				'value'    => '1111'
+			},
+			{
+				'id'       => '9231C0DCC59D4E9A8F6C1443E4160995',
+				'variable' => 'payment_method',
+				'value'    => 'iugu_credit_card_test'
+			}
+		],
+		'secure_id'                     => '688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb',
+		'financial_return_dates'        => undef,
+		'financial_return_date'         => undef,
+		'paid'                          => '30.00 BRL',
+		'ignore_due_email'              => undef,
+		'total_paid'                    => '30.00 BRL',
+		'custom_variables'              => [],
+		'installments'                  => '1',
+		'interest'                      => undef,
+		'advance_fee'                   => undef,
+		'tax_cents'                     => undef,
+		'created_at'                    => '12 May 14:36',
+		'updated_at'                    => '2018-05-14T11:06:38-03:00',
+		'status'                        => 'paid',
+		'discount'                      => undef,
+		'ignore_canceled_email'         => undef,
+		'total_cents'                   => 3000,
+		'user_id'                       => undef,
+		'payable_with'                  => 'credit_card',
+		'transaction_number'            => 1111,
+		'commission'                    => '0.00 BRL',
+		'customer_name'                 => undef,
+		'refundable'                    => \1,
+		'notification_url'              => undef,
+		'total'                         => '30.00 BRL',
+		'discount_cents'                => undef,
+		'email'                         => '1b7f9734-f24c-4c52-935e-c7fe4af78386@no-email.com',
+		'secure_url'                    => 'https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb',
+		'total_on_occurrence_day'       => '30.00 BRL',
+		'total_paid_cents'              => 3000,
+		'paid_at'                       => $paid_at_further,
+		'fines_on_occurrence_day'       => '0.00 BRL',
+		'customer_ref'                  => undef,
+		'paid_cents'                    => 3000,
+		'advance_fee_cents'             => undef,
+		'taxes_paid_cents'              => 75,
+		'total_on_occurrence_day_cents' => 3000,
+		'fines_on_occurrence_day_cents' => 0,
+		'items_total_cents'             => 3000,
+		'return_url'                    => undef,
+		'occurrence_date'               => '2018-05-14'
+	};
+}
+
+sub setup_success_mock_iugu_direct_charge_boleto {
+
+    $iugu_invoice_response = {
+        "success" => 'true',
+        "url" => "https://faturas.iugu.com/8e312b31-4cca-471d-b6d5-e94febac1592-341a?bs=true",
+        "pdf" => "https://faturas.iugu.com/8e312b31-4cca-471d-b6d5-e94febac1592-341a.pdf",
+        "identification" => "00000000000000000000000000000000000000000000000",
+        "invoice_id" => "8E312B314CCA471DB6D5E94FEBAC1592",
+        _charge_response_ => {
+            "success" => 'true',
+            "url" => "https://faturas.iugu.com/8e312b31-4cca-471d-b6d5-e94febac1592-341a?bs=true",
+            "pdf" => "https://faturas.iugu.com/8e312b31-4cca-471d-b6d5-e94febac1592-341a.pdf",
+            "identification" => "00000000000000000000000000000000000000000000000",
+            "invoice_id" => "8E312B314CCA471DB6D5E94FEBAC1592",
+        }
+    };
+
+}
+
+sub setup_fail_mock_iugu_direct_charge_cc {
+    $iugu_invoice_response = {
+        "errors" => "Cant charge with token and method"
+    }
 }
 
 1;
