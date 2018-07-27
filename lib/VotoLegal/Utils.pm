@@ -93,8 +93,11 @@ sub remote_notify {
         my $uri = URI->new( $ENV{VOTOLEGAL_HANGOUTS_CHAT_URL} );
         $uri->query_param_append( 'thread_key', $opts{channel} || 'error' );
 
+        $text = substr( $text, 0, 2000);
+
         return 1 if exists $already_notifed->{$text};
         $already_notifed->{$text} = 1;
+
 
         my $x = eval {
             $furl->post(
