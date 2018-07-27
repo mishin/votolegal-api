@@ -677,6 +677,9 @@ sub _check_daily_limit {
 sub sync_julios_payments {
     my ( $self, %opts ) = @_;
 
+    $self->resultset('Candidate')->create_pending_pre_campaign_julios_account;
+
+
     my $rs = $self->search(
         {
             julios_next_check              => { '<=' => \'now()' },

@@ -11,6 +11,8 @@ with 'VotoLegal::Role::Verification::TransactionalActions::DBIC';
 use Business::BR::CEP qw(test_cep);
 use VotoLegal::Types qw(EmailAddress CPF PositiveInt CommonLatinText);
 
+use VotoLegal::Utils qw/remote_notify is_test/;
+
 use Data::Verifier;
 
 sub verifiers_specs {
@@ -277,6 +279,42 @@ sub get_candidates_with_data_for_admin {
         },
         { prefetch => [qw/ party office political_movement payments user /] }
     );
+}
+
+sub create_pending_pre_campaign_julios_account {
+    my ($self) = @_;
+
+    return unless $ENV{JULIOS_URL};
+
+    my $rs = $self->search(
+        {
+            'candidate_campaign_config.pre_campaign_julios_customer_id'     => undef,
+            'candidate_campaign_config.pre_campaign_julios_customer_errmsg' => undef,
+        },
+        {
+            prefetch => 'candidate_campaign_config',
+        }
+    );
+    my $ws = WebService::Julios->instance;
+
+    while ( my $candidate = $rs->next ) {
+
+        my $cand_conf = $candidate->candidate_campaign_config;
+
+        my $res = eval { $ws->new_customer( { name => $candidate->name, api_key => $ENV{JULIOS_API_KEY}, } ) };
+
+        if ($@) {
+            $cand_conf->update( { pre_campaign_julios_customer_errmsg => $@ } );
+            remote_notify($@) unless is_test();
+        }
+        else {
+
+            $cand_conf->update( { pre_campaign_julios_customer_id => $res->{customer}{id} } );
+
+        }
+
+    }
+
 }
 
 1;

@@ -77,6 +77,8 @@ sub new_customer {
 
     }
 
+    die 'Error cannot create new_customer: ' . eval{to_json($res)} unless $res->{customer}{id};
+
     return $res;
 }
 

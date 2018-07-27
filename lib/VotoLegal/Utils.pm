@@ -17,9 +17,10 @@ my $furl = Furl->new( timeout => 5 );
 use vars qw(@ISA @EXPORT);
 
 @ISA    = (qw(Exporter));
-@EXPORT = qw(is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason
-  gen_page_marker
-  parse_page_marker
+@EXPORT = qw(
+    is_test left_padding_zeros left_padding_whitespaces die_with remote_notify die_with_reason
+    gen_page_marker
+    parse_page_marker
 );
 
 =head1 METHODS
