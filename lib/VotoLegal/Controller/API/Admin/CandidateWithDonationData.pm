@@ -45,7 +45,9 @@ sub list_GET {
                         avg_donation_amount    => $_->avg_donation_amount,
                         goal_raised_percentage => $goal_raised_percentage,
                         amount_boleto          => $_->amount_boleto ? $_->amount_boleto : '0',
-                        amount_credit_card     => $_->amount_credit_card ? $_->amount_credit_card : '0'
+                        amount_credit_card     => $_->amount_credit_card ? $_->amount_credit_card : '0',
+                        count_credit_card      => $_->count_credit_card,
+                        count_boleto           => $_->count_boleto
 
                         # Deactivating these columns for now
                         # days_fund_raising => $_->days_fundraising,
