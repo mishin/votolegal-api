@@ -611,6 +611,7 @@ sub setup_sucess_mock_iugu {
         financial_return_dates        => undef,
         fines_on_occurrence_day       => undef,
         fines_on_occurrence_day_cents => undef,
+        invoice_id                    => '688E8415E2D744C0BA819F6BC1D2092C',
         id                            => "688E8415E2D744C0BA819F6BC1D2092C",
         ignore_canceled_email         => undef,
         ignore_due_email              => undef,
@@ -775,6 +776,7 @@ sub setup_sucess_mock_iugu {
         'customer_id'             => undef,
         'cc_emails'               => undef,
         'id'                      => '688E8415E2D744C0BA819F6BC1D2092C',
+        'invoice_id'              => '688E8415E2D744C0BA819F6BC1D2092C',
         'early_payment_discounts' => [],
         'bank_slip'               => undef,
         'variables'               => [
@@ -989,6 +991,7 @@ sub setup_sucess_mock_iugu_boleto_success {
         'user_id'                 => undef,
         'email'                   => '87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
         'id'                      => '8ED8E2A0FF4E452BB7B2987699AB835D',
+        'invoice_id'              => '8ED8E2A0FF4E452BB7B2987699AB835D',
         'paid'                    => '35.00 BRL',
         'commission'              => '0.00 BRL',
         'customer_name'           => undef,

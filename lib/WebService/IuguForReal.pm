@@ -169,17 +169,29 @@ sub create_invoice {
         my $start = time();
         my $now   = time();
 
-        while ( $now - $start < $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
-			my $res = $self->ua->post( $post_url, $headers, $body );
-			$logger->info( "Iugu response: " . $res->decoded_content );
+        while (1) {
+            $now = time();
 
-			$invoice = decode_json( $res->decoded_content );
-            last if $res->is_success;
+            if ( $now - $start > $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
+				my $res = $self->ua->post( $post_url, $headers, $body );
+				$logger->info( 'Iugu response: ' . $res->decoded_content );
+
+                eval { $invoice = decode_json( $res->decoded_content ) };
+
+                if ($@) {
+                    $logger->info( 'Could not decode JSON' );
+                }
+
+                croak 'cannot create charge right now' if keys %{ $invoice->{errors} || {} };
+                last if $res->is_success;
+            }
+            else {
+                croak 'cannot create charge right now';
+            }
         }
-        $invoice->{_charge_response_} = $invoice;
     }
 
-    croak 'cannot create charge right now' unless $invoice->{id} || $invoice->{invoice_id};
+    croak 'cannot create charge right now' unless $invoice->{invoice_id};
 
     Log::Log4perl::NDC->remove();
 
