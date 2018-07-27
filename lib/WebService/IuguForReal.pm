@@ -9,7 +9,6 @@ use URI;
 use MIME::Base64 qw(encode_base64);
 use JSON;
 use Carp 'croak';
-use Time::HiRes qw/time/;
 
 BEGIN {
     use VotoLegal::Utils qw/is_test/;
@@ -172,7 +171,7 @@ sub create_invoice {
         while (1) {
             $now = time();
 
-            if ( $now - $start > $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
+            if ( $now - $start <= $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
 				my $res = $self->ua->post( $post_url, $headers, $body );
 				$logger->info( 'Iugu response: ' . $res->decoded_content );
 
