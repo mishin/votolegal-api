@@ -165,6 +165,9 @@ sub create_invoice {
 
         $invoice = decode_json( $res->decoded_content )
           or croak 'create_invoice parse json failed';
+
+        die "Iugu response error: " . $res->decoded_content
+          if $invoice->{errors} && keys %{ $invoice->{errors} };
     }
 
     croak "cannot create charge right now" unless $invoice->{id};
