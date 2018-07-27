@@ -140,15 +140,19 @@ sub health_check : Chained('base') : PathPart('health_check') : Args(0) {
         $ENV{JULIOS_URL}
         && $c->model('DB::VotolegalDonation')->search(
             {
-                julios_next_check => \" < now()  - '10 minutes'::interval",
-                state             => [qw/wait_for_compensation/]
+                julios_next_check              => \" < now()  - '10 minutes'::interval",
+                state                          => [qw/wait_for_compensation/],
+                'candidate.split_rule_id'      => { '!=' => undef },
+                'candidate.julios_customer_id' => { '!=' => undef },
+            },
+            {
+                join => 'candidate',
             }
         )->count
       ) {
         $c->res->body("too many pending julios_next_check");
         $c->detach;
     }
-
 
     if (
         $c->model('DB::VotolegalDonation')->search(
