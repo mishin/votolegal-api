@@ -53,6 +53,10 @@ done_testing();
 exit;
 
 sub test_sync_stuff {
+
+    my $res = rest_get "/api2/health_check", name => "get health_check";
+    is $res, 'good', 'all query on health_check is good';
+
     $schema->resultset('VotolegalDonation')->update( { next_gateway_check => '2010-01-01' } );
     $schema->resultset('VotolegalDonation')->sync_pending_payments( loc => sub { shift() } );
 }
