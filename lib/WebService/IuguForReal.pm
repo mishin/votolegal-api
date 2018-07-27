@@ -182,16 +182,19 @@ sub create_invoice {
                     $logger->info( 'Could not decode JSON' );
                 }
 
-                croak 'cannot create charge right now' if keys %{ $invoice->{errors} || {} };
+                die "Iugu response error: " . $res->decoded_content
+				  if $invoice->{errors} && keys %{ $invoice->{errors} };
+
                 last if $res->is_success;
+                sleep 1;
             }
             else {
-                croak 'cannot create charge right now';
+                croak 'max gateway retry window reached';
             }
         }
     }
 
-    croak 'cannot create charge right now' unless $invoice->{invoice_id};
+    croak 'cannot create charge right now (invoice id not found)' unless $invoice->{invoice_id};
 
     Log::Log4perl::NDC->remove();
 

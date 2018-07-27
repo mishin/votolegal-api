@@ -1447,24 +1447,11 @@ sub set_relative_time_epoch {
 sub setup_success_mock_iugu_direct_charge_cc {
 
     $iugu_invoice_response = {
-        "message" => "Autorizado",
-        "errors" => {},
-        "success" => 'true',
-        "url" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a",
-        "pdf" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a.pdf",
-        "identification" => undef,
-        "invoice_id" => "03937A3532084080B551F7307B581BD8",
-        "LR" => "00",
-        _charge_response_ => {
-            "message" => "Autorizado",
-            "errors" => {},
-            "success" => 'true',
-            "url" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a",
-            "pdf" => "https://faturas.iugu.com/03937a35-3208-4080-b551-f7307b581bd8-728a.pdf",
-            "identification" => undef,
-            "invoice_id" => "03937A3532084080B551F7307B581BD8",
-            "LR" => "00",
-        }
+        success        => \1,
+        url            => "https://faturas.iugu.com/04f2532f-b0dc-40c6-bf85-a34652652f45-eefa?bs=true",
+        pdf            => "https://faturas.iugu.com/04f2532f-b0dc-40c6-bf85-a34652652f45-eefa.pdf",
+        identification => "00000000000000000000000000000000000000000000000",
+        invoice_id     => "04F2532FB0DC40C6BF85A34652652F45"
     };
 
 	$iugu_invoice_response_capture = {
