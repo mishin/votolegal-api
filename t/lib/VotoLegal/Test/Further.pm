@@ -990,6 +990,7 @@ sub setup_sucess_mock_iugu_boleto_success {
         'user_id'                 => undef,
         'email'                   => '87258aba-1333-4dc5-a11a-1befb6251ff7@no-email.com',
         'id'                      => '8ED8E2A0FF4E452BB7B2987699AB835D',
+        'invoice_id'              => '8ED8E2A0FF4E452BB7B2987699AB835D',
         'paid'                    => '35.00 BRL',
         'commission'              => '0.00 BRL',
         'customer_name'           => undef,
