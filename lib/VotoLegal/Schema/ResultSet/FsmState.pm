@@ -499,7 +499,7 @@ sub _process_start_cc_payment {
 
     my $info = $donation->payment_info_parsed;
 
-    my $success = $info->{_charge_response_}{'LR'} eq '00';
+    my $success = $info->{'LR'} eq '00';
 
     if ($success) {
 
