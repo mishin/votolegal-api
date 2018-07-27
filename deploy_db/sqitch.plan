@@ -164,3 +164,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0158-fix-timezone [0157-julios_columns] 2018-07-26T13:30:16Z renato,,, <renato@renato-MS-7A34> # fix-time
 0159-add-retry-config [0158-fix-timezone] 2018-07-26T21:24:29Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding one entry to the 'config' table
 0160-error_acknowledged [0159-add-retry-config] 2018-07-27T11:30:34Z renato,,, <renato@renato-MS-7A34> # error_acknowledged
+0161-fix-candidate_campaign_config [0160-error_acknowledged] 2018-07-27T13:20:23Z renato,,, <renato@renato-MS-7A34> # candidate_campaign_config
