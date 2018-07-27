@@ -35,16 +35,40 @@ sub put_charge {
     }
     else {
 
-        my $retry = 1;
-      RETRY:
         $res = $self->furl->post(
             $ENV{JULIOS_URL} . '/master/customers-charges',
             [ 'Content-type', 'application/json' ],
             to_json($data)
         );
 
-        # token expirou, faz login e tenta novamente
         if ( $res->code != 202 ) {
+            die "Erro ao cadastrar no julios: " . $res->decoded_content;
+        }
+
+        $res = decode_json( $res->decoded_content ) if $res;
+
+    }
+
+    return $res;
+}
+
+sub new_customer {
+    my ( $self, $data ) = @_;
+
+    my $res;
+
+    if ( $ENV{JULIOS_TEST} ) {
+        $res = $VotoLegal::Test::Further::julios_information;
+    }
+    else {
+
+        $res = $self->furl->post(
+            $ENV{JULIOS_URL} . '/master/customers',
+            [ 'Content-type', 'application/json' ],
+            to_json($data)
+        );
+
+        if ( $res->code != 200 ) {
             die "Erro ao cadastrar no julios: " . $res->decoded_content;
 
         }

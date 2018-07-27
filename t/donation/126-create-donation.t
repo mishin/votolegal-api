@@ -53,6 +53,10 @@ done_testing();
 exit;
 
 sub test_sync_stuff {
+
+    my $res = rest_get "/api2/health_check", name => "get health_check";
+    is $res, 'good', 'all query on health_check is good';
+
     $schema->resultset('VotolegalDonation')->update( { next_gateway_check => '2010-01-01' } );
     $schema->resultset('VotolegalDonation')->sync_pending_payments( loc => sub { shift() } );
 }
@@ -93,7 +97,7 @@ sub test_credit_card_donation {
     assert_current_step('credit_card_form');
     is messages2str $response, 'msg_invalid_cc_token msg_add_credit_card', 'error msg included';
 
-    setup_success_mock_iugu_direct_charge_cc;
+    setup_sucess_mock_iugu;
 
     $response = rest_post $donation_url,
       code   => 200,

@@ -200,5 +200,10 @@ msgstr "No momento, não há campanhas ativas para este pre-candidato ou candida
 msgid "campaign_not_approved"
 msgstr "No momento, esse candidato não pode receber nenhuma doação"
 
+msgid "address_zip_code_error"
+msgstr "Problemas ao processar doação: por favor, vefique o CEP e tente novamente."
+
+msgid "address_number_error"
+msgstr "Problemas ao processar doação: por favor, vefique o número do endereço e tente novamente."
 
 

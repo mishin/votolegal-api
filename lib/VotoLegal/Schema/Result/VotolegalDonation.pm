@@ -111,6 +111,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "julios_split_id",
   { data_type => "integer", is_nullable => 1 },
+  "error_acknowledged",
+  { data_type => "boolean", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -162,8 +164,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-25 18:58:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rvRT3DzekfGpYUqP84tgdA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-27 08:31:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PYMtwDULoYve1bDeWr7wBg
 
 use Encode;
 use Carp;
@@ -340,7 +342,7 @@ sub _create_invoice {
 
     $self->update(
         {
-            gateway_tid  => $invoice->{payment_info}->{invoice_id} || $invoice->{gateway_tid},
+            gateway_tid  => $invoice->{gateway_tid},
             payment_info => to_json($payment_info),
 
             next_gateway_check => $next_check
@@ -398,6 +400,7 @@ sub capture_cc {
     my $gateway = $self->payment_gateway;
 
     my $invoice = $gateway->capture_invoice( donation_id => $self->id, id => $self->gateway_tid );
+
     my $payment_info = $self->payment_info_parsed;
     $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 
@@ -714,7 +717,7 @@ sub sync_julios {
         # se ja temos um transfer_id, e estamos fazendo o sync
         # signfica que o julios precisa ir no gateway novamente
         # provavelmente acordamos porque rolou um refund
-        my $force_update = $self->transfer_id && $self->refunded_at ? 1 : 0;
+        my $force_update = $self->julios_transfer_id && $self->refunded_at ? 1 : 0;
 
         my $res = $ws->put_charge(
             {

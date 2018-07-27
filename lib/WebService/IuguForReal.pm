@@ -7,7 +7,7 @@ use VotoLegal::Logger;
 use Furl;
 use URI;
 use MIME::Base64 qw(encode_base64);
-use JSON::MaybeXS qw(encode_json decode_json);
+use JSON;
 use Carp 'croak';
 use Time::HiRes qw/time/;
 
@@ -307,13 +307,29 @@ sub get_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->get( $post_url, $headers );
-        $logger->info( "Iugu response: " . $res->decoded_content );
+        my $tries = 5;
+        while (1) {
+            eval {
+                my $res = $self->ua->get( $post_url, $headers );
+                $logger->info( "Iugu response: " . $res->decoded_content );
 
-        croak 'get_invoice failed' unless $res->code == 200;
+                croak 'get_invoice failed' unless $res->code == 200;
 
-        $invoice = decode_json( $res->decoded_content )
-          or croak 'get_invoice parse json failed';
+                $invoice = decode_json( $res->decoded_content )
+                  or croak 'get_invoice parse json failed';
+            };
+            if ($@) {
+                $tries--;
+                if ( $tries == 0 ) {
+                    die $@;
+                }
+                $logger->info("trying again in 1 sec....");
+                sleep 1;
+            }
+            else {
+                last;
+            }
+        }
     }
     Log::Log4perl::NDC->remove();
 

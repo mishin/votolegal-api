@@ -1,7 +1,7 @@
 package VotoLegal::Controller::API2::Donation;
 use Moose;
 use namespace::autoclean;
-use VotoLegal::Utils qw/die_with is_test/;
+use VotoLegal::Utils qw/die_with is_test remote_notify/;
 
 BEGIN { extends 'VotoLegal::Controller::API2::Role::REST' }
 
@@ -40,15 +40,28 @@ sub donation_POST {
         with => $c->stash->{params}
     );
 
-    my $interface = $c->model('DB')->resultset('FsmState')->interface(
-        class => 'payment',
-        loc   => sub {
-            return is_test() ? join( '', @_ ) : $c->loc(@_);
-        },
-        donation => $donation,
+    my $interface = eval {
+        $c->model('DB')->resultset('FsmState')->interface(
+            class => 'payment',
+            loc   => sub {
+                return is_test() ? join( '', @_ ) : $c->loc(@_);
+            },
+            donation => $donation,
 
-        supports => $self->_supports($c),
-    );
+            supports => $self->_supports($c),
+        );
+    };
+    if ( $@ && $@ =~ /payer.address.zip_code/ ) {
+        remote_notify($@);
+
+        die_with 'address_zip_code_error';
+    }
+    elsif ( $@ && $@ =~ /payer.address.number/ ) {
+        remote_notify($@);
+
+        die_with 'address_number_error';
+    }
+    elsif ($@) { die $@ }
 
     $self->status_created(
         $c,
@@ -89,6 +102,8 @@ sub result_POST {
     my ( $self, $c ) = @_;
 
     my $was_captured = $c->stash->{donation}->get_column('captured_at');
+
+    delete $c->stash->{params}{the_response};
 
     my $interface = $c->model('DB')->resultset('FsmState')->apply_interface(
         class => 'payment',

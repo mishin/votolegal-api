@@ -117,6 +117,58 @@ sub iugu_callback : Chained('base') : PathPart('iugu_callback') : Args(1) {
     $c->res->body("ok");
 }
 
+sub health_check : Chained('base') : PathPart('health_check') : Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->res->body('disabled');
+
+    $c->detach() unless ( $c->req->params->{secret} || '' ) eq $ENV{HEALTH_CHECK_SECRET};
+
+    if (
+        $c->model('DB::VotolegalDonation')->search(
+            {
+                next_gateway_check => \" < now()  - '10 minutes'::interval",
+                state              => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
+            }
+        )->count
+      ) {
+        $c->res->body("too many pending gateway check");
+        $c->detach;
+    }
+
+    if (
+        $ENV{JULIOS_URL}
+        && $c->model('DB::VotolegalDonation')->search(
+            {
+                julios_next_check              => \" < now()  - '10 minutes'::interval",
+                state                          => [qw/wait_for_compensation/],
+                'candidate.split_rule_id'      => { '!=' => undef },
+                'candidate.julios_customer_id' => { '!=' => undef },
+            },
+            {
+                join => 'candidate',
+            }
+        )->count
+      ) {
+        $c->res->body("too many pending julios_next_check");
+        $c->detach;
+    }
+
+    if (
+        $c->model('DB::VotolegalDonation')->search(
+            {
+                state              => [qw/error_manual_check/],
+                error_acknowledged => undef
+            }
+        )->count
+      ) {
+        $c->res->body("new error not acknowledged");
+        $c->detach;
+    }
+
+    $c->res->body("good");
+}
+
 __PACKAGE__->meta->make_immutable;
 
 1;
