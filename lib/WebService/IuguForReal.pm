@@ -196,6 +196,8 @@ sub create_invoice {
 
     croak 'cannot create charge right now (invoice id not found)' unless $invoice->{invoice_id};
 
+    $invoice->{id} = $invoice->{invoice_id};
+
     Log::Log4perl::NDC->remove();
 
     return $invoice;
