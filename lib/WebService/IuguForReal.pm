@@ -7,7 +7,7 @@ use VotoLegal::Logger;
 use Furl;
 use URI;
 use MIME::Base64 qw(encode_base64);
-use JSON::MaybeXS qw(encode_json decode_json);
+use JSON;
 use Carp 'croak';
 
 BEGIN {
@@ -151,7 +151,8 @@ sub create_invoice {
 
     };
     $body = encode_json($data);
-    $logger->info("create_invoice: POST $post_url\n$body");
+    # to_json para que fique certo o encoding no log
+    $logger->info("create_invoice: POST $post_url\n" . to_json($data));
 
     # criando invoice
     my $invoice;
