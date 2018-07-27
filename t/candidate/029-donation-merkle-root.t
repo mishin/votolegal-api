@@ -32,7 +32,7 @@ db_transaction {
     ;
 
     # Mockando doações.
-    for my $i (1 .. 10) {
+    for my $i (1 .. 5) {
         my $donation = mock_donation();
         $donation->update(
             {
@@ -76,7 +76,7 @@ sub mock_donation {
         amount                        => 3000,
       };
 
-    setup_sucess_mock_iugu;
+    setup_success_mock_iugu_direct_charge_cc;
     my $donation_id  = $response->{donation}{id};
     my $donation_url = "/api2/donations/" . $donation_id;
 
@@ -87,6 +87,7 @@ sub mock_donation {
         credit_card_token             => 'A5B22CECDA5C48C7A9A7027295BFBD95',
         cc_hash                       => '123456'
       };
+    use DDP; p $response;
     is( messages2str($response), 'msg_cc_authorized msg_cc_paid_message', 'msg de todos os passos' );
 
     ok( my $donation = $schema->resultset('VotolegalDonation')->find($donation_id), 'get donation' );
