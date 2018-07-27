@@ -290,6 +290,7 @@ sub create_pending_pre_campaign_julios_account {
         {
             'candidate_campaign_config.pre_campaign_julios_customer_id'     => undef,
             'candidate_campaign_config.pre_campaign_julios_customer_errmsg' => undef,
+            'candidate_campaign_config.candidate_id'                        => { '!=' => undef },
         },
         {
             prefetch => 'candidate_campaign_config',
@@ -300,6 +301,7 @@ sub create_pending_pre_campaign_julios_account {
     while ( my $candidate = $rs->next ) {
 
         my $cand_conf = $candidate->candidate_campaign_config;
+        next unless $cand_conf;
 
         my $res = eval { $ws->new_customer( { name => $candidate->name, api_key => $ENV{JULIOS_API_KEY}, } ) };
 
