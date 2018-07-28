@@ -691,8 +691,9 @@ sub sync_julios_payments {
             state => [qw/wait_for_compensation/]
         },
         {
-            rows => 35,
-            join => { 'candidate' => 'candidate_campaign_config' },
+            rows => $ENV{MAX_ROWS_JULIOS_SYNC} || 35,
+            order_by => \'random()',
+            join     => { 'candidate' => 'candidate_campaign_config' },
         }
     );
 
@@ -722,7 +723,8 @@ sub sync_pending_payments {
             state => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
         },
         {
-            rows => 35,
+            rows     => 35,
+            order_by => \'random()',
         }
     );
 
