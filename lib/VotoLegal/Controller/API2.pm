@@ -138,10 +138,34 @@ sub health_check : Chained('base') : PathPart('health_check') : Args(0) {
 
     if (
         $ENV{JULIOS_URL}
+        && $c->model('DB::VotolegalDonation')->_sync_julios_payments_rs->search(
+            {
+                julios_next_check => \" < now()  - '10 minutes'::interval",
+            }
+        )->count
+      ) {
+        $c->res->body("too many pending julios_next_check");
+        $c->detach;
+    }
+
+    if (
+        $ENV{JULIOS_URL}
+        && $c->model('DB::VotolegalDonation')->_sync_julios_payments_rs->search(
+            {
+                julios_erromsg => { '!=' => undef },
+            }
+        )->count
+      ) {
+        $c->res->body("pending julios_erromsg");
+        $c->detach;
+    }
+
+    if (
+        $ENV{JULIOS_URL}
         && $c->model('DB::VotolegalDonation')->search(
             {
                 julios_next_check              => \" < now()  - '10 minutes'::interval",
-                state                          => [qw/wait_for_compensation/],
+                state                          => [qw/wait_for_compensation refunded done/],
                 'candidate.split_rule_id'      => { '!=' => undef },
                 'candidate.julios_customer_id' => { '!=' => undef },
             },

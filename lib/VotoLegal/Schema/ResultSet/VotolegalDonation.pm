@@ -676,14 +676,12 @@ sub _check_daily_limit {
 
 }
 
-sub sync_julios_payments {
-    my ( $self, %opts ) = @_;
+sub _sync_julios_payments_rs {
+    my ( $self ) = @_;
 
-    $self->resultset('Candidate')->create_pending_pre_campaign_julios_account;
-
-    my $rs = $self->search(
+    return $self->search(
         {
-            julios_next_check                                             => { '<=' => \'now()' },
+
             'candidate_campaign_config.pre_campaign_julios_customer_id'   => { '!=' => undef },
             'candidate_campaign_config.pre_campaign_cc_split_rule_id'     => { '!=' => undef },
             'candidate_campaign_config.pre_campaign_boleto_split_rule_id' => { '!=' => undef },
@@ -694,6 +692,19 @@ sub sync_julios_payments {
             rows => $ENV{MAX_ROWS_JULIOS_SYNC} || 35,
             order_by => \'random()',
             join     => { 'candidate' => 'candidate_campaign_config' },
+        }
+    );
+
+}
+
+sub sync_julios_payments {
+    my ( $self, %opts ) = @_;
+
+    $self->resultset('Candidate')->create_pending_pre_campaign_julios_account;
+
+    my $rs = $self->_sync_julios_payments_rs->search(
+        {
+            julios_next_check => { '<=' => \'now()' },
         }
     );
 
