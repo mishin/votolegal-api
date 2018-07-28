@@ -688,7 +688,7 @@ sub sync_julios_payments {
             'candidate_campaign_config.pre_campaign_cc_split_rule_id'     => { '!=' => undef },
             'candidate_campaign_config.pre_campaign_boleto_split_rule_id' => { '!=' => undef },
 
-            state => [qw/wait_for_compensation/]
+            state => [qw/wait_for_compensation refunded done/]
         },
         {
             rows => $ENV{MAX_ROWS_JULIOS_SYNC} || 35,
