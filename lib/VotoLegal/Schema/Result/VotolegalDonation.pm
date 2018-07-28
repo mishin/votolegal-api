@@ -714,6 +714,32 @@ sub sync_julios {
         my $ws        = WebService::Julios->instance;
         my $candidate = $self->candidate;
 
+        my $cand_conf = $candidate->candidate_campaign_config;
+
+        die 'missing candidate_campaign_config' unless $cand_conf;
+
+        my ($julios_customer_id, $split_rule_id);
+
+        if ( $self->is_pre_campaign ) {
+            $split_rule_id =
+                $self->is_boleto
+              ? $cand_conf->pre_campaign_boleto_split_rule_id()
+              : $cand_conf->pre_campaign_cc_split_rule_id();
+            $julios_customer_id = $cand_conf->pre_campaign_julios_customer_id;
+
+        }
+        else {
+            $split_rule_id =
+                $self->is_boleto
+              ? $cand_conf->campaign_boleto_split_rule_id()
+              : $cand_conf->campaign_cc_split_rule_id();
+            $julios_customer_id = $cand_conf->campaign_julios_customer_id;
+
+        }
+
+        die 'missing $split_rule_id'      unless $split_rule_id;
+        die 'missing $julios_customer_id' unless $julios_customer_id;
+
         # se ja temos um transfer_id, e estamos fazendo o sync
         # signfica que o julios precisa ir no gateway novamente
         # provavelmente acordamos porque rolou um refund
@@ -721,8 +747,8 @@ sub sync_julios {
 
         my $res = $ws->put_charge(
             {
-                split_rule_id => $candidate->split_rule_id,
-                customer_id   => $candidate->julios_customer_id,
+                split_rule_id => $split_rule_id,
+                customer_id   => $julios_customer_id,
                 gateway_tid   => $self->gateway_tid,
                 api_key       => $ENV{JULIOS_API_KEY},
 

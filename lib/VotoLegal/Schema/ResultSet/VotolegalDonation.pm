@@ -170,6 +170,7 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('address_city');
+
                         #$self->resultset('City')->search( { name => $city } )->count;
                         return 1;
                     },
@@ -239,6 +240,7 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('billing_address_city');
+
                         #$self->resultset('City')->search( { name => $city } )->count;
                         return 1;
                     },
@@ -679,17 +681,18 @@ sub sync_julios_payments {
 
     $self->resultset('Candidate')->create_pending_pre_campaign_julios_account;
 
-
     my $rs = $self->search(
         {
-            julios_next_check              => { '<=' => \'now()' },
-            'candidate.split_rule_id'      => { '!=' => undef },
-            'candidate.julios_customer_id' => { '!=' => undef },
-            state                          => [qw/wait_for_compensation/]
+            julios_next_check                                             => { '<=' => \'now()' },
+            'candidate_campaign_config.pre_campaign_julios_customer_id'   => { '!=' => undef },
+            'candidate_campaign_config.pre_campaign_cc_split_rule_id'     => { '!=' => undef },
+            'candidate_campaign_config.pre_campaign_boleto_split_rule_id' => { '!=' => undef },
+
+            state => [qw/wait_for_compensation/]
         },
         {
             rows => 35,
-            join => 'candidate',
+            join => { 'candidate' => 'candidate_campaign_config' },
         }
     );
 
