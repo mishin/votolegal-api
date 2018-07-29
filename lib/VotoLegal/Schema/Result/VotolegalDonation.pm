@@ -113,6 +113,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "error_acknowledged",
   { data_type => "boolean", is_nullable => 1 },
+  "dcrtime_timestamp",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -164,8 +166,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-27 08:31:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PYMtwDULoYve1bDeWr7wBg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-29 00:29:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RqMpGRdU2/Rv7Xk91HGtPA
 
 use Encode;
 use Carp;
