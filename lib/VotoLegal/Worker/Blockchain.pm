@@ -56,6 +56,7 @@ sub queue_rs {
             '-or'            => [
                 'me.decred_merkle_root'  => undef,
                 'me.decred_capture_txid' => undef,
+                'me.dcrtime_timestamp'   => undef,
             ],
         },
         { for => 'update' }
@@ -107,21 +108,21 @@ sub exec_item {
             digests => [$decred_data_digest]
         );
 
-        my $merkleroot  = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
-        my $transaction = $verify->{digests}->[0]->{chaininformation}->{transaction};
-        my $empty       = '0' x 64;
+        my $merkleroot      = $verify->{digests}->[0]->{chaininformation}->{merkleroot};
+        my $transaction     = $verify->{digests}->[0]->{chaininformation}->{transaction};
+        my $empty = '0' x 64;
 
         my %update_data;
-        if ( $merkleroot ne $empty ) {
+        if ( $merkleroot ne $empty && $transaction ne $empty ) {
             $update_data{decred_merkle_root}          = $merkleroot;
             $update_data{decred_merkle_registered_at} = \'NOW()';
-        }
 
-        if ( $transaction ne $empty ) {
             $update_data{decred_capture_txid}          = $transaction;
             $update_data{decred_capture_registered_at} = \'NOW()';
-        }
 
+            my $chaintimestamp = $verify->{digests}->[0]->{chaininformation}->{chaintimestamp};
+            $update_data{dcrtime_timestamp} = \[ "TO_TIMESTAMP(?)", $chaintimestamp ];
+        }
         if (%update_data) {
             $self->logger->info( "[Blockchaind] Atualizando a doação id=" . $donation->id . '.' ) if $self->has_log;
             $self->logger->debug(

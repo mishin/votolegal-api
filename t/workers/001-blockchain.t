@@ -47,8 +47,9 @@ db_transaction {
 
         ok( $worker->run_once(), 'run once' );
 
-        ok( !defined( $donation->decred_merkle_root ),  'decred_merkle_root=undef' );
-        ok( !defined( $donation->decred_capture_txid ), 'decred_capture_txid=undef' );
+        is( $donation->decred_merkle_root , undef,  'decred_merkle_root=undef' );
+        is( $donation->decred_capture_txid, undef, 'decred_capture_txid=undef' );
+        is( $donation->dcrtime_timestamp,   undef, 'dcrtime_timestamp=undef'   );
     };
 
     subtest 'when anchored' => sub {
@@ -66,8 +67,10 @@ db_transaction {
 
         like( $donation->decred_merkle_root,  qr/^[a-f0-9]{64}$/, 'decred_merkle_root'  );
         like( $donation->decred_capture_txid, qr/^[a-f0-9]{64}$/, 'decred_capture_txid' );
+
         ok( defined( $donation->decred_merkle_registered_at ) );
         ok( defined( $donation->decred_capture_registered_at ) );
+        ok( defined( $donation->dcrtime_timestamp ) );
     };
 };
 
