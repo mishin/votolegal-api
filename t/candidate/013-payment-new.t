@@ -124,7 +124,7 @@ db_transaction {
         phone                => $phone
       ];
 
-    &setup_sucess_mock_iugu;
+    &setup_success_mock_iugu_direct_charge_cc;
     rest_post "/api/candidate/$candidate_id/payment",
       name    => 'payment with Iugu with credit card',
       code    => 200,

@@ -113,6 +113,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "error_acknowledged",
   { data_type => "boolean", is_nullable => 1 },
+  "dcrtime_timestamp",
+  { data_type => "timestamp", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -164,8 +166,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-27 08:31:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PYMtwDULoYve1bDeWr7wBg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-29 00:29:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RqMpGRdU2/Rv7Xk91HGtPA
 
 use Encode;
 use Carp;
@@ -225,6 +227,7 @@ sub as_row_for_email_variable {
                 'candidate.cpf',
                 'candidate.name',
                 'candidate.cnpj',
+                'candidate.colective_name',
                 { party_name  => 'party.name' },
                 { donor_name  => 'votolegal_donation_immutable.donor_name' },
                 { donor_cpf   => 'votolegal_donation_immutable.donor_cpf' },
@@ -245,7 +248,7 @@ sub as_row_for_email_variable {
                     refunded_at_human => \
 "to_char( timezone('America/Sao_Paulo', timezone('UTC', me.refunded_at)) , 'DD/MM/YYYY HH24:MI:SS')"
                 },
-                { boleto_url => \"case when me.is_boleto then me.payment_info->>'secure_url' end" },
+                { boleto_url => \"case when me.is_boleto then me.payment_info->>'url' end" },
               ]
 
         }

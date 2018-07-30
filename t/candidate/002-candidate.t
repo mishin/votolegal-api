@@ -341,6 +341,14 @@ db_transaction {
     ok( $candidate->discard_changes, 'discard changes' );
     is( $candidate->google_analytics, 'UA-11111-5', 'google analytics' );
 
+	rest_put "/api/candidate/$candidate_id",
+	    name => 'Google analytics id',
+	    [ colective_name => 'AppCívico' ]
+    ;
+
+	ok( $candidate->discard_changes, 'discard changes' );
+	is( $candidate->colective_name, 'AppCívico', 'colective name' );
+
     # Tentando editar outro candidato.
     create_candidate;
     rest_put "/api/candidate/" . stash 'candidate.id',

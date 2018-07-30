@@ -245,8 +245,8 @@ sub _messages_of_state {
             $text_boleto = $loc->('msg_boleto_2_message');
         }
 
-        my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
-        $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
+        # my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
+        # $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
 
         @messages = (
             {
@@ -256,7 +256,7 @@ sub _messages_of_state {
             {
                 type => 'link',
                 text => $loc->('msg_boleto_link'),
-                href => $info->{secure_url},
+                href => $info->{secure_url} || $info->{url},
             },
             (
                 $candidate_config_id == 2
@@ -499,7 +499,7 @@ sub _process_start_cc_payment {
 
     my $info = $donation->payment_info_parsed;
 
-    my $success = $info->{_charge_response_}{'LR'} eq '00';
+    my $success = $info->{'LR'} eq '00';
 
     if ($success) {
 

@@ -36,8 +36,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "pre_campaign_cc_split_rule_id",
   { data_type => "integer", is_nullable => 1 },
-  "pre_campaign_julios_customer_id",
-  { data_type => "uuid", is_nullable => 1, size => 16 },
   "pre_campaign_julios_customer_errmsg",
   {
     data_type   => "text",
@@ -48,8 +46,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "campaign_cc_split_rule_id",
   { data_type => "integer", is_nullable => 1 },
-  "campaign_julios_customer_id",
-  { data_type => "uuid", is_nullable => 1, size => 16 },
   "campaign_julios_customer_errmsg",
   {
     data_type   => "text",
@@ -62,6 +58,10 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 3, is_nullable => 0 },
   "campaign_is_approved",
   { data_type => "boolean", default_value => \"false", is_nullable => 0 },
+  "pre_campaign_julios_customer_id",
+  { data_type => "integer", is_nullable => 1 },
+  "campaign_julios_customer_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("candidate_id");
 __PACKAGE__->belongs_to(
@@ -72,8 +72,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2018-07-26 10:31:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7u4KkjWK9DCzHcKlejWbSQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-29 00:07:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uJkXZRoP9tg7GnTyk2TT7g
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;

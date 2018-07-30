@@ -19,17 +19,19 @@ BEGIN {
         die "Missing IUGU_ACCOUNT_ID"                   unless $ENV{IUGU_ACCOUNT_ID};
         die "Missing IUGU_API_URL"                      unless $ENV{IUGU_API_URL};
         die "Missing VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID" unless $ENV{VOTOLEGAL_LICENSE_IUGU_ACCOUNT_ID};
-        die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+		die "Missing VOTOLEGAL_LICENSE_IUGU_API_KEY"    unless $ENV{VOTOLEGAL_LICENSE_IUGU_API_KEY};
+		die "Missing MAX_RETRY_WINDOW_IN_SECONDS"       unless $ENV{MAX_RETRY_WINDOW_IN_SECONDS};
 
         $ENV{IUGU_MOCK} = 0;
     }
     else {
 
-        $ENV{IUGU_MOCK}          = 1;
-        $ENV{IUGU_API_TEST_MODE} = 1;
-        $ENV{IUGU_API_KEY}       = 'Fooba';
-        $ENV{IUGU_ACCOUNT_ID}    = 'Fooba';
-        $ENV{IUGU_API_URL}       = 'http://foobar.com';
+        $ENV{IUGU_MOCK}                   = 1;
+        $ENV{IUGU_API_TEST_MODE}          = 1;
+        $ENV{IUGU_API_KEY}                = 'Fooba';
+        $ENV{IUGU_ACCOUNT_ID}             = 'Fooba';
+        $ENV{IUGU_API_URL}                = 'http://foobar.com';
+        $ENV{MAX_RETRY_WINDOW_IN_SECONDS} = 2;
 
     }
 }
@@ -133,15 +135,17 @@ sub create_invoice {
         Log::Log4perl::NDC->push( "create_invoice donation_id=" . $opts{donation_id} . '  ' );
     }
 
+
     my $invoice_email =
       $opts{is_votolegal_payment} ? $opts{candidate_id} . '@no-email.com' : $opts{donation_id} . '@no-email.com';
-    $post_url = $self->uri_for('invoices');
+    $post_url = $self->uri_for('charge');
     $data     = {
-        email        => $invoice_email,
-        payer        => $opts{payer},
-        due_date     => $opts{due_date},
-        payable_with => $opts{is_boleto} ? 'bank_slip' : 'credit_card',
-        items        => [
+        email                   => $invoice_email,
+        payer                   => $opts{payer},
+        due_date                => $opts{due_date},
+        order_id                => $opts{donation_id},
+        restrict_payment_method => \1,
+        items => [
             {
                 description => $opts{description},
                 quantity    => 1,
@@ -149,10 +153,10 @@ sub create_invoice {
             }
         ],
 
+        ( $opts{is_boleto} ? ( method => 'bank_slip' ) : ( token => $opts{credit_card_token} ) )
     };
     $body = encode_json($data);
-    # to_json para que fique certo o encoding no log
-    $logger->info("create_invoice: POST $post_url\n" . to_json($data));
+    $logger->info("creating_direct_charge: POST $post_url\n$body");
 
     # criando invoice
     my $invoice;
@@ -161,48 +165,53 @@ sub create_invoice {
         $invoice = $VotoLegal::Test::Further::iugu_invoice_response;
     }
     else {
-        my $res = $self->ua->post( $post_url, $headers, $body );
-        $logger->info( "Iugu response: " . $res->decoded_content );
+        my $start = time();
+        my $now   = time();
 
-        $invoice = decode_json( $res->decoded_content )
-          or croak 'create_invoice parse json failed';
+        while (1) {
+            $now = time();
 
-        die "Iugu response error: " . $res->decoded_content
-          if $invoice->{errors} && keys %{ $invoice->{errors} };
+            if ( $now - $start <= $ENV{MAX_RETRY_WINDOW_IN_SECONDS} ) {
+				my $res = $self->ua->post( $post_url, $headers, $body );
+				$logger->info( 'Iugu response: ' . $res->decoded_content );
+
+                eval { $invoice = decode_json( $res->decoded_content ) };
+
+                if ($@) {
+                    $logger->info( 'Could not decode JSON' );
+                }
+
+                # Caso a Iugu retorne que a invoice com o order_id informado
+                # ja exista, devo buscar no get_invoice
+                my $donation_id = $opts{donation_id};
+                if ( $invoice->{errors} && ref $invoice->{errors} eq '' && $invoice->{errors} =~ m/order_id/ ) {
+                    my %duplicate_invoice_opts = (
+                        donation_id           => "$donation_id",
+                        get_duplicate_invoice => 1
+                    );
+                    $invoice = $self->get_invoice(%duplicate_invoice_opts);
+                    $invoice->{invoice_id} = $invoice->{id};
+                }
+                else {
+					die "Iugu response error: " . $res->decoded_content
+					  if $invoice->{errors} && keys %{ $invoice->{errors} };
+                }
+
+                last if $res->is_success || $invoice->{id};
+                sleep 1;
+            }
+            else {
+                croak 'max gateway retry window reached';
+            }
+        }
     }
 
-    croak "cannot create charge right now" unless $invoice->{id};
+    croak 'cannot create charge right now (invoice id not found)' unless $invoice->{invoice_id};
 
-    # em caso de cartao, inicia-se o pagamento
-
-    if ( !$opts{is_boleto} ) {
-        $data = {
-            token                   => $opts{credit_card_token},
-            restrict_payment_method => \1,
-            invoice_id              => $invoice->{id},
-        };
-        $body = encode_json($data);
-
-        $post_url = $self->uri_for('charge');
-        $logger->info("POST $post_url\n$body");
-
-        if ( $ENV{IUGU_MOCK} ) {
-
-            # nothing to do here
-        }
-        else {
-            my $res = $self->ua->post( $post_url, $headers, $body );
-
-            $logger->info( "Iugu response: " . $res->decoded_content );
-
-            my $json = decode_json( $res->decoded_content ) or croak "$post_url decode failed";
-            croak "cannot create charge right now" if keys %{ $json->{errors} || {} };
-
-            $invoice->{_charge_response_} = $json;
-        }
-    }
+    $invoice->{id} = $invoice->{invoice_id};
 
     Log::Log4perl::NDC->remove();
+
     return $invoice;
 }
 
@@ -279,10 +288,20 @@ sub get_invoice {
     my ( $self, %opts ) = @_;
     my $logger = get_logger;
 
-    defined $opts{$_} or croak "missing $_" for qw/
-      id
-      donation_id
-      /;
+	my @required_opts;
+    if ( $opts{get_duplicate_invoice} ) {
+        @required_opts = qw/
+            donation_id
+        /;
+    }
+    else {
+		@required_opts = qw/
+		  id
+		  donation_id
+		/;
+    }
+
+    defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $acc, $pass );
 
@@ -303,7 +322,13 @@ sub get_invoice {
 
     Log::Log4perl::NDC->push( "get_invoice donation_id=" . $opts{donation_id} . '  ' );
 
-    $post_url = $self->uri_for('invoices') . '/' . $opts{id};
+    if ( $opts{get_duplicate_invoice} ) {
+		$post_url = $self->uri_for('invoices') . '?query=' . $opts{donation_id};
+    }
+    else {
+        $post_url = $self->uri_for('invoices') . '/' . $opts{id};
+    }
+
     $logger->info(" GET $post_url");
 
     # criando invoice
@@ -332,6 +357,11 @@ sub get_invoice {
                 sleep 1;
             }
             else {
+                if ( $opts{get_duplicate_invoice} ) {
+                    croak 'donation_id not found on itens array' unless grep { $opts{donation_id} } @{ $invoice->{items} };
+                    $invoice = $invoice->{items}->[0];
+                }
+
                 last;
             }
         }

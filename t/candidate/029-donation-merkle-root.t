@@ -1,5 +1,6 @@
 use common::sense;
 use FindBin qw($Bin);
+use Digest::SHA qw/ sha256_hex /;
 
 BEGIN {
     use lib "$Bin/../lib";
@@ -16,11 +17,8 @@ db_transaction {
     my $candidate_id = stash 'candidate.id';
 
     # Aprovando o candidato.
-    api_auth_as user_id => 1;
-    rest_put "/api/admin/candidate/$candidate_id/activate",
-      name => 'activate candidate',
-      code => 200,
-    ;
+    ok( my $candidate = $schema->resultset('Candidate')->search( { 'me.id' => $candidate_id } )->next, 'get candidate' );
+    ok( $candidate->update( { status => 'activated' } ), 'activate candidate' );
 
     api_auth_as candidate_id => $candidate_id;
     rest_put "/api/candidate/${candidate_id}",
@@ -33,27 +31,27 @@ db_transaction {
       },
     ;
 
-    my $donation = &mock_donation;
+    # Mockando doações.
+    for my $i (1 .. 5) {
+        my $donation = mock_donation();
+        $donation->update(
+            {
+                captured_at         => \"(NOW() + (ROUND(RANDOM() * 30) || ' days')::interval)",
+                decred_merkle_root  => sha256_hex(int($i % 3)),
+                decred_capture_txid => sha256_hex(random_string(10)),
+            }
+        );
+    }
 
-    like( my $digest = $donation->get_column('decred_data_digest'), qr/^[a-f0-9]{64}$/, 'digest' );
-
-    rest_get [ '/public-api/donation/digest', $digest ],
-        name  => 'get donation',
-        stash => 'donation',
+    rest_get [ '/public-api/donation/merkle_root' ],
+      name  => 'list merkle root',
+      stash => 'merkle_root',
     ;
 
-    stash_test 'donation' => sub {
+    stash_test 'merkle_root' => sub {
         my $res = shift;
 
-        is( ref $res->{donation}->{candidate},           'HASH', 'candidate' );
-        is( ref $res->{donation}->{candidate}->{party},  'HASH', 'party'     );
-        is( ref $res->{donation}->{candidate}->{office}, 'HASH', 'office'    );
-
-        is( $res->{donation}->{amount}, 3000, 'amount=3000' );
-        ok( defined $res->{donation}->{payment_method_human}, 'payment method' );
-
-        like( $res->{donation}->{git_hash}, qr/^[a-f0-9]{40}$/, 'git hash' );
-        like( $res->{donation}->{git_url},  qr/^https:\/\/github\.com\/AppCivico/, 'git url' );
+        p $res;
     };
 };
 
