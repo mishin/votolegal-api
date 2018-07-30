@@ -227,6 +227,7 @@ sub as_row_for_email_variable {
                 'candidate.cpf',
                 'candidate.name',
                 'candidate.cnpj',
+                'candidate.colective_name',
                 { party_name  => 'party.name' },
                 { donor_name  => 'votolegal_donation_immutable.donor_name' },
                 { donor_cpf   => 'votolegal_donation_immutable.donor_cpf' },
