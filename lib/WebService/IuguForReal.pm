@@ -43,7 +43,7 @@ my $domain = URI->new( $ENV{IUGU_API_URL} );
 sub _build_ua {
     my $self = shift;
 
-    Furl->new( timeout => 60, );
+    Furl->new( timeout => 20, );
 
 }
 
