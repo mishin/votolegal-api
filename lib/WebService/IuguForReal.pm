@@ -359,6 +359,10 @@ sub get_invoice {
                 sleep 1;
             }
             else {
+                if ( $opts{get_duplicate_invoice} ) {
+                    $invoice = $invoice->{items}->[0];
+                }
+
                 last;
             }
         }
