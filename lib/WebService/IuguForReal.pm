@@ -181,10 +181,17 @@ sub create_invoice {
                     $logger->info( 'Could not decode JSON' );
                 }
 
-                die "Iugu response error: " . $res->decoded_content
-				  if $invoice->{errors} && keys %{ $invoice->{errors} };
+                # Caso a Iugu retorne que a invoice com o order_id informado
+                # ja exista, devo buscar no get_invoice
+                if ( $invoice->{erros} && $invoice->{erros} =~ m/^Duplicated invoice with order_id/ ) {
+                    $invoice = get_invoice($opts{donation_id});
+                }
+                else {
+					die "Iugu response error: " . $res->decoded_content
+					  if $invoice->{errors} && keys %{ $invoice->{errors} };
+                }
 
-                last if $res->is_success;
+                last if $res->is_success || $invoice->{totalItems} > 0;
                 sleep 1;
             }
             else {
@@ -275,10 +282,21 @@ sub get_invoice {
     my ( $self, %opts ) = @_;
     my $logger = get_logger;
 
-    defined $opts{$_} or croak "missing $_" for qw/
-      id
-      donation_id
-      /;
+	my @required_opts;
+
+    if ( $opts{get_duplicate_invoice} ) {
+        @required_opts = qw/
+            donation_id
+        /;
+    }
+    else {
+		@required_opts = qw/
+		  id
+		  donation_id
+		/;
+    }
+
+    defined $opts{$_} or croak "missing $_" for @required_opts;
 
     my ( $acc, $pass );
 
@@ -299,7 +317,13 @@ sub get_invoice {
 
     Log::Log4perl::NDC->push( "get_invoice donation_id=" . $opts{donation_id} . '  ' );
 
-    $post_url = $self->uri_for('invoices') . '/' . $opts{id};
+    if ( $opts{get_duplicate_invoice} ) {
+		$post_url = $self->uri_for('invoices') . '?query=' . $opts{donation_id};
+    }
+    else {
+        $post_url = $self->uri_for('invoices') . '/' . $opts{id};
+    }
+
     $logger->info(" GET $post_url");
 
     # criando invoice
