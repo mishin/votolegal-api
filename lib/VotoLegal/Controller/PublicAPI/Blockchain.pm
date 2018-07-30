@@ -12,10 +12,14 @@ sub root : Chained('/publicapi/root') : PathPart('') : CaptureArgs(0) {
 
     $c->stash->{collection} = $c->model('DB::VotolegalDonation')->search(
         {
-            'me.refunded_at'         => \'IS NULL',
-            'me.decred_merkle_root'  => \'IS NOT NULL',
+            '-and' => [
+                'me.refunded_at'         => \'IS NULL',
+                'me.decred_merkle_root'  => \'IS NOT NULL',
+                \[ 'DATE(me.dcrtime_timestamp) = ( SELECT DATE(MAX(dcrtime_timestamp)) FROM votolegal_donation )' ],
+            ],
         },
         {
+            order_by => { '-desc ' => [ qw/ me.dcrtime_timestamp / ] },
             prefetch   => [ 'votolegal_donation_immutable', { candidate => 'party' }, { candidate => 'office' } ],
             '+columns' => [
                 { captured_at_human => \"TIMEZONE('America/Sao_Paulo', TIMEZONE('UTC', me.captured_at))" },
@@ -33,17 +37,6 @@ sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 
 sub list_GET {
     my ( $self, $c ) = @_;
-
-    $c->stash->{collection} = $c->stash->{collection}->search(
-        {
-            '-and' => [
-                \[ 'DATE(me.dcrtime_timestamp) = ( SELECT DATE(MAX(dcrtime_timestamp)) FROM votolegal_donation )' ],
-            ],
-        },
-        { order_by => { '-desc ' => [ qw/ me.dcrtime_timestamp / ] } },
-    );
-
-    my @donations = $c->stash->{collection}->all();
 
     my $donations = reduce {
         my $donation = $b;
@@ -81,14 +74,13 @@ sub list_GET {
             },
         };
         $a;
-    } {}, @donations;
+    } {}, $c->stash->{collection}->all();
 
     return $self->status_ok(
         $c,
         entity => [
             map {
                 my $decred_merkle_root = $_;
-
                 +{
                     decred_merkle_root => $decred_merkle_root,
                     donations => $donations->{$decred_merkle_root}{donations},
