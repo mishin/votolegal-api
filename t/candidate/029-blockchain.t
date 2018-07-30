@@ -53,7 +53,10 @@ db_transaction {
 
         stash_test 'blockchain_list' => sub {
             my $res = shift;
-            p $res;
+
+            like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
+            is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
+            ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
         };
     };
 
