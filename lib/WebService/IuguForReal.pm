@@ -196,7 +196,7 @@ sub create_invoice {
 					  if $invoice->{errors} && keys %{ $invoice->{errors} };
                 }
 
-                last if $res->is_success || $invoice->{totalItems} > 0;
+                last if $res->is_success || $invoice->{id};
                 sleep 1;
             }
             else {
