@@ -39,7 +39,8 @@ sub list_GET {
             '-and' => [
                 \[ 'DATE(me.dcrtime_timestamp) = ( SELECT DATE(MAX(dcrtime_timestamp)) FROM votolegal_donation )' ],
             ],
-        }
+        },
+        { order_by => { '-desc ' => [ qw/ me.dcrtime_timestamp / ] } },
     );
 
     my @donations = $c->stash->{collection}->all();
