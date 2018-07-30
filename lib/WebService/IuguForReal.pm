@@ -186,7 +186,7 @@ sub create_invoice {
                 my $donation_id = $opts{donation_id};
                 if ( $invoice->{errors} && $invoice->{errors} =~ m/$donation_id/ ) {
                     my %duplicate_invoice_opts = (
-                        donation_id           => $opts{donation_id},
+                        donation_id           => "$donation_id",
                         get_duplicate_invoice => 1
                     );
                     $invoice = get_invoice(%duplicate_invoice_opts);
