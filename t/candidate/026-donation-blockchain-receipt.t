@@ -62,6 +62,8 @@ db_transaction {
         is( ref $res->{donation}->{candidate}->{party},  'HASH', 'party'     );
         is( ref $res->{donation}->{candidate}->{office}, 'HASH', 'office'    );
 
+        ok( exists $res->{donation}->{candidate}->{colective_name}, 'colective_name exists' );
+
         is( $res->{donation}->{amount}, 3000, 'amount=3000' );
         ok( defined $res->{donation}->{payment_method_human}, 'payment method' );
 
