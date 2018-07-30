@@ -184,12 +184,13 @@ sub create_invoice {
                 # Caso a Iugu retorne que a invoice com o order_id informado
                 # ja exista, devo buscar no get_invoice
                 my $donation_id = $opts{donation_id};
-                if ( $invoice->{errors} && $invoice->{errors} =~ m/$donation_id/ ) {
+                if ( $invoice->{errors} && ref $invoice->{errors} eq '' && $invoice->{errors} =~ m/order_id/ ) {
                     my %duplicate_invoice_opts = (
                         donation_id           => "$donation_id",
                         get_duplicate_invoice => 1
                     );
                     $invoice = $self->get_invoice(%duplicate_invoice_opts);
+                    $invoice->{invoice_id} = $invoice->{id};
                 }
                 else {
 					die "Iugu response error: " . $res->decoded_content
@@ -288,10 +289,7 @@ sub get_invoice {
     my $logger = get_logger;
 
 	my @required_opts;
-	$logger->info("$_ :" . $opts{$_} ) for (keys %opts);
-
     if ( $opts{get_duplicate_invoice} ) {
-        $logger->info('Going to search for duplicate invoice' );
         @required_opts = qw/
             donation_id
         /;
@@ -360,6 +358,7 @@ sub get_invoice {
             }
             else {
                 if ( $opts{get_duplicate_invoice} ) {
+                    croak 'donation_id not found on itens array' unless grep { $opts{donation_id} } @{ $invoice->{items} };
                     $invoice = $invoice->{items}->[0];
                 }
 
