@@ -183,7 +183,8 @@ sub create_invoice {
 
                 # Caso a Iugu retorne que a invoice com o order_id informado
                 # ja exista, devo buscar no get_invoice
-                if ( $invoice->{erros} && $invoice->{erros} =~ m/^Duplicated invoice with order_id/ ) {
+                my $donation_id = $opts{donation_id};
+                if ( $invoice->{erros} && $invoice->{erros} =~ m/^$donation_id/ ) {
                     $invoice = get_invoice($opts{donation_id});
                 }
                 else {
