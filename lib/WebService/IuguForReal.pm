@@ -189,7 +189,7 @@ sub create_invoice {
                         donation_id           => "$donation_id",
                         get_duplicate_invoice => 1
                     );
-                    $invoice = get_invoice(%duplicate_invoice_opts);
+                    $invoice = $self->get_invoice(%duplicate_invoice_opts);
                 }
                 else {
 					die "Iugu response error: " . $res->decoded_content
@@ -288,8 +288,10 @@ sub get_invoice {
     my $logger = get_logger;
 
 	my @required_opts;
+	$logger->info("$_ :" . $opts{$_} ) for (keys %opts);
 
     if ( $opts{get_duplicate_invoice} ) {
+        $logger->info('Going to search for duplicate invoice' );
         @required_opts = qw/
             donation_id
         /;
