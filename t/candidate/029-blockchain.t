@@ -1,5 +1,7 @@
 use common::sense;
 use FindBin qw($Bin);
+
+use DateTime::Format::DateParse;
 use Digest::SHA qw/ sha256_hex /;
 
 BEGIN {
@@ -33,25 +35,60 @@ db_transaction {
 
     # Mockando doações.
     for my $i (1 .. 5) {
-        my $donation = mock_donation();
+        my $donation = &mock_donation;
         $donation->update(
             {
-                captured_at         => \"(NOW() + (ROUND(RANDOM() * 30) || ' days')::interval)",
+                captured_at         => \"(NOW() - (ROUND(RANDOM() * 1440) || ' minutes')::interval)",
                 decred_merkle_root  => sha256_hex(int($i % 3)),
                 decred_capture_txid => sha256_hex(random_string(10)),
+                dcrtime_timestamp   => \"(NOW() - (ROUND(RANDOM() * 1440) || ' minutes')::interval)",
             }
         );
     }
 
-    rest_get [ '/public-api/donation/merkle_root' ],
-      name  => 'list merkle root',
-      stash => 'merkle_root',
-    ;
+    subtest 'list donations' => sub {
 
-    stash_test 'merkle_root' => sub {
-        my $res = shift;
+        rest_get [ '/public-api/blockchain' ],
+          name  => 'list',
+          stash => 'blockchain_list',
+        ;
 
-        p $res;
+        stash_test 'blockchain_list' => sub {
+            my $res = shift;
+
+            like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
+            is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
+            ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+        };
+    };
+
+    subtest 'search by merkle root' => sub {
+
+        my $now = $schema->storage->dbh_do(sub {
+            DateTime::Format::DateParse->parse_datetime($_[1]->selectrow_array('SELECT CURRENT_TIMESTAMP;'));
+        });
+
+        my $list = stash 'blockchain_list';
+        my $decred_merkle_root = fake_pick( map { $_->{decred_merkle_root} } @{ $list } )->();
+
+        rest_get [ '/public-api/blockchain/search/fvox' ],
+          name    => 'search --invalid hash',
+          is_fail => 1,
+          code    => 400,
+        ;
+
+        rest_get [ '/public-api/blockchain/search', $decred_merkle_root ],
+          name  => 'search by valid block',
+          stash => 'search_block',
+        ;
+
+        stash_test 'search_block' => sub {
+            my $res = shift;
+
+            like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
+            is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
+            ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+        };
     };
 };
 

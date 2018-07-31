@@ -58,12 +58,15 @@ VotoLegal::Controller::API::Search	./lib/VotoLegal/Controller/API/Search.pm	/^pa
 VotoLegal::Controller::API::Stats	./lib/VotoLegal/Controller/API/Stats.pm	/^package VotoLegal::Controller::API::Stats;$/;"	p
 VotoLegal::Controller::API::Stats::Depth	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^package VotoLegal::Controller::API::Stats::Depth;$/;"	p
 VotoLegal::Controller::PublicAPI	./lib/VotoLegal/Controller/PublicAPI.pm	/^package VotoLegal::Controller::PublicAPI;$/;"	p
+VotoLegal::Controller::PublicAPI::Blockchain	./lib/VotoLegal/Controller/PublicAPI/Blockchain.pm	/^package VotoLegal::Controller::PublicAPI::Blockchain;$/;"	p
+VotoLegal::Controller::PublicAPI::Blockchain::Search	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^package VotoLegal::Controller::PublicAPI::Blockchain::Search;$/;"	p
 VotoLegal::Controller::PublicAPI::Candidate	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^package VotoLegal::Controller::PublicAPI::Candidate;$/;"	p
 VotoLegal::Controller::PublicAPI::Candidate::Donation	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^package VotoLegal::Controller::PublicAPI::Candidate::Donation;$/;"	p
 VotoLegal::Controller::PublicAPI::CandidateDonations	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^package VotoLegal::Controller::PublicAPI::CandidateDonations;$/;"	p
 VotoLegal::Controller::PublicAPI::CandidateDonationsSummary	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^package VotoLegal::Controller::PublicAPI::CandidateDonationsSummary;$/;"	p
 VotoLegal::Controller::PublicAPI::CandidateSummary	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^package VotoLegal::Controller::PublicAPI::CandidateSummary;$/;"	p
 VotoLegal::Controller::PublicAPI::Donation	./lib/VotoLegal/Controller/PublicAPI/Donation.pm	/^package VotoLegal::Controller::PublicAPI::Donation;$/;"	p
+VotoLegal::Controller::PublicAPI::Donation::MerkleRoot	./lib/VotoLegal/Controller/PublicAPI/Donation/MerkleRoot.pm	/^package VotoLegal::Controller::PublicAPI::Donation::MerkleRoot;$/;"	p
 VotoLegal::Controller::Root	./lib/VotoLegal/Controller/Root.pm	/^package VotoLegal::Controller::Root;$/;"	p
 VotoLegal::Daemon::Blockchaind	./script/daemon/Blockchaind	/^package VotoLegal::Daemon::Blockchaind;$/;"	p
 VotoLegal::Daemon::Emailsd	./script/daemon/Emailsd	/^package VotoLegal::Daemon::Emailsd;$/;"	p
@@ -301,12 +304,15 @@ base	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub base : Chained('\/api2\/b
 base	./lib/VotoLegal/Controller/API3.pm	/^sub base : Chained('\/') : PathPart('api3') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub base : Chained('root') : PathPart('iugu') : CaptureArgs(0) {$/;"	s
 base	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub base : Chained('root') : PathPart('pagseguro') : CaptureArgs(0) {$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/Blockchain.pm	/^sub base : Chained('root') : PathPart('blockchain') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub base : Chained('root') : PathPart('candidate') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub base : Chained('root') : PathPart('donation') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub base : Chained('root') : PathPart('') : CaptureArgs(0) { }$/;"	s
 base	./lib/VotoLegal/Controller/PublicAPI/Donation.pm	/^sub base : Chained('root') : PathPart('donation') : CaptureArgs(0) { }$/;"	s
+base	./lib/VotoLegal/Controller/PublicAPI/Donation/MerkleRoot.pm	/^sub base : Chained('root') : PathPart('merkle_root') : CaptureArgs(0) { }$/;"	s
 build_api_error	./lib/VotoLegal.pm	/^sub build_api_error {$/;"	s
 build_callback_url	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_callback_url {$/;"	s
 build_credit_card_object	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub build_credit_card_object {$/;"	s
@@ -470,6 +476,9 @@ list	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub lis
 list	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+list	./lib/VotoLegal/Controller/PublicAPI/Blockchain.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+list	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^sub list : Chained('object') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
+list	./lib/VotoLegal/Controller/PublicAPI/Donation/MerkleRoot.pm	/^sub list : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/Candidate.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/CandidateWithDonationData.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Admin/CandidateWithRelatedData.pm	/^sub list_GET {$/;"	s
@@ -477,6 +486,9 @@ list_GET	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list_GET 
 list_GET	./lib/VotoLegal/Controller/API/Candidate/DonationFromVotoLegal.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub list_GET {$/;"	s
 list_GET	./lib/VotoLegal/Controller/API/PoliticalMovement.pm	/^sub list_GET {$/;"	s
+list_GET	./lib/VotoLegal/Controller/PublicAPI/Blockchain.pm	/^sub list_GET {$/;"	s
+list_GET	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^sub list_GET {$/;"	s
+list_GET	./lib/VotoLegal/Controller/PublicAPI/Donation/MerkleRoot.pm	/^sub list_GET {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Admin/PaymentDiscount.pm	/^sub list_POST {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Candidate/ContractSignature.pm	/^sub list_POST {$/;"	s
 list_POST	./lib/VotoLegal/Controller/API/Candidate/MandatoAbertoIntegration.pm	/^sub list_POST {$/;"	s
@@ -515,6 +527,7 @@ object	./lib/VotoLegal/Controller/API/Candidate/Donation.pm	/^sub object : Chain
 object	./lib/VotoLegal/Controller/API/Candidate/Projects.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API/Candidate/Testimony.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/API2/Donation.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
+object	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
 object	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub object : Chained('base') : PathPart('') : CaptureArgs(1) {$/;"	s
@@ -614,12 +627,15 @@ root	./lib/VotoLegal/Controller/API/Stats/Depth.pm	/^sub root : Chained('\/api\/
 root	./lib/VotoLegal/Controller/API3/Iugu.pm	/^sub root : Chained('\/api3\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/API3/PagSeguro.pm	/^sub root : Chained('\/api3\/base') : PathPart('') : CaptureArgs(0) { }$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI.pm	/^sub root : Chained('\/') : PathPart('public-api') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/Blockchain.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/Blockchain/Search.pm	/^sub root : Chained('\/publicapi\/blockchain\/base') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/Candidate.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/Candidate/Donation.pm	/^sub root : Chained('\/publicapi\/candidate\/object') : PathPart('') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/CandidateDonations.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-donations') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/CandidateDonationsSummary.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-donations-summary') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/CandidateSummary.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('candidate-summary') : CaptureArgs(0) {$/;"	s
 root	./lib/VotoLegal/Controller/PublicAPI/Donation.pm	/^sub root : Chained('\/publicapi\/root') : PathPart('') : CaptureArgs(0) {$/;"	s
+root	./lib/VotoLegal/Controller/PublicAPI/Donation/MerkleRoot.pm	/^sub root : Chained('\/publicapi\/donation\/base') : PathPart('') : CaptureArgs(0) {$/;"	s
 run_once	./lib/VotoLegal/Worker/Blockchain.pm	/^sub run_once {$/;"	s
 run_once	./lib/VotoLegal/Worker/Email.pm	/^sub run_once {$/;"	s
 run_once	./lib/VotoLegal/Worker/Procob.pm	/^sub run_once {$/;"	s

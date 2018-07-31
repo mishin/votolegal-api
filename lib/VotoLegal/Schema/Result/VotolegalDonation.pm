@@ -522,11 +522,12 @@ sub send_boleto_expired_email {
 
     $self->result_source->schema->resultset('EmaildbQueue')->create(
         {
-            config_id => $self->candidate->emaildb_config_id,
-            template  => 'boleto_expired.html',
-            to        => $self->votolegal_donation_immutable->donor_email,
-            subject   => $subject,
-            variables => encode_json( $self->as_row_for_email_variable() ),
+            config_id     => $self->candidate->emaildb_config_id,
+            template      => 'boleto_expired.html',
+            to            => $self->votolegal_donation_immutable->donor_email,
+            subject       => $subject,
+            variables     => encode_json( $self->as_row_for_email_variable() ),
+            visible_after => \"NOW() + interval '1 day'"
         }
     );
 }

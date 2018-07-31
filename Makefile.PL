@@ -143,6 +143,7 @@ my %WriteMakefileArgs = (
     "Config::General" => 0,
     "Data::Fake" => 0,
     "Data::Printer" => 0,
+    "DateTime::Format::DateParse" => 0,
     "File::Spec" => 0,
     "FindBin::libs" => 0,
     "IO::Handle" => 0,
@@ -154,7 +155,7 @@ my %WriteMakefileArgs = (
     "blib" => "1.01",
     "lib" => 0
   },
-  "VERSION" => 20180727,
+  "VERSION" => 20180731,
   "test" => {
     "TESTS" => "t/*.t t/admin/*.t t/candidate/*.t t/donation/*.t t/misc/*.t t/workers/*.t"
   }
@@ -215,6 +216,7 @@ my %FallbackPrereqs = (
   "Data::Visitor" => 0,
   "Data::Visitor::Callback" => 0,
   "DateTime" => 0,
+  "DateTime::Format::DateParse" => 0,
   "DateTime::Format::Pg" => 0,
   "DateTimeX::Easy" => 0,
   "Digest::HMAC_SHA1" => 0,
