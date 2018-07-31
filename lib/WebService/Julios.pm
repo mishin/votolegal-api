@@ -38,7 +38,7 @@ sub put_charge {
         $res = $self->furl->post(
             $ENV{JULIOS_URL} . '/master/customers-charges',
             [ 'Content-type', 'application/json' ],
-            to_json($data)
+            encode_json($data)
         );
 
         if ( $res->code != 202 ) {
@@ -65,7 +65,7 @@ sub new_customer {
         $res = $self->furl->post(
             $ENV{JULIOS_URL} . '/master/customers',
             [ 'Content-type', 'application/json' ],
-            to_json($data)
+            encode_json($data)
         );
 
         if ( $res->code != 200 ) {
@@ -76,6 +76,8 @@ sub new_customer {
         $res = decode_json( $res->decoded_content ) if $res;
 
     }
+
+    die 'Error cannot create new_customer: ' . eval{to_json($res)} unless $res->{customer}{id};
 
     return $res;
 }

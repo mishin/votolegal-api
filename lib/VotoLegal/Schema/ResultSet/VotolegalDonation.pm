@@ -170,6 +170,7 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('address_city');
+
                         #$self->resultset('City')->search( { name => $city } )->count;
                         return 1;
                     },
@@ -239,6 +240,7 @@ sub verifiers_specs {
                     type       => 'Str',
                     post_check => sub {
                         my $city = $_[0]->get_value('billing_address_city');
+
                         #$self->resultset('City')->search( { name => $city } )->count;
                         return 1;
                     },
@@ -674,19 +676,35 @@ sub _check_daily_limit {
 
 }
 
+sub _sync_julios_payments_rs {
+    my ( $self ) = @_;
+
+    return $self->search(
+        {
+
+            'candidate_campaign_config.pre_campaign_julios_customer_id'   => { '!=' => undef },
+            'candidate_campaign_config.pre_campaign_cc_split_rule_id'     => { '!=' => undef },
+            'candidate_campaign_config.pre_campaign_boleto_split_rule_id' => { '!=' => undef },
+
+            state => [qw/wait_for_compensation refunded done/]
+        },
+        {
+            rows => $ENV{MAX_ROWS_JULIOS_SYNC} || 35,
+            order_by => \'random()',
+            join     => { 'candidate' => 'candidate_campaign_config' },
+        }
+    );
+
+}
+
 sub sync_julios_payments {
     my ( $self, %opts ) = @_;
 
-    my $rs = $self->search(
+    $self->resultset('Candidate')->create_pending_pre_campaign_julios_account;
+
+    my $rs = $self->_sync_julios_payments_rs->search(
         {
-            julios_next_check              => { '<=' => \'now()' },
-            'candidate.split_rule_id'      => { '!=' => undef },
-            'candidate.julios_customer_id' => { '!=' => undef },
-            state                          => [qw/wait_for_compensation/]
-        },
-        {
-            rows => 35,
-            join => 'candidate',
+            julios_next_check => { '<=' => \'now()' },
         }
     );
 
@@ -716,7 +734,8 @@ sub sync_pending_payments {
             state => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
         },
         {
-            rows => 35,
+            rows     => 35,
+            order_by => \'random()',
         }
     );
 

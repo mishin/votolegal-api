@@ -91,7 +91,7 @@ sub iugu_callback : Chained('base') : PathPart('iugu_callback') : Args(1) {
                 # queremos ignorar o evento no caso de "criado", só devemos ataulizar o
                 # next_gateway_check se o estado souber tratar isso, se nao vai ficar em loop
                 # sem ataulizar nunca
-                if ( $row->state =~ /(waiting_boleto_payment|wait_for_compensation|done)/ ) {
+                if ( $row->state =~ /(waiting_boleto_payment|wait_for_compensation|boleto_expired|done)/ ) {
                     $update = 1;
                 }
 
@@ -138,10 +138,34 @@ sub health_check : Chained('base') : PathPart('health_check') : Args(0) {
 
     if (
         $ENV{JULIOS_URL}
+        && $c->model('DB::VotolegalDonation')->_sync_julios_payments_rs->search(
+            {
+                julios_next_check => \" < now()  - '10 minutes'::interval",
+            }
+        )->count
+      ) {
+        $c->res->body("too many pending julios_next_check");
+        $c->detach;
+    }
+
+    if (
+        $ENV{JULIOS_URL}
+        && $c->model('DB::VotolegalDonation')->_sync_julios_payments_rs->search(
+            {
+                julios_erromsg => { '!=' => undef },
+            }
+        )->count
+      ) {
+        $c->res->body("pending julios_erromsg");
+        $c->detach;
+    }
+
+    if (
+        $ENV{JULIOS_URL}
         && $c->model('DB::VotolegalDonation')->search(
             {
                 julios_next_check              => \" < now()  - '10 minutes'::interval",
-                state                          => [qw/wait_for_compensation/],
+                state                          => [qw/wait_for_compensation refunded done/],
                 'candidate.split_rule_id'      => { '!=' => undef },
                 'candidate.julios_customer_id' => { '!=' => undef },
             },
