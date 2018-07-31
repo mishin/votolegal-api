@@ -57,9 +57,8 @@ sub interface {
 
         # em alguns estados, precisa escrever no banco durante um GET
         # entao precisa chamar o _apply
-        for
-          my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment wait_for_compensation boleto_expired/)
-        {
+        for my $apply_on_get_state (
+            qw/boleto_authentication waiting_boleto_payment wait_for_compensation boleto_expired error_manual_check/) {
 
             if ( $opts{donation}->state() eq $apply_on_get_state && $last_applied_state ne $apply_on_get_state ) {
                 undef @messages;
