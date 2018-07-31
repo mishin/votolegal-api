@@ -629,6 +629,15 @@ sub get_iugu_data {
         };
     }
 
+    if ( !$self->code ) {
+        return {
+			gross_amount => undef,
+			fee_amount   => undef,
+			net_amount   => undef,
+			secure_id    => undef
+        }
+    }
+
     my %opts = (
         gateway_id           => $self->code,
         is_votolegal_payment => 1,
