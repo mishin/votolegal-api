@@ -90,6 +90,27 @@ db_transaction {
             ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
         };
     };
+
+    subtest 'search by digest' => sub {
+
+        my $list = stash 'blockchain_list';
+        my $digest = fake_pick( map { map { $_->{decred_data_digest} } @{ $_->{donations } } } @{ $list } )->();
+
+        rest_get [ '/public-api/blockchain/search', $digest ],
+          name  => 'search by digest',
+          stash => 'search_digest',
+        ;
+
+        stash_test 'search_digest' => sub {
+            my $res = shift;
+
+            like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
+            is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
+            ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+        };
+
+
+    };
 };
 
 done_testing();

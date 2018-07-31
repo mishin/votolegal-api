@@ -49,7 +49,7 @@ sub list_GET {
         push @{ $a->{$decred_merkle_root}{donations} }, {
             (
                 map { $_ => $donation->get_column($_) }
-                qw/ id candidate_id decred_capture_txid decred_data_raw decred_data_digest captured_at_human
+                qw/ id candidate_id decred_capture_txid decred_data_digest captured_at_human
                 payment_method_human decred_transaction_url git_url /
             ),
             captured_at       => $donation->captured_at->datetime(),
@@ -83,7 +83,7 @@ sub list_GET {
                 my $decred_merkle_root = $_;
                 +{
                     decred_merkle_root => $decred_merkle_root,
-                    donations => $donations->{$decred_merkle_root}{donations},
+                    donations          => $donations->{$decred_merkle_root}{donations},
                 }
             } keys %{ $donations }
         ]
