@@ -20,9 +20,15 @@ sub verifiers_specs {
                     required   => 1,
                     type       => 'Int',
                     post_check => sub {
-                        my $user_id = $_[0]->get_value('user_id');
+                        my $user_id         = $_[0]->get_value('user_id');
+                        my $is_pre_campaign = $_[0]->get_value('is_pre_campaign');
 
-                        die \[ 'user_id', 'alredy signed contract' ] if $self->search( { user_id => $user_id } )->next;
+                        die \[ 'user_id', 'alredy signed contract' ] if $self->search(
+                            {
+                                user_id         => $user_id,
+                                is_pre_campaign => $is_pre_campaign
+                            }
+                        )->next;
 
                         return 1;
                     }
@@ -31,6 +37,10 @@ sub verifiers_specs {
                     required => 1,
                     type     => 'Str',
                 },
+                is_pre_campaign => {
+                    required => 1,
+                    type     => 'Bool'
+                }
             },
         ),
     };

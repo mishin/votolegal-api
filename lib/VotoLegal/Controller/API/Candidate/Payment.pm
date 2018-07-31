@@ -42,9 +42,9 @@ sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub payment_POST {
     my ( $self, $c ) = @_;
 
-    my $now = DateTime->now();
+    # my $now = DateTime->now();
 
-    if ( $E )
+    # if ( $E )
 
     my $gateway = $c->req->params->{payment_gateway} || 'iugu';
     die \['gateway', 'invalid'] unless $gateway =~ m/(iugu|pagseguro)/;

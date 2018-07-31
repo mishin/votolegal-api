@@ -7,6 +7,8 @@ use VotoLegal::Test::Further;
 my $schema = VotoLegal->model('DB');
 
 db_transaction {
+    setup_time_for_contract_test_pre_campaign;
+
     my $email_queue_rs = $schema->resultset("EmailQueue");
 
     create_candidate;
@@ -54,6 +56,26 @@ db_transaction {
 
         is( $res->{candidate}->{signed_contract}, 1, 'candidate has signed contract' );
     };
+
+    ok ( my $contract_signature_pc = $schema->resultset('ContractSignature')->find(stash 'c1.id'), 'contract signature' );
+    is ( $contract_signature_pc->is_pre_campaign, 1, 'is pre-campaign' );
+
+    setup_time_for_contract_test_campaign;
+
+    rest_post "/api/candidate/$candidate_id/contract_signature",
+	  name                => 'signing contract for campaign',
+	  automatic_load_item => 0,
+	  stash               => 'c2';
+	  ;
+
+    ok ( my $contract_signature_c = $schema->resultset('ContractSignature')->find(stash 'c2.id'), 'contract signature' );
+    is ( $contract_signature_c->is_pre_campaign, 0, 'is normal campaign' );
+
+	rest_post "/api/candidate/$candidate_id/contract_signature",
+	  name    => 'signing contract for nomal campaign once again',
+	  is_fail => 1,
+	  code    => 400,
+	  ;
 };
 
 done_testing();
