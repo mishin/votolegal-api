@@ -527,7 +527,7 @@ sub send_boleto_expired_email {
             to            => $self->votolegal_donation_immutable->donor_email,
             subject       => $subject,
             variables     => encode_json( $self->as_row_for_email_variable() ),
-            visible_after => \"NOW() + interval '3 days'"
+            visible_after => \"NOW() + interval '1 day'"
         }
     );
 }
