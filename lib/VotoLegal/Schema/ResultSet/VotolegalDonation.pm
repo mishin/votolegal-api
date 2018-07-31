@@ -731,7 +731,7 @@ sub sync_pending_payments {
     my $rs = $self->search(
         {
             next_gateway_check => { '<=' => \'replaceable_now()' },
-            state => [qw/wait_for_compensation waiting_boleto_payment boleto_expired/]
+            state => [qw/wait_for_compensation waiting_boleto_payment boleto_expired error_manual_check/]
         },
         {
             rows     => 35,
