@@ -91,7 +91,7 @@ sub iugu_callback : Chained('base') : PathPart('iugu_callback') : Args(1) {
                 # queremos ignorar o evento no caso de "criado", só devemos ataulizar o
                 # next_gateway_check se o estado souber tratar isso, se nao vai ficar em loop
                 # sem ataulizar nunca
-                if ( $row->state =~ /(waiting_boleto_payment|wait_for_compensation|done)/ ) {
+                if ( $row->state =~ /(waiting_boleto_payment|wait_for_compensation|boleto_expired|done)/ ) {
                     $update = 1;
                 }
 
