@@ -29,6 +29,8 @@ our $paid_at_further = DateTime->now( time_zone => 'America/Sao_Paulo' )->dateti
 our $procob_response;
 our $serpro_response;
 
+our $time_for_contract_test;
+
 my $inc = 0;
 
 sub inc_paid_at_seconds {
@@ -1660,6 +1662,24 @@ sub setup_fail_mock_iugu_direct_charge_cc {
     $iugu_invoice_response = {
         "errors" => "Cant charge with token and method"
     }
+}
+
+sub setup_time_for_contract_test_pre_campaign {
+    $time_for_contract_test = DateTime->new(
+        year      => 2018,
+        month     => 7,
+        day       => 21,
+        time_zone => 'America/Sao_Paulo'
+    );
+}
+
+sub setup_time_for_contract_test_campaign {
+	$time_for_contract_test = DateTime->new(
+		year      => 2018,
+		month     => 8,
+		day       => 16,
+		time_zone => 'America/Sao_Paulo'
+	);
 }
 
 1;

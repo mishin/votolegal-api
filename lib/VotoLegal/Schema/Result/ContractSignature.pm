@@ -33,6 +33,8 @@ __PACKAGE__->add_columns(
     is_nullable   => 0,
     original      => { default_value => \"now()" },
   },
+  "is_pre_campaign",
+  { data_type => "boolean", default_value => \"true", is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key("id");
 __PACKAGE__->belongs_to(
@@ -43,8 +45,8 @@ __PACKAGE__->belongs_to(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fY974gI8VmDKRuerzXA+2A
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-31 14:59:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M1b5KtGYif3Pn4/xlp9vRw
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
