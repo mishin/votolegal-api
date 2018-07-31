@@ -26,6 +26,7 @@ sub root : Chained('/publicapi/root') : PathPart('') : CaptureArgs(0) {
                 { payment_method_human => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
                 { decred_transaction_url => \"CASE WHEN me.decred_capture_txid IS NOT NULL THEN CONCAT('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) END" },
                 { git_url => \"CASE WHEN votolegal_donation_immutable.git_hash IS NOT NULL THEN CONCAT('https://github.com/AppCivico/votolegal-api/tree/', votolegal_donation_immutable.git_hash) END" },
+                { highlight => \'False' },
             ],
         }
     );
@@ -50,7 +51,7 @@ sub list_GET {
             (
                 map { $_ => $donation->get_column($_) }
                 qw/ id candidate_id decred_capture_txid decred_data_digest captured_at_human
-                payment_method_human decred_transaction_url git_url /
+                payment_method_human decred_transaction_url git_url highlight /
             ),
             captured_at       => $donation->captured_at->datetime(),
             dcrtime_timestamp => $donation->dcrtime_timestamp->datetime(),
