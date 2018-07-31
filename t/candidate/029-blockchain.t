@@ -46,7 +46,7 @@ db_transaction {
         );
     }
 
-    subtest 'list donations' => sub {
+    subtest 'list all' => sub {
 
         rest_get [ '/public-api/blockchain' ],
           name  => 'list',
@@ -62,20 +62,16 @@ db_transaction {
         };
     };
 
-    subtest 'search by merkle root' => sub {
+    rest_get [ '/public-api/blockchain/search/fvox' ],
+      name    => 'search --invalid hash',
+      is_fail => 1,
+      code    => 400,
+    ;
 
-        my $now = $schema->storage->dbh_do(sub {
-            DateTime::Format::DateParse->parse_datetime($_[1]->selectrow_array('SELECT CURRENT_TIMESTAMP;'));
-        });
+    subtest 'search by merkle root' => sub {
 
         my $list = stash 'blockchain_list';
         my $decred_merkle_root = fake_pick( map { $_->{decred_merkle_root} } @{ $list } )->();
-
-        rest_get [ '/public-api/blockchain/search/fvox' ],
-          name    => 'search --invalid hash',
-          is_fail => 1,
-          code    => 400,
-        ;
 
         rest_get [ '/public-api/blockchain/search', $decred_merkle_root ],
           name  => 'search by valid block',
@@ -115,6 +111,28 @@ db_transaction {
             # Highlight.
             ok( grep { $_->{decred_data_digest} eq $digest && $_->{highlight} == 1 } map { map { $_ } @{ $_->{donations} } } @{ $res } );
             ok( grep { $_->{decred_data_digest} ne $digest && $_->{highlight} == 0 } map { map { $_ } @{ $_->{donations} } } @{ $res } );
+        };
+    };
+
+    subtest 'search by date' => sub {
+
+        my $now = $schema->storage->dbh_do(sub {
+            DateTime::Format::DateParse->parse_datetime($_[1]->selectrow_array('SELECT CURRENT_TIMESTAMP;'));
+        });
+
+        rest_get [ '/public-api/blockchain/search', $now->ymd() ],
+          name  => 'search by date',
+          stash => 'search_date',
+        ;
+
+        stash_test 'search_date' => sub {
+            my $res = shift;
+
+            like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
+            is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
+            ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+
+            ok( grep { $_->{highlight} == 1 } map { map { $_ } @{ $_->{donations} } } @{ $res } );
         };
     };
 };

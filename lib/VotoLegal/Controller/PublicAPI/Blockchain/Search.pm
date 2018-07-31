@@ -34,7 +34,6 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     my ( $self, $c, $param ) = @_;
 
     if ( $param =~ m{^[a-f0-9]{64}$}i ) {
-        $c->stash->{search_term} = $param;
         $c->stash->{collection}  = $c->stash->{collection}->search(
             {
                 '-and' => [
@@ -51,8 +50,18 @@ SQL_QUERY
             { '+columns' => [ { highlight => \[ "CASE WHEN me.decred_data_digest = ? OR me.decred_merkle_root = ? THEN True ELSE False END", $param, $param ] } ] },
         );
     }
+    elsif ( $param =~ m{^\d{4}-\d{2}-\d{2}$} ) {
+        $c->stash->{collection}  = $c->stash->{collection}->search(
+            {
+                '-and' => [
+                    \[ 'DATE(me.dcrtime_timestamp) = DATE(?)', $param ]
+                ]
+            },
+            { '+columns' => [ { highlight => \'True' } ] },
+        );
+    }
     else {
-        $self->status_bad_request( $c, message => 'Invalid sha256 hash.' );
+        $self->status_bad_request( $c, message => 'Invalid parameter.' );
         $c->detach();
     }
 }
