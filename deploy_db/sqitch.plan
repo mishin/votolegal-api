@@ -168,3 +168,4 @@ appschema 2016-06-18T22:38:38Z junior,,, <junior@fvox> # init schema
 0162-donation-dcrtime-timestamp [0161-fix-candidate_campaign_config] 2018-07-29T03:34:13Z junior,,, <junior@fvox> # nation-dcrtime-timestamp
 0163-add-colective_name [0162-donation-dcrtime-timestamp] 2018-07-30T13:25:26Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding 'colective_name' column to the 'candidate' table
 0164-update-bank-data [0163-add-colective_name] 2018-07-30T20:32:28Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Updating the 'bank' related data
+0165-add-envs [0164-update-bank-data] 2018-07-31T14:32:31Z lucas-eokoe,,, <lucas-eokoe@lucaseokoe-Lenovo-G400s> # Adding two more license related envs
