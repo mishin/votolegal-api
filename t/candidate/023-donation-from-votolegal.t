@@ -149,7 +149,7 @@ sub mock_donation {
         amount                        => $amount,
       };
 
-    setup_success_mock_iugu_direct_charge_cc;
+    setup_success_mock_iugu_direct_charge_cc( $amount / 100 );
     my $donation_id  = $response->{donation}{id};
     my $donation_url = "/api2/donations/" . $donation_id;
 

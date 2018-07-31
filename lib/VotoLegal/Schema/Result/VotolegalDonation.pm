@@ -407,13 +407,11 @@ sub capture_cc {
     my $payment_info = $self->payment_info_parsed;
     $payment_info = { %$payment_info, %{ $invoice->{payment_info} } };
 
+    # nao mexe mais no captured_at aqui,
+    # é job do set_captured_at
     $self->update(
         {
             payment_info => to_json($payment_info),
-
-            # converte para UTC
-            captured_at       => \[ "timezone('utc', ?::timestamp with time zone)", $payment_info->{paid_at} ],
-            julios_next_check => \'now()',
         }
     );
 }
@@ -455,13 +453,15 @@ sub sync_gateway_status {
     return $self;
 }
 
-sub set_boleto_paid {
+sub set_captured_at {
     my ($self) = @_;
 
-    die 'cannot set_boleto_paid' unless $self->is_boleto;
-    die 'cannot set_boleto_paid' if $self->captured_at;
+    die 'cannot set_captured_at again' if $self->captured_at;
 
     my $payment_info = $self->payment_info_parsed;
+
+    die '$payment_info->{paid_at} missing' unless $payment_info->{paid_at};
+
     $self->update(
         {
             # converte para UTC
@@ -480,17 +480,21 @@ sub set_boleto_paid {
         $subject = 'Somos Rede - Recibo provis&#xF3;rio';
     }
     else {
+
         $subject = 'Campanha PSOL - Recibo provis&#xF3;rio';
 
-        $self->result_source->schema->resultset('EmaildbQueue')->create(
-            {
-                config_id => $self->candidate->emaildb_config_id,
-                template  => 'captured.html',
-                to        => 'doacao@psol50.org.br',
-                subject   => $subject,
-                variables => encode_json( $self->as_row_for_email_variable() ),
-            }
-        );
+        # esses emails por algum motivo só eram enviados no boleto
+        if ( $self->is_boleto ) {
+            $self->result_source->schema->resultset('EmaildbQueue')->create(
+                {
+                    config_id => $self->candidate->emaildb_config_id,
+                    template  => 'captured.html',
+                    to        => 'doacao@psol50.org.br',
+                    subject   => $subject,
+                    variables => encode_json( $self->as_row_for_email_variable() ),
+                }
+            );
+        }
     }
 
     $self->result_source->schema->resultset('EmaildbQueue')->create(
@@ -722,7 +726,7 @@ sub sync_julios {
 
         die 'missing candidate_campaign_config' unless $cand_conf;
 
-        my ($julios_customer_id, $split_rule_id);
+        my ( $julios_customer_id, $split_rule_id );
 
         if ( $self->is_pre_campaign ) {
             $split_rule_id =

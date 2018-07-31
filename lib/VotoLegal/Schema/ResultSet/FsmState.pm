@@ -11,7 +11,6 @@ use Carp;
 use VotoLegal::Utils qw/is_test remote_notify/;
 use Digest::SHA qw(sha1_hex);
 
-
 extends 'DBIx::Class::ResultSet';
 with 'VotoLegal::Schema::Role::ResultsetFind';
 with 'VotoLegal::Schema::Role::FsmLoader';
@@ -58,7 +57,9 @@ sub interface {
 
         # em alguns estados, precisa escrever no banco durante um GET
         # entao precisa chamar o _apply
-        for my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment wait_for_compensation boleto_expired/) {
+        for
+          my $apply_on_get_state (qw/boleto_authentication waiting_boleto_payment wait_for_compensation boleto_expired/)
+        {
 
             if ( $opts{donation}->state() eq $apply_on_get_state && $last_applied_state ne $apply_on_get_state ) {
                 undef @messages;
@@ -245,8 +246,8 @@ sub _messages_of_state {
             $text_boleto = $loc->('msg_boleto_2_message');
         }
 
-        # my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
-        # $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
+       # my $due_date_br = DateTime::Format::Pg->parse_datetime( $donation->payment_info_parsed->{due_date} )->dmy('/');
+       # $text_boleto =~ s/__DUE_DATE__/$due_date_br/;
 
         @messages = (
             {
@@ -391,8 +392,21 @@ sub _process_state {
     elsif ( $state eq 'boleto_expired' ) {
         &_process_boleto_expired(@params);
     }
+    elsif ( $state eq 'error_manual_check' ) {
+        &_process_error_manual_check(@params);
+    }
 
     return $stash;
+}
+
+sub _process_error_manual_check {
+    my ( $state, $loc, $donation, $params, $stash ) = @_;
+
+    $donation->update( { next_gateway_check => \'replaceable_now()' } );
+
+    $donation = $donation->sync_gateway_status();
+
+    $stash->{value} = 'GatewayInfoUpdated';
 }
 
 sub _process_boleto_expired {
@@ -484,7 +498,7 @@ sub _process_validate_payment {
 
     if ( $info->{total_paid_cents} == $donation->votolegal_donation_immutable->amount ) {
 
-        $donation->set_boleto_paid;
+        $donation->set_captured_at;
 
         $stash->{value} = 'paid_amount_ok';
 
@@ -539,19 +553,6 @@ sub _process_capture_cc {
     }
 
     $stash->{value} = $err ? 'error' : 'captured';
-
-    if ( $stash->{value} eq 'captured' ) {
-        $donation->result_source->schema->resultset('EmaildbQueue')->create(
-            {
-                config_id => $donation->candidate->emaildb_config_id,
-                template  => 'captured.html',
-                to        => $donation->votolegal_donation_immutable->donor_email,
-                subject   => $loc->( 'email_' . $donation->candidate->emaildb_config_id . '_captured_subject' ),
-                variables => encode_json( $donation->as_row_for_email_variable() ),
-            }
-        );
-    }
-
 }
 
 sub _process_credit_card_form {

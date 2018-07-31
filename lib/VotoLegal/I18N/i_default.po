@@ -154,18 +154,6 @@ msgstr "Meio de pagamento não suportado"
 msgid "need_billing_adddress"
 msgstr "Precisamos do endereço de cobrança!"
 
-msgid "email_1_captured_subject"
-msgstr "Voto legal - Recibo provisório"
-
-msgid "email_2_captured_subject"
-msgstr "Doe Marina - Recibo provisório"
-
-msgid "email_3_captured_subject"
-msgstr "Campanha PSOL - Recibo provisório"
-
-msgid "email_4_captured_subject"
-msgstr "Campanha PSOL - Recibo provisório"
-
 msgid "donation_daily_reached"
 msgstr "Limite de doação diário para o CPF atingido. Caso você tenha algum boleto ainda em aberto, o valor dele ainda é considerado."
 

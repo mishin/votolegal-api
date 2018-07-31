@@ -1444,6 +1444,8 @@ sub set_relative_time_epoch {
 }
 
 sub setup_success_mock_iugu_direct_charge_cc {
+    my $amount = shift || 30;
+    my $amount_cents = $amount * 100;
 
     $iugu_invoice_response = {
         "message" => "Autorizado",
@@ -1596,9 +1598,9 @@ sub setup_success_mock_iugu_direct_charge_cc {
 		'secure_id'                     => '688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb',
 		'financial_return_dates'        => undef,
 		'financial_return_date'         => undef,
-		'paid'                          => '30.00 BRL',
+		'paid'                          => "$amount.00 BRL",
 		'ignore_due_email'              => undef,
-		'total_paid'                    => '30.00 BRL',
+		'total_paid'                    => "$amount.00 BRL",
 		'custom_variables'              => [],
 		'installments'                  => '1',
 		'interest'                      => undef,
@@ -1617,21 +1619,21 @@ sub setup_success_mock_iugu_direct_charge_cc {
 		'customer_name'                 => undef,
 		'refundable'                    => \1,
 		'notification_url'              => undef,
-		'total'                         => '30.00 BRL',
+		'total'                         => "$amount.00 BRL",
 		'discount_cents'                => undef,
 		'email'                         => '1b7f9734-f24c-4c52-935e-c7fe4af78386@no-email.com',
 		'secure_url'                    => 'https://faturas.iugu.com/688e8415-e2d7-44c0-ba81-9f6bc1d2092c-9adb',
-		'total_on_occurrence_day'       => '30.00 BRL',
-		'total_paid_cents'              => 3000,
+		'total_on_occurrence_day'       => "$amount.00 BRL",
+		'total_paid_cents'              => $amount_cents,
 		'paid_at'                       => $paid_at_further,
 		'fines_on_occurrence_day'       => '0.00 BRL',
 		'customer_ref'                  => undef,
-		'paid_cents'                    => 3000,
+		'paid_cents'                    => $amount_cents,
 		'advance_fee_cents'             => undef,
 		'taxes_paid_cents'              => 75,
-		'total_on_occurrence_day_cents' => 3000,
+		'total_on_occurrence_day_cents' => $amount_cents,
 		'fines_on_occurrence_day_cents' => 0,
-		'items_total_cents'             => 3000,
+		'items_total_cents'             => $amount_cents,
 		'return_url'                    => undef,
 		'occurrence_date'               => '2018-05-14'
 	};

@@ -70,7 +70,7 @@ sub build_api_error {
     if ( $loc_msg eq $msg_id ) {
 
         remote_notify(
-            sprintf( "[Voto Legal] Faltando traducao para msg_id=$msg_id [hostname=%s] [%s]",
+            sprintf( "[Voto Legal] Faltando traducao para msg_id=$msg_id [%s]",
                     $app->req->uri->as_string
                   . ( $app->req->data   ? Dumper( $app->req->data )   : '' ) . " - "
                   . ( $app->req->params ? Dumper( $app->req->params ) : '' ) ),
