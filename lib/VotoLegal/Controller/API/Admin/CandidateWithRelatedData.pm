@@ -75,13 +75,12 @@ sub list_GET {
                 my $payment_data = $payment->get_iugu_data();
 
                 if ($payment_data) {
-                    $payment_data->{grossAmount} =~ s/\./,/g;
-                    $payment_data->{feeAmount}   =~ s/\./,/g;
-                    $payment_data->{netAmount}   =~ s/\./,/g;
+                    # $payment_data->{total_cents} =~ s/\./,/g;
+                    # $payment_data->{taxes_paid_cents}   =~ s/\./,/g;
+                    # $payment_data->{netAmount}   =~ s/\./,/g;
 
-                    $ret->[$i]->{'valor bruto'}   = $payment_data->{grossAmount};
-                    $ret->[$i]->{'taxa'}          = $payment_data->{feeAmount};
-                    $ret->[$i]->{'valor liquido'} = $payment_data->{netAmount};
+                    $ret->[$i]->{'valor bruto'}   = $payment_data->{total_cents};
+                    $ret->[$i]->{'taxa'}          = $payment_data->{taxes_paid_cents};
                     $ret->[$i]->{'secure_id'}     = $payment_data->{secure_id};
                 }
                 else {
