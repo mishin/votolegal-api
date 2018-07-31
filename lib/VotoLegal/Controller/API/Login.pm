@@ -37,19 +37,20 @@ sub login_POST {
         # Barrando o login de candidatos que foram desaprovados.
         if ( my $candidate = $c->user->candidates->next ) {
             if ( $candidate->status ne "deactivated" ) {
-                $session->{signed_contract}        = $c->user->has_signed_contract();
-                $session->{paid}                   = $candidate->candidate_has_paid();
-                $session->{payment_created}        = $candidate->candidate_has_payment_created();
-                $session->{address_state}          = $candidate->address_state;
-                $session->{address_city}           = $candidate->address_city;
-                $session->{address_zipcode}        = $candidate->address_zipcode;
-                $session->{address_street}         = $candidate->address_street;
-                $session->{address_house_number}   = $candidate->address_house_number;
-                $session->{name}                   = $candidate->name;
-                $session->{phone}                  = $candidate->phone;
-                $session->{email}                  = $candidate->user->email;
-                $session->{campaign_donation_type} = $candidate->campaign_donation_type;
-                $session->{has_custom_site}        = $candidate->has_custom_site;
+                $session->{signed_contract_campaign} = $c->user->has_signed_contract_campaign();
+                $session->{signed_contract}          = $c->user->has_signed_contract_pre_campaign();
+                $session->{paid}                     = $candidate->candidate_has_paid();
+                $session->{payment_created}          = $candidate->candidate_has_payment_created();
+                $session->{address_state}            = $candidate->address_state;
+                $session->{address_city}             = $candidate->address_city;
+                $session->{address_zipcode}          = $candidate->address_zipcode;
+                $session->{address_street}           = $candidate->address_street;
+                $session->{address_house_number}     = $candidate->address_house_number;
+                $session->{name}                     = $candidate->name;
+                $session->{phone}                    = $candidate->phone;
+                $session->{email}                    = $candidate->user->email;
+                $session->{campaign_donation_type}   = $candidate->campaign_donation_type;
+                $session->{has_custom_site}          = $candidate->has_custom_site;
 
                 if ( my $payment = $candidate->payments->search( undef, { max => 'created_at' } )->next ) {
                     $session->{payment_method} = $payment->method;

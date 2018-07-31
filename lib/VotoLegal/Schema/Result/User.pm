@@ -178,10 +178,16 @@ sub send_email_contract_signed {
     );
 }
 
-sub has_signed_contract {
+sub has_signed_contract_pre_campaign {
     my ($self) = @_;
 
-    return $self->contract_signatures->count;
+    return $self->contract_signatures->search( { is_pre_campaign => 1 } )->count;
+}
+
+sub has_signed_contract_campaign {
+	my ($self) = @_;
+
+	return $self->contract_signatures->search( { is_pre_campaign => 0 } )->count;
 }
 
 __PACKAGE__->meta->make_immutable;

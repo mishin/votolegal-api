@@ -111,7 +111,8 @@ sub candidate_GET {
     $candidate->{total_donated}                 = $c->stash->{candidate}->total_donated();
     $candidate->{total_donated_by_votolegal}    = $c->stash->{candidate}->total_donated_by_votolegal();
     $candidate->{people_donated}                = $c->stash->{candidate}->people_donated();
-    $candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract();
+	$candidate->{signed_contract}               = $c->stash->{candidate}->user->has_signed_contract_pre_campaign();
+	$candidate->{signed_contract_campaign}      = $c->stash->{candidate}->user->has_signed_contract_campaign();
     $candidate->{paid}                          = $c->stash->{candidate}->candidate_has_paid();
     $candidate->{has_mandatoaberto_integration} = $has_mandatoaberto_integration;
 
@@ -145,10 +146,11 @@ sub candidate_PUT {
         $picture = $self->_upload_picture($upload);
     }
 
-    my $spending_spreadsheet;
-    if ( my $upload = $c->req->upload("spending_spreadsheet") ) {
-        $spending_spreadsheet = $self->_upload_spreadsheet($upload);
-    }
+    # Deactivating spreadsheet for now
+    # my $spending_spreadsheet;
+    # if ( my $upload = $c->req->upload("spending_spreadsheet") ) {
+    #     $spending_spreadsheet = $self->_upload_spreadsheet($upload);
+    # }
 
     # O Data::Verifier ignora strings "" e as seta como undef. :(
     for ( keys %{ $c->req->params } ) {
@@ -167,7 +169,7 @@ sub candidate_PUT {
             %{ $c->req->params },
             picture              => $picture->{normal},
             avatar               => $picture->{avatar},
-            spending_spreadsheet => $spending_spreadsheet,
+            # spending_spreadsheet => $spending_spreadsheet,
             payment_gateway_id   => $payment_gateway_id,
             roles                => [ $c->user->roles ],
         }

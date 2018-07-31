@@ -21,7 +21,7 @@ db_transaction {
     my $candidate      = $schema->resultset("Candidate")->find($candidate_id);
     my $candidate_user = $candidate->user;
 
-    is( $candidate_user->has_signed_contract, 0, "candidate didn't sign contract yet" );
+    is( $candidate_user->has_signed_contract_pre_campaign, 0, "candidate didn't sign contract yet" );
 
     rest_get "/api/candidate/$candidate_id",
       name  => 'GET candidate data',
@@ -41,7 +41,7 @@ db_transaction {
 
     is( $email_queue_rs->count, 2, 'Registration and contract signature email' );
 
-    is( $candidate_user->has_signed_contract, 1, "candidate signed contract" );
+    is( $candidate_user->has_signed_contract_pre_campaign, 1, "candidate signed contract" );
 
     rest_post "/api/candidate/$candidate_id/contract_signature",
       name    => 'signing contract once again',

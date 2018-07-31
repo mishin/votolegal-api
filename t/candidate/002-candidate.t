@@ -183,11 +183,11 @@ db_transaction {
       ;
 
 
-    rest_put "/api/candidate/${candidate_id}",
-      name    => "can't upload invalid spreadsheet",
-      is_fail => 1,
-      files   => { spending_spreadsheet => "$Bin/picture.jpg", },
-      ;
+    # rest_put "/api/candidate/${candidate_id}",
+    #   name    => "can't upload invalid spreadsheet",
+    #   is_fail => 1,
+    #   files   => { spending_spreadsheet => "$Bin/picture.jpg", },
+    #   ;
 
     rest_put "/api/candidate/${candidate_id}",
       name    => "can't set invalid political movement",
@@ -246,7 +246,7 @@ db_transaction {
       name  => 'edit myself',
       files => {
         picture              => "$Bin/picture.jpg",
-        spending_spreadsheet => "$Bin/tse_spreadsheet.csv",
+        # spending_spreadsheet => "$Bin/tse_spreadsheet.csv",
       },
       params => {
         video_url           => $video_url,
@@ -281,7 +281,7 @@ db_transaction {
     is( $candidate->biography,     $biography,     'biography' );
     ok( $candidate->raising_goal == $raising_goal, 'raising goal' );
     is( $candidate->public_email, $public_email, 'public email' );
-    ok( $candidate->spending_spreadsheet =~ m{^https?:\/\/}, 'spending spreadsheet' );
+    # ok( $candidate->spending_spreadsheet =~ m{^https?:\/\/}, 'spending spreadsheet' );
     is( $candidate->responsible_name,  $responsible_name,  'responsible name' );
     is( $candidate->responsible_email, $responsible_email, 'responsible email' );
     is( $candidate->merchant_id,       $merchant_id,       'merchant_id' );

@@ -43,6 +43,7 @@ db_transaction {
       code    => 400,
       ;
 
+    setup_time_for_contract_test_pre_campaign;
     create_candidate_contract_signature($candidate_id);
 
     #rest_get "/api/candidate/$candidate_id/payment/session",
