@@ -7,8 +7,8 @@ use VotoLegal::Utils;
 use VotoLegal::Payment::PagSeguro;
 
 use JSON;
-
 use XML::Hash::XS qw/ hash2xml xml2hash /;
+use DateTime;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
@@ -42,6 +42,10 @@ sub payment : Chained('base') : PathPart('') : Args(0) : ActionClass('REST') { }
 sub payment_POST {
     my ( $self, $c ) = @_;
 
+    my $now = DateTime->now();
+
+    if ( $E )
+
     my $gateway = $c->req->params->{payment_gateway} || 'iugu';
     die \['gateway', 'invalid'] unless $gateway =~ m/(iugu|pagseguro)/;
 
@@ -62,37 +66,6 @@ sub payment_POST {
             %{ $c->req->params }, candidate_id => $c->stash->{candidate}->id
         }
     );
-
-    # if ( $method eq 'boleto' ) {
-    #     $self->status_ok(
-    #         $c,
-    #         entity => {
-    #             mensagem_sucesso => 'Parabéns, o boleto será enviado por e-mail.'
-    #         },
-    #     );
-
-    #     if ( $ENV{BOLETO_OFFLINE_SENDMAIL} ) {
-    #         $c->model('DB::EmaildbQueue')->create(
-    #             {
-    #                 config_id => 1,
-    #                 template  => 'message.html',
-    #                 to        => $ENV{BOLETO_OFFLINE_SENDMAIL},
-    #                 subject   => 'Enviar boleto para candidato',
-    #                 variables => encode_json(
-    #                     {
-    #                         message => sprintf "O candidato %s deseja receber um boleto",
-    #                         $candidate->name
-    #                           . ' POST= '
-    #                           . to_json( $c->req->params )
-
-    #                     }
-    #                 ),
-    #             }
-    #         );
-    #     }
-
-    #     $c->detach;
-    # }
 
     my $payment_execution;
     if ($gateway eq 'iugu') {
