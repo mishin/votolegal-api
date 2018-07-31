@@ -88,6 +88,10 @@ db_transaction {
             like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
             is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
             ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+
+            # Highlight.
+            ok( grep { $_->{highlight} == 1 } map { map { $_ } @{ $_->{donations} } } grep { $_->{decred_merkle_root} eq $decred_merkle_root } @{ $res } );
+            ok( grep { $_->{highlight} == 0 } map { map { $_ } @{ $_->{donations} } } grep { $_->{decred_merkle_root} ne $decred_merkle_root } @{ $res } );
         };
     };
 
@@ -107,9 +111,11 @@ db_transaction {
             like( $res->[0]->{decred_merkle_root}, qr/^[a-f0-9]+$/i, 'decred merkle root' );
             is( ref $res->[0]->{donations}, 'ARRAY', 'donations=ARRAY' );
             ok( scalar(@{ $res->[0]->{donations} }) > 0, 'has donation' );
+
+            # Highlight.
+            ok( grep { $_->{decred_data_digest} eq $digest && $_->{highlight} == 1 } map { map { $_ } @{ $_->{donations} } } @{ $res } );
+            ok( grep { $_->{decred_data_digest} ne $digest && $_->{highlight} == 0 } map { map { $_ } @{ $_->{donations} } } @{ $res } );
         };
-
-
     };
 };
 

@@ -5,8 +5,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
-
 sub root : Chained('/publicapi/blockchain/base') : PathPart('') : CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
@@ -28,7 +26,6 @@ sub root : Chained('/publicapi/blockchain/base') : PathPart('') : CaptureArgs(0)
             ],
         }
     );
-
 }
 
 sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }
@@ -49,8 +46,9 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
                               OR vd.decred_merkle_root  = ?
                         )
 SQL_QUERY
-                ]
-            }
+                ],
+            },
+            { '+columns' => [ { highlight => \[ "CASE WHEN me.decred_data_digest = ? OR me.decred_merkle_root = ? THEN True ELSE False END", $param, $param ] } ] },
         );
     }
     else {
