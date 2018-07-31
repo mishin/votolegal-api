@@ -294,6 +294,11 @@ sub get_invoice {
             donation_id
         /;
     }
+    elsif ( $opts{is_votolegal_payment} ) {
+        @required_opts = qw/
+            gateway_id
+        /;
+    }
     else {
 		@required_opts = qw/
 		  id
@@ -324,6 +329,9 @@ sub get_invoice {
 
     if ( $opts{get_duplicate_invoice} ) {
 		$post_url = $self->uri_for('invoices') . '?query=' . $opts{donation_id};
+    }
+    elsif ( $opts{is_votolegal_payment} ) {
+        $post_url = $self->uri_for('invoices') . '/' . $opts{gateway_id};
     }
     else {
         $post_url = $self->uri_for('invoices') . '/' . $opts{id};

@@ -5,8 +5,6 @@ use namespace::autoclean;
 
 BEGIN { extends 'CatalystX::Eta::Controller::REST' }
 
-use DDP;
-
 sub root : Chained('/publicapi/blockchain/base') : PathPart('') : CaptureArgs(0) {
     my ( $self, $c ) = @_;
 
@@ -21,14 +19,13 @@ sub root : Chained('/publicapi/blockchain/base') : PathPart('') : CaptureArgs(0)
             order_by => { '-desc ' => [ qw/ me.dcrtime_timestamp / ] },
             prefetch   => [ 'votolegal_donation_immutable', { candidate => 'party' }, { candidate => 'office' } ],
             '+columns' => [
-                { captured_at_human => \"TIMEZONE('America/Sao_Paulo', TIMEZONE('UTC', me.captured_at))" },
-                { payment_method_human => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
+                { captured_at_human      => \"TIMEZONE('America/Sao_Paulo', TIMEZONE('UTC', me.captured_at))" },
+                { payment_method_human   => \"CASE WHEN me.is_boleto THEN 'Boleto' ELSE 'Cartão de crédito' END" },
                 { decred_transaction_url => \"CASE WHEN me.decred_capture_txid IS NOT NULL THEN CONCAT('https://explorer.dcrdata.org/tx/', me.decred_capture_txid) END" },
                 { git_url => \"CASE WHEN votolegal_donation_immutable.git_hash IS NOT NULL THEN CONCAT('https://github.com/AppCivico/votolegal-api/tree/', votolegal_donation_immutable.git_hash) END" },
             ],
         }
     );
-
 }
 
 sub base : Chained('root') : PathPart('search') : CaptureArgs(0) { }
@@ -37,10 +34,34 @@ sub object : Chained('base') : PathPart('') : CaptureArgs(1) {
     my ( $self, $c, $param ) = @_;
 
     if ( $param =~ m{^[a-f0-9]{64}$}i ) {
-        $c->stash->{collection} = $c->stash->{collection}->search( { 'me.decred_merkle_root' => $param } );
+        $c->stash->{collection}  = $c->stash->{collection}->search(
+            {
+                '-and' => [
+                    \[ <<'SQL_QUERY', $param, $param ],
+                        DATE(me.dcrtime_timestamp) = (
+                            SELECT DATE(MAX(vd.dcrtime_timestamp))
+                            FROM votolegal_donation vd
+                            WHERE vd.decred_data_digest = ?
+                              OR vd.decred_merkle_root  = ?
+                        )
+SQL_QUERY
+                ],
+            },
+            { '+columns' => [ { highlight => \[ "CASE WHEN me.decred_data_digest = ? OR me.decred_merkle_root = ? THEN True ELSE False END", $param, $param ] } ] },
+        );
+    }
+    elsif ( $param =~ m{^\d{4}-\d{2}-\d{2}$} ) {
+        $c->stash->{collection}  = $c->stash->{collection}->search(
+            {
+                '-and' => [
+                    \[ 'DATE(me.dcrtime_timestamp) = DATE(?)', $param ]
+                ]
+            },
+            { '+columns' => [ { highlight => \'True' } ] },
+        );
     }
     else {
-        $self->status_bad_request( $c, message => 'Invalid sha256 hash.' );
+        $self->status_bad_request( $c, message => 'Invalid parameter.' );
         $c->detach();
     }
 }
