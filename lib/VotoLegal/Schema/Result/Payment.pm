@@ -654,7 +654,6 @@ sub get_iugu_data {
                gross_amount => $payment_data->{total_cents} / 100,
                fee_amount   => $payment_data->{taxes_paid_cents} / 100,
                net_amount   => ( $payment_data->{total_cents} - $payment_data->{taxes_paid_cents} ) / 100,
-               secure_id    => $payment_data->{gateway_id}
             }
         );
 
