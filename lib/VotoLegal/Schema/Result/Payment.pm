@@ -608,6 +608,51 @@ sub get_pagseguro_data {
     }
 }
 
+sub get_iugu_data {
+    my ($self) = @_;
+
+	my $gateway = WebService::IuguForReal->instance();
+
+    if ( is_test() ) {
+        $self->update(
+            {
+               gross_amount => 10,
+               fee_amount   => 3,
+               net_amount   => 7
+            }
+        );
+
+        return {
+            grossAmount => 10,
+            feeAmount   => 3,
+            netAmount   => 7
+        };
+    }
+
+    my %opts = (
+        gateway_id           => $self->code,
+        is_votolegal_payment => 1,
+    );
+
+    my $payment_data = $gateway->get_invoice( %opts );
+
+    if ( ref $payment_data ne 'HASH' ) {
+        return 0;
+    }
+    else {
+        $self->update(
+            {
+               gross_amount => $payment_data->{total_cents} / 100,
+               fee_amount   => $payment_data->{taxes_paid_cents} / 100,
+               net_amount   => ( $payment_data->{total_cents} - $payment_data->{taxes_paid_cents} ) / 100,
+               secure_id    => $payment_data->{gateway_id}
+            }
+        );
+
+        return $payment_data;
+    }
+}
+
 sub has_amount_data {
     my ($self) = @_;
 
