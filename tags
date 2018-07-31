@@ -441,6 +441,7 @@ get_git_hash	./lib/VotoLegal/Schema/ResultSet/VotolegalDonation.pm	/^sub get_git
 get_human_like_method	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_human_like_method {$/;"	s
 get_invoice	./lib/VotoLegal/Schema/Result/PaymentGateway.pm	/^sub get_invoice {$/;"	s
 get_invoice	./lib/WebService/IuguForReal.pm	/^sub get_invoice {$/;"	s
+get_iugu_data	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_iugu_data {$/;"	s
 get_license_value	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_license_value {$/;"	s
 get_license_value_in_cents	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_license_value_in_cents {$/;"	s
 get_most_recent_log	./lib/VotoLegal/Schema/Result/Payment.pm	/^sub get_most_recent_log {$/;"	s

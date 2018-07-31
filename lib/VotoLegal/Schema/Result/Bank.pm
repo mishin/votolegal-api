@@ -29,8 +29,8 @@ __PACKAGE__->has_many(
 );
 #>>>
 
-# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-05-21 09:57:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ESDxbUAwrOTgcPqg+kvHKQ
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-07-30 17:27:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o6lNVX7W/fFBiQAEK15U0A
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 __PACKAGE__->meta->make_immutable;
